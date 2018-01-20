@@ -13,7 +13,7 @@ local.properties
 .recommenders
 
 # Eclipse pmd settings
-sources\conway-sim/.eclipse-pmd
+sources\conway-sim\.eclipse-pmd
 
 
 # Compiled class file
