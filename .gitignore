@@ -12,6 +12,10 @@ local.properties
 .loadpath
 .recommenders
 
+# Eclipse pmd settings
+sources\conway-sim/.eclipse-pmd
+
+
 # Compiled class file
 *.class
 
