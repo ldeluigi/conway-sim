@@ -231,7 +231,6 @@
 	<rule ref="rulesets/java/design.xml/UseNotifyAllInsteadOfNotify" />
 	<rule ref="rulesets/java/controversial.xml/UseObjectForClearerAPI" />
 	<rule ref="rulesets/java/strings.xml/UseStringBufferLength" />
-	<rule ref="rulesets/java/design.xml/UseUtilityClass" />
 	<rule ref="rulesets/java/unnecessary.xml/UselessOperationOnImmutable" />
 	<rule ref="rulesets/java/unnecessary.xml/UselessOverridingMethod" />
 	<rule ref="rulesets/java/strings.xml/UselessStringValueOf" />
