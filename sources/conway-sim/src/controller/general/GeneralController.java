@@ -3,6 +3,7 @@
  */
 package controller.general;
 
+import core.model.Generation;
 import core.utils.Matrix;
 
 /**
@@ -20,9 +21,9 @@ public interface GeneralController {
      */
     Matrix<Boolean> getAliveMatrix();
 
-//    /**
-//     * @return Generation update the current generation
-//     */
-//    Generation updateGeneration();
+    /**
+     * @return Generation update the current generation
+     */
+    Generation updateGeneration();
 
 }
