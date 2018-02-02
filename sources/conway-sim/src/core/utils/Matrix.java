@@ -47,7 +47,7 @@ public interface Matrix<X> {
     int getWidth();
 
     /**
-     * A method to map this matrix to another one of the same dimension.
+     * A method to map this matrix to a new one of the same dimension.
      * @param mapper to create elements of the new matrix.
      * @param <Y> the type of the new matrix
      * @return the new mapped matrix

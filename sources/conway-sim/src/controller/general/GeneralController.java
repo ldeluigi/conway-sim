@@ -17,12 +17,12 @@ public interface GeneralController {
     void start();
 
     /**
-     * @return Matrix<Boolean> return a Matrix where alive cell is true and death cell is false
+     * @return Matrix<Boolean> return a Matrix where alive cell is true and dead cell is false
      */
     Matrix<Boolean> getAliveMatrix();
 
     /**
-     * @return Generation update the current generation
+     * @return Generation updates the current generation
      */
     Generation updateGeneration();
 
