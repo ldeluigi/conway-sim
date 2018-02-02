@@ -9,23 +9,23 @@ package core.model;
 public interface Environment {
 
     /**
-     * 
-     * @return the current height of the environment
+     * Gets the height of {@link CellEnvironment} matrix.
+     * @return the current height of the environment matrix
      */
     int getHeight();
 
     /**
-     * 
-     * @return the current height
+     * Gets the height of {@link CellEnvironment} matrix.
+     * @return the current height of the environment matrix
      */
     int getWidth();
 
 
     /**
      * 
-     * @param x height of the environment to be used
-     * @param y width of the environment to be used
-     * @param env the environment to be used
+     * @param x is the row where the {@link CellEnvironment} should be set
+     * @param y is the column where the {@link CellEnvironment} should be set
+     * @param env the {@link CellEnvironment} to be used
      */
     void setEnvironment(int x, int y, CellEnvironment env);
 }
