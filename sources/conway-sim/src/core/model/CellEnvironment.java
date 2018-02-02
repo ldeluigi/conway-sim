@@ -1,7 +1,7 @@
 package core.model;
 
 /**
- * This class uses two strategies passed to constructor to determine if the cell should die or not based on the number of neighbors.
+ * This class uses two strategies passed to constructor to determine if the cell should die or be born based on the number of neighbors.
  *
  */
 public interface CellEnvironment {
