@@ -27,7 +27,7 @@ public interface Book<E> {
     List<E> getListPatterns();
     /**
      * 
-     * @return the lenght of the list of patterns
+     * @return the length of the list of patterns
      */
-    int getListLenght();
+    int getListLength();
 }
