@@ -1,12 +1,15 @@
 package view.swing.book;
-
+/**
+ * 
+ *
+ */
 public interface Book {
 /**
  * 
  */
-	void dummyMethod();
-	
-	
-	void dummyMethod2();
-	
+    void dummyMethod();
+/**
+ * 
+ */
+    void dummyMethod2();
 }
