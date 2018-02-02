@@ -1,6 +1,7 @@
 package core.model;
 
-/** Status describes the various types of cells and their current state.
+/**
+ * Status describes the various types of cells and their current state.
  * 
  *
  */
