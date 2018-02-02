@@ -11,7 +11,7 @@ public interface GenerationController {
     /**
      * 
      */
-    void startGameWithGeneratio();
+    void startGameWithGeneration();
 
     /**
      * 
