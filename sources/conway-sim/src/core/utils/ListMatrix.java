@@ -58,17 +58,11 @@ public class ListMatrix<X> implements Matrix<X> {
         });
     }
 
-    /**
-     * 
-     */
     @Override
     public X get(final int row, final int column) {
         return this.matrix.get(row).get(column);
     }
 
-    /**
-     * 
-     */
     @Override
     public void rotateClockwise(final int times) {
         if (times % 4 == 1) {
