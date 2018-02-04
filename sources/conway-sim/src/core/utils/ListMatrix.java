@@ -115,7 +115,7 @@ public class ListMatrix<X> implements Matrix<X> {
     public <Y> Matrix<Y> map(final Function<? super X, ? extends Y> mapper) {
         final List<List<Y>> temp = new ArrayList<>();
         this.matrix.forEach(row -> {
-            temp.add(new ArrayList<Y>(row.stream().map(mapper).collect(Collectors.toList())));
+            temp.add(row.stream().map(mapper).collect(Collectors.toList()));
         });
         return new ListMatrix<>(temp);
     }
