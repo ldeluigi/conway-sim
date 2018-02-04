@@ -80,4 +80,9 @@ public class TestMatrix {
             return x.toString();
         }));
     }
+
+    @Test
+    void testConstructors() {
+        System.out.println(new ListMatrix<>(12, 6, () -> "hi"));
+    }
 }

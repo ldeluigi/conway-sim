@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.function.Supplier;
 
 /**
  * Matrix implementation with ArrayLists.
@@ -55,6 +56,26 @@ public class ListMatrix<X> implements Matrix<X> {
         this.matrix = new ArrayList<>();
         matrix.forEach(row -> {
             this.matrix.add(new ArrayList<>(row));
+        });
+    }
+
+    /**
+     * Constructor that takes the dimensions and fills the matrix with a {@link Supplier}.
+     * @param width that is the number of columns
+     * @param height that is the number of rows
+     * @param supplier that produces elements of type {@link X}
+     */
+    public ListMatrix(final int width, final int height, final Supplier<X> supplier) {
+        Objects.requireNonNull(supplier);
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Dimension must be greater than zero.");
+        }
+        this.matrix = new ArrayList<>(height);
+        IntStream.range(0, height).forEach(row -> {
+            this.matrix.add(row, new ArrayList<>(width));
+            IntStream.range(0, width).forEach(column -> {
+                this.matrix.get(row).add(column, supplier.get());
+            });
         });
     }
 
