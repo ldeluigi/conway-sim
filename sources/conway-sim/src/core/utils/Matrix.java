@@ -20,7 +20,7 @@ public interface Matrix<X> {
 
     /**
      * Rotates the matrix by 90 degrees clockwise.
-     * @param times the number of of rotations
+     * @param times the number of rotations
      */
     void rotateClockwise(int times);
 
