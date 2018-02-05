@@ -174,7 +174,7 @@ public class ListMatrix<X> implements Matrix<X> {
 
     @Override
     public String toString() {
-        return "ListMatrix [" + this.matrix + "]";
+        return "ListMatrix " + this.matrix;
     }
 
 }
