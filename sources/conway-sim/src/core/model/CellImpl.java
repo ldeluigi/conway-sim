@@ -12,10 +12,10 @@ public class CellImpl implements Cell {
 
     /**
      * Constructor for a new Cell.
-     * @param newStatus is the status to be assumed the first time
+     * @param firstStatus is the status to be assumed the first time
      */
-    public CellImpl(final Status newStatus) {
-        this.current = newStatus;
+    public CellImpl(final Status firstStatus) {
+        this.current = firstStatus;
     }
     /**
      * setStatus is the method to invoke in order to change the current status of the cell.

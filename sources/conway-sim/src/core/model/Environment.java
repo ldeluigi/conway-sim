@@ -28,4 +28,12 @@ public interface Environment {
      * @param env the {@link CellEnvironment} to be used
      */
     void setEnvironment(int x, int y, CellEnvironment env);
+
+    /**
+     * Returns the single cell environment from a position.
+     * @param x is the row
+     * @param y is the column
+     * @return the {@link CellEnvironment} in that position
+     */
+    CellEnvironment getCellEnvironment(int x, int y);
 }
