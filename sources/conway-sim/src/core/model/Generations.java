@@ -35,4 +35,9 @@ public interface Generations {
      * @return the modified generation with the pattern applied in the given position
      */
     Generation mergePatternXY(Generation generation, int x, int y, Matrix<Boolean> patternAliveCells);
+
+    /**
+     * 
+     */
+    Generation copyOf(Generation generation);
 }
