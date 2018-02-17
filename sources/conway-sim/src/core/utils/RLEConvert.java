@@ -8,6 +8,7 @@ import java.io.StringReader;
 
 /**
  * 
+ * 
  */
 public class RLEConvert {
     private BufferedReader buffer;
