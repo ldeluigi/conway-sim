@@ -9,8 +9,8 @@ import core.utils.Matrix;
 public interface Generation {
 
     /**
-     * Returns the {@link Matrix} of alive cells.
-     * @return A boolean {@link Matrix} where true means that the cell is alive
+     * Returns the {@link Matrix<Boolean>} of alive cells.
+     * @return A boolean {@link Matrix<Boolean>} where true means that the cell is alive
      */
     Matrix<Boolean> getAliveMatrix();
 

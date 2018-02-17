@@ -3,7 +3,6 @@ package core.model;
 /**
  * Implementation of the interface Cell.
  * 
- *
  */
 
 public class CellImpl implements Cell {
@@ -17,21 +16,47 @@ public class CellImpl implements Cell {
     public CellImpl(final Status firstStatus) {
         this.current = firstStatus;
     }
+
     /**
      * setStatus is the method to invoke in order to change the current status of the cell.
      * @param nextstatus is the new status to be assumed. 
      */
-
     public void setStatus(final Status nextstatus) {
         this.current = nextstatus;
     }
 
     /**
-     * getStatus is the method to get the curent status of the cell.
+     * getStatus is the method to get the current status of the cell.
      * @return the current status
      */
     public Status getStatus() {
       return this.current;
+    }
+
+    /**
+     * It's the same as {@link Status}.
+     */
+    @Override
+    public int hashCode() {
+        return ((current == null) ? 0 : current.hashCode());
+    }
+
+    /**
+     * Equals checks if the two cells have the same {@link Status}.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CellImpl other = (CellImpl) obj;
+        return current.equals(other.current);
     }
 
 }

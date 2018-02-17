@@ -19,6 +19,7 @@ public enum StandardEnviroments implements CellEnvironment {
         this.checkBorn = checkBorn;
         this.checkDeath = checkDeath;
     }
+
     @Override
     public boolean checkCellBorn(final int neighbors) {
         return this.checkBorn.apply(neighbors);

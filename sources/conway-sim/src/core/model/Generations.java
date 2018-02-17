@@ -22,24 +22,24 @@ public final class Generations {
     public static Generation compute(final Generation start) {
         Objects.requireNonNull(start);
         final Environment env = start.getEnviroment();
-        final Matrix<Cell> m = start.getCellMatrix();
+        final Matrix<Cell> previous = start.getCellMatrix();
         final Matrix<Cell> result = Generations.copyOf(start).getCellMatrix();
         //Iteration of the cell matrix
-        IntStream.range(0, m.getHeight()).forEach(row -> {
-            IntStream.range(0, m.getWidth()).forEach(column -> {
+        IntStream.range(0, previous.getHeight()).forEach(row -> {
+            IntStream.range(0, previous.getWidth()).forEach(column -> {
                 //Alive neighbors count
                 int neighbors = 0;
                 for (int h = -1; h <= 1; h++) {
                     for (int w = -1; w <= 1; w++) {
-                        if (row + h >= 0 && row + h < m.getHeight() && column + w >= 0 && column + w < m.getWidth() && !(h == 0 && w == 0)) {
-                            neighbors += m.get(row + h, column + w).getStatus().equals(ALIVE) ? 1 : 0;
+                        if (row + h >= 0 && row + h < previous.getHeight() && column + w >= 0 && column + w < previous.getWidth() && !(h == 0 && w == 0)) {
+                            neighbors += previous.get(row + h, column + w).getStatus().equals(ALIVE) ? 1 : 0;
                         }
                     }
                 }
                 //Next Status evaluation
-                if (m.get(row, column).getStatus().equals(ALIVE) && env.getCellEnvironment(row, column).checkCellDeath(neighbors)) {
+                if (previous.get(row, column).getStatus().equals(ALIVE) && env.getCellEnvironment(row, column).checkCellDeath(neighbors)) {
                     result.get(row, column).setStatus(DEAD);
-                } else if (m.get(row, column).getStatus().equals(DEAD) && env.getCellEnvironment(row, column).checkCellBorn(neighbors)) {
+                } else if (previous.get(row, column).getStatus().equals(DEAD) && env.getCellEnvironment(row, column).checkCellBorn(neighbors)) {
                     result.get(row, column).setStatus(ALIVE);
                 }
             });
@@ -66,7 +66,7 @@ public final class Generations {
     }
 
     /**
-     * A method to modify a {@link Generation} by applying a certain alive cell pattern.
+     * A method to modify a {@link Generation} by applying a certain alive cell pattern. Note that in order to do this it creates a new generation without modifying the given one.
      * @param generation is the {@link Generation} to be modified
      * @param x is the row of the top left cell of the pattern
      * @param y is the column of the top left cell of the pattern
@@ -77,7 +77,7 @@ public final class Generations {
         Objects.requireNonNull(generation);
         Objects.requireNonNull(patternAliveCells);
         if (x < 0 || y < 0 || x + patternAliveCells.getHeight() > generation.getHeight() || y + patternAliveCells.getWidth() > generation.getWidth()) {
-            throw new IllegalArgumentException("Invalid position or pattern dimension.");
+            throw new IllegalArgumentException("Invalid position or invalid pattern dimension.");
         }
         final Matrix<Cell> gen = Generations.copyOf(generation).getCellMatrix();
         final Matrix<Cell> toApply = patternAliveCells.map(b -> new CellImpl(b ? ALIVE : DEAD));
