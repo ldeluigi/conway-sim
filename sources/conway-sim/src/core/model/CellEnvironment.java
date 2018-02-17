@@ -1,7 +1,7 @@
 package core.model;
 
 /**
- * This interface must be implemented by classes which use two strategies passed to constructor 
+ * This interface must be implemented by classes which use two methods 
  * to determine if the cell should die or be born based on the number of neighbors.
  */
 public interface CellEnvironment {
