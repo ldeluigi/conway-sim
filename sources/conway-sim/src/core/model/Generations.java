@@ -1,6 +1,3 @@
-/**
- * 
- */
 package core.model;
 
 import core.utils.Matrix;
@@ -9,14 +6,19 @@ import core.utils.Matrix;
  * Utility class for computation and editing of {@link Generation}.
  *
  */
-public interface Generations {
+public final class Generations {
+
+    private  Generations() { }
 
     /**
      * Computes a new {@link Generation} from the given one.
      * @param start that is the previous {@link Generation}
      * @return the new computed {@link Generation}
      */
-    Generation compute(Generation start);
+    public static Generation compute(final Generation start) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     /**
      * Computes n generations from start. 
@@ -24,7 +26,10 @@ public interface Generations {
      * @param number is the number of generation to be computed sequentially
      * @return the result of the computations
      */
-    Generation compute(Generation start, int number);
+    public static Generation compute(final Generation start, final int number) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     /**
      * A method to modify a {@link Generation} by applying a certain alive cell pattern.
@@ -34,12 +39,19 @@ public interface Generations {
      * @param patternAliveCells is the alive cells {@link Matrix} of the pattern
      * @return the modified generation with the pattern applied in the given position
      */
-    Generation mergePatternXY(Generation generation, int x, int y, Matrix<Boolean> patternAliveCells);
+    public static Generation mergePatternXY(final Generation generation, final int x, final int y, final Matrix<Boolean> patternAliveCells) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     /**
      * A method to clone a {@link Generation}.
      * @param generation is the generation to clone
      * @return the cloned generation
      */
-    Generation copyOf(Generation generation);
+    public static Generation copyOf(final Generation generation) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
