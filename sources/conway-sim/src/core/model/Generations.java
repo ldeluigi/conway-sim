@@ -37,7 +37,9 @@ public interface Generations {
     Generation mergePatternXY(Generation generation, int x, int y, Matrix<Boolean> patternAliveCells);
 
     /**
-     * 
+     * A method to clone a {@link Generation}.
+     * @param generation is the generation to clone
+     * @return the cloned generation
      */
     Generation copyOf(Generation generation);
 }
