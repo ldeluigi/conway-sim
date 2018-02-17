@@ -3,7 +3,6 @@ package core.model;
 /**
  * Status describes the various types of cells and their current state.
  * 
- *
  */
 
 public enum Status {
@@ -13,7 +12,7 @@ public enum Status {
      */
     DEAD,
     /**
-     * Alive means that the cell can produce other living cells.
+     * Alive means that the cell can produce other living cells or die, according to the rules specified by its environment.
      */
     ALIVE;
 }
