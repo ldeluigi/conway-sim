@@ -6,7 +6,7 @@ import java.util.function.Function;
  * Enumeration for common rule sets used in Conway's Game of Life.
  * 
  */
-public enum StandardEnviroments implements CellEnviroment {
+public enum StandardEnviroments implements CellEnvironment {
     /**
      * This is the classic rule set of Conway's Game of Life.
      */
