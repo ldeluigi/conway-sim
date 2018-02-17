@@ -1,6 +1,3 @@
-/**
- * 
- */
 package core.utils;
 
 import java.util.ArrayList;
@@ -17,7 +14,7 @@ import java.util.function.Supplier;
  * Matrix implementation with ArrayLists.
  * @param <X> generic type
  */
-public class ListMatrix<X> implements Matrix<X> {
+public final class ListMatrix<X> implements Matrix<X> {
 
     private List<List<X>> matrix;
 
