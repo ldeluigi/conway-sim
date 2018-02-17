@@ -7,7 +7,7 @@ import java.util.Map;
 import core.model.Generation;
 
 /**
- *
+ * pattern memento.
  */
 public interface GenerationMemento {
 
