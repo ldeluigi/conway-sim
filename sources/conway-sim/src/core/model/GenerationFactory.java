@@ -61,6 +61,11 @@ public final class GenerationFactory {
             public Matrix<Cell> getCellMatrix() {
                 return cellMatrix;
             }
+
+            @Override
+            public String toString() {
+                return this.getCellMatrix().toString();
+            }
         };
     }
 }

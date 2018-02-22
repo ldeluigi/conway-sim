@@ -171,7 +171,7 @@ public final class ListMatrix<X> implements Matrix<X> {
 
     @Override
     public String toString() {
-        return "ListMatrix " + this.matrix;
+        return "ListMatrix:\n" + this.matrix.stream().map(l -> l.toString()).collect(Collectors.joining("\n", "[", "]"));
     }
 
 }

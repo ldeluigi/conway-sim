@@ -21,6 +21,7 @@ public class CellImpl implements Cell {
      * setStatus is the method to invoke in order to change the current status of the cell.
      * @param nextstatus is the new status to be assumed. 
      */
+    @Override
     public void setStatus(final Status nextstatus) {
         this.current = nextstatus;
     }
@@ -29,6 +30,7 @@ public class CellImpl implements Cell {
      * getStatus is the method to get the current status of the cell.
      * @return the current status
      */
+    @Override
     public Status getStatus() {
       return this.current;
     }
@@ -59,4 +61,11 @@ public class CellImpl implements Cell {
         return current.equals(other.current);
     }
 
+    /**
+     * Describes Cell status with a string.
+     */
+    @Override
+    public String toString() {
+        return current.toString();
+    }
 }

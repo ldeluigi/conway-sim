@@ -27,7 +27,7 @@ public final class Generations {
         //Iteration of the cell matrix
         IntStream.range(0, previous.getHeight()).forEach(row -> {
             IntStream.range(0, previous.getWidth()).forEach(column -> {
-                //Alive neighbors count
+                //alive neighbors count
                 int neighbors = 0;
                 for (int h = -1; h <= 1; h++) {
                     for (int w = -1; w <= 1; w++) {
@@ -36,7 +36,7 @@ public final class Generations {
                         }
                     }
                 }
-                //Next Status evaluation
+                //next Status evaluation
                 if (previous.get(row, column).getStatus().equals(ALIVE) && env.getCellEnvironment(row, column).checkCellDeath(neighbors)) {
                     result.get(row, column).setStatus(DEAD);
                 } else if (previous.get(row, column).getStatus().equals(DEAD) && env.getCellEnvironment(row, column).checkCellBorn(neighbors)) {
