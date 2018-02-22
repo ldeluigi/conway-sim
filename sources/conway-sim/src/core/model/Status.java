@@ -1,10 +1,9 @@
 package core.model;
 
 /**
- * Status describes the various types of cells and their current state.
+ * Status describes the current state of a {@link Cell}.
  * 
  */
-
 public enum Status {
     /**
      * Dead means that the cell has not survived the generation 

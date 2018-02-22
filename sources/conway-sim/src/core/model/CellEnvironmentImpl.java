@@ -30,7 +30,7 @@ public final class CellEnvironmentImpl implements CellEnvironment {
 
     private boolean apply(final int neighbors, final Function<Integer, Boolean> rule) {
         if (!(neighbors >= 0 && neighbors <= MAX_NEIGHBORS)) {
-            throw new IllegalArgumentException("Neighbors must be positive and less than " + MAX_NEIGHBORS);
+            throw new IllegalArgumentException("Neighbors must be positive and less or equal than " + MAX_NEIGHBORS);
         }
         return rule.apply(neighbors);
     }

@@ -23,7 +23,7 @@ public final class Generations {
         Objects.requireNonNull(start);
         final Environment env = start.getEnviroment();
         final Matrix<Cell> previous = start.getCellMatrix();
-        final Matrix<Cell> result = Generations.copyOf(start).getCellMatrix();
+        final Matrix<Cell> result = GenerationFactory.copyOf(start).getCellMatrix();
         //Iteration of the cell matrix
         IntStream.range(0, previous.getHeight()).forEach(row -> {
             IntStream.range(0, previous.getWidth()).forEach(column -> {
@@ -44,7 +44,7 @@ public final class Generations {
                 }
             });
         });
-        return Generations.from(result, env);
+        return GenerationFactory.from(result, env);
     }
 
     /**
@@ -79,64 +79,14 @@ public final class Generations {
         if (x < 0 || y < 0 || x + patternAliveCells.getHeight() > generation.getHeight() || y + patternAliveCells.getWidth() > generation.getWidth()) {
             throw new IllegalArgumentException("Invalid position or invalid pattern dimension.");
         }
-        final Matrix<Cell> gen = Generations.copyOf(generation).getCellMatrix();
+        final Matrix<Cell> gen = GenerationFactory.copyOf(generation).getCellMatrix();
         final Matrix<Cell> toApply = patternAliveCells.map(b -> new CellImpl(b ? ALIVE : DEAD));
         IntStream.range(0, toApply.getHeight()).forEach(row -> {
             IntStream.range(0, toApply.getWidth()).forEach(column -> {
                 gen.set(row + x, column + y, toApply.get(row, column));
             });
         });
-        return Generations.from(gen, generation.getEnviroment());
-    }
-
-    /**
-     * A method to clone a {@link Generation}. Note that cells are copied, whereas the environment is the exact same.
-     * @param generation is the generation to clone
-     * @return the cloned generation
-     */
-    public static Generation copyOf(final Generation generation) {
-        return Generations.from(generation.getCellMatrix().map(c -> new CellImpl(c.getStatus())), generation.getEnviroment());
-    }
-
-    /**
-     * Creates a new {@link Generation} from a given {@link Matrix<Cell>} and an {@link Environment} of the same dimensions, without making copies.
-     * @param cellMatrix the {@link Matrix<Cell>}
-     * @param e the {@link Environment}
-     * @return the {@link Generation} created from the arguments
-     */
-    public static Generation from(final Matrix<Cell> cellMatrix, final Environment e) {
-        Objects.requireNonNull(cellMatrix);
-        Objects.requireNonNull(e);
-        if (cellMatrix.getHeight() != e.getHeight() || cellMatrix.getWidth() != e.getWidth()) {
-            throw new IllegalArgumentException("Cell Matrix and Environment must have the same dimensions.");
-        }
-        return new Generation() {
-
-            @Override
-            public Matrix<Boolean> getAliveMatrix() {
-                return cellMatrix.map(c -> c.getStatus().equals(ALIVE));
-            }
-
-            @Override
-            public int getWidth() {
-                return cellMatrix.getWidth();
-            }
-
-            @Override
-            public int getHeight() {
-                return cellMatrix.getHeight();
-            }
-
-            @Override
-            public Environment getEnviroment() {
-                return e;
-            }
-
-            @Override
-            public Matrix<Cell> getCellMatrix() {
-                return cellMatrix;
-            }
-        };
+        return GenerationFactory.from(gen, generation.getEnviroment());
     }
 
 }
