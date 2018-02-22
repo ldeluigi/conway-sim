@@ -1,8 +1,11 @@
-package core.utils;
+package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
+
+import core.utils.ListMatrix;
+import core.utils.Matrix;
 
 /**
  * JUnit test for Matrix implementations.
