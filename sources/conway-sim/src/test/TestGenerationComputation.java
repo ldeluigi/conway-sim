@@ -42,7 +42,7 @@ public class TestGenerationComputation {
         Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
         Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
         assertEquals(AFTER_STANDARD, Generations.compute(start).getAliveMatrix());
-        System.out.println("First:\n" + start + "\nSecond:\n" + Generations.compute(start));
+        System.out.println("First:\n" + start.getAliveMatrix().map(b -> b ? "■" : "□") + "\nSecond:\n" + Generations.compute(start).getAliveMatrix().map(b -> b ? "■" : "□"));
     }
 
     @Test
