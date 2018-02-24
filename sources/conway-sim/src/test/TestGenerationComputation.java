@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import core.model.CellEnvironment;
 import core.model.CellImpl;
 import core.model.Environment;
+import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
 import core.model.Generations;
@@ -38,23 +39,7 @@ public class TestGenerationComputation {
 });
     @Test
     void testOneComputation() {
-        Environment env = new Environment() {
-
-            @Override
-            public int getWidth() {
-                return BEFORE.getWidth();
-            }
-
-            @Override
-            public int getHeight() {
-                return BEFORE.getHeight();
-            }
-
-            @Override
-            public CellEnvironment getCellEnvironment(int x, int y) {
-                return StandardCellEnviroments.STANDARD;
-            }
-        };
+        Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
         Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
         assertEquals(AFTER_STANDARD, Generations.compute(start).getAliveMatrix());
         System.out.println("First:\n" + start + "\nSecond:\n" + Generations.compute(start));
@@ -62,23 +47,7 @@ public class TestGenerationComputation {
 
     @Test
     void testSomeComputations() {
-            Environment env = new Environment() {
-
-                @Override
-                public int getWidth() {
-                    return BEFORE.getWidth();
-                }
-
-                @Override
-                public int getHeight() {
-                    return BEFORE.getHeight();
-                }
-
-                @Override
-                public CellEnvironment getCellEnvironment(int x, int y) {
-                    return StandardCellEnviroments.STANDARD;
-                }
-            };
+            Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
             Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
             assertEquals(AFTER_THREE_STANDARD, Generations.compute(start, 3).getAliveMatrix());
             assertEquals(Generations.compute(start, 20).getAliveMatrix(), Generations.compute(start, 13).getAliveMatrix());
