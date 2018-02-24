@@ -64,30 +64,5 @@ public final class Generations {
         }
         return temp;
     }
-
-    /**
-     * A method to modify a {@link Generation} by applying a certain alive cell pattern. Note that in order to do this it creates a new generation without modifying the given one.
-     * @param generation is the {@link Generation} to be modified
-     * @param x is the row of the top left cell of the pattern
-     * @param y is the column of the top left cell of the pattern
-     * @param patternAliveCells is the alive cells {@link Matrix} of the pattern
-     * @return the modified generation with the pattern applied in the given position
-     */
-    public static Generation mergePatternXY(final Generation generation, final int x, final int y, final Matrix<Boolean> patternAliveCells) {
-        Objects.requireNonNull(generation);
-        Objects.requireNonNull(patternAliveCells);
-        if (x < 0 || y < 0 || x + patternAliveCells.getHeight() > generation.getHeight() || y + patternAliveCells.getWidth() > generation.getWidth()) {
-            throw new IllegalArgumentException("Invalid position or invalid pattern dimension.");
-        }
-        final Matrix<Cell> gen = GenerationFactory.copyOf(generation).getCellMatrix();
-        final Matrix<Cell> toApply = patternAliveCells.map(b -> new CellImpl(b ? ALIVE : DEAD));
-        IntStream.range(0, toApply.getHeight()).forEach(row -> {
-            IntStream.range(0, toApply.getWidth()).forEach(column -> {
-                gen.set(row + x, column + y, toApply.get(row, column));
-            });
-        });
-        return GenerationFactory.from(gen, generation.getEnviroment());
-    }
-
 }
 
