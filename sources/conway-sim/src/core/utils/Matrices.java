@@ -67,6 +67,18 @@ public final class Matrices {
             public <Y> Matrix<Y> map(final Function<? super X, ? extends Y> mapper) {
                 return matrix.map(mapper);
             }
+            @Override
+            public String toString() {
+                return matrix.toString();
+            }
+            @Override
+            public boolean equals(final Object obj) {
+                return matrix.equals(obj);
+            }
+            @Override
+            public int hashCode() {
+                return matrix.hashCode();
+            }
         };
     }
 }
