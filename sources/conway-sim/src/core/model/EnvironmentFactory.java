@@ -1,6 +1,5 @@
 package core.model;
 
-import java.util.function.Supplier;
 
 import core.utils.Matrix;
 
@@ -25,11 +24,11 @@ public interface EnvironmentFactory {
     Environment from(Matrix<CellEnvironment> envMatrix);
 
     /**
-     * A method that creates an {@link Environment} filled with {@link CellEnvironment} from the given supplier.
+     * A method that creates an {@link Environment} filled with the given {@link CellEnvironment}r.
      * @param width of the Environment
      * @param height of the Environment
-     * @param cellEnvSupplier the {@link Supplier<CellEnvironment>}
+     * @param cellEnv the {@link CellEnvironment}
      * @return the Environment as specified
      */
-    Environment fill(int width, int height, Supplier<CellEnvironment> cellEnvSupplier);
+    Environment fill(int width, int height, CellEnvironment cellEnv);
 }
