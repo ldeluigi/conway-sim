@@ -68,4 +68,12 @@ public class CellImpl implements Cell {
     public String toString() {
         return current.toString();
     }
+
+    /**
+     * Returns a new {@link CellImpl} with the same status.
+     */
+    @Override
+    public Cell copy() {
+        return new CellImpl(this.current);
+    }
 }

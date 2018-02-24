@@ -16,4 +16,10 @@ public interface Cell {
      * @return the current status of the cell
      */
     Status getStatus();
+
+    /**
+     * A method that return an exact copy of itself.
+     * @return a copy of itself
+     */
+    Cell copy();
 }

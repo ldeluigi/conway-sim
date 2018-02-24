@@ -20,7 +20,7 @@ public final class GenerationFactory {
      * @return the cloned generation
      */
     public static Generation copyOf(final Generation generation) {
-        return GenerationFactory.from(generation.getCellMatrix().map(c -> new CellImpl(c.getStatus())), generation.getEnviroment());
+        return GenerationFactory.from(generation.getCellMatrix().map(c -> c.copy()), generation.getEnviroment());
     }
 
     /**
