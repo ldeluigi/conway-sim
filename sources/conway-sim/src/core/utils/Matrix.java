@@ -5,7 +5,7 @@ import java.util.function.Function;
 /**
  * A generic matrix with useful utility methods.
  * 
- * @param <X>
+ * @param <X> generic type
  */
 public interface Matrix<X> {
 
