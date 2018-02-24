@@ -4,6 +4,7 @@ import static core.model.Status.ALIVE;
 
 import java.util.Objects;
 
+import core.utils.Matrices;
 import core.utils.Matrix;
 
 /**
@@ -39,7 +40,7 @@ public final class GenerationFactory {
 
             @Override
             public Matrix<Boolean> getAliveMatrix() {
-                return cellMatrix.map(c -> c.getStatus().equals(ALIVE));
+                return this.getCellMatrix().map(c -> c.getStatus().equals(ALIVE));
             }
 
             @Override
@@ -59,7 +60,7 @@ public final class GenerationFactory {
 
             @Override
             public Matrix<Cell> getCellMatrix() {
-                return cellMatrix;
+                return Matrices.unmodifiableMatrix(cellMatrix);
             }
 
             @Override
