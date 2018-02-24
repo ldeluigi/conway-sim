@@ -6,7 +6,7 @@ import java.util.function.Function;
  * Enumeration for common rule sets used in Conway's Game of Life.
  * 
  */
-public enum StandardCellEnviroments implements CellEnvironment {
+public enum StandardCellEnvironments implements CellEnvironment {
     /**
      * This is the classic rule set of Conway's Game of Life.
      */
@@ -15,7 +15,7 @@ public enum StandardCellEnviroments implements CellEnvironment {
     private final Function<Integer, Boolean> checkBorn;
     private final Function<Integer, Boolean> checkDeath;
 
-    StandardCellEnviroments(final Function<Integer, Boolean> checkBorn, final Function<Integer, Boolean> checkDeath) {
+    StandardCellEnvironments(final Function<Integer, Boolean> checkBorn, final Function<Integer, Boolean> checkDeath) {
         this.checkBorn = checkBorn;
         this.checkDeath = checkDeath;
     }

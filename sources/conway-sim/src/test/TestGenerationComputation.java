@@ -11,7 +11,7 @@ import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
 import core.model.Generations;
-import core.model.StandardCellEnviroments;
+import core.model.StandardCellEnvironments;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
 import static core.model.Status.*;
