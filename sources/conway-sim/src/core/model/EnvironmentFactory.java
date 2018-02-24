@@ -1,12 +1,11 @@
 package core.model;
 
-
 import core.utils.Matrix;
 
 /**
  * A factory used to create {@link Environment}.
  */
-public interface EnvironmentFactory {
+public class EnvironmentFactory {
 
     /**
      * A method that creates an {@link Environment} with the standard rules of Conway's Game of Life.
@@ -14,14 +13,20 @@ public interface EnvironmentFactory {
      * @param height of the Environment
      * @return the Environment as specified
      */
-    Environment standardRules(int width, int height);
+    public Environment standardRules(final int width, final int height) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     /**
      * A method that creates an {@link Environment} from the given {@link CellEnvironment} matrix.
      * @param envMatrix a {@link Matrix<CellEnvironment>}
      * @return the Environment based on the given matrix
      */
-    Environment from(Matrix<CellEnvironment> envMatrix);
+    public Environment from(final Matrix<CellEnvironment> envMatrix) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     /**
      * A method that creates an {@link Environment} filled with the given {@link CellEnvironment}r.
@@ -30,5 +35,9 @@ public interface EnvironmentFactory {
      * @param cellEnv the {@link CellEnvironment}
      * @return the Environment as specified
      */
-    Environment fill(int width, int height, CellEnvironment cellEnv);
+    public Environment fill(final int width, final int height, final CellEnvironment cellEnv) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
