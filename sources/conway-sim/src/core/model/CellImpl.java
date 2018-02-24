@@ -36,11 +36,27 @@ public class CellImpl implements Cell {
     }
 
     /**
-     * It's the same as {@link Status}.
+     * Returns a new {@link CellImpl} with the same status.
+     */
+    @Override
+    public Cell copy() {
+        return new CellImpl(this.getStatus());
+    }
+
+    /**
+     * Describes Cell status with a string.
+     */
+    @Override
+    public String toString() {
+        return current.toString();
+    }
+
+    /**
+     * It's the same as {@link Status}.hashCode().
      */
     @Override
     public int hashCode() {
-        return ((current == null) ? 0 : current.hashCode());
+        return (current == null) ? 0 : current.hashCode();
     }
 
     /**
@@ -59,21 +75,5 @@ public class CellImpl implements Cell {
         }
         final CellImpl other = (CellImpl) obj;
         return current.equals(other.current);
-    }
-
-    /**
-     * Describes Cell status with a string.
-     */
-    @Override
-    public String toString() {
-        return current.toString();
-    }
-
-    /**
-     * Returns a new {@link CellImpl} with the same status.
-     */
-    @Override
-    public Cell copy() {
-        return new CellImpl(this.current);
     }
 }
