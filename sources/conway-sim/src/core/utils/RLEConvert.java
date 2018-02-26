@@ -14,7 +14,9 @@ import java.util.regex.Pattern;
  * 
  */
 public class RLEConvert {
-
+    
+    //I'm adding this suppress warning, in the meanwhile I check what to do with it.
+    @SuppressWarnings("PMD.ImmutableField")
     private BufferedReader buffer;
     //RULEPATTERNS FOR THE ENCODING
     static final String COORDPATTERN = "x ?= ?([1-9]\\d*)",
@@ -22,12 +24,12 @@ public class RLEConvert {
                         CELLRUNPATTERN = "([1-9]\\d*)?([bo$])";
 
     //DEFAULT RULE TO BE SETTED. METHOD TO BE IMPLEMENTED
-    static final String DEFAULTRULE = "B3/S23";
+    private static final String DEFAULTRULE = "B3/S23";
 
     //WILDCHAR
-    static final char ALT = '!';
-    static final String DOLLAR = "$";
-    static final String HASH = "#";
+    private static final char ALT = '!';
+    private static final String DOLLAR = "$";
+    private static final String HASH = "#";
 
 
     //This will contain methods to convert a given matrix into a RLE Format
@@ -188,11 +190,6 @@ public class RLEConvert {
             }
         }
         return null;
-    }
-    /**
-     * 
-     */
-    void saveToFile() {
     }
 
 }
