@@ -2,16 +2,12 @@ package test;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GUITest {
@@ -34,7 +30,7 @@ public class GUITest {
         d.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
         i = new JInternalFrame("hey");
         a.setBounds(0, 0, 200, 200);
-        a.setVisible(true);
+        //a.setVisible(true);
         a.setLayout(new BorderLayout());
         a.add(new JButton("Hello world"));
         f.getContentPane().add(a);
