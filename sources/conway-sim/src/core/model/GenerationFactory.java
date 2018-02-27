@@ -40,7 +40,7 @@ public final class GenerationFactory {
 
             @Override
             public Matrix<Boolean> getAliveMatrix() {
-                return this.getCellMatrix().map(c -> c.getStatus().equals(ALIVE));
+                return Matrices.unmodifiableMatrix(cellMatrix.map(c -> c.getStatus().equals(ALIVE)));
             }
 
             @Override
