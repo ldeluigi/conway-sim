@@ -20,13 +20,14 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 public final class MainGUI {
 
     private static final int PIXELS_FROM_SCREEN_BORDERS = 50;
-    private static final int MINIMUM_FRAME_RATIO = 5;
+    private static final int MINIMUM_FRAME_RATIO = 2;
     private static final int INNER_FRAME_SCALE = 5;
 
 
     private final JFrame frame;
     private final JDesktopPane desktop;
     private final JPanel mainPanel;
+    private final JPanel menuPanel;
 
     /**
      * Starts the application.
@@ -71,7 +72,8 @@ public final class MainGUI {
         final BasicInternalFrameTitlePane titlePane = (BasicInternalFrameTitlePane) basicInternalFrameUI.getNorthPane();
         background.remove(titlePane);
         background.setVisible(true);
-        setView(MainMenu.JPANEL);
+        this.menuPanel = new MainMenu(this);
+        setView(this.menuPanel);
         this.frame.setVisible(true);
     }
 
@@ -110,6 +112,29 @@ public final class MainGUI {
         for (final JInternalFrame iframe : this.desktop.getAllFrames()) {
             iframe.doDefaultCloseAction();
         }
+    }
+
+    /**
+     * Gets frame width.
+     * @return current frame width
+     */
+    public int getCurrentWidth() {
+        return this.frame.getWidth();
+    }
+
+    /**
+     * Gets frame height.
+     * @return current frame height
+     */
+    public int getCurrentHeight() {
+        return this.frame.getHeight();
+    }
+
+    /**
+     * Removes current view and replaces it with main menu.
+     */
+    public void backToMainMenu() {
+        setView(this.menuPanel);
     }
 
 }

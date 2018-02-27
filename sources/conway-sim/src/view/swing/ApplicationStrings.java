@@ -15,4 +15,12 @@ public final class ApplicationStrings {
     public static String getApplicationTitle() {
         return "Conway's Game of Life";
     }
+
+    public static String getVersion() {
+        return "0.0.5 (Alpha)";
+    }
+
+    public static String getInfo() {
+        return "LDLM-Project, All Rights Reserved";
+    }
 }

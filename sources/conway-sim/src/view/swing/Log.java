@@ -1,8 +1,17 @@
 package view.swing;
 
+/**
+ * Logger class.
+ *
+ */
 public final class Log {
 
-    public static void log(String string) {
+    private Log() { }
+    /**
+     * Method to log.
+     * @param string to log
+     */
+    public static void log(final String string) {
         System.out.println(string);
     }
 
