@@ -8,7 +8,7 @@ public class TestView {
 
     public static void main(String[] args) {
         MainGUI m = new MainGUI();
-        JInternalFrame i = new JInternalFrame("test");
+        JInternalFrame i = new JInternalFrame("test", true, true, true, true);
         i.setSize(100, 100);
         m.popUpFrame(i);
     }
