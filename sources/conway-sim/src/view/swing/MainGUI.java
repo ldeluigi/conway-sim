@@ -82,7 +82,6 @@ public final class MainGUI {
     public void setView(final JPanel viewPanel) {
         this.mainPanel.removeAll();
         this.mainPanel.add(viewPanel);
-        this.mainPanel.repaint();
     }
 
     /**
