@@ -1,6 +1,5 @@
 package view.swing;
 
-import javax.swing.Icon;
 
 /**
  * Static class to get strings. Can support translations.

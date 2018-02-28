@@ -1,7 +1,6 @@
 package view.swing;
 
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
@@ -17,7 +16,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
  * 
  *
  */
-public final class MainGUI {
+public final class MainGUI implements GUI {
 
     private static final int PIXELS_FROM_SCREEN_BORDERS = 50;
     private static final int MINIMUM_FRAME_RATIO = 2;
@@ -26,7 +25,7 @@ public final class MainGUI {
 
     private final JFrame frame;
     private final JDesktopPane desktop;
-    private final JPanel mainPanel;
+    private final JInternalFrame background;
     private final JPanel menuPanel;
 
     /**
@@ -57,21 +56,21 @@ public final class MainGUI {
         this.desktop = new JDesktopPane();
         this.frame.setContentPane(this.desktop);
         this.desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
-        this.mainPanel = new JPanel(new GridBagLayout());
-        final JInternalFrame background = new JInternalFrame("", false, false, false);
-        background.setContentPane(this.mainPanel);
-        this.frame.getContentPane().add(background);
+        this.background = new JInternalFrame("", false, false, false);
+        this.frame.getContentPane().add(this.background);
         try {
             background.setMaximum(true);
         } catch (PropertyVetoException e1) {
             throw new IllegalStateException("Background Internal Frame has to be full size");
         }
-        background.setLayer(JDesktopPane.DEFAULT_LAYER);
-        background.setEnabled(false);
-        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) background.getUI());
+        this.background.setLayer(JDesktopPane.DEFAULT_LAYER);
+        this.background.setEnabled(false);
+        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background.getUI());
         final BasicInternalFrameTitlePane titlePane = (BasicInternalFrameTitlePane) basicInternalFrameUI.getNorthPane();
-        background.remove(titlePane);
-        background.setVisible(true);
+        this.background.remove(titlePane);
+        this.background.setBorder(null);
+        this.background.setVisible(true);
+        //Start with MainMenu
         this.menuPanel = new MainMenu(this);
         setView(this.menuPanel);
         this.frame.setVisible(true);
@@ -82,8 +81,7 @@ public final class MainGUI {
      * @param viewPanel the panel that will be shown as main screen on the application desktop.
      */
     public void setView(final JPanel viewPanel) {
-        this.mainPanel.removeAll();
-        this.mainPanel.add(viewPanel);
+        this.background.setContentPane(viewPanel);
     }
 
     /**
