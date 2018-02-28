@@ -32,7 +32,7 @@ public final class MainGUI implements GUI {
      * Starts the application.
      */
     public MainGUI() {
-        this.frame = new JFrame(ApplicationStrings.getApplicationTitle());
+        this.frame = new JFrame(MenuStrings.getApplicationTitle());
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.frame.addWindowListener(new WindowListener() {
             public void windowOpened(final WindowEvent e) {  }

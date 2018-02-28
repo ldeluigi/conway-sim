@@ -5,9 +5,9 @@ package view.swing;
  * Static class to get strings. Can support translations.
  *
  */
-public final class ApplicationStrings {
+public final class MenuStrings {
 
-    private ApplicationStrings() { }
+    private MenuStrings() { }
 
     /**
      * Main Frame title.

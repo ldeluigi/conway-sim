@@ -32,17 +32,17 @@ public final class MainMenu extends JPanel {
         this.setLayout(new BorderLayout());
         final JPanel center = new JPanel(new GridBagLayout());
         this.add(center, BorderLayout.CENTER);
-        final JLabel title = new JLabel(ApplicationStrings.getApplicationTitle());
+        final JLabel title = new JLabel(MenuStrings.getApplicationTitle());
         title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setBorder(new EmptyBorder(TITLE_OFFSET, 0, 0, 0));
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel();
         centralButtons.setLayout(new GridLayout(2, 1, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y)));
-        final JButton sandbox = new JButton(ApplicationStrings.sandboxButtonText());
+        final JButton sandbox = new JButton(MenuStrings.sandboxButtonText());
         sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
         sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
-        final JButton exit = new JButton(ApplicationStrings.exitButtonText());
+        final JButton exit = new JButton(MenuStrings.exitButtonText());
         exit.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         exit.addActionListener(e -> {
             mainGUI.close();
@@ -52,15 +52,15 @@ public final class MainMenu extends JPanel {
         });
         exit.setFocusPainted(false);
         exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
-        sandbox.setToolTipText(ApplicationStrings.getHoverSandboxButton());
+        sandbox.setToolTipText(MenuStrings.getHoverSandboxButton());
         sandbox.setFocusPainted(false);
         centralButtons.add(sandbox);
         centralButtons.add(exit);
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BorderLayout());
-        lowerPanel.add(new JLabel(ApplicationStrings.getVersion()), BorderLayout.EAST);
-        lowerPanel.add(new JLabel(ApplicationStrings.getInfo()), BorderLayout.WEST);
+        lowerPanel.add(new JLabel(MenuStrings.getVersion()), BorderLayout.EAST);
+        lowerPanel.add(new JLabel(MenuStrings.getInfo()), BorderLayout.WEST);
         this.add(lowerPanel, BorderLayout.SOUTH);
     }
 }
