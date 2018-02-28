@@ -1,6 +1,7 @@
 package view.swing;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -9,12 +10,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.InputVerifier;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 
-import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 
 /**
@@ -32,37 +35,32 @@ public class GenerationPanel extends JPanel {
     private static final String STOP = "STOP";
     private static final String PAUSE = "PAUSE";
     private static final String UNDO = "UNDO";
-    private static final List<Long> DEFAULT_GENERATION = Arrays.asList(1L, 10L, 20L, 50L, 100L, 200L);
 
-    private final GenerationController generationController = new GenerationControllerImpl();
-    private final JButton bStart;
-    private final JButton bStop;
-    private final JButton bPause;
-    private final JButton bUndo;
-    private final JComboBox<String> selectorUndo;
+    private final GenerationControllerImpl generationController = new GenerationControllerImpl();
 
     /**
      * 
      */
     public GenerationPanel() {
-        this.bStart = new JButton(START);
-        this.bStop = new JButton(STOP);
-        this.bPause = new JButton(PAUSE);
-        this.bUndo = new JButton(UNDO);
-        this.selectorUndo = new JComboBox<>();
+        final JButton bStart = new JButton(START);
+        final JButton bStop = new JButton(STOP);
+        final JButton bPause = new JButton(PAUSE);
+        final JButton bUndo = new JButton(UNDO);
 
         this.setLayout(new FlowLayout());
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        final JPanel undoPanel = new JPanel(new GridLayout(1, 2));
+        final JPanel undoPanel = new JPanel(new GridLayout(2, 2));
         this.add(bStart);
         this.add(bPause);
         this.add(bStop);
         this.add(bUndo);
 
-        final JComboBox<Long> defaulValue = new JComboBox<>();
-        DEFAULT_GENERATION.forEach(l -> defaulValue.addItem(l));
 
-        undoPanel.add(defaulValue);
+        final JTextComponent undoField = new JTextField();
+        undoField.setEditable(true);
+        undoField.setText("1234123");
+
+        this.add(undoField);
         this.add(buttonPanel);
         this.add(undoPanel);
         this.setLayoutSize(Toolkit.getDefaultToolkit().getScreenSize(), RELATIONSHIP_STANDARD);
@@ -99,12 +97,12 @@ public class GenerationPanel extends JPanel {
     /* 
      * Personal test don't remove
      */
-//    public static void main(final String[] s) {
-//        final JFrame frame = new JFrame();
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.add(new GenerationPanelFactory());
-//        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-//        frame.setVisible(true);
-//    }
-    
+    public static void main(final String[] s) {
+        final JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new GenerationPanel());
+        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
+        frame.setVisible(true);
+    }
+
 }
