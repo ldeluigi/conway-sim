@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import view.swing.GUI;
+import view.swing.DesktopGUI;
 import view.swing.sandbox.Sandbox;
 
 /**
@@ -29,7 +29,7 @@ public final class MainMenu extends JPanel {
      * The constructor fills the panel.
      * @param mainGUI the main GUI
      */
-    public MainMenu(final GUI mainGUI) {
+    public MainMenu(final DesktopGUI mainGUI) {
         this.setLayout(new BorderLayout());
         final JPanel center = new JPanel(new GridBagLayout());
         this.add(center, BorderLayout.CENTER);

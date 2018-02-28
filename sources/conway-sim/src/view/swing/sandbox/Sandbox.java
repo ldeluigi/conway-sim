@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import view.swing.DesktopGUI;
+import view.swing.GUI;
 import view.swing.book.BookFrame;
 
 /**
@@ -29,7 +29,7 @@ public class Sandbox extends JPanel {
      * 
      * @param maingui the mainGui that call this SandBox
      */
-    public Sandbox(final DesktopGUI maingui) {
+    public Sandbox(final GUI maingui) {
 
         final JPanel eastButtonPanel = new JPanel(new FlowLayout());
         this.setLayout(new BorderLayout());
