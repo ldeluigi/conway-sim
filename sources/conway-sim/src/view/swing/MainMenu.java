@@ -18,10 +18,10 @@ public final class MainMenu extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private static final int TITLE_SIZE = 80;
-    private static final int TEXT_RATIO = 2;
+    private static final int BUTTON_TEXT_SIZE = 40;
     private static final int BUTTON_RATIO_Y = 10;
     private static final int BUTTON_RATIO_X = 5;
-    private static final int TITLE_OFFSET = 60;
+    private static final int TITLE_OFFSET = 120;
     /**
      * The constructor fills the panel.
      * @param mainGUI the main GUI
@@ -38,7 +38,7 @@ public final class MainMenu extends JPanel {
         final JPanel centralButtons = new JPanel();
         centralButtons.setLayout(new GridLayout(2, 1, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y)));
         final JButton b1 = new JButton(ApplicationStrings.sandboxButtonText());
-        b1.setFont(new Font(Font.MONOSPACED, Font.PLAIN, TITLE_SIZE / TEXT_RATIO));
+        b1.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
         b1.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         final JButton exit = new JButton(ApplicationStrings.exitButtonText());
         exit.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
@@ -46,7 +46,7 @@ public final class MainMenu extends JPanel {
             mainGUI.close();
         });
         exit.setFocusPainted(false);
-        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, TITLE_SIZE / TEXT_RATIO));
+        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
         b1.setToolTipText(ApplicationStrings.getHoverSandboxButton());
         b1.setFocusPainted(false);
         centralButtons.add(b1);

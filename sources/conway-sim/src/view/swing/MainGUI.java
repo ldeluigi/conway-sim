@@ -48,11 +48,10 @@ public final class MainGUI implements GUI {
             public void windowActivated(final WindowEvent e) {  }
         });
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.frame.setMinimumSize(new Dimension(screenSize.width / MINIMUM_FRAME_RATIO, screenSize.height / MINIMUM_FRAME_RATIO));
-        this.frame.setBounds(PIXELS_FROM_SCREEN_BORDERS,
-                    PIXELS_FROM_SCREEN_BORDERS,
-                    screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2,
-                    screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
+        this.frame.setMinimumSize(
+                new Dimension(screenSize.width / MINIMUM_FRAME_RATIO, screenSize.height / MINIMUM_FRAME_RATIO));
+        this.frame.setBounds(PIXELS_FROM_SCREEN_BORDERS, PIXELS_FROM_SCREEN_BORDERS,
+                screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2, screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
         this.desktop = new JDesktopPane();
         this.frame.setContentPane(this.desktop);
         this.desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
@@ -76,7 +75,6 @@ public final class MainGUI implements GUI {
 //                    javax.swing.UIManager.getSystemLookAndFeelClassName());
 //        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 //                | javax.swing.UnsupportedLookAndFeelException e) {
-//            Log.log("Switching to normal Look and Feel due to Exception " + e);
 //        }
         //Start with MainMenu
         this.menuPanel = new MainMenu(this);
@@ -85,7 +83,7 @@ public final class MainGUI implements GUI {
     }
 
     /**
-     * A method that changes the main view of the application.
+     * A method that changes the main view of the application (background).
      * @param viewPanel the panel that will be shown as main screen on the application desktop.
      */
     @Override
@@ -107,7 +105,11 @@ public final class MainGUI implements GUI {
      */
     public void popUpFrame(final JInternalFrame frame) {
         frame.setLocation(this.desktop.getWidth() / INNER_FRAME_SCALE, this.desktop.getHeight() / INNER_FRAME_SCALE);
-        frame.setMinimumSize(new Dimension(this.desktop.getMinimumSize().width / MINIMUM_FRAME_RATIO, this.desktop.getMinimumSize().height / MINIMUM_FRAME_RATIO));
+        final Dimension minDim = new Dimension(
+                Math.max(frame.getMinimumSize().width, this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
+                Math.max(frame.getMinimumSize().height, this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
+        frame.setMinimumSize(minDim);
+        frame.setSize(Math.max(minDim.width, frame.getWidth()), Math.max(minDim.height, frame.getHeight()));
         frame.setVisible(true);
         this.desktop.add(frame);
         frame.setLayer(JDesktopPane.PALETTE_LAYER);

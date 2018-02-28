@@ -27,7 +27,7 @@ public final class ApplicationStrings {
 
     /**
      * Info about this project.
-     * @return the infos
+     * @return the info
      */
     public static String getInfo() {
         return "LDLM-Project, All Rights Reserved";
