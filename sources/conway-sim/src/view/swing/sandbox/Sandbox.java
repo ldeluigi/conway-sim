@@ -8,7 +8,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.swing.DesktopGUI;
-import view.swing.GUI;
 import view.swing.book.BookFrame;
 
 /**

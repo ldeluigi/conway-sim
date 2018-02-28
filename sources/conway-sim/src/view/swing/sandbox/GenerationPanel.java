@@ -1,18 +1,12 @@
 package view.swing.sandbox;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.swing.BorderFactory;
-import javax.swing.InputVerifier;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
