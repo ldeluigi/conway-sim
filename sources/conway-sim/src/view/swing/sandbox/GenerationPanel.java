@@ -1,4 +1,4 @@
-package view.swing;
+package view.swing.sandbox;
 
 import java.awt.Color;
 import java.awt.Component;

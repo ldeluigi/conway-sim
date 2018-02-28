@@ -104,12 +104,12 @@ public final class MainGUI implements GUI {
      * @param frame the frame that pops up
      */
     public void popUpFrame(final JInternalFrame frame) {
-        frame.setLocation(this.desktop.getWidth() / INNER_FRAME_SCALE, this.desktop.getHeight() / INNER_FRAME_SCALE);
         final Dimension minDim = new Dimension(
                 Math.max(frame.getMinimumSize().width, this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
                 Math.max(frame.getMinimumSize().height, this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
         frame.setMinimumSize(minDim);
         frame.setSize(Math.max(minDim.width, frame.getWidth()), Math.max(minDim.height, frame.getHeight()));
+        frame.setLocation((this.getCurrentWidth() - frame.getWidth()) / 2, this.desktop.getHeight() / INNER_FRAME_SCALE);
         frame.setVisible(true);
         this.desktop.add(frame);
         frame.setLayer(JDesktopPane.PALETTE_LAYER);
