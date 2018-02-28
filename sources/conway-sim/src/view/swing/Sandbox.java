@@ -11,7 +11,7 @@ import view.swing.book.Book;
 /**
  * 
  */
-public class SandboxView extends JPanel {
+public class Sandbox extends JPanel {
 
     /**
      * 
@@ -25,7 +25,7 @@ public class SandboxView extends JPanel {
     /**
      * 
      */
-    public SandboxView() {
+    public Sandbox() {
         this.setLayout(new BorderLayout());
         this.add(label, BorderLayout.CENTER);
         this.add(bBook, BorderLayout.EAST);
