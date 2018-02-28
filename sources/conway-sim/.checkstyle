@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <fileset-config file-format-version="1.2.0" simple-config="true" sync-formatter="true">
-  <local-check-config name="StyleTest" location="internal_config_1519572394506.xml" type="internal" description=""/>
-  <fileset name="all" enabled="true" check-config-name="style" local="false">
+  <local-check-config name="style.xml" location="internal_config_1519855296694.xml" type="internal" description=""/>
+  <fileset name="all" enabled="true" check-config-name="style.xml" local="true">
     <file-match-pattern match-pattern="." include-pattern="true"/>
   </fileset>
 </fileset-config>
