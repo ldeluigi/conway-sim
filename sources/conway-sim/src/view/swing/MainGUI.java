@@ -104,18 +104,18 @@ public final class MainGUI implements GUI {
 
     /**
      * This method pops up a {@link JInternalFrame} in a fixed position.
-     * @param frame the frame that pops up
+     * @param iFrame the frame that pops up
      */
-    public void popUpFrame(final JInternalFrame frame) {
+    public void popUpFrame(final JInternalFrame iFrame) {
         final Dimension minDim = new Dimension(
-                Math.max(frame.getMinimumSize().width, this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
-                Math.max(frame.getMinimumSize().height, this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
-        frame.setMinimumSize(minDim);
-        frame.setSize(Math.max(minDim.width, frame.getWidth()), Math.max(minDim.height, frame.getHeight()));
-        frame.setLocation((this.getCurrentWidth() - frame.getWidth()) / 2, this.desktop.getHeight() / INNER_FRAME_SCALE);
-        frame.setVisible(true);
-        this.desktop.add(frame);
-        frame.setLayer(JDesktopPane.PALETTE_LAYER);
+                Math.max(iFrame.getMinimumSize().width, this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
+                Math.max(iFrame.getMinimumSize().height, this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
+        iFrame.setMinimumSize(minDim);
+        iFrame.setSize(Math.max(minDim.width, iFrame.getWidth()), Math.max(minDim.height, iFrame.getHeight()));
+        iFrame.setLocation((this.getCurrentWidth() - iFrame.getWidth()) / 2, this.desktop.getHeight() / INNER_FRAME_SCALE);
+        iFrame.setVisible(true);
+        this.desktop.add(iFrame);
+        iFrame.setLayer(JDesktopPane.PALETTE_LAYER);
     }
 
     /**
