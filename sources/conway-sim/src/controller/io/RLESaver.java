@@ -10,7 +10,7 @@ public class RLESaver {
      * 
      * @return
      */
-    private boolean[][] getGrid(){
+    private boolean[][] getGrid() {
         return this.grid;
     }
     /**
