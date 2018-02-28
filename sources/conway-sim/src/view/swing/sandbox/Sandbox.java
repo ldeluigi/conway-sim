@@ -7,8 +7,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.swing.GUI;
-import view.swing.MainGUI;
-import view.swing.menu.MainMenu;
 
 /**
  * 
@@ -35,7 +33,7 @@ public class Sandbox extends JPanel {
         this.generationPanel.setLayoutSize(this.getSize(), 10);
         this.add(generationPanel, BorderLayout.NORTH);
         final JButton bExit = new JButton("EXIT");
-        bExit.addActionListener(e -> maingui.setView(new MainMenu(maingui)));
+        bExit.addActionListener(e -> maingui.backToMainMenu());
         this.add(bExit, BorderLayout.SOUTH);
     }
 }
