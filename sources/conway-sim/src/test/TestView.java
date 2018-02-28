@@ -3,7 +3,7 @@ package test;
 import javax.swing.JInternalFrame;
 
 import view.swing.MainGUI;
-import view.swing.Sandbox;
+import view.swing.sandbox.Sandbox;
 
 public class TestView {
 

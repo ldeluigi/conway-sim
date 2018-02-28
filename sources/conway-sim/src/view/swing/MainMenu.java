@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import view.swing.sandbox.Sandbox;
+
 /**
  * This class displays the main menu. Pattern: Singleton.
  */
