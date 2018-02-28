@@ -1,5 +1,7 @@
 package view.swing;
 
+import javax.swing.Icon;
+
 /**
  * Static class to get strings. Can support translations.
  *
@@ -22,5 +24,17 @@ public final class ApplicationStrings {
 
     public static String getInfo() {
         return "LDLM-Project, All Rights Reserved";
+    }
+    
+    public static String getHoverSandboxButton() {
+        return "Start Sandbox Mode";
+    }
+
+    public static String sandboxButtonText() {
+        return "Sandbox";
+    }
+
+    public static String exitButtonText() {
+        return "Exit";
     }
 }

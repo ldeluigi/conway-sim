@@ -30,16 +30,18 @@ public final class MainMenu extends JPanel {
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel();
         centralButtons.setLayout(new GridLayout(2, 1, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO * BUTTON_RATIO)));
-        final JButton b1 = new JButton("Sandbox");
+        final JButton b1 = new JButton(ApplicationStrings.sandboxButtonText());
         b1.setFont(new Font(Font.MONOSPACED, Font.PLAIN, TITLE_SIZE / TEXT_RATIO));
         b1.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO, mainGUI.getCurrentHeight() / BUTTON_RATIO));
-        final JButton exit = new JButton("Exit");
+        final JButton exit = new JButton(ApplicationStrings.exitButtonText());
         exit.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO, mainGUI.getCurrentHeight() / BUTTON_RATIO));
         exit.addActionListener(e -> {
             mainGUI.close();
         });
+        exit.setFocusPainted(false);
         exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, TITLE_SIZE / TEXT_RATIO));
-        exit.setToolTipText("Exits the application");
+        b1.setToolTipText(ApplicationStrings.getHoverSandboxButton());
+        b1.setFocusPainted(false);
         centralButtons.add(b1);
         centralButtons.add(exit);
         this.add(centralButtons, BorderLayout.CENTER);
