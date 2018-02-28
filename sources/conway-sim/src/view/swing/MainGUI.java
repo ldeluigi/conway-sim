@@ -70,6 +70,14 @@ public final class MainGUI implements GUI {
         this.background.remove(titlePane);
         this.background.setBorder(null);
         this.background.setVisible(true);
+        //Change L&F
+//        try {
+//            javax.swing.UIManager.setLookAndFeel(
+//                    javax.swing.UIManager.getSystemLookAndFeelClassName());
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
+//                | javax.swing.UnsupportedLookAndFeelException e) {
+//            Log.log("Switching to normal Look and Feel due to Exception " + e);
+//        }
         //Start with MainMenu
         this.menuPanel = new MainMenu(this);
         setView(this.menuPanel);
@@ -80,6 +88,7 @@ public final class MainGUI implements GUI {
      * A method that changes the main view of the application.
      * @param viewPanel the panel that will be shown as main screen on the application desktop.
      */
+    @Override
     public void setView(final JPanel viewPanel) {
         this.background.setContentPane(viewPanel);
     }
@@ -87,6 +96,7 @@ public final class MainGUI implements GUI {
     /**
      * Method that closes the program, programmatically or called by user actions.
      */
+    @Override
     public void close() {
         System.exit(0);
     }
@@ -116,6 +126,7 @@ public final class MainGUI implements GUI {
      * Gets frame width.
      * @return current frame width
      */
+    @Override
     public int getCurrentWidth() {
         return this.frame.getWidth();
     }
@@ -124,6 +135,7 @@ public final class MainGUI implements GUI {
      * Gets frame height.
      * @return current frame height
      */
+    @Override
     public int getCurrentHeight() {
         return this.frame.getHeight();
     }
@@ -131,6 +143,7 @@ public final class MainGUI implements GUI {
     /**
      * Removes current view and replaces it with main menu.
      */
+    @Override
     public void backToMainMenu() {
         setView(this.menuPanel);
     }

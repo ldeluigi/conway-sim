@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
 
 import core.utils.ListMatrix;
+import core.utils.Matrices;
 import core.utils.Matrix;
 
 /**
@@ -87,5 +88,10 @@ public class TestMatrix {
     @Test
     void testConstructors() {
         System.out.println(new ListMatrix<>(12, 6, () -> "hi"));
+    }
+
+    @Test
+    void testEquals() {
+        assertEquals(new ListMatrix<>(2, 2, () -> true), Matrices.unmodifiableMatrix(new ListMatrix<>(2, 2, () -> true)));
     }
 }

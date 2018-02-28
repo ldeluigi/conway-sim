@@ -81,4 +81,24 @@ public final class Matrices {
             }
         };
     }
+
+    /**
+     * Returns true only if the two Matrices have the same dimensions and every corresponding cell equals the counterpart.
+     * @param a a matrix
+     * @param b a second matrix
+     * @return true if they are equals
+     */
+    public static boolean areEquals(final Matrix<?> a, final Matrix<?> b) {
+        if (a.getHeight() != b.getHeight() || a.getWidth() != b.getWidth()) {
+            return false;
+        }
+        for (int i = 0; i < a.getHeight(); i++) {
+            for (int j = 0; j < a.getWidth(); j++) {
+                if (!a.get(i, j).equals(b.get(i, j))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

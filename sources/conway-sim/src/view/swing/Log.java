@@ -12,7 +12,7 @@ public final class Log {
      * @param string to log
      */
     public static void log(final String string) {
-        System.out.println(string);
+        System.err.println(string);
     }
 
 }

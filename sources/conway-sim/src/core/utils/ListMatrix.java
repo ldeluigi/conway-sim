@@ -155,18 +155,11 @@ public final class ListMatrix<X> implements Matrix<X> {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof Matrix)) {
             return false;
         }
-        final ListMatrix<?> other = (ListMatrix<?>) obj;
-        if (this.matrix == null) {
-            if (other.matrix != null) {
-                return false;
-            }
-        } else if (!this.matrix.equals(other.matrix)) {
-            return false;
-        }
-        return true;
+        final Matrix<?> other = (Matrix<?>) obj;
+        return Matrices.areEquals(this, other);
     }
 
     @Override

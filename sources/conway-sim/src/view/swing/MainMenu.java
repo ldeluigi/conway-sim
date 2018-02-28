@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 /**
  * This class displays the main menu. Pattern: Singleton.
@@ -16,10 +17,11 @@ import javax.swing.JPanel;
 public final class MainMenu extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static final int TITLE_SIZE = 50;
+    private static final int TITLE_SIZE = 80;
     private static final int TEXT_RATIO = 2;
     private static final int BUTTON_RATIO_Y = 10;
     private static final int BUTTON_RATIO_X = 5;
+    private static final int TITLE_OFFSET = 60;
     /**
      * The constructor fills the panel.
      * @param mainGUI the main GUI
@@ -31,6 +33,7 @@ public final class MainMenu extends JPanel {
         final JLabel title = new JLabel(ApplicationStrings.getApplicationTitle());
         title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
         title.setHorizontalAlignment(JLabel.CENTER);
+        title.setBorder(new EmptyBorder(TITLE_OFFSET, 0, 0, 0));
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel();
         centralButtons.setLayout(new GridLayout(2, 1, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y)));

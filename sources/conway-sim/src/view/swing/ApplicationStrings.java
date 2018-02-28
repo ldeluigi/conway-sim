@@ -17,22 +17,42 @@ public final class ApplicationStrings {
         return "Conway's Game of Life";
     }
 
+    /**
+     * Returns a string representing the version of the source.
+     * @return the version
+     */
     public static String getVersion() {
-        return "0.0.5 (Alpha)";
+        return "0.0.7 (Alpha)";
     }
 
+    /**
+     * Info about this project.
+     * @return the infos
+     */
     public static String getInfo() {
         return "LDLM-Project, All Rights Reserved";
     }
-    
+
+    /**
+     * Sandbox button Hover hint.
+     * @return hint on sandbox button
+     */
     public static String getHoverSandboxButton() {
         return "Start Sandbox Mode";
     }
 
+    /**
+     * Sandbox button text.
+     * @return text to be displayed
+     */
     public static String sandboxButtonText() {
         return "Sandbox";
     }
 
+    /**
+     * Exit button text.
+     * @return text to be displayed
+     */
     public static String exitButtonText() {
         return "Exit";
     }
