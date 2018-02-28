@@ -48,7 +48,7 @@ public final class MainMenu extends JPanel {
             mainGUI.close();
         });
         sandbox.addActionListener(e -> {
-            mainGUI.setView(new Sandbox());
+            mainGUI.setView(new Sandbox(mainGUI));
         });
         exit.setFocusPainted(false);
         exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
