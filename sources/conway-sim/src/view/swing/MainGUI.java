@@ -19,7 +19,7 @@ import view.swing.menu.MenuStrings;
  * 
  *
  */
-public final class MainGUI implements GUI {
+public final class MainGUI implements DesktopGUI {
 
     private static final int PIXELS_FROM_SCREEN_BORDERS = 50;
     private static final int MINIMUM_FRAME_RATIO = 2;
