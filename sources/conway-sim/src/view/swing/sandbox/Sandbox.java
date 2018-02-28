@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 
 import view.swing.GUI;
 import view.swing.MainGUI;
-import view.swing.MainMenu;
+import view.swing.menu.MainMenu;
 
 /**
  * 

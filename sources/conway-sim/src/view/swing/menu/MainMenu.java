@@ -1,4 +1,4 @@
-package view.swing;
+package view.swing.menu;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import view.swing.GUI;
 import view.swing.sandbox.Sandbox;
 
 /**

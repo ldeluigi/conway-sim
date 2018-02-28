@@ -12,6 +12,9 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+
+import view.swing.menu.MainMenu;
+import view.swing.menu.MenuStrings;
 /**
  * 
  *
