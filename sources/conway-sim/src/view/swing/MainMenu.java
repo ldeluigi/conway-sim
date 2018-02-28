@@ -37,19 +37,22 @@ public final class MainMenu extends JPanel {
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel();
         centralButtons.setLayout(new GridLayout(2, 1, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y)));
-        final JButton b1 = new JButton(ApplicationStrings.sandboxButtonText());
-        b1.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
-        b1.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        final JButton sandbox = new JButton(ApplicationStrings.sandboxButtonText());
+        sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
+        sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         final JButton exit = new JButton(ApplicationStrings.exitButtonText());
         exit.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         exit.addActionListener(e -> {
             mainGUI.close();
         });
+        sandbox.addActionListener(e -> {
+            mainGUI.setView(new Sandbox());
+        });
         exit.setFocusPainted(false);
         exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
-        b1.setToolTipText(ApplicationStrings.getHoverSandboxButton());
-        b1.setFocusPainted(false);
-        centralButtons.add(b1);
+        sandbox.setToolTipText(ApplicationStrings.getHoverSandboxButton());
+        sandbox.setFocusPainted(false);
+        centralButtons.add(sandbox);
         centralButtons.add(exit);
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
