@@ -6,7 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import view.swing.GUI;
+import view.swing.DesktopGUI;
 
 /**
  * 
@@ -26,7 +26,7 @@ public class Sandbox extends JPanel {
      * 
      * @param maingui the mainGui that call this SandBox
      */
-    public Sandbox(final GUI maingui) {
+    public Sandbox(final DesktopGUI maingui) {
         this.setLayout(new BorderLayout());
         this.add(label, BorderLayout.CENTER);
         this.add(bBook, BorderLayout.EAST);
