@@ -1,12 +1,12 @@
-package view.swing.grid;
+package view.swing.sandbox;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
-import javax.swing.*;
-
-import core.utils.Matrix;
-
-import core.model.*;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * 
@@ -18,22 +18,19 @@ public class GridPanel extends JPanel {
      * 
      */
     private static final long serialVersionUID = -6223682631387845522L;
-
-    private JPanel main = new JPanel(new BorderLayout());
-    private JScrollPane scroll;
-    private JPanel grid;
-    private GridBagConstraints c = new GridBagConstraints();
+    private final JPanel grid;
+    private final GridBagConstraints c = new GridBagConstraints();
 
     /**
      * 
      */
     public GridPanel() {
-        super();
+        final JScrollPane scroll;
         this.grid = new JPanel(new GridBagLayout());
-        this.scroll = new JScrollPane(this.grid);
-        this.scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        this.scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        this.main.add(scroll, BorderLayout.CENTER);
+        scroll = new JScrollPane(this.grid);
+        scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        this.add(scroll, BorderLayout.CENTER);
         this.c.fill =  GridBagConstraints.HORIZONTAL;
         this.addGrid();
     }
