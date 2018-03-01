@@ -3,6 +3,7 @@ package test;
 import javax.swing.JInternalFrame;
 
 import view.swing.MainGUI;
+import view.swing.sandbox.GridPanel;
 import view.swing.sandbox.Sandbox;
 
 public class TestView {
@@ -14,6 +15,7 @@ public class TestView {
         updates.add(new javax.swing.JLabel("CLICK BUTTONS YAY"));
         updates.setSize(m.getCurrentWidth() / 2, m.getCurrentHeight() / 2);
         m.popUpFrame(updates);
+
     }
 
 }

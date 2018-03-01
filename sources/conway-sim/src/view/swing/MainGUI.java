@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyVetoException;
 
+import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -90,7 +91,7 @@ public final class MainGUI implements DesktopGUI {
      * @param viewPanel the panel that will be shown as main screen on the application desktop.
      */
     @Override
-    public void setView(final JPanel viewPanel) {
+    public void setView(final JComponent viewPanel) {
         this.background.setContentPane(viewPanel);
     }
 

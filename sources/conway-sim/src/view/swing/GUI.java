@@ -1,6 +1,6 @@
 package view.swing;
 
-import javax.swing.JPanel;
+import javax.swing.JComponent;
 
 /**
  * Interface for generic GUI implementations.
@@ -28,7 +28,7 @@ public interface GUI {
      * Makes the given panel the main content pane of the view.
      * @param viewPanel to be displayed as main view.
      */
-    void setView(JPanel viewPanel);
+    void setView(JComponent viewPanel);
 
     /**
      * Returns to the default view.

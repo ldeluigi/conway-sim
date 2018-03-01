@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import view.swing.DesktopGUI;
@@ -20,7 +19,7 @@ public class Sandbox extends JPanel {
      */
     private static final long serialVersionUID = -9015811419136279771L;
 
-    private final JLabel label = new JLabel("this is Sandbox area");
+
     private final GenerationPanel generationPanel = new GenerationPanel();
     private final JButton bBook = new JButton("book");
 
@@ -32,7 +31,7 @@ public class Sandbox extends JPanel {
 
         final JPanel eastButtonPanel = new JPanel(new FlowLayout());
         this.setLayout(new BorderLayout());
-        this.add(label, BorderLayout.CENTER);
+        this.add(new GridPanel(), BorderLayout.CENTER);
         this.generationPanel.setLayoutSize(this.getSize(), 10);
         eastButtonPanel.add(generationPanel);
         eastButtonPanel.add(bBook);
