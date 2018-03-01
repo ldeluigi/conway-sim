@@ -1,11 +1,20 @@
 package view.swing.book;
 
 
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
+
+import controller.io.IOLoader;
 
 /**
  * 
@@ -16,26 +25,65 @@ public class BookFrame extends JInternalFrame {
      * 
      */
     private static final long serialVersionUID = -1045414565623185058L;
-
+    private static final int WIDTH = 150;
+    private static final int HEIGHT = 270;
     /**
      * 
      */
     public BookFrame() {
         super("Book", false, true);
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
+        this.setSize(WIDTH, HEIGHT);
         // TEST FOR THE JList WITH A TEMP ARRAY
-        String[] elems = new String[10];
-        elems[0] = "elem1";
-        elems[1] = "elem2";
+        List<String> arrList = new ArrayList<String>();
+        arrList.add("Glider");
+        arrList.add("Blinker (period 2)");
+        arrList.add("Toad (period 2)");
+        arrList.add("Beacon (period 2)");
+        arrList.add("Pulsar (period 3)");
+        arrList.add("Pentadecathlon (period 15)");
+        arrList.add("Lightweight spaceship (LWSS)");
+        arrList.add("Gosper glider gun");
+        arrList.add(" ");
+        arrList.add(" ");
+        arrList.add(" ");
+        String[] elems = arrList.toArray(new String[arrList.size()]);
         JList list = new JList(elems);
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
         list.setVisibleRowCount(-1);
         this.add(list);
+        //BUTTON PANEL
+        JPanel ioPanel = new JPanel();
+        this.add(ioPanel);
         JButton placeBtn = new JButton("Place");
-        getContentPane().add(placeBtn);
+        ioPanel.add(placeBtn);
+        //JFILECHOOSER
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Select the file you want to load");
+        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         JButton loadBtn = new JButton("Load");
-        getContentPane().add(loadBtn);
+        //ACTION LISTENER TESSSSST
+        ActionListener ac = e -> {
+            final JButton jb = (JButton) e.getSource();
+            if (fc.showOpenDialog(jb) == JFileChooser.APPROVE_OPTION) {
+                final String filepath;
+                filepath = fc.getSelectedFile().getAbsolutePath();
+                System.out.println("File selected:" + filepath);
+                IOLoader ioLoader = new IOLoader();
+                try {
+                    ArrayList<String> al = ioLoader.load(filepath);
+                } catch (FileNotFoundException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
+            }
+        };
+        loadBtn.addActionListener(ac);
+        //ADD THE BUTTON
+        ioPanel.add(loadBtn);
+
     }
+    
 }
 
