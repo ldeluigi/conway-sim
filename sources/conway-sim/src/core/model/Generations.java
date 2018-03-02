@@ -112,7 +112,6 @@ public final class Generations {
         Generation temp = start;
         for (int i = 0; i < number; i++) {
             temp = Generations.compute(temp, threads);
-            System.out.println(temp.getCellMatrix());
         }
         return temp;
     }

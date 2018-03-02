@@ -70,17 +70,29 @@ public class TestGenerationComputation {
             assertEquals(Generations.compute(20, start, 4).getAliveMatrix(), Generations.compute(13, start, 4).getAliveMatrix());
      }
 
-    
+    @Test
     void testMultithreadPerformances() {
         Environment env = EnvironmentFactory.standardRules(1000, 1000);
         Generation start = GenerationFactory.from(new ListMatrix<>(1000, 1000, () -> new CellImpl(Math.random() > 0.5 ? ALIVE : DEAD)), env);
         long startTime = System.currentTimeMillis();
-        Generations.compute(1000, start, 1);
+        Generations.compute(100, start, 1);
         long first = System.currentTimeMillis() - startTime;
         System.out.println(first);
         startTime = System.currentTimeMillis();
-        Generations.compute(1000, start, 4);
+        Generations.compute(100, start, 2);
         long second = System.currentTimeMillis() - startTime;
+        System.out.println(second);
+        startTime = System.currentTimeMillis();
+        Generations.compute(100, start, 4);
+        second = System.currentTimeMillis() - startTime;
+        System.out.println(second);
+        startTime = System.currentTimeMillis();
+        Generations.compute(100, start, 5);
+        second = System.currentTimeMillis() - startTime;
+        System.out.println(second);
+        startTime = System.currentTimeMillis();
+        Generations.compute(100, start, 6);
+        second = System.currentTimeMillis() - startTime;
         System.out.println(second);
         if (second > first) {
             fail();
