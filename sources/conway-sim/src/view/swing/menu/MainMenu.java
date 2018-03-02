@@ -49,6 +49,7 @@ public final class MainMenu extends JPanel {
             mainGUI.close();
         });
         sandbox.addActionListener(e -> {
+            mainGUI.setView(new LoadingScreen());
             mainGUI.setView(new Sandbox(mainGUI));
         });
         exit.setFocusPainted(false);
@@ -63,5 +64,21 @@ public final class MainMenu extends JPanel {
         lowerPanel.add(new JLabel(MenuStrings.getVersion()), BorderLayout.EAST);
         lowerPanel.add(new JLabel(MenuStrings.getInfo()), BorderLayout.WEST);
         this.add(lowerPanel, BorderLayout.SOUTH);
+    }
+    /**
+     * {@link JPanel} representing a simple loading screen.
+     */
+    public class LoadingScreen extends JPanel {
+        private static final long serialVersionUID = 1L;
+
+        /**
+         * Constructor that builds the scene.
+         */
+        public LoadingScreen() {
+            super(new GridBagLayout());
+            final JLabel loading = new JLabel(MenuStrings.getLoadingText());
+            loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2));
+            this.add(loading);
+        }
     }
 }

@@ -56,4 +56,12 @@ public final class MenuStrings {
     public static String exitButtonText() {
         return "Exit";
     }
+
+    /**
+     * Returns text to be displayed on loading screen.
+     * @return the text
+     */
+    public static String getLoadingText() {
+        return "Loading...";
+    }
 }
