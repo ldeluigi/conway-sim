@@ -2,7 +2,9 @@ package view.swing.sandbox;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.util.Objects;
 
+import javax.print.attribute.standard.RequestingUserName;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -23,7 +25,7 @@ public class Sandbox extends JPanel {
     private final GenerationPanel generationPanel = new GenerationPanel();
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
-
+    private BookFrame book;
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
@@ -49,8 +51,13 @@ public class Sandbox extends JPanel {
     }
 
     private void callBook() {
-
-        this.mainGUI.popUpFrame(new BookFrame());
+        if (Objects.isNull(book)) {
+            book = new BookFrame();
+            this.mainGUI.popUpFrame(book);
+        } else if (!book.isShowing()) {
+            this.book = new BookFrame();
+            this.mainGUI.popUpFrame(book);
+        }
     }
 
     private void exit() {
