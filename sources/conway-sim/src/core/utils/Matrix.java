@@ -1,5 +1,6 @@
 package core.utils;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -54,4 +55,10 @@ public interface Matrix<X> {
      * @return the new mapped matrix
      */
     <Y> Matrix<Y> map(Function<? super X, ? extends Y> mapper);
+
+    /**
+     * Iterates the matrix and applies the given action.
+     * @param action to apply to each element
+     */
+    void forEach(Consumer<? super X> action);
 }
