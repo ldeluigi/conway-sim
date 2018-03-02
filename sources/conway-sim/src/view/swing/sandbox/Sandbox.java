@@ -46,5 +46,11 @@ public class Sandbox extends JPanel {
 
     private void book(final DesktopGUI desktop) {
         desktop.popUpFrame(new BookFrame());
+        disableAll();
+    }
+
+    private void disableAll() {
+
+        this.setFocusable(false);
     }
 }
