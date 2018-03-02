@@ -19,7 +19,8 @@ public class RLEConvert {
     @SuppressWarnings("PMD.ImmutableField")
     private BufferedReader buffer;
     //RULEPATTERNS FOR THE ENCODING
-    static final String COORDPATTERN = "x ?= ?([1-9]\\d*)",
+    static final String XCOORDPATTERN = "x ?= ?([1-9]\\d*)",
+                        YCOORDPATTERN = "y ?= ?([1-9]\\d*)",
                         RULEPATTERN = "rule ?= ?((B[0-8]*/S[0-8]*)|([0-8]*/[0-8]*))",
                         CELLRUNPATTERN = "([1-9]\\d*)?([bo$])";
 
@@ -114,12 +115,12 @@ public class RLEConvert {
      * 
      * @return grid
      */
-    public boolean[][] load() {
+    public boolean[][] convert() {
         try {
             String header = getHeaderLine();
-
+            
             Matcher headerMatcher = Pattern.compile(String.format("^%s, ?%s(, ?%s)?$",
-                    COORDPATTERN, COORDPATTERN, RULEPATTERN), Pattern.CASE_INSENSITIVE).matcher(header);
+                    XCOORDPATTERN, YCOORDPATTERN, RULEPATTERN), Pattern.CASE_INSENSITIVE).matcher(header);
             if (!headerMatcher.matches()) {
                 throw new IllegalArgumentException("Invalid header.");
             }

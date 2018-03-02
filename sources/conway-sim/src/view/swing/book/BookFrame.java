@@ -1,6 +1,8 @@
 package view.swing.book;
 
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -25,8 +27,12 @@ public class BookFrame extends JInternalFrame {
      * 
      */
     private static final long serialVersionUID = -1045414565623185058L;
+    //TBI Screen size proportions
+    // private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    // screenSize.getHeight();
+    // screenSize.getWidth();
     private static final int WIDTH = 150;
-    private static final int HEIGHT = 270;
+    private static final int HEIGHT = 280;
     /**
      * 
      */
