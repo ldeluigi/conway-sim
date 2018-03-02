@@ -1,5 +1,6 @@
 package test;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -49,24 +50,47 @@ public class TestGenerationComputation {
     void testSomeComputations() {
             Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
             Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
-            assertEquals(AFTER_THREE_STANDARD, Generations.compute(start, 3).getAliveMatrix());
-            assertEquals(Generations.compute(start, 20).getAliveMatrix(), Generations.compute(start, 13).getAliveMatrix());
+            assertEquals(AFTER_THREE_STANDARD, Generations.compute(3, start).getAliveMatrix());
+            assertEquals(Generations.compute(20, start).getAliveMatrix(), Generations.compute(13, start).getAliveMatrix());
      }
     
     @Test
     void testOneComputationMultithread() {
         Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
         Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
-        assertEquals(AFTER_STANDARD, Generations.compute(start, true).getAliveMatrix());
-        System.out.println("First:\n" + start.getAliveMatrix().map(b -> b ? "■" : "□") + "\nSecond:\n" + Generations.compute(start, true).getAliveMatrix().map(b -> b ? "■" : "□"));
+        assertEquals(AFTER_STANDARD, Generations.compute(start, 4).getAliveMatrix());
+        System.out.println("First:\n" + start.getAliveMatrix().map(b -> b ? "■" : "□") + "\nSecond:\n" + Generations.compute(start, 4).getAliveMatrix().map(b -> b ? "■" : "□"));
     }
 
     @Test
     void testSomeComputationsMultithread() {
             Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
             Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
-            assertEquals(AFTER_THREE_STANDARD, Generations.compute(start, true, 3).getAliveMatrix());
-            assertEquals(Generations.compute(start, 20).getAliveMatrix(), Generations.compute(start, true, 13).getAliveMatrix());
+            assertEquals(AFTER_THREE_STANDARD, Generations.compute(3, start, 4).getAliveMatrix());
+            assertEquals(Generations.compute(20, start, 4).getAliveMatrix(), Generations.compute(13, start, 4).getAliveMatrix());
      }
 
+    
+    void testMultithreadPerformances() {
+        Environment env = EnvironmentFactory.standardRules(1000, 1000);
+        Generation start = GenerationFactory.from(new ListMatrix<>(1000, 1000, () -> new CellImpl(Math.random() > 0.5 ? ALIVE : DEAD)), env);
+        long startTime = System.currentTimeMillis();
+        Generations.compute(1000, start, 1);
+        long first = System.currentTimeMillis() - startTime;
+        System.out.println(first);
+        startTime = System.currentTimeMillis();
+        Generations.compute(1000, start, 4);
+        long second = System.currentTimeMillis() - startTime;
+        System.out.println(second);
+        if (second > first) {
+            fail();
+        }
+    }
+    
+    public static void main(String ...args) {
+        Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
+        Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
+        Generations.compute(3, start);
+        Generations.compute(Generations.compute(start));
+    }
 }
