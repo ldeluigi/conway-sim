@@ -48,7 +48,7 @@ public class GridPanel extends JScrollPane {
             final JLabel l = new JLabel("");
             l.setSize(cellSize);
             l.setPreferredSize(cellSize);
-            l.setBackground(Math.random() > 0.5 ? Color.black : Color.white); //TODO rimuovere elemento randomico
+            l.setBackground(Color.white);
             l.setOpaque(true);
             return l;
         });
