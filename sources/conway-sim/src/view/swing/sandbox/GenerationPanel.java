@@ -6,10 +6,16 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.text.JTextComponent;
 
 import controller.generation.GenerationControllerImpl;
@@ -29,6 +35,7 @@ public class GenerationPanel extends JPanel {
     private static final String STOP = "STOP";
     private static final String PAUSE = "PAUSE";
     private static final String UNDO = "UNDO";
+    private static final String NEXT = "NEXT";
 
     private final GenerationControllerImpl generationController = new GenerationControllerImpl();
 
@@ -39,26 +46,27 @@ public class GenerationPanel extends JPanel {
         final JButton bStart = new JButton(START);
         final JButton bStop = new JButton(STOP);
         final JButton bPause = new JButton(PAUSE);
+        final JButton bNext = new JButton(NEXT);
         final JButton bUndo = new JButton(UNDO);
-
-        this.setLayout(new FlowLayout());
+        this.setLayout(new FlowLayout(FlowLayout.RIGHT));
         final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        final JPanel undoPanel = new JPanel(new GridLayout(2, 2));
         this.add(bStart);
         this.add(bPause);
         this.add(bStop);
+        this.add(bNext);
         this.add(bUndo);
 
+        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000, 10);
+        final JSpinner spinner = new JSpinner(spin);
 
-        final JTextComponent undoField = new JTextField();
-        undoField.setEditable(true);
-        undoField.setText("1234123");
+        spinner.getValue();
+        this.add(spinner);
+        final JLabel generationNumber = new JLabel("Generation number: ");
+        final JLabel numGeneration = new JLabel("0");
+        this.add(generationNumber);
+        this.add(numGeneration);
 
-        this.add(undoField);
         this.add(buttonPanel);
-        this.add(undoPanel);
-        this.setLayoutSize(Toolkit.getDefaultToolkit().getScreenSize(), RELATIONSHIP_STANDARD);
-
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.setVisible(true);
 
@@ -66,26 +74,6 @@ public class GenerationPanel extends JPanel {
         bStop.addActionListener(e -> generationController.end());
         bPause.addActionListener(e -> generationController.pause());
         bUndo.addActionListener(e -> generationController.loadOldGeneration(1L));
-    }
-
-    /**
-     * 
-     * @param currentExternalDimension set the dimension of the panel with a relationship standard 
-     */
-    public void setLayoutSize(final Dimension currentExternalDimension) {
-        this.setLayoutSize(currentExternalDimension, RELATIONSHIP_STANDARD);
-    }
-
-    /**
-     * 
-     * @param currentExternalDimension set the dimension of the panel with a relationship of relationship
-     * @param relationship between the panel and the external frame
-     */
-    public void setLayoutSize(final Dimension currentExternalDimension, final int relationship) {
-        if (relationship <= 0) {
-            throw new IllegalArgumentException();
-        }
-        this.setSize((int) currentExternalDimension.getWidth() / relationship, (int) currentExternalDimension.getHeight() / relationship);
     }
 
     /* 
