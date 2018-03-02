@@ -1,23 +1,13 @@
 package view.swing.sandbox;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Toolkit;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.text.JTextComponent;
-
 import controller.generation.GenerationControllerImpl;
 
 /**
@@ -30,7 +20,6 @@ public class GenerationPanel extends JPanel {
      */
     private static final long serialVersionUID = 9060069868596999045L;
 
-    private static final int RELATIONSHIP_STANDARD = 6;
     private static final String START = "START";
     private static final String STOP = "STOP";
     private static final String PAUSE = "PAUSE";
@@ -74,17 +63,6 @@ public class GenerationPanel extends JPanel {
         bStop.addActionListener(e -> generationController.end());
         bPause.addActionListener(e -> generationController.pause());
         bUndo.addActionListener(e -> generationController.loadOldGeneration(1L));
-    }
-
-    /* 
-     * Personal test don't remove
-     */
-    public static void main(final String[] s) {
-        final JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new GenerationPanel());
-        frame.setSize(Toolkit.getDefaultToolkit().getScreenSize());
-        frame.setVisible(true);
     }
 
 }

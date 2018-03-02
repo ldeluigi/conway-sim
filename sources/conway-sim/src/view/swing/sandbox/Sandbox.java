@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 
