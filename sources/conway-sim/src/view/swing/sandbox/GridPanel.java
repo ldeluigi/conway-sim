@@ -69,6 +69,7 @@ public class GridPanel extends JScrollPane {
         this.setViewportView(grid);
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
     }
     /**
      * Alters Cell size value.
@@ -83,6 +84,7 @@ public class GridPanel extends JScrollPane {
             label.setSize(this.cellSize);
             label.setPreferredSize(this.cellSize);
         });
+        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
     }
 
     /**
