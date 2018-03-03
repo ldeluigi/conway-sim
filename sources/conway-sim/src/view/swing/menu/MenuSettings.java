@@ -37,6 +37,7 @@ public final class MenuSettings extends JPanel {
     private static final int INITIAL_FONT_SIZE = 15;
     private static final int GRID_WIDTH = 5;
     private static final int MAX_FONT_SIZE = 30;
+    private static final int BUTTON_FONT_PLUS = 10;
 
     private static int fontSize = INITIAL_FONT_SIZE;
     private static boolean usingSystemLF;
@@ -115,7 +116,7 @@ public final class MenuSettings extends JPanel {
         final JButton ret = new JButton("Return");
         ret.setPreferredSize(
                 new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
-        ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
+        ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
         ret.addActionListener(e -> {
             mainGUI.backToMainMenu();
         });
@@ -147,7 +148,7 @@ public final class MenuSettings extends JPanel {
     }
 
     private static Font generateFont(final Component c) {
-        return new Font(c.getFont().getFontName(), c.getFont().getStyle(), MenuSettings.getFontSize());
+        return new Font(c.getFont().getFontName(), c.getFont().getStyle(), MenuSettings.getFontSize() + (c instanceof JButton ? BUTTON_FONT_PLUS : 0));
     }
 
     private boolean isUsingSystemLF() {
