@@ -22,7 +22,7 @@ public final class MenuStrings {
      * @return the version
      */
     public static String getVersion() {
-        return "0.0.7 (Alpha)";
+        return "0.0.11 (Alpha)";
     }
 
     /**
@@ -103,5 +103,13 @@ public final class MenuStrings {
      */
     public static String noCrossPlatformLookAndFeel() {
         return "Error while trying to retrieve cross platform look and feel.";
+    }
+
+    /**
+     * 
+     * @return text
+     */
+    public static String font() {
+        return "Font dimension";
     }
 }
