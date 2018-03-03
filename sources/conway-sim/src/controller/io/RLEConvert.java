@@ -1,4 +1,4 @@
-package core.utils;
+package controller.io;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,7 +14,6 @@ import java.util.regex.Pattern;
  * 
  */
 public class RLEConvert {
-    
     //I'm adding this suppress warning, in the meanwhile I check what to do with it.
     @SuppressWarnings("PMD.ImmutableField")
     private BufferedReader buffer;
@@ -118,7 +117,6 @@ public class RLEConvert {
     public boolean[][] convert() {
         try {
             String header = getHeaderLine();
-            
             Matcher headerMatcher = Pattern.compile(String.format("^%s, ?%s(, ?%s)?$",
                     XCOORDPATTERN, YCOORDPATTERN, RULEPATTERN), Pattern.CASE_INSENSITIVE).matcher(header);
             if (!headerMatcher.matches()) {

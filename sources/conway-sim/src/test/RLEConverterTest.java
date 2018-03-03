@@ -1,7 +1,8 @@
 package test;
 import java.io.IOException;
 import java.util.Arrays;
-import core.utils.RLEConvert;
+
+import controller.io.RLEConvert;
 
 class RLEConverterTest {
     private static String TESTRLE = "#C This is a glider.\n" 
