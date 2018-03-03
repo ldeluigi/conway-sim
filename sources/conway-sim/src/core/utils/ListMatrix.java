@@ -117,8 +117,7 @@ public final class ListMatrix<X> implements Matrix<X> {
 
     @Override
     public void set(final int row, final int column, final X value) {
-        Objects.requireNonNull(value);
-        this.matrix.get(row).set(column, value);
+        this.matrix.get(row).set(column, Objects.requireNonNull(value));
     }
 
     @Override

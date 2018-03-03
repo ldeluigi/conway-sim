@@ -10,8 +10,7 @@ import static core.model.Status.DEAD;
 import core.utils.Matrix;
 
 /**
- * Utility class for computation and editing of {@link Generation}.
- *
+ * Utility class for computation of {@link Generation}.
  */
 public final class Generations {
 
@@ -29,7 +28,7 @@ public final class Generations {
     /**
      * Computes a new {@link Generation} from the given one, with multithreading option.
      * @param start that is the previous {@link Generation}
-     * @param threads to use
+     * @param threads to use, including the caller
      * @return the new computed {@link Generation}
      */
     public static Generation compute(final Generation start, final int threads) {
@@ -88,8 +87,8 @@ public final class Generations {
     }
 
     /**
-     * Computes n generations from start. 
-     * @param number is the number of generation to be computed sequentially
+     * Computes number generations from start. 
+     * @param number is the number of generations to be computed sequentially
      * @param start is the first {@link Generation}
      * @return the result of the computations
      */
@@ -98,10 +97,10 @@ public final class Generations {
     }
 
     /**
-     * Computes n generations from start, with multithreading option (4 threads).
-     * @param number is the number of generation to be computed sequentially
+     * Computes number generations from start, with multithreading option.
+     * @param number is the number of generations to be computed sequentially
      * @param start is the first {@link Generation}
-     * @param threads toggle if the computation should use multithreading (4 threads)
+     * @param threads to use, including the caller
      * @return the result of the computations
      */
     public static Generation compute(final int number, final Generation start, final int threads) {

@@ -16,7 +16,7 @@ public final class GenerationFactory {
     private GenerationFactory() { }
 
     /**
-     * A method to clone a {@link Generation}. Note that cells are copied, whereas the environment is the exact same.
+     * A method to clone a {@link Generation}. Note that cells are copied with {@link Cell#copy()}, whereas the {@link Environment} is the exact same.
      * @param generation is the generation to clone
      * @return the cloned generation
      */
