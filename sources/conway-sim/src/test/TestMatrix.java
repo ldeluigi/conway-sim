@@ -2,6 +2,11 @@ package test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import core.utils.ListMatrix;
@@ -93,5 +98,12 @@ public class TestMatrix {
     @Test
     void testEquals() {
         assertEquals(new ListMatrix<>(2, 2, () -> true), Matrices.unmodifiableMatrix(new ListMatrix<>(2, 2, () -> true)));
+    }
+    
+    @Test
+    void testForEach() {
+        Matrix<List<Boolean>> m = new ListMatrix<>(10, 10, () -> new LinkedList<Boolean>());
+        m.forEach(x -> { x.add(true); x.add(true); });
+        assertEquals(new ListMatrix<>(10, 10, () -> new LinkedList<>(Arrays.asList(true, true))), m);
     }
 }

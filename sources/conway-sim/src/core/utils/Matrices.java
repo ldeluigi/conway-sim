@@ -1,6 +1,7 @@
 package core.utils;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -78,6 +79,10 @@ public final class Matrices {
             @Override
             public int hashCode() {
                 return matrix.hashCode();
+            }
+            @Override
+            public void forEach(final Consumer<? super X> action) {
+                matrix.forEach(action);
             }
         };
     }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -116,8 +117,7 @@ public final class ListMatrix<X> implements Matrix<X> {
 
     @Override
     public void set(final int row, final int column, final X value) {
-        Objects.requireNonNull(value);
-        this.matrix.get(row).set(column, value);
+        this.matrix.get(row).set(column, Objects.requireNonNull(value));
     }
 
     @Override
@@ -165,6 +165,15 @@ public final class ListMatrix<X> implements Matrix<X> {
     @Override
     public String toString() {
         return this.matrix.stream().map(l -> l.toString()).collect(Collectors.joining("\n", "[", "]"));
+    }
+
+    @Override
+    public void forEach(final Consumer<? super X> action) {
+        this.matrix.forEach(row -> {
+            row.forEach(cell -> {
+                action.accept(cell);
+            });
+        });
     }
 
 }
