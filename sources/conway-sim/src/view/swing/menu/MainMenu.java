@@ -10,6 +10,7 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import view.swing.DesktopGUI;
@@ -22,11 +23,11 @@ public final class MainMenu extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private static final int TITLE_SIZE = 80;
-    private static final int BUTTON_TEXT_SIZE = 40;
+    private static final int BUTTON_TEXT_PLUS = 25;
+    private static final int MINOR_BUTTON_TEXT_PLUS = 15;
     private static final int BUTTON_RATIO_Y = 10;
     private static final int BUTTON_RATIO_X = 5;
     private static final int TITLE_OFFSET = 120;
-    private static final int MINOR_BUTTON_TEXT_SIZE = 30;
     private static final int MINOR_BUTTON_RATIO_X = 6;
     /**
      * The constructor fills the panel.
@@ -43,11 +44,13 @@ public final class MainMenu extends JPanel {
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         final JButton sandbox = new JButton(MenuStrings.sandboxButtonText());
-        sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
+        sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
         sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
-            mainGUI.setView(new Sandbox(mainGUI));
+            SwingUtilities.invokeLater(() -> {
+                mainGUI.setView(new Sandbox(mainGUI));
+            });
         });
         sandbox.setToolTipText(MenuStrings.getHoverSandboxButton());
         sandbox.setFocusPainted(false);
@@ -59,14 +62,14 @@ public final class MainMenu extends JPanel {
             mainGUI.close();
         });
         exit.setFocusPainted(false);
-        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MINOR_BUTTON_TEXT_SIZE));
+        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
         final JButton settings = new JButton(MenuStrings.settingsButton());
         settings.setPreferredSize(bottomCoupleDimension);
         settings.addActionListener(e -> {
-            mainGUI.setView(new Settings(mainGUI));
+            mainGUI.setView(new MenuSettings(mainGUI));
         });
         settings.setFocusPainted(false);
-        settings.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MINOR_BUTTON_TEXT_SIZE));
+        settings.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
         final GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y), 0, 0, 0);
