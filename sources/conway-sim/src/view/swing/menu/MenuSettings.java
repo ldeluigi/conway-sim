@@ -53,29 +53,25 @@ public final class MenuSettings extends JPanel {
         final JCheckBox checkLookAndFeel = new JCheckBox();
         checkLookAndFeel.setSelected(isUsingSystemLF());
         checkLookAndFeel.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED && !isUsingSystemLF()) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
                 try {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     setUsingSystemLF(true);
                 } catch (Exception e1) {
                     final JLabel l = new JLabel(MenuStrings.noLookAndFeelAvailable());
-                    JOptionPane.showInternalMessageDialog(this, l, "Unavailable", JOptionPane.ERROR_MESSAGE);
-                    checkLookAndFeel.setSelected(false);
-                } finally {
-                    this.repaint();
+                    JOptionPane.showMessageDialog(this, l, "Unavailable", JOptionPane.ERROR_MESSAGE);
                 }
-            } else if (e.getStateChange() == ItemEvent.DESELECTED && isUsingSystemLF()) {
+            } else if (e.getStateChange() == ItemEvent.DESELECTED) {
                 try {
                     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                     setUsingSystemLF(false);
                 } catch (Exception e1) {
                     final JLabel l = new JLabel(MenuStrings.noCrossPlatformLookAndFeel());
-                    JOptionPane.showInternalMessageDialog(this, l, "Error", JOptionPane.ERROR_MESSAGE);
-                    checkLookAndFeel.setSelected(true);
-                } finally {
-                    this.repaint();
+                    JOptionPane.showMessageDialog(this, l, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
+            checkLookAndFeel.setSelected(isUsingSystemLF());
+            this.repaint();
         });
         final JLabel checkLFLabel = new JLabel(MenuStrings.lookAndFeelCheck());
         checkLFLabel.setFont(MenuSettings.generateFont());
