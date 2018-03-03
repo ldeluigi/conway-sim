@@ -58,7 +58,7 @@ public final class MenuSettings extends JPanel {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     setUsingSystemLF(true);
                 } catch (Exception e1) {
-                    final JLabel l = new JLabel(MenuStrings.noLookAndFeelAvailable());
+                    final JLabel l = new JLabel("No System Look and Feel found.");
                     JOptionPane.showMessageDialog(this, l, "Unavailable", JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getStateChange() == ItemEvent.DESELECTED) {
@@ -66,14 +66,14 @@ public final class MenuSettings extends JPanel {
                     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                     setUsingSystemLF(false);
                 } catch (Exception e1) {
-                    final JLabel l = new JLabel(MenuStrings.noCrossPlatformLookAndFeel());
+                    final JLabel l = new JLabel("No System Look and Feel found.");
                     JOptionPane.showMessageDialog(this, l, "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
             checkLookAndFeel.setSelected(isUsingSystemLF());
             this.repaint();
         });
-        final JLabel checkLFLabel = new JLabel(MenuStrings.lookAndFeelCheck());
+        final JLabel checkLFLabel = new JLabel("Use System Look and Feel (if available)");
         checkLFLabel.setFont(MenuSettings.generateFont());
         final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(), 1, MAX_FONT_SIZE, 1);
         final JSpinner fontSizeSelector = new JSpinner(fontSizeSelectorModel);
@@ -85,7 +85,7 @@ public final class MenuSettings extends JPanel {
             resizeFonts();
         });
         ((DefaultEditor) fontSizeSelector.getEditor()).getTextField().setEditable(false);
-        final JLabel fontLabel = new JLabel(MenuStrings.font());
+        final JLabel fontLabel = new JLabel("Font dimension");
         fontLabel.setFont(MenuSettings.generateFont());
         c.insets = new Insets(mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0,
                 mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0);
@@ -112,7 +112,7 @@ public final class MenuSettings extends JPanel {
         c.gridy = 1;
         c.gridwidth = 1;
         centralButtons.add(fontSizeSelector, c);
-        final JButton ret = new JButton(MenuStrings.returnToMainMenuText());
+        final JButton ret = new JButton("Return");
         ret.setPreferredSize(
                 new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));

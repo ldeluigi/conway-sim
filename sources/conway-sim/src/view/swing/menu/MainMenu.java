@@ -37,13 +37,13 @@ public final class MainMenu extends JPanel {
         this.setLayout(new BorderLayout());
         final JPanel center = new JPanel(new GridBagLayout());
         this.add(center, BorderLayout.CENTER);
-        final JLabel title = new JLabel(MenuStrings.getApplicationTitle());
+        final JLabel title = new JLabel("Conway's Game of Life");
         title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setBorder(new EmptyBorder(TITLE_OFFSET, 0, 0, 0));
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
-        final JButton sandbox = new JButton(MenuStrings.sandboxButtonText());
+        final JButton sandbox = new JButton("Sandbox");
         sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
         sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         sandbox.addActionListener(e -> {
@@ -52,9 +52,9 @@ public final class MainMenu extends JPanel {
                 mainGUI.setView(new Sandbox(mainGUI));
             });
         });
-        sandbox.setToolTipText(MenuStrings.getHoverSandboxButton());
+        sandbox.setToolTipText("Start Sandbox Mode");
         sandbox.setFocusPainted(false);
-        final JButton exit = new JButton(MenuStrings.exitButtonText());
+        final JButton exit = new JButton("Exit");
         final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X, 
                 mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * 2));
         exit.setPreferredSize(bottomCoupleDimension);
@@ -63,7 +63,7 @@ public final class MainMenu extends JPanel {
         });
         exit.setFocusPainted(false);
         exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
-        final JButton settings = new JButton(MenuStrings.settingsButton());
+        final JButton settings = new JButton("Settings");
         settings.setPreferredSize(bottomCoupleDimension);
         settings.addActionListener(e -> {
             mainGUI.setView(new MenuSettings(mainGUI));
@@ -94,8 +94,8 @@ public final class MainMenu extends JPanel {
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BorderLayout());
-        lowerPanel.add(new JLabel(MenuStrings.getVersion()), BorderLayout.EAST);
-        lowerPanel.add(new JLabel(MenuStrings.getInfo()), BorderLayout.WEST);
+        lowerPanel.add(new JLabel("0.0.11 (Alpha)"), BorderLayout.EAST);
+        lowerPanel.add(new JLabel("LDLM-Project, All Rights Reserved"), BorderLayout.WEST);
         this.add(lowerPanel, BorderLayout.SOUTH);
     }
     /**
@@ -109,7 +109,7 @@ public final class MainMenu extends JPanel {
          */
         public LoadingScreen() {
             super(new GridBagLayout());
-            final JLabel loading = new JLabel(MenuStrings.getLoadingText());
+            final JLabel loading = new JLabel("Loading...");
             loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2));
             this.add(loading);
         }
