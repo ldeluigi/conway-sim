@@ -3,8 +3,9 @@ package view.swing.menu;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -25,6 +26,8 @@ public final class MainMenu extends JPanel {
     private static final int BUTTON_RATIO_Y = 10;
     private static final int BUTTON_RATIO_X = 5;
     private static final int TITLE_OFFSET = 120;
+    private static final int MINOR_BUTTON_TEXT_SIZE = 30;
+    private static final int MINOR_BUTTON_RATIO_X = 6;
     /**
      * The constructor fills the panel.
      * @param mainGUI the main GUI
@@ -38,26 +41,53 @@ public final class MainMenu extends JPanel {
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setBorder(new EmptyBorder(TITLE_OFFSET, 0, 0, 0));
         this.add(title, BorderLayout.NORTH);
-        final JPanel centralButtons = new JPanel();
-        centralButtons.setLayout(new GridLayout(2, 1, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y)));
+        final JPanel centralButtons = new JPanel(new GridBagLayout());
         final JButton sandbox = new JButton(MenuStrings.sandboxButtonText());
         sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
         sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
-        final JButton exit = new JButton(MenuStrings.exitButtonText());
-        exit.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
-        exit.addActionListener(e -> {
-            mainGUI.close();
-        });
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
             mainGUI.setView(new Sandbox(mainGUI));
         });
-        exit.setFocusPainted(false);
-        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, BUTTON_TEXT_SIZE));
         sandbox.setToolTipText(MenuStrings.getHoverSandboxButton());
         sandbox.setFocusPainted(false);
-        centralButtons.add(sandbox);
-        centralButtons.add(exit);
+        final JButton exit = new JButton(MenuStrings.exitButtonText());
+        final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X, 
+                mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * 2));
+        exit.setPreferredSize(bottomCoupleDimension);
+        exit.addActionListener(e -> {
+            mainGUI.close();
+        });
+        exit.setFocusPainted(false);
+        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MINOR_BUTTON_TEXT_SIZE));
+        final JButton settings = new JButton(MenuStrings.settingsButton());
+        settings.setPreferredSize(bottomCoupleDimension);
+        settings.addActionListener(e -> {
+            mainGUI.setView(new Settings(mainGUI));
+        });
+        settings.setFocusPainted(false);
+        settings.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MINOR_BUTTON_TEXT_SIZE));
+        final GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y), 0, 0, 0);
+        c.anchor = GridBagConstraints.CENTER;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        centralButtons.add(sandbox, c);
+        c.anchor = GridBagConstraints.EAST;
+        c.insets.set(c.insets.top, 0, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y));
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        centralButtons.add(settings, c);
+        c.anchor = GridBagConstraints.WEST;
+        c.insets.set(c.insets.top, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y), 0, 0);
+        c.gridx = 1;
+        c.gridy = 1;
+        centralButtons.add(exit, c);
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BorderLayout());

@@ -73,13 +73,6 @@ public final class MainGUI implements DesktopGUI {
         this.background.remove(titlePane);
         this.background.setBorder(null);
         this.background.setVisible(true);
-        //Change L&F
-//        try {
-//            javax.swing.UIManager.setLookAndFeel(
-//                    javax.swing.UIManager.getSystemLookAndFeelClassName());
-//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-//                | javax.swing.UnsupportedLookAndFeelException e) {
-//        }
         //Start with MainMenu
         this.menuPanel = new MainMenu(this);
         setView(this.menuPanel);

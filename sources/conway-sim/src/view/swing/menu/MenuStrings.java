@@ -64,4 +64,44 @@ public final class MenuStrings {
     public static String getLoadingText() {
         return "Loading...";
     }
+
+    /**
+     * Returns text to be displayed on settings button.
+     * @return the text
+     */
+    public static String settingsButton() {
+        return "Settings";
+    }
+
+    /**
+     * Returns text for L&F checkbox.
+     * @return the text
+     */
+    public static String lookAndFeelCheck() {
+        return "Use System Look and Feel (if available)";
+    }
+
+    /**
+     * Return to main menu button text.
+     * @return the text
+     */
+    public static String returnToMainMenuText() {
+        return "Return";
+    }
+
+    /**
+     * 
+     * @return text
+     */
+    public static String noLookAndFeelAvailable() {
+        return "No System Look and Feel found.";
+    }
+
+    /**
+     * 
+     * @return text
+     */
+    public static String noCrossPlatformLookAndFeel() {
+        return "Error while trying to retrieve cross platform look and feel.";
+    }
 }
