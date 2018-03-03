@@ -15,7 +15,6 @@ import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import view.swing.menu.MainMenu;
-import view.swing.menu.MenuStrings;
 /**
  * 
  *
@@ -36,7 +35,7 @@ public final class MainGUI implements DesktopGUI {
      * Starts the application.
      */
     public MainGUI() {
-        this.frame = new JFrame(MenuStrings.getApplicationTitle());
+        this.frame = new JFrame("Conway's Game of Life");
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.frame.addWindowListener(new WindowListener() {
             public void windowOpened(final WindowEvent e) {  }
