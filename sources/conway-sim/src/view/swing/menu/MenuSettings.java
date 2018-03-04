@@ -114,6 +114,7 @@ public final class MenuSettings extends JPanel {
         c.gridwidth = 1;
         centralButtons.add(fontSizeSelector, c);
         final JButton ret = new JButton("Return");
+        ret.setFocusPainted(false);
         ret.setPreferredSize(
                 new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
