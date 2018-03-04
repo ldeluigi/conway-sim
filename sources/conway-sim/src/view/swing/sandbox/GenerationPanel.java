@@ -11,7 +11,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
+import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
+import view.swing.menu.MenuSettings;
 
 /**
  * This is the panel that contain all the Generation control for the application.
@@ -40,12 +43,18 @@ public class GenerationPanel extends JPanel {
     private final JButton bRes;
 
     private final JLabel numGeneration;
-    private GenerationControllerImpl generationController;
+    private final GenerationController generationController;
+    private final JPanel superPanel;
 
     /**
      * 
+     * @param controller the controller of the generation
+     * @param superPanel the panel that call this one
      */
-    public GenerationPanel() {
+    public GenerationPanel(final GenerationController controller, final JPanel superPanel) {
+        this.generationController = controller;
+        this.superPanel = superPanel;
+
         bStart = this.newJButton(STA);
         bStart.setToolTipText("Start the game");
         bStop = this.newJButton(STO);
@@ -117,6 +126,8 @@ public class GenerationPanel extends JPanel {
             // TODO error of generation undo
             JOptionPane.showMessageDialog(this, "Impossible undo of " + value + " from " + this.generationController.getCurrentNumberGeneration());
         }
+        this.generationController.loadOldGeneration(this.generationController.getCurrentNumberGeneration() - value);
+        this.refreshView();
     }
 
     private void stop() {
@@ -132,15 +143,18 @@ public class GenerationPanel extends JPanel {
     }
 
     private void start() {
-        this.generationController = new GenerationControllerImpl();
-        this.generationController.setView(this);
         this.generationController.startGameWithGeneration();
         this.bStart.setEnabled(false);
-        this.resume();
+        this.bPause.setEnabled(true);
+        bRes.setEnabled(false);
+        bStop.setEnabled(false);
+        bNext.setEnabled(false);
+        bPrev.setEnabled(false);
+        bUndo.setEnabled(false);
     }
 
     private void resume() {
-//        this.generationController.resumeClock(); // TODO
+        this.generationController.resume();
         this.bPause.setEnabled(true);
         bRes.setEnabled(false);
         bStop.setEnabled(false);
@@ -150,7 +164,7 @@ public class GenerationPanel extends JPanel {
     }
 
     private void pause() {
-//        this.generationController.stopClock(); // TODO
+        this.generationController.pause();
         this.generationController.pause();
         this.bPause.setEnabled(false);
         this.bRes.setEnabled(true);
@@ -162,15 +176,14 @@ public class GenerationPanel extends JPanel {
 
     /**
      * 
-     * @param numberGeneration for update
      */
-    public void updateNumCurrentGeneration(final Long numberGeneration) {
-        this.numGeneration.setText(numberGeneration.toString());
+    public void refreshView() {
+        this.numGeneration.setText(this.generationController.getCurrentNumberGeneration().toString());
     }
 
     private JButton newJButton(final String name) {
         final JButton button = new JButton(name);
-        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, button.getFont().getSize()));
+        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         return button;
     }
 }

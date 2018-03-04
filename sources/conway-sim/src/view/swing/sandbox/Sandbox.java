@@ -7,6 +7,9 @@ import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import controller.generation.GenerationController;
+import controller.generation.GenerationControllerImpl;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 
@@ -21,7 +24,9 @@ public class Sandbox extends JPanel {
     private static final long serialVersionUID = -9015811419136279771L;
     private static final String BOOK_NAME = "BOOK";
 
-    private final GenerationPanel generationPanel = new GenerationPanel();
+    private final GenerationController genController;
+    private final GenerationPanel generationPanel;
+    private final GridPanel grid;
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
     private BookFrame book;
@@ -30,9 +35,13 @@ public class Sandbox extends JPanel {
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
+        this.genController = new GenerationControllerImpl();
+        this.genController.setView(this);
+        this.generationPanel = new GenerationPanel(genController, this);
         this.mainGUI = mainGUI;
+        this.grid = new GridPanel();
         this.setLayout(new BorderLayout());
-        this.add(new GridPanel(), BorderLayout.CENTER);
+        this.add(grid, BorderLayout.CENTER);
 
         this.add(generationPanel, BorderLayout.NORTH);
 
@@ -47,6 +56,13 @@ public class Sandbox extends JPanel {
 
         bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
+    }
+
+    /**
+     * refresh all the view.
+     */
+    public void refreshView() {
+        this.generationPanel.refreshView();
     }
 
     private void callBook() {
@@ -68,4 +84,5 @@ public class Sandbox extends JPanel {
             this.mainGUI.backToMainMenu();
         }
     }
+
 }
