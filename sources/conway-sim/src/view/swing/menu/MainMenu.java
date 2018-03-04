@@ -27,7 +27,6 @@ public final class MainMenu extends JPanel {
     private static final int MINOR_BUTTON_TEXT_PLUS = 15;
     private static final int BUTTON_RATIO_Y = 10;
     private static final int BUTTON_RATIO_X = 5;
-    private static final int TITLE_OFFSET = 120;
     private static final int MINOR_BUTTON_RATIO_X = 6;
     /**
      * The constructor fills the panel.
@@ -40,7 +39,7 @@ public final class MainMenu extends JPanel {
         final JLabel title = new JLabel("Conway's Game of Life");
         title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
         title.setHorizontalAlignment(JLabel.CENTER);
-        title.setBorder(new EmptyBorder(TITLE_OFFSET, 0, 0, 0));
+        title.setBorder(new EmptyBorder((mainGUI.getCurrentHeight() * 2) / BUTTON_RATIO_Y, 0, 0, 0));
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         final JButton sandbox = new JButton("Sandbox");
@@ -94,8 +93,12 @@ public final class MainMenu extends JPanel {
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BorderLayout());
-        lowerPanel.add(new JLabel("0.0.11 (Alpha)"), BorderLayout.EAST);
-        lowerPanel.add(new JLabel("LDLM-Project, All Rights Reserved"), BorderLayout.WEST);
+        final JLabel version = new JLabel("0.0.11 (Alpha)");
+        final JLabel author = new JLabel("LDLM-Project, All Rights Reserved");
+        version.setFont(new Font(version.getFont().getFontName(), version.getFont().getStyle(), MenuSettings.getFontSize()));
+        author.setFont(new Font(author.getFont().getFontName(), author.getFont().getStyle(), MenuSettings.getFontSize()));
+        lowerPanel.add(version, BorderLayout.EAST);
+        lowerPanel.add(author, BorderLayout.WEST);
         this.add(lowerPanel, BorderLayout.SOUTH);
     }
     /**

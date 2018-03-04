@@ -29,7 +29,6 @@ public final class MainGUI implements DesktopGUI {
     private final JFrame frame;
     private final JDesktopPane desktop;
     private final JInternalFrame background;
-    private final JPanel menuPanel;
 
     /**
      * Starts the application.
@@ -73,8 +72,8 @@ public final class MainGUI implements DesktopGUI {
         this.background.setBorder(null);
         this.background.setVisible(true);
         //Start with MainMenu
-        this.menuPanel = new MainMenu(this);
-        setView(this.menuPanel);
+        final JPanel menuPanel = new MainMenu(this);
+        setView(menuPanel);
         this.frame.setVisible(true);
     }
 
@@ -143,7 +142,7 @@ public final class MainGUI implements DesktopGUI {
      */
     @Override
     public void backToMainMenu() {
-        setView(this.menuPanel);
+        setView(new MainMenu(this));
     }
 
 }
