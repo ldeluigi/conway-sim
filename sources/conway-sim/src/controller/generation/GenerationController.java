@@ -4,7 +4,7 @@
 package controller.generation;
 
 import core.model.Generation;
-import view.swing.sandbox.GenerationPanel;
+import view.swing.sandbox.Sandbox;
 
 /**
  *
@@ -20,6 +20,11 @@ public interface GenerationController {
      * 
      */
     void pause();
+
+    /**
+     * 
+     */
+    void resume();
 
     /**
      * 
@@ -58,5 +63,6 @@ public interface GenerationController {
     /**
      * @param viewPanel the panel that contain the output
      */
-    void setView(GenerationPanel viewPanel);
+    void setView(Sandbox viewPanel);
+
 }
