@@ -25,6 +25,7 @@ public class Sandbox extends JPanel {
      */
     private static final long serialVersionUID = -9015811419136279771L;
     private static final String BOOK_NAME = "BOOK";
+    private static final int DEFAULT_SIZE = 100;
 
     private final GenerationController genController;
     private final GenerationPanel generationPanel;
@@ -42,7 +43,7 @@ public class Sandbox extends JPanel {
         this.genController.setView(this);
         this.generationPanel = new GenerationPanel(genController, this);
         this.mainGUI = mainGUI;
-        this.grid = new GridPanel();
+        this.grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
 
