@@ -91,6 +91,7 @@ public class GenerationControllerImpl implements GenerationController {
             this.currentGeneration = this.oldGeneration.getFirst();
             this.currentGenerationNumber = 0L;
             this.oldGeneration.removeAllGenerationAfter(0L);
+            this.view.refreshView();
             return;
         } else if (generationNumber.longValue() < 0L) {
             throw new IllegalArgumentException();

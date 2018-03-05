@@ -86,9 +86,9 @@ public class Sandbox extends JPanel {
     }
 
     private void exit() {
+        //TODO save option name
         final int result = JOptionPane.showOptionDialog(this, "Save before going back to menu?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
         if (result == JOptionPane.YES_OPTION) {
-        //TODO save option
             this.mainGUI.backToMainMenu();
         } else if (result == JOptionPane.NO_OPTION) {
             this.mainGUI.backToMainMenu();

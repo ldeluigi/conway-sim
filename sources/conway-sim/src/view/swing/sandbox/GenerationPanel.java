@@ -28,7 +28,7 @@ public class GenerationPanel extends JPanel {
     private final JButton bStop;
     private final JButton bPause;
     private final JButton bNext;
-    private final JButton bUndo;
+    private final JButton bGoTo;
     private final JButton bPrev;
     private final JButton bRes;
 
@@ -48,7 +48,7 @@ public class GenerationPanel extends JPanel {
         bStop = this.newJButton("Stop", "Reset the game mode");
         bPause = this.newJButton("Pause", "Stop the time");
         bNext = this.newJButton("Next", "Go to the next generation");
-        bUndo = this.newJButton("Undo", "Go back in time of N generations");
+        bGoTo = this.newJButton("Go to", "Go back in time to N generations");
         bPrev = this.newJButton("Previous", "Go to the previous generation");
         bRes = this.newJButton("Resume", "Resume the current game");
 
@@ -69,9 +69,9 @@ public class GenerationPanel extends JPanel {
         this.add(bPause);
         this.add(bRes);
         this.add(bStop);
-        this.add(bNext);
         this.add(bPrev);
-        this.add(bUndo);
+        this.add(bNext);
+        this.add(bGoTo);
 
         this.add(spinner);
 
@@ -87,7 +87,7 @@ public class GenerationPanel extends JPanel {
         bStop.setEnabled(false);
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
-        bUndo.setEnabled(false);
+        bGoTo.setEnabled(false);
 
         this.setVisible(true);
 
@@ -95,8 +95,8 @@ public class GenerationPanel extends JPanel {
         bStop.addActionListener(e -> this.stop());
         bRes.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
-        bUndo.addActionListener(e -> this.undo(Long.parseLong(spinner.getValue().toString())));
-        bPrev.addActionListener(e -> this.undo(1L));
+        bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
+        bPrev.addActionListener(e -> this.goTo(1L));
         bNext.addActionListener(e -> this.next());
     }
 
@@ -104,11 +104,11 @@ public class GenerationPanel extends JPanel {
         this.generationController.computeNextGeneration();
     }
 
-    private void undo(final Long value) {
-        if (this.generationController.getCurrentNumberGeneration() - value < 0) {
+    private void goTo(final Long value) {
+        if (this.generationController.getCurrentNumberGeneration() < value || value < 0) {
             JOptionPane.showMessageDialog(this, "Impossible undo of " + value + " from " + this.generationController.getCurrentNumberGeneration());
         }
-        this.generationController.loadOldGeneration(this.generationController.getCurrentNumberGeneration() - value);
+        this.generationController.loadOldGeneration(value);
         this.refreshView();
     }
 
@@ -120,7 +120,7 @@ public class GenerationPanel extends JPanel {
             bStop.setEnabled(false);
             bNext.setEnabled(false);
             bPrev.setEnabled(false);
-            bUndo.setEnabled(false);
+            bGoTo.setEnabled(false);
             this.generationController.reset();
         }
     }
@@ -133,7 +133,7 @@ public class GenerationPanel extends JPanel {
         bStop.setEnabled(false);
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
-        bUndo.setEnabled(false);
+        bGoTo.setEnabled(false);
     }
 
     private void resume() {
@@ -143,7 +143,7 @@ public class GenerationPanel extends JPanel {
         bStop.setEnabled(false);
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
-        bUndo.setEnabled(false);
+        bGoTo.setEnabled(false);
     }
 
     private void pause() {
@@ -153,7 +153,7 @@ public class GenerationPanel extends JPanel {
         this.bRes.setEnabled(true);
         this.bNext.setEnabled(true);
         this.bPrev.setEnabled(true);
-        this.bUndo.setEnabled(true);
+        this.bGoTo.setEnabled(true);
         this.bStop.setEnabled(true);
     }
 
@@ -168,6 +168,7 @@ public class GenerationPanel extends JPanel {
         final JButton button = new JButton(name);
         button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         button.setToolTipText(tooltipText);
+        button.setFocusPainted(false);
         return button;
     }
 }
