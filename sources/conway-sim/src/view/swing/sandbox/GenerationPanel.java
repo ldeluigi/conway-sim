@@ -54,7 +54,7 @@ public class GenerationPanel extends JPanel {
 
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000, 10);
+        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 100000, 10);
         final JSpinner spinner = new JSpinner(spin);
 
         this.add(bStart);
@@ -105,11 +105,12 @@ public class GenerationPanel extends JPanel {
     }
 
     private void goTo(final Long value) {
-        if (this.generationController.getCurrentNumberGeneration() < value || value < 0) {
+        if (value < 0) {
             JOptionPane.showMessageDialog(this, "Impossible undo to " + value + " from " + this.generationController.getCurrentNumberGeneration());
+        } else {
+            this.generationController.loadOldGeneration(value);
+            this.refreshView();
         }
-        this.generationController.loadOldGeneration(value);
-        this.refreshView();
     }
 
     private void stop() {
