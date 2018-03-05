@@ -3,7 +3,6 @@ package controller.generation;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
 
 import core.model.Cell;
 import core.model.CellImpl;
@@ -77,9 +76,12 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void setSleepTime(final Long timeSleep) {
-        if (timeSleep > 0 && timeSleep < MAX_TIME_GENERATION) {
-            this.clock.setStep(timeSleep);
+    public void setSpeed(final int speed) {
+        // 1 == 900L
+        // 9 == 100L
+        final Long sleepTime = Long.valueOf(10 - speed) * 100L;
+        if (sleepTime > 0 && sleepTime < MAX_TIME_GENERATION) {
+            this.clock.setStep(Long.valueOf(sleepTime));
         } else {
             throw new IllegalArgumentException();
         }
@@ -167,7 +169,7 @@ public class GenerationControllerImpl implements GenerationController {
 
     class AgentClock extends Thread {
 
-        private static final long INIT_STEP = 500L;
+        private static final long INIT_STEP = 900L;
         private Long step = INIT_STEP;
         private boolean clock = true;
 

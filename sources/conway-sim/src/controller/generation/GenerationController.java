@@ -35,7 +35,7 @@ public interface GenerationController {
      * 
      * @param timeSleep is the time that pass between a generation and the next one
      */
-    void setSleepTime(Long timeSleep);
+    void setSpeed(int timeSleep);
 
     /**
      * 

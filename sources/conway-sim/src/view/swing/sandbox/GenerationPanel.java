@@ -3,9 +3,10 @@ package view.swing.sandbox;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-
+import java.util.stream.IntStream;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -24,6 +25,10 @@ public class GenerationPanel extends JPanel {
      */
     private static final long serialVersionUID = 9060069868596999045L;
 
+    private static final int MIN_SPEED = 1;
+    private static final int MAX_SPEED = 9;
+
+    private final JComboBox<Integer> speedControl;
     private final JButton bStart;
     private final JButton bStop;
     private final JButton bPause;
@@ -33,7 +38,7 @@ public class GenerationPanel extends JPanel {
     private final JButton bRes;
 
     private final JLabel numGeneration;
-    private GenerationController generationController;
+    private final GenerationController generationController;
 
     private final int fontSize = MenuSettings.getFontSize();
 
@@ -59,6 +64,14 @@ public class GenerationPanel extends JPanel {
 
         this.add(bStart);
 
+        //speed control
+        speedControl = new JComboBox<>();
+        IntStream.rangeClosed(MIN_SPEED, MAX_SPEED).mapToObj(e -> Integer.valueOf(e))
+                    .forEach(e -> speedControl.addItem(e));
+        speedControl.setSelectedIndex(0);
+        this.add(speedControl);
+
+        //display for current generation
         final JLabel generationNumber = new JLabel("Generation number: ");
         generationNumber.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         numGeneration = new JLabel("0");
@@ -91,6 +104,7 @@ public class GenerationPanel extends JPanel {
 
         this.setVisible(true);
 
+        speedControl.addActionListener(e -> this.speedControl());
         bStart.addActionListener(e -> this.start());
         bStop.addActionListener(e -> this.stop());
         bRes.addActionListener(e -> this.resume());
@@ -98,6 +112,10 @@ public class GenerationPanel extends JPanel {
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
         bPrev.addActionListener(e -> this.goTo(1L));
         bNext.addActionListener(e -> this.next());
+    }
+
+    private void speedControl() {
+        this.generationController.setSpeed(Integer.valueOf(this.speedControl.getSelectedItem().toString()));
     }
 
     private void next() {
