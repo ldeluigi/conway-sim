@@ -65,4 +65,9 @@ public interface GenerationController {
      */
     void setView(Sandbox viewPanel);
 
+    /**
+     * Totally reset the controller.
+     */
+    void reset();
+
 }
