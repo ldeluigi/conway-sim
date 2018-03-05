@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import controller.generation.GenerationController;
@@ -28,7 +29,7 @@ public class GenerationPanel extends JPanel {
     private static final int MIN_SPEED = 1;
     private static final int MAX_SPEED = 9;
 
-    private final JComboBox<Integer> speedControl;
+    private final JSlider speedSlider;
     private final JButton bStart;
     private final JButton bStop;
     private final JButton bPause;
@@ -65,11 +66,9 @@ public class GenerationPanel extends JPanel {
         this.add(bStart);
 
         //speed control
-        speedControl = new JComboBox<>();
-        IntStream.rangeClosed(MIN_SPEED, MAX_SPEED).mapToObj(e -> Integer.valueOf(e))
-                    .forEach(e -> speedControl.addItem(e));
-        speedControl.setSelectedIndex(0);
-        this.add(speedControl);
+        speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
+        speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        this.add(speedSlider);
 
         //display for current generation
         final JLabel generationNumber = new JLabel("Generation number: ");
@@ -104,7 +103,7 @@ public class GenerationPanel extends JPanel {
 
         this.setVisible(true);
 
-        speedControl.addActionListener(e -> this.speedControl());
+        speedSlider.addChangeListener(e -> this.speedControl());
         bStart.addActionListener(e -> this.start());
         bStop.addActionListener(e -> this.stop());
         bRes.addActionListener(e -> this.resume());
@@ -115,7 +114,7 @@ public class GenerationPanel extends JPanel {
     }
 
     private void speedControl() {
-        this.generationController.setSpeed(Integer.valueOf(this.speedControl.getSelectedItem().toString()));
+        this.generationController.setSpeed(this.speedSlider.getValue());
     }
 
     private void next() {
