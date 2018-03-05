@@ -3,6 +3,10 @@ package core.model;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 import java.util.stream.IntStream;
 
 import static core.model.Status.ALIVE;
@@ -28,7 +32,7 @@ public final class Generations {
     /**
      * Computes a new {@link Generation} from the given one, with multithreading option.
      * @param start that is the previous {@link Generation}
-     * @param threads to use, including the caller
+     * @param threads to use (the caller will wait for the others to end)
      * @return the new computed {@link Generation}
      */
     public static Generation compute(final Generation start, final int threads) {
@@ -42,21 +46,23 @@ public final class Generations {
         final int cells = previous.getWidth() * previous.getHeight();
         final int nThread = Math.min(cells, threads);
         final int delta = cells / nThread;
-        final List<Thread> threadList = new LinkedList<>();
-        IntStream.range(0, nThread - 1).forEach(n -> {
-            threadList.add(new Thread(() -> {
+        final List<FutureTask<?>> threadList = new LinkedList<>();
+        final ExecutorService executor = Executors.newFixedThreadPool(nThread);
+        IntStream.range(0, nThread).forEach(n -> {
+            final FutureTask<Boolean> fTask = new FutureTask<>(() -> {
                 compute(n * delta, (n + 1) * delta, previous, result, env);
-            }));
+            }, null);
+            threadList.add(fTask);
+            executor.execute(fTask);
         });
-        threadList.forEach(Thread::start);
-        compute((nThread - 1) * delta, cells, previous, result, env);
-        for (final Thread t : threadList) {
+        for (final FutureTask<?> tTask : threadList) {
             try {
-                t.join();
-            } catch (InterruptedException e) {
-                return compute(1, start);
+                tTask.get();
+            } catch (InterruptedException | ExecutionException e) {
+                throw new IllegalStateException("Generation computation was interrupted. Aborted.");
             }
         }
+        executor.shutdown();
         return GenerationFactory.from(result, env);
     }
 
@@ -100,7 +106,7 @@ public final class Generations {
      * Computes number generations from start, with multithreading option.
      * @param number is the number of generations to be computed sequentially
      * @param start is the first {@link Generation}
-     * @param threads to use, including the caller
+     * @param threads to use (the caller will wait for the others to end)
      * @return the result of the computations
      */
     public static Generation compute(final int number, final Generation start, final int threads) {
