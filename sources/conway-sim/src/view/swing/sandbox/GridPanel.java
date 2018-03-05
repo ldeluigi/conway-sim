@@ -4,6 +4,11 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -28,8 +33,8 @@ public class GridPanel extends JScrollPane {
     private final Matrix<JLabel> labelMatrix;
     private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
     private int borderWidth = INITIAL_BORDER_WIDTH;
-    private Color borderColor = INITIAL_BORDER_COLOR;
-    
+    private final Color borderColor = INITIAL_BORDER_COLOR;
+
     /**
      * 
      * @param width of the matrix
@@ -121,4 +126,48 @@ public class GridPanel extends JScrollPane {
         }
     }
 
+    /**
+     * A fr nvrogòwn  ng .
+     * @param boolMatrix is the to.
+     */
+    public void paintCells(final Matrix<Boolean> boolMatrix) {
+
+        if (boolMatrix.getHeight() != this.labelMatrix.getHeight() || boolMatrix.getWidth() != this.labelMatrix.getWidth()) {
+            throw new IllegalArgumentException("Matrix shuld be as high and wide as the current one");
+        }
+
+        final Map<Boolean, Color> booltocolor = new HashMap<>();
+        booltocolor.put(false, Color.WHITE);
+        booltocolor.put(true, Color.BLACK);
+        final List<List<Color>> colors = new ArrayList<>();
+        IntStream.range(0, boolMatrix.getHeight()).forEach(line -> {
+            colors.add(line, new ArrayList<>(boolMatrix.getWidth()));
+            IntStream.range(0, boolMatrix.getWidth()).forEach(column -> {
+                colors.get(line).add(column, booltocolor.get(boolMatrix.get(line, column)));
+            });
+        });
+        this.displayColors(new ListMatrix<>(colors));
+    }
+
+    private void displayColors(final Matrix<Color> colorMatrix) {
+        final JPanel grid = new JPanel(new GridBagLayout());
+        final GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
+            IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
+                final JLabel lab = new JLabel();
+                lab.setBackground(colorMatrix.get(line, column));
+                lab.setSize(this.cellSize);
+                lab.setPreferredSize(this.cellSize);
+                lab.setOpaque(true);
+                c.gridx = line;
+                c.gridy = column;
+                grid.add(lab, c);
+            });
+        });
+        this.setViewportView(grid);
+    }
 }
