@@ -41,14 +41,17 @@ public class GridPanel extends JScrollPane {
         if (width < 1 || height < 1) {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
+        GridPanel.booltocolor.put(false, Color.WHITE);
+        GridPanel.booltocolor.put(true, Color.BLACK);
         this.labelMatrix = new ListMatrix<>(width, height, () -> {
             final JLabel l = new JLabel("");
             l.setSize(cellSize);
             l.setPreferredSize(cellSize);
-            l.setBackground(Color.white);
+            l.setBackground(GridPanel.booltocolor.get(false));
             l.setOpaque(true);
             return l;
         });
+<<<<<<< HEAD
         this.grid = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.NONE;
@@ -68,6 +71,12 @@ public class GridPanel extends JScrollPane {
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
+=======
+        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
+        this.displayLabels();
+>>>>>>> ae6402d3c1cec95177730be35494e6fc4210a51d
     }
     /**
      * Alters Cell size value.
@@ -129,7 +138,22 @@ public class GridPanel extends JScrollPane {
      * @param boolMatrix is the to.
      */
     public void paintCells(final Matrix<Boolean> boolMatrix) {
+<<<<<<< HEAD
         displayColors(boolMatrix.map(b -> b ? Color.black : Color.white));
+=======
+
+        if (boolMatrix.getHeight() != this.labelMatrix.getHeight() || boolMatrix.getWidth() != this.labelMatrix.getWidth()) {
+            throw new IllegalArgumentException("Matrix shuld be as high and wide as the current one");
+        }
+        final List<List<Color>> colors = new ArrayList<>();
+        IntStream.range(0, boolMatrix.getHeight()).forEach(line -> {
+            colors.add(line, new ArrayList<>(boolMatrix.getWidth()));
+            IntStream.range(0, boolMatrix.getWidth()).forEach(column -> {
+                colors.get(line).add(column, GridPanel.booltocolor.get(boolMatrix.get(line, column)));
+            });
+        });
+        this.displayColors(new ListMatrix<>(colors));
+>>>>>>> ae6402d3c1cec95177730be35494e6fc4210a51d
     }
 
     private void displayColors(final Matrix<Color> colorMatrix) {
@@ -142,5 +166,27 @@ public class GridPanel extends JScrollPane {
             });
             this.grid.setVisible(true);
         });
+<<<<<<< HEAD
+=======
+        this.displayLabels();
+    }
+
+    private void displayLabels() {
+        final JPanel grid = new JPanel(new GridBagLayout());
+        final GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.NONE;
+        c.anchor = GridBagConstraints.CENTER;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+            for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                c.gridx = j;
+                c.gridy = i;
+                setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                grid.add(this.labelMatrix.get(i, j), c);
+            }
+        }
+        this.setViewportView(grid);
+>>>>>>> ae6402d3c1cec95177730be35494e6fc4210a51d
     }
 }
