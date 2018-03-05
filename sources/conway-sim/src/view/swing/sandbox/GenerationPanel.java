@@ -43,33 +43,23 @@ public class GenerationPanel extends JPanel {
 
     private final JLabel numGeneration;
     private final GenerationController generationController;
-    private final JPanel superPanel;
 
     private final int fontSize = MenuSettings.getFontSize();
 
     /**
      * 
      * @param controller the controller of the generation
-     * @param superPanel the panel that call this one
      */
-    public GenerationPanel(final GenerationController controller, final JPanel superPanel) {
+    public GenerationPanel(final GenerationController controller) {
         this.generationController = controller;
-        this.superPanel = superPanel;
 
-        bStart = this.newJButton(STA);
-        bStart.setToolTipText("Start the game");
-        bStop = this.newJButton(STO);
-        bStop.setToolTipText("Reset the game mode");
-        bPause = this.newJButton(PAU);
-        bPause.setToolTipText("Stop the time");
-        bNext = this.newJButton(NEX);
-        bNext.setToolTipText("Go to the next generation");
-        bUndo = this.newJButton(UND);
-        bUndo.setToolTipText("Go back in time of N generations");
-        bPrev = this.newJButton(PRE);
-        bPrev.setToolTipText("Go to the previous generation");
-        bRes = this.newJButton(RES);
-        bRes.setToolTipText("Resume the current game");
+        bStart = this.newJButton(STA, "Start the game");
+        bStop = this.newJButton(STO, "Reset the game mode");
+        bPause = this.newJButton(PAU, "Stop the time");
+        bNext = this.newJButton(NEX, "Go to the next generation");
+        bUndo = this.newJButton(UND, "Go back in time of N generations");
+        bPrev = this.newJButton(PRE, "Go to the previous generation");
+        bRes = this.newJButton(RES, "Resume the current game");
 
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
@@ -125,7 +115,6 @@ public class GenerationPanel extends JPanel {
 
     private void undo(final Long value) {
         if (this.generationController.getCurrentNumberGeneration() - value < 0) {
-            // TODO error of generation undo
             JOptionPane.showMessageDialog(this, "Impossible undo of " + value + " from " + this.generationController.getCurrentNumberGeneration());
         }
         this.generationController.loadOldGeneration(this.generationController.getCurrentNumberGeneration() - value);
@@ -183,9 +172,10 @@ public class GenerationPanel extends JPanel {
         this.numGeneration.setText(this.generationController.getCurrentNumberGeneration().toString());
     }
 
-    private JButton newJButton(final String name) {
+    private JButton newJButton(final String name, final String tooltipText) {
         final JButton button = new JButton(name);
-        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
+        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        button.setToolTipText(tooltipText);
         return button;
     }
 }

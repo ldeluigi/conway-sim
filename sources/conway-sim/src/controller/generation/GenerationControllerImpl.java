@@ -114,6 +114,19 @@ public class GenerationControllerImpl implements GenerationController {
         }
         this.view.refreshView();
     }
+    
+    @Override
+    public void setView(final Sandbox viewPanel) {
+        this.view = viewPanel;
+    }
+    
+    private void stopClock() {
+        clock.setClock(false);
+    }
+    
+    private void restartClock() {
+        clock.setClock(true);
+    }
 
     class AgentClock extends Thread {
 
@@ -146,19 +159,6 @@ public class GenerationControllerImpl implements GenerationController {
         public void setStep(final Long step) {
             this.step = step;
         }
-    }
-
-    @Override
-    public void setView(final Sandbox viewPanel) {
-        this.view = viewPanel;
-    }
-
-    private void stopClock() {
-        clock.setClock(false);
-    }
-
-    private void restartClock() {
-        clock.setClock(true);
     }
 
 }
