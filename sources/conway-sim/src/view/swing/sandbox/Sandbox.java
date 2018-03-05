@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
+import core.model.Status;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
@@ -30,6 +31,8 @@ public class Sandbox extends JPanel {
     private final GenerationPanel generationPanel;
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
+    private final GridPanel grid;
+    private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
     /**
@@ -37,8 +40,7 @@ public class Sandbox extends JPanel {
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
-        final GenerationController genController = new GenerationControllerImpl();
-        final GridPanel grid;
+        genController = new GenerationControllerImpl();
         this.generationPanel = new GenerationPanel(genController);
         genController.setView(this);
         this.mainGUI = mainGUI;
@@ -69,6 +71,7 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
+        this.grid.paintCells(this.genController.getCurrentGeneration().getCellMatrix().map(e -> e.getStatus() == Status.ALIVE ? true : false));
     }
 
     private void callBook() {

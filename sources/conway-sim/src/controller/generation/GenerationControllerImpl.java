@@ -1,5 +1,8 @@
 package controller.generation;
 
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+
 import core.model.Cell;
 import core.model.CellImpl;
 import core.model.EnvironmentFactory;
@@ -121,6 +124,12 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void computeNextGeneration() {
+        Future<Generation> futurGeneration;
+        class AgentThread extends Thread {
+            public void run() {
+                futurGeneration = Generations.compute(getCurrentGeneration());
+            }
+        }
         this.currentGeneration = Generations.compute(this.currentGeneration);
         this.currentGenerationNumber++;
         if (this.getCurrentNumberGeneration().intValue() % 3 == 0) {
@@ -128,12 +137,12 @@ public class GenerationControllerImpl implements GenerationController {
         }
         this.view.refreshView();
     }
-    
+
     @Override
     public void setView(final Sandbox viewPanel) {
         this.view = viewPanel;
     }
-    
+
     private void stopClock() {
         clock.setClock(false);
     }

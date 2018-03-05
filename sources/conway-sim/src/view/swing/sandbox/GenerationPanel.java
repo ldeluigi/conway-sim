@@ -13,7 +13,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import controller.generation.GenerationController;
-import controller.generation.GenerationControllerImpl;
 import view.swing.menu.MenuSettings;
 
 /**
