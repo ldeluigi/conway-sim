@@ -14,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import core.utils.ListMatrix;
 import core.utils.Matrix;
@@ -45,14 +46,19 @@ public class GridPanel extends JScrollPane {
         if (width < 1 || height < 1) {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
+        GridPanel.booltocolor.put(false, Color.WHITE);
+        GridPanel.booltocolor.put(true, Color.BLACK);
         this.labelMatrix = new ListMatrix<>(width, height, () -> {
             final JLabel l = new JLabel("");
             l.setSize(cellSize);
             l.setPreferredSize(cellSize);
-            l.setBackground(Color.white);
+            l.setBackground(GridPanel.booltocolor.get(false));
             l.setOpaque(true);
             return l;
         });
+        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
         this.displayLabels();
     }
     /**
@@ -119,9 +125,6 @@ public class GridPanel extends JScrollPane {
         if (boolMatrix.getHeight() != this.labelMatrix.getHeight() || boolMatrix.getWidth() != this.labelMatrix.getWidth()) {
             throw new IllegalArgumentException("Matrix shuld be as high and wide as the current one");
         }
-
-        GridPanel.booltocolor.put(false, Color.WHITE);
-        GridPanel.booltocolor.put(true, Color.BLACK);
         final List<List<Color>> colors = new ArrayList<>();
         IntStream.range(0, boolMatrix.getHeight()).forEach(line -> {
             colors.add(line, new ArrayList<>(boolMatrix.getWidth()));
@@ -157,8 +160,5 @@ public class GridPanel extends JScrollPane {
             }
         }
         this.setViewportView(grid);
-        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
     }
 }
