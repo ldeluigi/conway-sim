@@ -124,12 +124,6 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void computeNextGeneration() {
-        Future<Generation> futurGeneration;
-        class AgentThread extends Thread {
-            public void run() {
-                futurGeneration = Generations.compute(getCurrentGeneration());
-            }
-        }
         this.currentGeneration = Generations.compute(this.currentGeneration);
         this.currentGenerationNumber++;
         if (this.getCurrentNumberGeneration().intValue() % 3 == 0) {
