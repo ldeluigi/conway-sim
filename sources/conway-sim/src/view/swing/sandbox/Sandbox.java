@@ -25,6 +25,7 @@ public class Sandbox extends JPanel {
      */
     private static final long serialVersionUID = -9015811419136279771L;
     private static final String BOOK_NAME = "BOOK";
+    private static final int DEFAULT_SIZE = 100;
 
     private final GenerationPanel generationPanel;
     private final JButton bBook = new JButton(BOOK_NAME);
@@ -37,10 +38,11 @@ public class Sandbox extends JPanel {
      */
     public Sandbox(final DesktopGUI mainGUI) {
         final GenerationController genController = new GenerationControllerImpl();
-        final GridPanel grid = new GridPanel();
+        final GridPanel grid;
         this.generationPanel = new GenerationPanel(genController);
         genController.setView(this);
         this.mainGUI = mainGUI;
+        grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
 

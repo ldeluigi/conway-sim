@@ -29,12 +29,7 @@ public class GridPanel extends JScrollPane {
     private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
     private int borderWidth = INITIAL_BORDER_WIDTH;
     private Color borderColor = INITIAL_BORDER_COLOR;
-    /**
-     * 
-     */
-    public GridPanel() {
-        this(100, 100);
-    }
+    
     /**
      * 
      * @param width of the matrix
