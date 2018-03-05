@@ -41,6 +41,8 @@ public final class MenuSettings extends JPanel {
 
     private static int fontSize = INITIAL_FONT_SIZE;
     private static boolean usingSystemLF;
+    private static boolean instantTransitions;
+
     private final List<JComponent> toResize = new LinkedList<>();
 
     /**
@@ -88,6 +90,17 @@ public final class MenuSettings extends JPanel {
         ((DefaultEditor) fontSizeSelector.getEditor()).getTextField().setEditable(false);
         final JLabel fontLabel = new JLabel("Font dimension");
         fontLabel.setFont(MenuSettings.generateFont());
+        final JCheckBox checkInstantAnimations = new JCheckBox();
+        checkInstantAnimations.setSelected(areTransitionsInstant());
+        checkInstantAnimations.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                setInstantTransitions(true);
+            } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+                setInstantTransitions(false);
+            }
+        });
+        final JLabel checkInstantAnimationsLabel = new JLabel("Enable instant transitions between generations");
+        checkInstantAnimationsLabel.setFont(MenuSettings.generateFont());
         c.insets = new Insets(mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0,
                 mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0);
         c.fill = GridBagConstraints.NONE;
@@ -107,10 +120,22 @@ public final class MenuSettings extends JPanel {
         c.gridx = 0;
         c.gridy = 1;
         c.gridwidth = 3;
-        centralButtons.add(fontLabel, c);
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        centralButtons.add(checkInstantAnimationsLabel, c);
         c.anchor = GridBagConstraints.EAST;
         c.gridx = 4;
         c.gridy = 1;
+        c.gridwidth = 1;
+        centralButtons.add(checkInstantAnimations, c);
+        c.anchor = GridBagConstraints.WEST;
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 3;
+        centralButtons.add(fontLabel, c);
+        c.anchor = GridBagConstraints.EAST;
+        c.gridx = 4;
+        c.gridy = 2;
         c.gridwidth = 1;
         centralButtons.add(fontSizeSelector, c);
         final JButton ret = new JButton("Return");
@@ -132,6 +157,10 @@ public final class MenuSettings extends JPanel {
         this.toResize.add(fontLabel);
         this.toResize.add(((DefaultEditor) fontSizeSelector.getEditor()).getTextField());
         this.toResize.add(ret);
+    }
+
+    private static void setInstantTransitions(final boolean instantTransitions) {
+        MenuSettings.instantTransitions = instantTransitions;
     }
 
     private void setFontSize(final int value) {
@@ -165,5 +194,12 @@ public final class MenuSettings extends JPanel {
      */
     public static int getFontSize() {
         return fontSize;
+    }
+
+    /**
+     * @return true if transitions should be instantaneous
+     */
+    public static boolean areTransitionsInstant() {
+        return instantTransitions;
     }
 }

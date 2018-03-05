@@ -14,6 +14,7 @@ import javax.swing.SwingUtilities;
 
 import core.utils.ListMatrix;
 import core.utils.Matrix;
+import view.swing.menu.MenuSettings;
 
 
 /**
@@ -32,6 +33,7 @@ public class GridPanel extends JScrollPane {
     private final Color borderColor = INITIAL_BORDER_COLOR;
     private final JPanel grid;
     private final Matrix<JLabel> labelMatrix;
+    private final boolean shouldGridStayVisible;
     /**
      * 
      * @param width of the matrix
@@ -68,6 +70,7 @@ public class GridPanel extends JScrollPane {
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
+        this.shouldGridStayVisible = !MenuSettings.areTransitionsInstant();
     }
     /**
      * Alters Cell size value.
@@ -134,7 +137,7 @@ public class GridPanel extends JScrollPane {
 
     private void displayColors(final Matrix<Color> colorMatrix) {
         SwingUtilities.invokeLater(() -> {
-            this.grid.setVisible(false);
+            this.grid.setVisible(this.shouldGridStayVisible);
             IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
                 IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
                     labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
