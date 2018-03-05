@@ -35,6 +35,7 @@ public class GridPanel extends JScrollPane {
     private final Matrix<JLabel> labelMatrix1;
     private final Matrix<JLabel> labelMatrix2;
     private volatile boolean usingFirstGrid = true;
+    private final JPanel wrapper;
     /**
      * 
      * @param width of the matrix
@@ -83,7 +84,9 @@ public class GridPanel extends JScrollPane {
                 this.grid2.add(this.labelMatrix2.get(i, j), c);
             }
         }
-        this.setViewportView(grid1);
+        this.wrapper = new JPanel();
+        this.wrapper.add(grid1);
+        this.setViewportView(wrapper);
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
@@ -168,12 +171,10 @@ public class GridPanel extends JScrollPane {
             });
         });
         SwingUtilities.invokeLater(() -> {
-            final int ver = this.getVerticalScrollBar().getValue();
-            final int hor = this.getHorizontalScrollBar().getValue();
-            this.setViewportView(usingFirstGrid ? grid2 : grid1);
+            this.wrapper.removeAll();
+            this.wrapper.add(usingFirstGrid ? grid2 : grid1);
+            this.wrapper.repaint();
             this.usingFirstGrid = !this.usingFirstGrid;
-            this.getVerticalScrollBar().setValue(ver);
-            this.getHorizontalScrollBar().setValue(hor);
         });
     }
 }
