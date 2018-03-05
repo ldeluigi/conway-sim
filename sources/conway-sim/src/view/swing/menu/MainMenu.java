@@ -113,7 +113,7 @@ public final class MainMenu extends JPanel {
         public LoadingScreen() {
             super(new GridBagLayout());
             final JLabel loading = new JLabel("Loading...");
-            loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2));
+            loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
             this.add(loading);
         }
     }
