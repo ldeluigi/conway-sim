@@ -1,8 +1,11 @@
 package controller.generation;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import core.model.Cell;
 import core.model.CellImpl;
@@ -29,7 +32,8 @@ public class GenerationControllerImpl implements GenerationController {
     private final AgentClock clock = new AgentClock();
     private boolean start = true;
 
-    private long lastSaved = 0L;
+    private final List<Long> savedState = new LinkedList<>();
+    private static final int MAX_SAVED_STATE = 6;
 
     /**
      * 
@@ -77,9 +81,7 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void setSpeed(final int speed) {
-        // 1 == 900L
-        // 9 == 100L
-        final Long sleepTime = Long.valueOf(10 - speed) * 100L;
+        final Long sleepTime = 1000 / Long.valueOf(speed);
         if (sleepTime > 0 && sleepTime < MAX_TIME_GENERATION) {
             this.clock.setStep(Long.valueOf(sleepTime));
         } else {
@@ -93,29 +95,31 @@ public class GenerationControllerImpl implements GenerationController {
             this.currentGeneration = this.oldGeneration.getFirst();
             this.currentGenerationNumber = 0L;
             this.oldGeneration.removeAllGenerationAfter(0L);
-            this.view.refreshView();
-            return;
         } else if (generationNumber.longValue() < 0L) {
             throw new IllegalArgumentException();
-        }
-        final Long value = this.oldGeneration.getSavedState().keySet().stream()
-                        .filter(l -> l <= generationNumber)
-                        .max((x, y) -> Long.compare(x, y))
-                        .orElse(0L);
-        Generation valueGeneration;
-        Long difference;
-        if (value.longValue() == 0L) {
-            valueGeneration = this.oldGeneration.getFirst();
         } else {
-            valueGeneration = this.oldGeneration.getSavedState().get(value);
+            final Long value = this.oldGeneration.getSavedState().keySet().stream()
+                            .filter(l -> l <= generationNumber)
+                            .max((x, y) -> Long.compare(x, y))
+                            .orElse(0L);
+            Generation valueGeneration;
+            Long difference;
+            if (value.longValue() == 0L) {
+                valueGeneration = this.oldGeneration.getFirst();
+            } else {
+                valueGeneration = this.oldGeneration.getSavedState().get(value);
+            }
+            difference = generationNumber - value;
+            if (difference.longValue() != 0L) {
+                valueGeneration = Generations.compute(difference.intValue(), valueGeneration);
+            }
+            this.currentGeneration = valueGeneration;
+            this.currentGenerationNumber = generationNumber;
+            this.oldGeneration.removeAllGenerationAfter(this.getCurrentNumberGeneration());
         }
-        difference = generationNumber - value;
-        if (difference.longValue() != 0L) {
-            valueGeneration = Generations.compute(difference.intValue(), valueGeneration);
-        }
-        this.currentGeneration = valueGeneration;
-        this.currentGenerationNumber = generationNumber;
-        this.oldGeneration.removeAllGenerationAfter(this.getCurrentNumberGeneration());
+        this.savedState.removeAll(savedState.stream()
+                                            .filter(l -> l > 1 && l > this.getCurrentNumberGeneration())
+                                            .collect(Collectors.toList()));
         this.view.refreshView();
     }
 
@@ -149,7 +153,14 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     private void saveGeneration(final Generation generationToSave, final Long generationNumber) {
-        if (this.lastSaved == 0L) {
+        if (this.savedState.size() < MAX_SAVED_STATE) {
+            this.savedState.add(generationNumber);
+            this.oldGeneration.addGeneration(generationNumber, generationToSave);
+        } else if (this.savedState.stream().reduce((x, y) -> x + y).get() + 1 == generationNumber) {
+            if (this.savedState.size() >= MAX_SAVED_STATE) {
+                this.savedState.remove(0);
+            }
+            this.savedState.add(generationNumber);
             this.oldGeneration.addGeneration(generationNumber, generationToSave);
         }
     }

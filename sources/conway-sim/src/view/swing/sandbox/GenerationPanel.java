@@ -3,10 +3,8 @@ package view.swing.sandbox;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.util.stream.IntStream;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -27,7 +25,7 @@ public class GenerationPanel extends JPanel {
     private static final long serialVersionUID = 9060069868596999045L;
 
     private static final int MIN_SPEED = 1;
-    private static final int MAX_SPEED = 9;
+    private static final int MAX_SPEED = 20;
 
     private final JSlider speedSlider;
     private final JButton bStart;
@@ -109,8 +107,9 @@ public class GenerationPanel extends JPanel {
         bRes.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
-        bPrev.addActionListener(e -> this.goTo(1L));
+        bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
         bNext.addActionListener(e -> this.next());
+
     }
 
     private void speedControl() {

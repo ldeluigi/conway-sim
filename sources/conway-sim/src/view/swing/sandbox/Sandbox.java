@@ -65,6 +65,7 @@ public class Sandbox extends JPanel {
         bExit.addActionListener(e -> exit());
         this.generationPanel.refreshView();
         this.grid.paintCells(this.genController.getCurrentGeneration().getAliveMatrix());
+
     }
 
     /**
