@@ -23,7 +23,7 @@ public class RLEConvert {
                         RULEPATTERN = "rule ?= ?((B[0-8]*/S[0-8]*)|([0-8]*/[0-8]*))",
                         CELLRUNPATTERN = "([1-9]\\d*)?([bo$])";
 
-    //DEFAULT RULE TO BE SETTED. METHOD TO BE IMPLEMENTED
+    //DEFAULT RULE TO BE SETTED. METHOD TO BE IMPLEMENTED AS CHALLENGE
     private static final String DEFAULTRULE = "B3/S23";
 
     //WILDCHAR
@@ -36,23 +36,25 @@ public class RLEConvert {
     //http://www.conwaylife.com/w/index.php?title=Run_Length_Encoded
     //NB: This will be used also as I/O method and SaveToFile
     /**
-     * 
+     *  This is the builder from file, it takes a fileName of File type
+     *  and builds the buffer with the given text found.
      * @param fileName name of the file to be loaded
-     * @throws FileNotFoundException when file not found
+     * @throws FileNotFoundException when file is null or not found in filesystem
      */
     public RLEConvert(final File fileName) throws FileNotFoundException {
         this.buffer = new BufferedReader(new FileReader(fileName));
     }
     /**
-     * 
-     * @param rle string of rle loaded
+     *  This is the builder from String, it takes a rle of String type
+     *  and builds the buffer with the given text found in the String.
+     * @param rle String in RLE Format.
      */
     public RLEConvert(final String rle) {
         this.buffer = new BufferedReader(new StringReader(rle));
     }
 
     /**
-     * 
+     * This is a wrapper of the readLine() method of buffer.
      * @return
      * @throws IOException
      */
@@ -60,7 +62,7 @@ public class RLEConvert {
         return buffer.readLine();
     }
     /**
-     * 
+     * This is a wrapper of the close() method of buffer.
      * @throws IOException
      */
     private void close() throws IOException {
@@ -68,10 +70,10 @@ public class RLEConvert {
     }
 
     /**
-     * 
-     * @return
+     * This method finds and returns the header line of the RLE.
+     * @return the header line in String format
      * @throws IOException
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException if no non-commented strings are found in buffer
      */
     private String getHeaderLine() throws IOException, IllegalArgumentException {
         String line;
@@ -87,7 +89,12 @@ public class RLEConvert {
             throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
         }
     }
-
+    /**
+     * 
+     * @return
+     * @throws IOException
+     * @throws IllegalArgumentException
+     */
     private String getCellString() throws IOException, IllegalArgumentException {
         StringBuilder sb = new StringBuilder();
         String line;
@@ -111,7 +118,8 @@ public class RLEConvert {
     }
 
     /**
-     * 
+     * This is the main method, it returns the matrix (grid[][]) converted from the 
+     * RLE format.
      * @return grid
      */
     public boolean[][] convert() {

@@ -4,19 +4,17 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.IntStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import core.utils.ListMatrix;
 import core.utils.Matrix;
+import view.swing.menu.MenuSettings;
 
 
 /**
@@ -30,11 +28,12 @@ public class GridPanel extends JScrollPane {
     private static final int INITIAL_BORDER_WIDTH = 1;
     private static final Color INITIAL_BORDER_COLOR = Color.darkGray;
 
-    private final Matrix<JLabel> labelMatrix;
     private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
     private int borderWidth = INITIAL_BORDER_WIDTH;
     private final Color borderColor = INITIAL_BORDER_COLOR;
-
+    private final JPanel grid;
+    private final Matrix<JLabel> labelMatrix;
+    private final boolean shouldGridStayVisible;
     /**
      * 
      * @param width of the matrix
@@ -52,7 +51,7 @@ public class GridPanel extends JScrollPane {
             l.setOpaque(true);
             return l;
         });
-        final JPanel grid = new JPanel(new GridBagLayout());
+        this.grid = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
@@ -63,13 +62,15 @@ public class GridPanel extends JScrollPane {
                 c.gridx = j;
                 c.gridy = i;
                 setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
-                grid.add(this.labelMatrix.get(i, j), c);
+                this.grid.add(this.labelMatrix.get(i, j), c);
             }
         }
+        this.setDoubleBuffered(true);
         this.setViewportView(grid);
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
+        this.shouldGridStayVisible = !MenuSettings.areTransitionsInstant();
     }
     /**
      * Alters Cell size value.
@@ -131,43 +132,18 @@ public class GridPanel extends JScrollPane {
      * @param boolMatrix is the to.
      */
     public void paintCells(final Matrix<Boolean> boolMatrix) {
-
-        if (boolMatrix.getHeight() != this.labelMatrix.getHeight() || boolMatrix.getWidth() != this.labelMatrix.getWidth()) {
-            throw new IllegalArgumentException("Matrix shuld be as high and wide as the current one");
-        }
-
-        final Map<Boolean, Color> booltocolor = new HashMap<>();
-        booltocolor.put(false, Color.WHITE);
-        booltocolor.put(true, Color.BLACK);
-        final List<List<Color>> colors = new ArrayList<>();
-        IntStream.range(0, boolMatrix.getHeight()).forEach(line -> {
-            colors.add(line, new ArrayList<>(boolMatrix.getWidth()));
-            IntStream.range(0, boolMatrix.getWidth()).forEach(column -> {
-                colors.get(line).add(column, booltocolor.get(boolMatrix.get(line, column)));
-            });
-        });
-        this.displayColors(new ListMatrix<>(colors));
+        displayColors(boolMatrix.map(b -> b ? Color.black : Color.white));
     }
 
     private void displayColors(final Matrix<Color> colorMatrix) {
-        final JPanel grid = new JPanel(new GridBagLayout());
-        final GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
-            IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
-                final JLabel lab = new JLabel();
-                lab.setBackground(colorMatrix.get(line, column));
-                lab.setSize(this.cellSize);
-                lab.setPreferredSize(this.cellSize);
-                lab.setOpaque(true);
-                c.gridx = line;
-                c.gridy = column;
-                grid.add(lab, c);
+        SwingUtilities.invokeLater(() -> {
+            this.grid.setVisible(this.shouldGridStayVisible);
+            IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
+                IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
+                    labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
+                });
             });
+            this.grid.setVisible(true);
         });
-        this.setViewportView(grid);
     }
 }

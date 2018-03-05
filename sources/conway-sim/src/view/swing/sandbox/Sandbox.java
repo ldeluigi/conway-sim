@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
-import core.model.Status;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
@@ -65,7 +64,7 @@ public class Sandbox extends JPanel {
         bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
         this.generationPanel.refreshView();
-        this.grid.paintCells(this.genController.getCurrentGeneration().getCellMatrix().map(e -> e.getStatus() == Status.ALIVE ? true : false));
+        this.grid.paintCells(this.genController.getCurrentGeneration().getAliveMatrix());
     }
 
     /**
@@ -73,7 +72,7 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
-        this.grid.paintCells(this.genController.getCurrentGeneration().getCellMatrix().map(e -> e.getStatus() == Status.ALIVE ? true : false));
+        this.grid.paintCells(this.genController.getCurrentGeneration().getAliveMatrix());
     }
 
     private void callBook() {
