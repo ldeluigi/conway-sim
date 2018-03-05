@@ -13,6 +13,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import controller.generation.GenerationController;
+import controller.generation.GenerationControllerImpl;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -25,14 +26,6 @@ public class GenerationPanel extends JPanel {
      */
     private static final long serialVersionUID = 9060069868596999045L;
 
-    private static final String STA = "Start";
-    private static final String STO = "Stop";
-    private static final String PAU = "Pause";
-    private static final String UND = "Undo";
-    private static final String NEX = "Next";
-    private static final String PRE = "Previous";
-    private static final String RES = "Resume";
-
     private final JButton bStart;
     private final JButton bStop;
     private final JButton bPause;
@@ -42,34 +35,24 @@ public class GenerationPanel extends JPanel {
     private final JButton bRes;
 
     private final JLabel numGeneration;
-    private final GenerationController generationController;
-    private final JPanel superPanel;
+    private GenerationController generationController;
 
     private final int fontSize = MenuSettings.getFontSize();
 
     /**
      * 
      * @param controller the controller of the generation
-     * @param superPanel the panel that call this one
      */
-    public GenerationPanel(final GenerationController controller, final JPanel superPanel) {
+    public GenerationPanel(final GenerationController controller) {
         this.generationController = controller;
-        this.superPanel = superPanel;
 
-        bStart = this.newJButton(STA);
-        bStart.setToolTipText("Start the game");
-        bStop = this.newJButton(STO);
-        bStop.setToolTipText("Reset the game mode");
-        bPause = this.newJButton(PAU);
-        bPause.setToolTipText("Stop the time");
-        bNext = this.newJButton(NEX);
-        bNext.setToolTipText("Go to the next generation");
-        bUndo = this.newJButton(UND);
-        bUndo.setToolTipText("Go back in time of N generations");
-        bPrev = this.newJButton(PRE);
-        bPrev.setToolTipText("Go to the previous generation");
-        bRes = this.newJButton(RES);
-        bRes.setToolTipText("Resume the current game");
+        bStart = this.newJButton("Start", "Start the game");
+        bStop = this.newJButton("Stop", "Reset the game mode");
+        bPause = this.newJButton("Pause", "Stop the time");
+        bNext = this.newJButton("Next", "Go to the next generation");
+        bUndo = this.newJButton("Undo", "Go back in time of N generations");
+        bPrev = this.newJButton("Previous", "Go to the previous generation");
+        bRes = this.newJButton("Resume", "Resume the current game");
 
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
@@ -125,7 +108,6 @@ public class GenerationPanel extends JPanel {
 
     private void undo(final Long value) {
         if (this.generationController.getCurrentNumberGeneration() - value < 0) {
-            // TODO error of generation undo
             JOptionPane.showMessageDialog(this, "Impossible undo of " + value + " from " + this.generationController.getCurrentNumberGeneration());
         }
         this.generationController.loadOldGeneration(this.generationController.getCurrentNumberGeneration() - value);
@@ -141,6 +123,7 @@ public class GenerationPanel extends JPanel {
             bNext.setEnabled(false);
             bPrev.setEnabled(false);
             bUndo.setEnabled(false);
+            this.generationController.reset();
         }
     }
 
@@ -183,9 +166,10 @@ public class GenerationPanel extends JPanel {
         this.numGeneration.setText(this.generationController.getCurrentNumberGeneration().toString());
     }
 
-    private JButton newJButton(final String name) {
+    private JButton newJButton(final String name, final String tooltipText) {
         final JButton button = new JButton(name);
-        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
+        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        button.setToolTipText(tooltipText);
         return button;
     }
 }
