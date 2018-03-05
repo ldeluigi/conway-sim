@@ -106,7 +106,7 @@ public class GenerationPanel extends JPanel {
 
     private void goTo(final Long value) {
         if (this.generationController.getCurrentNumberGeneration() < value || value < 0) {
-            JOptionPane.showMessageDialog(this, "Impossible undo of " + value + " from " + this.generationController.getCurrentNumberGeneration());
+            JOptionPane.showMessageDialog(this, "Impossible undo to " + value + " from " + this.generationController.getCurrentNumberGeneration());
         }
         this.generationController.loadOldGeneration(value);
         this.refreshView();
