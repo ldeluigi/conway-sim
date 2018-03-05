@@ -29,6 +29,7 @@ public class GridPanel extends JScrollPane {
     private static final int INITIAL_SIZE = 20;
     private static final int INITIAL_BORDER_WIDTH = 1;
     private static final Color INITIAL_BORDER_COLOR = Color.darkGray;
+    private static Map<Boolean, Color> booltocolor = new HashMap<>();
 
     private final Matrix<JLabel> labelMatrix;
     private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
@@ -52,24 +53,7 @@ public class GridPanel extends JScrollPane {
             l.setOpaque(true);
             return l;
         });
-        final JPanel grid = new JPanel(new GridBagLayout());
-        final GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
-            for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                c.gridx = j;
-                c.gridy = i;
-                setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
-                grid.add(this.labelMatrix.get(i, j), c);
-            }
-        }
-        this.setViewportView(grid);
-        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
+        this.displayLabels();
     }
     /**
      * Alters Cell size value.
@@ -136,38 +120,45 @@ public class GridPanel extends JScrollPane {
             throw new IllegalArgumentException("Matrix shuld be as high and wide as the current one");
         }
 
-        final Map<Boolean, Color> booltocolor = new HashMap<>();
-        booltocolor.put(false, Color.WHITE);
-        booltocolor.put(true, Color.BLACK);
+        GridPanel.booltocolor.put(false, Color.WHITE);
+        GridPanel.booltocolor.put(true, Color.BLACK);
         final List<List<Color>> colors = new ArrayList<>();
         IntStream.range(0, boolMatrix.getHeight()).forEach(line -> {
             colors.add(line, new ArrayList<>(boolMatrix.getWidth()));
             IntStream.range(0, boolMatrix.getWidth()).forEach(column -> {
-                colors.get(line).add(column, booltocolor.get(boolMatrix.get(line, column)));
+                colors.get(line).add(column, GridPanel.booltocolor.get(boolMatrix.get(line, column)));
             });
         });
         this.displayColors(new ListMatrix<>(colors));
     }
 
     private void displayColors(final Matrix<Color> colorMatrix) {
+        IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
+            IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
+                this.labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
+            });
+        });
+        this.displayLabels();
+    }
+
+    private void displayLabels() {
         final JPanel grid = new JPanel(new GridBagLayout());
         final GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
         c.weightx = 0.5;
         c.weighty = 0.5;
-        IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
-            IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
-                final JLabel lab = new JLabel();
-                lab.setBackground(colorMatrix.get(line, column));
-                lab.setSize(this.cellSize);
-                lab.setPreferredSize(this.cellSize);
-                lab.setOpaque(true);
-                c.gridx = line;
-                c.gridy = column;
-                grid.add(lab, c);
-            });
-        });
+        for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+            for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                c.gridx = j;
+                c.gridy = i;
+                setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                grid.add(this.labelMatrix.get(i, j), c);
+            }
+        }
         this.setViewportView(grid);
+        this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
     }
 }
