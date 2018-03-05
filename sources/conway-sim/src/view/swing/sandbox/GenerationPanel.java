@@ -13,7 +13,6 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import controller.generation.GenerationController;
-import controller.generation.GenerationControllerImpl;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -45,6 +44,8 @@ public class GenerationPanel extends JPanel {
     private final JLabel numGeneration;
     private final GenerationController generationController;
     private final JPanel superPanel;
+
+    private final int fontSize = MenuSettings.getFontSize();
 
     /**
      * 
@@ -78,9 +79,9 @@ public class GenerationPanel extends JPanel {
         this.add(bStart);
 
         final JLabel generationNumber = new JLabel("Generation number: ");
-        generationNumber.setFont(new Font(Font.MONOSPACED, Font.PLAIN, generationNumber.getFont().getSize()));
+        generationNumber.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         numGeneration = new JLabel("0");
-        numGeneration.setFont(new Font(Font.MONOSPACED, Font.PLAIN, numGeneration.getFont().getSize()));
+        numGeneration.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         this.add(generationNumber);
         this.add(numGeneration);
 
@@ -94,6 +95,7 @@ public class GenerationPanel extends JPanel {
         this.add(spinner);
 
         this.setBorder(BorderFactory.createLineBorder(Color.black));
+        this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
         /*
          * Start conditions.

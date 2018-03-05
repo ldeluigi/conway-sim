@@ -2,6 +2,7 @@ package view.swing.sandbox;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.util.Objects;
 
 import javax.swing.JButton;
@@ -12,6 +13,7 @@ import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
+import view.swing.menu.MenuSettings;
 
 /**
  * 
@@ -30,6 +32,7 @@ public class Sandbox extends JPanel {
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
     private BookFrame book;
+    private final int fontSize = MenuSettings.getFontSize();
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
@@ -48,6 +51,9 @@ public class Sandbox extends JPanel {
         final JButton bExit = new JButton("EXIT");
 
         final JPanel south = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+
+        bBook.setFont(new Font(bBook.getFont().getFontName(), bBook.getFont().getStyle(), this.fontSize));
+        bExit.setFont(new Font(bExit.getFont().getFontName(), bExit.getFont().getStyle(), this.fontSize));
 
         south.add(bBook);
         south.add(bExit);
