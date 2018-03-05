@@ -1,5 +1,7 @@
 package controller.generation;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
@@ -27,6 +29,8 @@ public class GenerationControllerImpl implements GenerationController {
     private GenerationMemento<Generation> oldGeneration;
     private final AgentClock clock = new AgentClock();
     private boolean start = true;
+
+    private long lastSaved = 0L;
 
     /**
      * 
@@ -122,20 +126,29 @@ public class GenerationControllerImpl implements GenerationController {
         return this.currentGenerationNumber;
     }
 
+    private Future<Generation> computeFuture(final Generation generation) {
+        return Executors.newSingleThreadExecutor().submit(() -> {
+            return Generations.compute(generation);
+        });
+    }
+
     @Override
     public void computeNextGeneration() {
-        Future<Generation> futurGeneration;
-        class AgentThread extends Thread {
-            public void run() {
-                futurGeneration = Generations.compute(getCurrentGeneration());
-            }
+        final Future<Generation> futurGeneration = computeFuture(this.getCurrentGeneration());
+        try {
+            this.currentGeneration = futurGeneration.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
-        this.currentGeneration = Generations.compute(this.currentGeneration);
         this.currentGenerationNumber++;
-        if (this.getCurrentNumberGeneration().intValue() % 3 == 0) {
-            this.oldGeneration.addGeneration(this.getCurrentNumberGeneration(), getCurrentGeneration());
-        }
+        this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
         this.view.refreshView();
+    }
+
+    private void saveGeneration(final Generation generationToSave, final Long generationNumber) {
+        if (this.lastSaved == 0L) {
+            this.oldGeneration.addGeneration(generationNumber, generationToSave);
+        }
     }
 
     @Override
