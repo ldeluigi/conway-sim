@@ -38,6 +38,7 @@ public final class MenuSettings extends JPanel {
     private static final int GRID_WIDTH = 5;
     private static final int MAX_FONT_SIZE = 30;
     private static final int BUTTON_FONT_PLUS = 10;
+    private static final int MIN_FONT_SIZE = 1;
 
     private static int fontSize = INITIAL_FONT_SIZE;
     private static boolean usingSystemLF;
@@ -78,7 +79,8 @@ public final class MenuSettings extends JPanel {
         });
         final JLabel checkLFLabel = new JLabel("Use System Look and Feel (if available)");
         checkLFLabel.setFont(MenuSettings.generateFont());
-        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(), 1, MAX_FONT_SIZE, 1);
+        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(),
+                MIN_FONT_SIZE, MAX_FONT_SIZE, 1);
         final JSpinner fontSizeSelector = new JSpinner(fontSizeSelectorModel);
         fontSizeSelector.setFont(generateFont());
         fontSizeSelector.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / MINI_BUTTON_RATIO_X,
@@ -156,10 +158,11 @@ public final class MenuSettings extends JPanel {
         this.toResize.add(checkLFLabel);
         this.toResize.add(fontLabel);
         this.toResize.add(((DefaultEditor) fontSizeSelector.getEditor()).getTextField());
+        this.toResize.add(checkInstantAnimationsLabel);
         this.toResize.add(ret);
     }
 
-    private static void setInstantTransitions(final boolean instantTransitions) {
+    private void setInstantTransitions(final boolean instantTransitions) {
         MenuSettings.instantTransitions = instantTransitions;
     }
 
@@ -178,7 +181,8 @@ public final class MenuSettings extends JPanel {
     }
 
     private static Font generateFont(final Component c) {
-        return new Font(c.getFont().getFontName(), c.getFont().getStyle(), MenuSettings.getFontSize() + (c instanceof JButton ? BUTTON_FONT_PLUS : 0));
+        return new Font(c.getFont().getFontName(), c.getFont().getStyle(),
+                MenuSettings.getFontSize() + (c instanceof JButton ? BUTTON_FONT_PLUS : 0));
     }
 
     private boolean isUsingSystemLF() {
@@ -190,7 +194,7 @@ public final class MenuSettings extends JPanel {
     }
 
     /**
-     * @return the fontSize
+     * @return the fontSize selected by user
      */
     public static int getFontSize() {
         return fontSize;
