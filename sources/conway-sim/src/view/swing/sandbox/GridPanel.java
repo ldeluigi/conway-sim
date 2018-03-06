@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 
 import core.utils.ListMatrix;
 import core.utils.Matrix;
+import view.swing.GUI;
 import view.swing.menu.MenuSettings;
 
 
@@ -29,6 +30,8 @@ public class GridPanel extends JScrollPane {
     private static final int INITIAL_SIZE = 20;
     private static final int INITIAL_BORDER_WIDTH = 1;
     private static final Color INITIAL_BORDER_COLOR = Color.darkGray;
+    private static final int MAX_CELL_SIZE_RATIO = 15;
+    private static final int MIN_CELL_SIZE_RATIO = 105;
 
     private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
     private int borderWidth = INITIAL_BORDER_WIDTH;
@@ -36,15 +39,20 @@ public class GridPanel extends JScrollPane {
     private final JPanel grid;
     private final Matrix<JLabel> labelMatrix;
     private final boolean shouldGridStayVisible;
+    private final int maxCellSize;
+    private final int minCellSize;
     /**
      * 
      * @param width of the matrix
      * @param height of the matrix
+     * @param gui for dynamic dimensions
      */
-    public GridPanel(final int width, final int height) {
+    public GridPanel(final int width, final int height, final GUI gui) {
         if (width < 1 || height < 1) {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
+        this.maxCellSize = gui.getCurrentWidth() / MAX_CELL_SIZE_RATIO;
+        this.minCellSize = gui.getCurrentWidth() / MIN_CELL_SIZE_RATIO;
         this.labelMatrix = new ListMatrix<>(width, height, () -> {
             final JLabel l = new JLabel("");
             l.setSize(cellSize);
@@ -74,37 +82,55 @@ public class GridPanel extends JScrollPane {
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
         this.shouldGridStayVisible = !MenuSettings.areTransitionsInstant(); //cambiare con getter-setter
+        this.addMouseWheelListener(e -> {
+            if (e.isControlDown()) {
+                if (e.getWheelRotation() < 0) {
+                    if (cellSize.getWidth() < this.maxCellSize) {
+                        alterCellSize(1);
+                    }
+                } else {
+                    if (cellSize.getWidth() > this.minCellSize) {
+                        alterCellSize(-1);
+                    }
+                }
+            }
+        });
     }
+
     /**
      * Alters Cell size value.
-     * @param byPixels to add
+     * 
+     * @param byPixels
+     *            to add
      */
     public void alterCellSize(final int byPixels) {
+        if (this.cellSize.getWidth() + byPixels <= 0 || this.cellSize.getHeight() + byPixels <= 0) {
+            throw new IllegalStateException("Final Dimensions are 0 or less.");
+        }
         SwingUtilities.invokeLater(() -> {
-                this.grid.setVisible(false);
-            if (this.cellSize.getWidth() + byPixels <= 0 || this.cellSize.getHeight() + byPixels <= 0) {
-                throw new IllegalStateException("Final Dimensions are 0 or less.");
-            }
+            this.grid.setVisible(false);
             this.cellSize.setSize(this.cellSize.getWidth() + byPixels, this.cellSize.getHeight() + byPixels);
             this.labelMatrix.forEach(label -> {
                 label.setSize(this.cellSize);
                 label.setPreferredSize(this.cellSize);
             });
             this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
-                this.grid.setVisible(true);
-            });
-        }
+            this.grid.setVisible(true);
+        });
+    }
 
     /**
      * Alters Border width value.
-     * @param byPixels to add
+     * 
+     * @param byPixels
+     *            to add
      */
     public void alterBorderWidth(final int byPixels) {
+        if (this.borderWidth + byPixels < 1) {
+            throw new IllegalStateException("Final Border Width is 0 or less.");
+        }
         SwingUtilities.invokeLater(() -> {
-                this.grid.setVisible(false);
-            if (this.borderWidth + byPixels < 1) {
-                throw new IllegalStateException("Final Border Width is 0 or less.");
-            }
+            this.grid.setVisible(false);
             this.borderWidth += byPixels;
             for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
                 for (int j = 0; j < this.labelMatrix.getWidth(); j++) {

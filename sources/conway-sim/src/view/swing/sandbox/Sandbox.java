@@ -43,7 +43,7 @@ public class Sandbox extends JPanel {
         this.generationPanel = new GenerationPanel(genController);
         genController.setView(this);
         this.mainGUI = mainGUI;
-        grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE);
+        grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
 
