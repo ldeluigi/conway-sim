@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.stream.IntStream;
 
 import javax.swing.BorderFactory;
@@ -61,6 +63,7 @@ public class GridPanel extends JScrollPane {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
                 c.gridx = j;
                 c.gridy = i;
+                this.labelMatrix.get(i, j).addMouseListener(new GridPanel.CellListener(i, j));
                 setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
                 this.grid.add(this.labelMatrix.get(i, j), c);
             }
@@ -70,38 +73,46 @@ public class GridPanel extends JScrollPane {
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
-        this.shouldGridStayVisible = !MenuSettings.areTransitionsInstant();
+        this.shouldGridStayVisible = !MenuSettings.areTransitionsInstant(); //cambiare con getter-setter
     }
     /**
      * Alters Cell size value.
      * @param byPixels to add
      */
     public void alterCellSize(final int byPixels) {
-        if (this.cellSize.getWidth() + byPixels <= 0 || this.cellSize.getHeight() + byPixels <= 0) {
-            throw new IllegalStateException("Final Dimensions are 0 or less.");
+        SwingUtilities.invokeLater(() -> {
+                this.grid.setVisible(false);
+            if (this.cellSize.getWidth() + byPixels <= 0 || this.cellSize.getHeight() + byPixels <= 0) {
+                throw new IllegalStateException("Final Dimensions are 0 or less.");
+            }
+            this.cellSize.setSize(this.cellSize.getWidth() + byPixels, this.cellSize.getHeight() + byPixels);
+            this.labelMatrix.forEach(label -> {
+                label.setSize(this.cellSize);
+                label.setPreferredSize(this.cellSize);
+            });
+            this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
+                this.grid.setVisible(true);
+            });
         }
-        this.cellSize.setSize(this.cellSize.getWidth() + byPixels, this.cellSize.getHeight() + byPixels);
-        this.labelMatrix.forEach(label -> {
-            label.setSize(this.cellSize);
-            label.setPreferredSize(this.cellSize);
-        });
-        this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
-    }
 
     /**
      * Alters Border width value.
      * @param byPixels to add
      */
     public void alterBorderWidth(final int byPixels) {
-        if (this.borderWidth + byPixels < 1) {
-            throw new IllegalStateException("Final Border Width is 0 or less.");
-        }
-        this.borderWidth += byPixels;
-        for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
-            for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+        SwingUtilities.invokeLater(() -> {
+                this.grid.setVisible(false);
+            if (this.borderWidth + byPixels < 1) {
+                throw new IllegalStateException("Final Border Width is 0 or less.");
             }
-        }
+            this.borderWidth += byPixels;
+            for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+                for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                    setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                }
+            }
+            this.grid.setVisible(true);
+        });
     }
 
     private void setBorder(final JLabel label, final int row, final int col, final Color c, final int borderWidth)  {
@@ -145,5 +156,35 @@ public class GridPanel extends JScrollPane {
             });
             this.grid.setVisible(true);
         });
+    }
+
+    /**
+     * 
+     */
+    public void piazzamentoPattern() {
+
+    }
+
+    private final class CellListener implements MouseListener {
+
+        private final int row, column;
+
+        private CellListener(final int row, final int column) {
+            this.row = row;
+            this.column = column;
+        }
+        public void mouseReleased(final MouseEvent e) { }
+
+        public void mousePressed(final MouseEvent e) { }
+
+        public void mouseExited(final MouseEvent e) { }
+
+        public void mouseEntered(final MouseEvent e) {
+            System.out.println("Enter: " + row + ";" + column);
+        }
+
+        public void mouseClicked(final MouseEvent e) {
+            System.out.println("Click: " + row + ";" + column);
+        }
     }
 }
