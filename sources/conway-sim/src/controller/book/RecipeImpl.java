@@ -5,7 +5,7 @@ import java.util.Random;
  * 
  *
  */
-public abstract class RecipeImpl implements Recipe {
+public class RecipeImpl implements Recipe {
 
     private String name;
     private String content;
