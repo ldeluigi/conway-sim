@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
 import view.swing.GUI;
@@ -41,6 +42,8 @@ public class GridPanel extends JScrollPane {
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
+    private Matrix<Boolean> pattern;
+
     /**
      * 
      * @param width of the matrix
@@ -168,11 +171,11 @@ public class GridPanel extends JScrollPane {
      * A fr nvrogòwn  ng .
      * @param boolMatrix is the to.
      */
-    public void paintCells(final Matrix<Boolean> boolMatrix) {
-        displayColors(boolMatrix.map(b -> b ? Color.black : Color.white));
+    public void paintCells(final Matrix<Boolean> boolMatrix) { //aggiungere gli opzionali
+        this.displayColors(boolMatrix.map(b -> b ? Color.black : Color.white));
     }
 
-    private void displayColors(final Matrix<Color> colorMatrix) {
+    private void displayColors(final Matrix<Color> colorMatrix) { //aggiun gere gli opzionali
         SwingUtilities.invokeLater(() -> {
             this.grid.setVisible(this.shouldGridStayVisible);
             IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
@@ -187,8 +190,26 @@ public class GridPanel extends JScrollPane {
     /**
      * 
      */
-    public void piazzamentoPattern() {
+    public void showPattern() {
+        this.paintCells(this.pattern);
+    }
 
+    /**
+     * 
+     */
+    public void getModifiedGrid() {
+
+    }
+
+    /**
+     * 
+     */
+    public void setPattern(final Matrix<Status> toPlace) {
+        this.pattern = toPlace.map(c -> c.equals(Status.ALIVE) ? true : false);
+    }
+
+    private void discardPattern() {
+        this.pattern = null; //optional
     }
 
     private final class CellListener implements MouseListener {
@@ -199,11 +220,18 @@ public class GridPanel extends JScrollPane {
             this.row = row;
             this.column = column;
         }
-        public void mouseReleased(final MouseEvent e) { }
 
-        public void mousePressed(final MouseEvent e) { }
+        public void mouseReleased(final MouseEvent e) {
+            throw new UnsupportedOperationException("This observer doesn't support the invoked method.");
+        }
 
-        public void mouseExited(final MouseEvent e) { }
+        public void mousePressed(final MouseEvent e) {
+            throw new UnsupportedOperationException("This observer doesn't support the invoked method.");
+        }
+
+        public void mouseExited(final MouseEvent e) {
+            throw new UnsupportedOperationException("This observer doesn't support the invoked method.");
+        }
 
         public void mouseEntered(final MouseEvent e) {
             System.out.println("Enter: " + row + ";" + column);
