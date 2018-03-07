@@ -90,7 +90,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void loadOldGeneration(final Long generationNumber) {
+    public void loadGeneration(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);

@@ -41,7 +41,7 @@ public interface GenerationController {
      * 
      * @param generationNumber the number of the generation to load
      */
-    void loadOldGeneration(Long generationNumber);
+    void loadGeneration(Long generationNumber);
 
     /**
      * 

@@ -147,7 +147,7 @@ public class GenerationPanel extends JPanel {
                 final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 menu.setLocation((int) dim.getWidth() / 2, (int) dim.getHeight() / 2);
                 menu.setVisible(true);
-                generationController.loadOldGeneration(value);
+                generationController.loadGeneration(value);
                 menu.setVisible(false);
                 this.setEableTimeOption(true);
                 bPlay.setEnabled(true);
