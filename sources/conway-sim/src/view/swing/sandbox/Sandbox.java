@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -64,7 +65,7 @@ public class Sandbox extends JPanel {
         bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
         this.generationPanel.refreshView();
-        this.grid.paintCells(this.genController.getCurrentGeneration().getAliveMatrix());
+        this.grid.paintCells(this.genController.getCurrentGeneration().getAliveMatrix(), Optional.empty(), Optional.empty());
 
     }
 
@@ -73,7 +74,7 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
-        this.grid.paintCells(this.genController.getCurrentGeneration().getAliveMatrix());
+        this.grid.paintCells(this.genController.getCurrentGeneration().getAliveMatrix(), Optional.empty(), Optional.empty());
     }
 
     private void callBook() {
