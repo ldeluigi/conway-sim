@@ -12,6 +12,11 @@ public class IOLoader {
     //private static final String filepath = "/test/file.txt";
     /**
      * 
+     */
+    public IOLoader() {
+    }
+    /**
+     * 
      * @param filepath > Path of file to be loaded
      * @return list of Arrays
      * @throws FileNotFoundException if file not found

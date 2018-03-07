@@ -5,13 +5,13 @@ import java.util.ArrayList;
  * 
  *
  */
-public abstract class RecipeBookImpl implements RecipeBook {
-    private ArrayList<RecipeImpl> rb = new ArrayList<RecipeImpl>();
+public class RecipeBookImpl implements RecipeBook {
+    private ArrayList<RecipeImpl> rb;
     /**
      * 
      */
     public RecipeBookImpl() {
-        //EMPTY BUILDER
+        this.rb = new ArrayList<RecipeImpl>();
     }
     /**
      * 
@@ -19,7 +19,7 @@ public abstract class RecipeBookImpl implements RecipeBook {
      * @return recipe
      */
     public RecipeImpl getRecipeByPos(final int pos) {
-        return rb.get(pos);
+        return this.rb.get(pos);
     }
     /**
      * 
@@ -28,7 +28,7 @@ public abstract class RecipeBookImpl implements RecipeBook {
      */
     public RecipeImpl getRecipeByName(final String name) {
         try {
-            for (RecipeImpl e : rb) {
+            for (RecipeImpl e : this.rb) {
                 if (e.getName() == name) {
                     return e;
                 }
@@ -38,7 +38,7 @@ public abstract class RecipeBookImpl implements RecipeBook {
 
             throw new IllegalArgumentException("No recipe found with the given name, returning the first one.");
         }
-        return rb.get(0);
+        return this.rb.get(0);
 
     }
     /**
@@ -48,7 +48,7 @@ public abstract class RecipeBookImpl implements RecipeBook {
      * @param author of the Recipe.
      */
     public void addRecipe(final String content, final String name, final String author) {
-        rb.add(new RecipeImpl(content, name, author));
+        this.rb.add(new RecipeImpl(content, name, author));
     }
     /**
      * Method for adding a new Recipe in the book given the content and the name of the recipe.
@@ -56,13 +56,28 @@ public abstract class RecipeBookImpl implements RecipeBook {
      * @param name of the Recipe.
      */
     public void addRecipe(final String content, final String name) {
-        rb.add(new RecipeImpl(content, name));
+        this.rb.add(new RecipeImpl(content, name));
     }
     /**
      * Method for adding a new Recipe in the book given only the content of it.
      * @param content of the Recipe
      */
     public void addRecipe(final String content) {
-        rb.add(new RecipeImpl(content));
+        this.rb.add(new RecipeImpl(content));
+    }
+    /**
+     * Method for getting the Book Size.
+     * @return size of Book
+     */
+    public int getRecipeBookSize() {
+        return this.rb.size();
+    }
+    /**
+     * SEVERE TO REFACTOR
+     * This method returns the recipebook List.
+     * @return the Arraylist of recipebook
+     */
+    public ArrayList<RecipeImpl> getBookList() {
+        return this.rb;
     }
 }
