@@ -35,7 +35,7 @@ public final class MenuSettings extends JPanel {
     private static final int MINI_BUTTON_RATIO_Y = 30;
     private static final int MINI_BUTTON_RATIO_X = 25;
     private static final int INITIAL_FONT_SIZE = 15;
-    private static final int GRID_WIDTH = 5;
+    private static final int GRIDBAG_WIDTH = 5;
     private static final int MAX_FONT_SIZE = 30;
     private static final int BUTTON_FONT_PLUS = 10;
     private static final int MIN_FONT_SIZE = 1;
@@ -152,7 +152,7 @@ public final class MenuSettings extends JPanel {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 8;
-        c.gridwidth = GRID_WIDTH;
+        c.gridwidth = GRIDBAG_WIDTH;
         centralButtons.add(ret, c);
         this.add(centralButtons);
         this.toResize.add(checkLFLabel);
@@ -162,11 +162,11 @@ public final class MenuSettings extends JPanel {
         this.toResize.add(ret);
     }
 
-    private void setInstantTransitions(final boolean instantTransitions) {
+    private synchronized void setInstantTransitions(final boolean instantTransitions) {
         MenuSettings.instantTransitions = instantTransitions;
     }
 
-    private void setFontSize(final int value) {
+    private synchronized void setFontSize(final int value) {
         MenuSettings.fontSize = value;
     }
 
@@ -185,25 +185,25 @@ public final class MenuSettings extends JPanel {
                 MenuSettings.getFontSize() + (c instanceof JButton ? BUTTON_FONT_PLUS : 0));
     }
 
-    private boolean isUsingSystemLF() {
+    private synchronized boolean isUsingSystemLF() {
         return MenuSettings.usingSystemLF;
     }
 
-    private void setUsingSystemLF(final boolean usingSystemLF) {
+    private synchronized void setUsingSystemLF(final boolean usingSystemLF) {
         MenuSettings.usingSystemLF = usingSystemLF;
     }
 
     /**
      * @return the fontSize selected by user
      */
-    public static int getFontSize() {
+    public static synchronized int getFontSize() {
         return fontSize;
     }
 
     /**
      * @return true if transitions should be instantaneous
      */
-    public static boolean areTransitionsInstant() {
+    public static synchronized boolean areTransitionsInstant() {
         return instantTransitions;
     }
 }

@@ -19,15 +19,6 @@ public interface Environment {
      */
     int getWidth();
 
-
-    /* TODO Add only if needed, or else delete this.
-     * 
-     * @param x is the row where the {@link CellEnvironment} should be set
-     * @param y is the column where the {@link CellEnvironment} should be set
-     * @param env the {@link CellEnvironment} to be used
-
-    void setEnvironment(int x, int y, CellEnvironment env);*/
-
     /**
      * Returns the single cell environment from a position.
      * @param x is the row

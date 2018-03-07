@@ -46,7 +46,7 @@ public final class EnvironmentFactory {
     }
 
     /**
-     * A method that creates an {@link Environment} filled with the given {@link CellEnvironment}r.
+     * A method that creates an {@link Environment} filled with the given {@link CellEnvironment}.
      * @param width of the Environment
      * @param height of the Environment
      * @param cellEnv the {@link CellEnvironment}

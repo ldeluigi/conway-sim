@@ -6,8 +6,7 @@ import java.util.function.Function;
 import java.util.stream.IntStream;
 
 /**
- * 
- *
+ * Utility class for {@link Matrix} objects.
  */
 public final class Matrices {
 
