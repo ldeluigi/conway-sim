@@ -1,6 +1,7 @@
 package view.swing.menu;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -106,40 +107,15 @@ public final class MenuSettings extends JPanel {
         c.insets = new Insets(mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0,
                 mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0);
         c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.gridwidth = 3;
         c.weightx = 0.5;
         c.weighty = 0.5;
         centralButtons.add(checkLFLabel, c);
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 4;
-        c.gridy = 0;
-        c.gridwidth = 1;
-        centralButtons.add(checkLookAndFeel, c);
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx = 0;
-        c.gridy = 1;
-        c.gridwidth = 3;
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        centralButtons.add(checkInstantAnimationsLabel, c);
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 4;
-        c.gridy = 1;
-        c.gridwidth = 1;
-        centralButtons.add(checkInstantAnimations, c);
-        c.anchor = GridBagConstraints.WEST;
-        c.gridx = 0;
-        c.gridy = 2;
-        c.gridwidth = 3;
-        centralButtons.add(fontLabel, c);
-        c.anchor = GridBagConstraints.EAST;
-        c.gridx = 4;
-        c.gridy = 2;
-        c.gridwidth = 1;
-        centralButtons.add(fontSizeSelector, c);
+        addToCenter(GridBagConstraints.WEST, 0, 0, 3, checkLFLabel, c, centralButtons);
+        addToCenter(GridBagConstraints.EAST, 4, 0, 1, checkLookAndFeel, c, centralButtons);
+        addToCenter(GridBagConstraints.WEST, 0, 1, 3, checkInstantAnimationsLabel, c, centralButtons);
+        addToCenter(GridBagConstraints.EAST, 4, 1, 1, checkInstantAnimations, c, centralButtons);
+        addToCenter(GridBagConstraints.WEST, 0, 2, 3, fontLabel, c, centralButtons);
+        addToCenter(GridBagConstraints.EAST, 4, 2, 1, fontSizeSelector, c, centralButtons);
         final JButton ret = new JButton("Return");
         ret.setFocusPainted(false);
         ret.setPreferredSize(
@@ -160,6 +136,15 @@ public final class MenuSettings extends JPanel {
         this.toResize.add(((DefaultEditor) fontSizeSelector.getEditor()).getTextField());
         this.toResize.add(checkInstantAnimationsLabel);
         this.toResize.add(ret);
+    }
+
+    private void addToCenter(final int anchor, final int gridx, final int gridy, final int gridwidth,
+            final Component comp, final GridBagConstraints c, final Container dest) {
+        c.anchor = anchor;
+        c.gridx = gridx;
+        c.gridy = gridy;
+        c.gridwidth = gridwidth;
+        dest.add(comp, c);
     }
 
     private synchronized void setInstantTransitions(final boolean instantTransitions) {
@@ -185,11 +170,11 @@ public final class MenuSettings extends JPanel {
                 MenuSettings.getFontSize() + (c instanceof JButton ? BUTTON_FONT_PLUS : 0));
     }
 
-    private synchronized boolean isUsingSystemLF() {
+    private boolean isUsingSystemLF() {
         return MenuSettings.usingSystemLF;
     }
 
-    private synchronized void setUsingSystemLF(final boolean usingSystemLF) {
+    private void setUsingSystemLF(final boolean usingSystemLF) {
         MenuSettings.usingSystemLF = usingSystemLF;
     }
 
