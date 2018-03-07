@@ -80,7 +80,9 @@ public class GridPanel extends JScrollPane {
             }
         }
         this.setDoubleBuffered(true);
-        this.setViewportView(grid);
+        final JPanel gridWrapper = new JPanel();
+        gridWrapper.add(grid);
+        this.setViewportView(gridWrapper);
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
