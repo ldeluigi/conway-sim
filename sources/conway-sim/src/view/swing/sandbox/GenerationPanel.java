@@ -1,17 +1,27 @@
 package view.swing.sandbox;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
+import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
 import controller.generation.GenerationController;
+import core.model.Generation;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -40,6 +50,7 @@ public class GenerationPanel extends JPanel {
     private final GenerationController generationController;
 
     private final int fontSize = MenuSettings.getFontSize();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
      * 
@@ -124,8 +135,20 @@ public class GenerationPanel extends JPanel {
         if (value < 0) {
             JOptionPane.showMessageDialog(this, "Impossible undo to " + value + " from " + this.generationController.getCurrentNumberGeneration());
         } else {
-            this.generationController.loadOldGeneration(value);
-            this.refreshView();
+            final FutureTask<Generation> fTask = new FutureTask<>(() -> {
+                final JProgressBar pb = new JProgressBar();
+                pb.setIndeterminate(true);
+                final JPopupMenu menu = new JPopupMenu();
+                menu.add(pb);
+                pb.setComponentPopupMenu(menu);
+                final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+                menu.setLocation((int) dim.getWidth() / 2, (int) dim.getHeight() / 2);
+                menu.setVisible(true);
+                generationController.loadOldGeneration(value);
+                menu.setVisible(false);
+                this.refreshView();
+            }, null);
+            executor.execute(fTask);
         }
     }
 
@@ -143,18 +166,18 @@ public class GenerationPanel extends JPanel {
     }
 
     private void start() {
-        this.generationController.startGameWithGeneration();
+        this.generationController.start();
         this.bStart.setEnabled(false);
-        this.bPause.setEnabled(true);
-        bRes.setEnabled(false);
-        bStop.setEnabled(false);
-        bNext.setEnabled(false);
-        bPrev.setEnabled(false);
-        bGoTo.setEnabled(false);
+        this.bPause.setEnabled(false);
+        bRes.setEnabled(true);
+        bStop.setEnabled(true);
+        bNext.setEnabled(true);
+        bPrev.setEnabled(true);
+        bGoTo.setEnabled(true);
     }
 
     private void resume() {
-        this.generationController.resume();
+        this.generationController.start();
         this.bPause.setEnabled(true);
         bRes.setEnabled(false);
         bStop.setEnabled(false);

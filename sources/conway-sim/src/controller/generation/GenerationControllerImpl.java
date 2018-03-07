@@ -45,12 +45,13 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void startGameWithGeneration() {
+    public void start() {
         if (this.start) {
             this.start = false;
+            this.stopClock();
             this.clock.start();
         } else {
-            this.resume();
+            this.restartClock();
         }
     }
 
@@ -58,11 +59,6 @@ public class GenerationControllerImpl implements GenerationController {
     public void pause() {
         this.stopClock();
         this.view.refreshView();
-    }
-
-    @Override
-    public void resume() {
-        this.restartClock();
     }
 
     @Override
@@ -111,7 +107,10 @@ public class GenerationControllerImpl implements GenerationController {
             }
             difference = generationNumber - value;
             if (difference.longValue() != 0L) {
-                valueGeneration = Generations.compute(difference.intValue(), valueGeneration);
+
+                    final int threadNumber = (difference.intValue() / 4000 > 4 ? 4 : difference.intValue() / 2000) + 1;
+                    System.err.println(threadNumber + " thread");
+                    valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
             }
             this.currentGeneration = valueGeneration;
             this.currentGenerationNumber = generationNumber;
@@ -133,15 +132,15 @@ public class GenerationControllerImpl implements GenerationController {
         return this.currentGenerationNumber;
     }
 
-    private Future<Generation> computeFuture(final Generation generation) {
+    private Future<Generation> computeFuture(final Generation generation, final int numberGen) {
         return Executors.newSingleThreadExecutor().submit(() -> {
-            return Generations.compute(generation);
+            return Generations.compute(numberGen, generation);
         });
     }
 
     @Override
     public void computeNextGeneration() {
-        final Future<Generation> futurGeneration = computeFuture(this.getCurrentGeneration());
+        final Future<Generation> futurGeneration = computeFuture(this.getCurrentGeneration(), 1);
         try {
             this.currentGeneration = futurGeneration.get();
         } catch (InterruptedException | ExecutionException e) {
