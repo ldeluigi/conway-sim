@@ -14,17 +14,12 @@ public interface GenerationController {
     /**
      * 
      */
-    void startGameWithGeneration();
+    void start();
 
     /**
      * 
      */
     void pause();
-
-    /**
-     * 
-     */
-    void resume();
 
     /**
      * 

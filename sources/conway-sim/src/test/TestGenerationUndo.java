@@ -31,7 +31,21 @@ public class TestGenerationUndo {
         assertEquals(205, controller.getCurrentNumberGeneration().intValue());
         controller.loadOldGeneration(67L);
         assertEquals(67, controller.getCurrentNumberGeneration().intValue());
-
+        long now = System.currentTimeMillis() / 100;
+        controller.loadOldGeneration(1000L);
+        System.err.println("1000L " + (System.currentTimeMillis() / 100 - now));
+        controller.loadOldGeneration(0L);
+        now = System.currentTimeMillis() / 100;
+        controller.loadOldGeneration(10000L);
+        System.err.println("10000L " + (System.currentTimeMillis() / 100 - now));
+        controller.loadOldGeneration(0L);
+        now = System.currentTimeMillis() / 100;
+        controller.loadOldGeneration(500L);
+        System.err.println("500L " + (System.currentTimeMillis() / 100 - now));
+        controller.loadOldGeneration(0L);
+        now = System.currentTimeMillis() / 100;
+        controller.loadOldGeneration(2000L);
+        System.err.println("2000 " + (System.currentTimeMillis() / 100 - now));
     }
 
 }
