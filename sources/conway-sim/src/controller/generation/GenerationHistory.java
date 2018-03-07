@@ -16,7 +16,7 @@ import core.model.Generation;
 /**
  *  The implementation of GenerationMemento.
  */
-public class GenerationHistory implements GenerationMemento<Generation> {
+public class GenerationHistory implements Memento<Generation> {
 
     private static final int NUMBER_OF_GENERATION_STORED = 5;
 
@@ -25,7 +25,7 @@ public class GenerationHistory implements GenerationMemento<Generation> {
 
     /**
      * 
-     * @param firstGeneration is the first generation
+     * @param firstGeneration the first generation that have to be saved. The starting status.
      */
     public GenerationHistory(final Generation firstGeneration) {
         this.firstGeneration = firstGeneration;
@@ -43,11 +43,10 @@ public class GenerationHistory implements GenerationMemento<Generation> {
     }
 
     @Override
-    public void addGeneration(final Long numberGeneration, final Generation generation) {
+    public void addElem(final Long numberGeneration, final Generation generation) {
         if (this.historyGeneration.keySet().size() >= NUMBER_OF_GENERATION_STORED) {
             this.historyGeneration.remove(this.historyGeneration.keySet().stream().min((x, y) -> Long.compare(x, y)).get());
         }
-
         if (!this.historyGeneration.keySet().stream().allMatch(e -> e < numberGeneration)) {
             throw new IllegalArgumentException();
         }
@@ -55,12 +54,12 @@ public class GenerationHistory implements GenerationMemento<Generation> {
     }
 
     @Override
-    public void removeGeneration(final Long numberGeneartion) {
+    public void removeElem(final Long numberGeneartion) {
         this.historyGeneration.remove(numberGeneartion);
     }
 
     @Override
-    public void removeAllGenerationAfter(final Long numberGeneration) {
+    public void removeAllElemsAfter(final Long numberGeneration) {
         Objects.requireNonNull(this.historyGeneration);
         final List<Long> longToRemove = new LinkedList<>();
         if (!this.historyGeneration.isEmpty()) {
