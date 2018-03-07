@@ -224,15 +224,12 @@ public class GridPanel extends JScrollPane {
         }
 
         public void mouseReleased(final MouseEvent e) {
-            throw new UnsupportedOperationException("This observer doesn't support the invoked method.");
         }
 
         public void mousePressed(final MouseEvent e) {
-            throw new UnsupportedOperationException("This observer doesn't support the invoked method.");
         }
 
         public void mouseExited(final MouseEvent e) {
-            throw new UnsupportedOperationException("This observer doesn't support the invoked method.");
         }
 
         public void mouseEntered(final MouseEvent e) {
