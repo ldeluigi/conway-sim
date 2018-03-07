@@ -30,7 +30,7 @@ public class GenerationControllerImpl implements GenerationController {
     private Generation currentGeneration;
     private GenerationMemento<Generation> oldGeneration;
     private final AgentClock clock = new AgentClock();
-    private boolean start = true;
+    private boolean firstStart = true;
 
     private final List<Long> savedState = new LinkedList<>();
     private static final int MAX_SAVED_STATE = 6;
@@ -46,8 +46,8 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void start() {
-        if (this.start) {
-            this.start = false;
+        if (this.firstStart) {
+            this.firstStart = false;
             this.stopClock();
             this.clock.start();
         } else {
