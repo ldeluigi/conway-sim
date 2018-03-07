@@ -23,13 +23,14 @@ import view.swing.sandbox.Sandbox;
  */
 public class GenerationControllerImpl implements GenerationController {
 
-    private static final int MAX_TIME_GENERATION = 100000;
+    private static final int THREAD_FIRST_STEP = 3000;
+    private static final int THREAD_SECOND_STEP = 7000;
 
     private Long currentGenerationNumber = 0L;
     private Sandbox view;
     private Generation currentGeneration;
     private GenerationMemento<Generation> oldGeneration;
-    private final AgentClock clock = new AgentClock();
+    private final Clock clock = new Clock(() -> this.computeNextGeneration());
     private boolean firstStart = true;
 
     private final List<Long> savedState = new LinkedList<>();
@@ -49,7 +50,7 @@ public class GenerationControllerImpl implements GenerationController {
         final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new CellImpl(Math.random() > 0.5 ? Status.ALIVE : Status.DEAD));
         this.currentGeneration = GenerationFactory.from(m, EnvironmentFactory.standardRules(100, 100));
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        this.stopClock();
+        clock.stopClock();
         if (firstStart) {
             this.firstStart = false;
             this.clock.start();
@@ -59,13 +60,13 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void pause() {
-        this.stopClock();
+        this.clock.stopClock();
         this.view.refreshView();
     }
 
     @Override
     public void play() {
-        this.restartClock();
+        this.clock.restartClock();
     }
 
     @Override
@@ -84,22 +85,24 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void setSpeed(final int speed) {
-        final Long sleepTime = 1000 / Long.valueOf(speed);
-        if (sleepTime > 0 && sleepTime < MAX_TIME_GENERATION) {
-            this.clock.setStep(Long.valueOf(sleepTime));
-        } else {
-            throw new IllegalArgumentException();
-        }
+        this.clock.setSpeed(speed);
     }
 
     @Override
     public void loadOldGeneration(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
-            this.currentGeneration = this.oldGeneration.getFirst();
-            this.currentGenerationNumber = 0L;
+            this.setCurrentGeneration(this.oldGeneration.getFirst());
+            this.setCurrentNumberGeneration(0L);
             this.oldGeneration.removeAllGenerationAfter(0L);
         } else if (generationNumber.longValue() < 0L) {
             throw new IllegalArgumentException();
+        } else if (generationNumber > this.getCurrentNumberGeneration()) {
+            final Long difference = generationNumber - this.getCurrentNumberGeneration();
+            final int threadNumber = difference.intValue() < THREAD_FIRST_STEP ? 1 : difference.intValue() < THREAD_SECOND_STEP ? 2 : 4;
+            System.err.println(threadNumber + " thread");
+            final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentGeneration(), threadNumber);
+            this.setCurrentGeneration(valueGeneration);
+            this.setCurrentNumberGeneration(generationNumber);
         } else {
             final Long value = this.oldGeneration.getSavedState().keySet().stream()
                             .filter(l -> l <= generationNumber)
@@ -114,13 +117,12 @@ public class GenerationControllerImpl implements GenerationController {
             }
             difference = generationNumber - value;
             if (difference.longValue() != 0L) {
-
-                    final int threadNumber = (difference.intValue() / 4000 > 4 ? 4 : difference.intValue() / 2000) + 1;
+                    final int threadNumber = difference.intValue() < THREAD_FIRST_STEP ? 1 : difference.intValue() < THREAD_SECOND_STEP ? 2 : 4;
                     System.err.println(threadNumber + " thread");
                     valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
             }
-            this.currentGeneration = valueGeneration;
-            this.currentGenerationNumber = generationNumber;
+            this.setCurrentGeneration(valueGeneration);
+            this.setCurrentNumberGeneration(generationNumber);
             this.oldGeneration.removeAllGenerationAfter(this.getCurrentNumberGeneration());
         }
         this.savedState.removeAll(savedState.stream()
@@ -130,13 +132,21 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public Generation getCurrentGeneration() {
+    public synchronized Generation getCurrentGeneration() {
         return this.currentGeneration;
+    }
+
+    private synchronized void setCurrentGeneration(final Generation generation) {
+        this.currentGeneration = generation;
     }
 
     @Override
     public Long getCurrentNumberGeneration() {
         return this.currentGenerationNumber;
+    }
+
+    private synchronized void setCurrentNumberGeneration(final long number) {
+        this.currentGenerationNumber = number;
     }
 
     private Future<Generation> computeFuture(final Generation generation, final int numberGen) {
@@ -174,47 +184,6 @@ public class GenerationControllerImpl implements GenerationController {
     @Override
     public void setView(final Sandbox viewPanel) {
         this.view = viewPanel;
-    }
-
-    private void stopClock() {
-        clock.setClock(false);
-    }
-
-    private void restartClock() {
-        clock.setClock(true);
-    }
-
-    class AgentClock extends Thread {
-
-        private static final long INIT_STEP = 900L;
-        private Long step = INIT_STEP;
-        private boolean clock = true;
-
-        public void run() {
-            while (true) {
-                while (clock) {
-                    computeNextGeneration();
-                    try {
-                        sleep(step);
-                    } catch (Exception e) {
-                        System.err.println("Errore nella sleep!" + e.getMessage());
-                    }
-                }
-                try {
-                    sleep(step * 2);
-                } catch (Exception e) {
-                    System.err.println("Errore nella sleep!" + e.getMessage());
-                }
-            }
-        }
-
-        public void setClock(final boolean flag) {
-            this.clock = flag;
-        }
-
-        public void setStep(final Long step) {
-            this.step = step;
-        }
     }
 
 }

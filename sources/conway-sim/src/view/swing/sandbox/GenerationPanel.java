@@ -87,8 +87,8 @@ public class GenerationPanel extends JPanel {
         this.add(generationNumber);
         this.add(numGeneration);
 
-        this.add(bPause);
         this.add(bPlay);
+        this.add(bPause);
         this.add(bEnd);
         this.add(bPrev);
         this.add(bNext);
@@ -159,19 +159,12 @@ public class GenerationPanel extends JPanel {
     }
 
     private void end() {
-        if (JOptionPane.showOptionDialog(this, 
-                "Are you sure you want to end the game?" + System.lineSeparator() + "All unsaved data will be lost.",
-                "END",
-                JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, null, null, null)
-                ==
-                JOptionPane.YES_OPTION) {
-            bNew.setEnabled(true);
-            bPlay.setEnabled(false);
-            bPause.setEnabled(false);
-            bEnd.setEnabled(false);
-            this.setEableTimeOption(false);
-            this.generationController.reset();
-        }
+        bNew.setEnabled(true);
+        bPlay.setEnabled(false);
+        bPause.setEnabled(false);
+        bEnd.setEnabled(false);
+        this.setEableTimeOption(false);
+        this.generationController.reset();
     }
 
     private void start() {

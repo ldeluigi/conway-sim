@@ -12,19 +12,19 @@ import view.swing.sandbox.Sandbox;
 public interface GenerationController {
 
     /**
-     * 
+     * Create a new Game, of the selected type.
      */
     void newGame();
 
     /**
      * 
      */
-    void pause();
+    void play();
 
     /**
      * 
      */
-    void play();
+    void pause();
 
     /**
      * 
