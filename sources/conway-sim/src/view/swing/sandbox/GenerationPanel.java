@@ -38,13 +38,13 @@ public class GenerationPanel extends JPanel {
     private static final int MAX_SPEED = 20;
 
     private final JSlider speedSlider;
-    private final JButton bStart;
-    private final JButton bStop;
+    private final JButton bNew;
+    private final JButton bEnd;
     private final JButton bPause;
     private final JButton bNext;
     private final JButton bGoTo;
     private final JButton bPrev;
-    private final JButton bRes;
+    private final JButton bPlay;
 
     private final JLabel numGeneration;
     private final GenerationController generationController;
@@ -59,20 +59,20 @@ public class GenerationPanel extends JPanel {
     public GenerationPanel(final GenerationController controller) {
         this.generationController = controller;
 
-        bStart = this.newJButton("Start", "Start the game");
-        bStop = this.newJButton("Stop", "Reset the game mode");
+        bNew = this.newJButton("New", "New game");
+        bEnd = this.newJButton("End", "End the current game");
         bPause = this.newJButton("Pause", "Stop the time");
         bNext = this.newJButton("Next", "Go to the next generation");
         bGoTo = this.newJButton("Go to", "Go back in time to N generations");
         bPrev = this.newJButton("Previous", "Go to the previous generation");
-        bRes = this.newJButton("Resume", "Resume the current game");
+        bPlay = this.newJButton("Play", "Play the current game");
 
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
         final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 100000, 10);
         final JSpinner spinner = new JSpinner(spin);
 
-        this.add(bStart);
+        this.add(bNew);
 
         //speed control
         speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
@@ -88,8 +88,8 @@ public class GenerationPanel extends JPanel {
         this.add(numGeneration);
 
         this.add(bPause);
-        this.add(bRes);
-        this.add(bStop);
+        this.add(bPlay);
+        this.add(bEnd);
         this.add(bPrev);
         this.add(bNext);
         this.add(bGoTo);
@@ -102,10 +102,10 @@ public class GenerationPanel extends JPanel {
         /*
          * Start conditions.
          */
-        bStart.setEnabled(true);
-        bRes.setEnabled(false);
+        bNew.setEnabled(true);
+        bPlay.setEnabled(false);
         bPause.setEnabled(false);
-        bStop.setEnabled(false);
+        bEnd.setEnabled(false);
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
@@ -113,9 +113,9 @@ public class GenerationPanel extends JPanel {
         this.setVisible(true);
 
         speedSlider.addChangeListener(e -> this.speedControl());
-        bStart.addActionListener(e -> this.start());
-        bStop.addActionListener(e -> this.stop());
-        bRes.addActionListener(e -> this.resume());
+        bNew.addActionListener(e -> this.start());
+        bEnd.addActionListener(e -> this.end());
+        bPlay.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
         bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
@@ -136,6 +136,9 @@ public class GenerationPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Impossible undo to " + value + " from " + this.generationController.getCurrentNumberGeneration());
         } else {
             final FutureTask<Generation> fTask = new FutureTask<>(() -> {
+                bPlay.setEnabled(false);
+                bEnd.setEnabled(false);
+                this.setEableTimeOption(false);
                 final JProgressBar pb = new JProgressBar();
                 pb.setIndeterminate(true);
                 final JPopupMenu menu = new JPopupMenu();
@@ -146,55 +149,61 @@ public class GenerationPanel extends JPanel {
                 menu.setVisible(true);
                 generationController.loadOldGeneration(value);
                 menu.setVisible(false);
+                this.setEableTimeOption(true);
+                bPlay.setEnabled(true);
+                bEnd.setEnabled(true);
                 this.refreshView();
             }, null);
             executor.execute(fTask);
         }
     }
 
-    private void stop() {
-        if (JOptionPane.showOptionDialog(this, "Stop", "Stop this game?", JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
-            bStart.setEnabled(true);
-            bRes.setEnabled(false);
+    private void end() {
+        if (JOptionPane.showOptionDialog(this, 
+                "Are you sure you want to end the game?" + System.lineSeparator() + "All unsaved data will be lost.",
+                "END",
+                JOptionPane.YES_NO_OPTION,  JOptionPane.INFORMATION_MESSAGE, null, null, null)
+                ==
+                JOptionPane.YES_OPTION) {
+            bNew.setEnabled(true);
+            bPlay.setEnabled(false);
             bPause.setEnabled(false);
-            bStop.setEnabled(false);
-            bNext.setEnabled(false);
-            bPrev.setEnabled(false);
-            bGoTo.setEnabled(false);
+            bEnd.setEnabled(false);
+            this.setEableTimeOption(false);
             this.generationController.reset();
         }
     }
 
     private void start() {
-        this.generationController.start();
-        this.bStart.setEnabled(false);
+        this.generationController.newGame();
+        this.bNew.setEnabled(false);
         this.bPause.setEnabled(false);
-        bRes.setEnabled(true);
-        bStop.setEnabled(true);
-        bNext.setEnabled(true);
-        bPrev.setEnabled(true);
-        bGoTo.setEnabled(true);
+        bPlay.setEnabled(true);
+        bEnd.setEnabled(true);
+        this.setEableTimeOption(true);
     }
 
     private void resume() {
-        this.generationController.start();
+        this.generationController.play();
         this.bPause.setEnabled(true);
-        bRes.setEnabled(false);
-        bStop.setEnabled(false);
-        bNext.setEnabled(false);
-        bPrev.setEnabled(false);
-        bGoTo.setEnabled(false);
+        bPlay.setEnabled(false);
+        bEnd.setEnabled(false);
+        this.setEableTimeOption(false);
     }
 
     private void pause() {
         this.generationController.pause();
         this.generationController.pause();
         this.bPause.setEnabled(false);
-        this.bRes.setEnabled(true);
-        this.bNext.setEnabled(true);
-        this.bPrev.setEnabled(true);
-        this.bGoTo.setEnabled(true);
-        this.bStop.setEnabled(true);
+        this.bPlay.setEnabled(true);
+        this.bEnd.setEnabled(true);
+        this.setEableTimeOption(true);
+    }
+
+    private void setEableTimeOption(final boolean flag) {
+        this.bNext.setEnabled(flag);
+        this.bPrev.setEnabled(flag);
+        this.bGoTo.setEnabled(flag);
     }
 
     /**

@@ -4,7 +4,6 @@
 package controller.generation;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,7 +45,6 @@ public class GenerationHistory implements GenerationMemento<Generation> {
     @Override
     public void addGeneration(final Long numberGeneration, final Generation generation) {
         if (this.historyGeneration.keySet().size() >= NUMBER_OF_GENERATION_STORED) {
-            //ci sono già 6 generazioni tolgo la più vecchia
             this.historyGeneration.remove(this.historyGeneration.keySet().stream().min((x, y) -> Long.compare(x, y)).get());
         }
 
@@ -64,7 +62,7 @@ public class GenerationHistory implements GenerationMemento<Generation> {
     @Override
     public void removeAllGenerationAfter(final Long numberGeneration) {
         Objects.requireNonNull(this.historyGeneration);
-        List<Long> longToRemove = new LinkedList<>();
+        final List<Long> longToRemove = new LinkedList<>();
         if (!this.historyGeneration.isEmpty()) {
             this.historyGeneration.keySet().stream().filter(l -> l > numberGeneration).forEach(l -> longToRemove.add(l));
         }

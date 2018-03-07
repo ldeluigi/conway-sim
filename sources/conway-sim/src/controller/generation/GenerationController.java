@@ -14,12 +14,17 @@ public interface GenerationController {
     /**
      * 
      */
-    void start();
+    void newGame();
 
     /**
      * 
      */
     void pause();
+
+    /**
+     * 
+     */
+    void play();
 
     /**
      * 

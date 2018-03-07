@@ -36,29 +36,36 @@ public class GenerationControllerImpl implements GenerationController {
     private static final int MAX_SAVED_STATE = 6;
 
     /**
-     * 
+     * Init a new Generation Controller.
      */
     public GenerationControllerImpl() {
-        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new CellImpl(Math.random() > 0.5 ? Status.ALIVE : Status.DEAD));
+        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new CellImpl(Status.DEAD));
         this.currentGeneration = GenerationFactory.from(m, EnvironmentFactory.standardRules(100, 100));
-        oldGeneration = new GenerationHistory(this.currentGeneration);
+        this.oldGeneration = new GenerationHistory(this.currentGeneration);
     }
 
     @Override
-    public void start() {
-        if (this.firstStart) {
+    public void newGame() {
+        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new CellImpl(Math.random() > 0.5 ? Status.ALIVE : Status.DEAD));
+        this.currentGeneration = GenerationFactory.from(m, EnvironmentFactory.standardRules(100, 100));
+        this.oldGeneration = new GenerationHistory(this.currentGeneration);
+        this.stopClock();
+        if (firstStart) {
             this.firstStart = false;
-            this.stopClock();
             this.clock.start();
-        } else {
-            this.restartClock();
         }
+        this.view.refreshView();
     }
 
     @Override
     public void pause() {
         this.stopClock();
         this.view.refreshView();
+    }
+
+    @Override
+    public void play() {
+        this.restartClock();
     }
 
     @Override
@@ -69,7 +76,7 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void reset() {
-        this.currentGeneration = GenerationFactory.from(new ListMatrix<>(100, 100, () -> new CellImpl(Math.random() > 0.5 ? Status.ALIVE : Status.DEAD)), EnvironmentFactory.standardRules(100, 100));
+        this.currentGeneration = GenerationFactory.from(new ListMatrix<>(100, 100, () -> new CellImpl(Status.DEAD)), EnvironmentFactory.standardRules(100, 100));
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
         this.currentGenerationNumber = 0L;
         this.view.refreshView();
