@@ -80,12 +80,8 @@ public class GenerationPanel extends JPanel {
         this.add(speedSlider);
 
         //display for current generation
-        final JLabel generationNumber = new JLabel("Generation number: ");
-        generationNumber.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         numGeneration = new JLabel("0");
         numGeneration.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
-        this.add(generationNumber);
-        this.add(numGeneration);
 
         this.add(bPlay);
         this.add(bPause);
@@ -113,22 +109,26 @@ public class GenerationPanel extends JPanel {
         this.setVisible(true);
 
         speedSlider.addChangeListener(e -> this.speedControl());
-        bNew.addActionListener(e -> this.start());
+        bNew.addActionListener(e -> this.newStart());
         bEnd.addActionListener(e -> this.end());
         bPlay.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
         bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
-        bNext.addActionListener(e -> this.next());
+        bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
 
+    }
+
+    /**
+     * 
+     * @return the JLabel that show the number of the current generation.
+     */
+    public JLabel getNumGeneration() {
+        return numGeneration;
     }
 
     private void speedControl() {
         this.generationController.setSpeed(this.speedSlider.getValue());
-    }
-
-    private void next() {
-        this.generationController.computeNextGeneration();
     }
 
     private void goTo(final Long value) {
@@ -138,7 +138,8 @@ public class GenerationPanel extends JPanel {
             final FutureTask<Generation> fTask = new FutureTask<>(() -> {
                 bPlay.setEnabled(false);
                 bEnd.setEnabled(false);
-                this.setEableTimeOption(false);
+                this.setTimeButtonEnable(false);
+
                 final JProgressBar pb = new JProgressBar();
                 pb.setIndeterminate(true);
                 final JPopupMenu menu = new JPopupMenu();
@@ -147,11 +148,15 @@ public class GenerationPanel extends JPanel {
                 final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
                 menu.setLocation((int) dim.getWidth() / 2, (int) dim.getHeight() / 2);
                 menu.setVisible(true);
+
                 generationController.loadGeneration(value);
+
                 menu.setVisible(false);
-                this.setEableTimeOption(true);
+
                 bPlay.setEnabled(true);
                 bEnd.setEnabled(true);
+                this.setTimeButtonEnable(true);
+
                 this.refreshView();
             }, null);
             executor.execute(fTask);
@@ -163,25 +168,25 @@ public class GenerationPanel extends JPanel {
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
         bEnd.setEnabled(false);
-        this.setEableTimeOption(false);
+        this.setTimeButtonEnable(false);
         this.generationController.reset();
     }
 
-    private void start() {
+    private void newStart() {
         this.generationController.newGame();
         this.bNew.setEnabled(false);
         this.bPause.setEnabled(false);
         bPlay.setEnabled(true);
         bEnd.setEnabled(true);
-        this.setEableTimeOption(true);
+        this.setTimeButtonEnable(true);
     }
 
     private void resume() {
         this.generationController.play();
         this.bPause.setEnabled(true);
-        bPlay.setEnabled(false);
-        bEnd.setEnabled(false);
-        this.setEableTimeOption(false);
+        this.bPlay.setEnabled(false);
+        this.bEnd.setEnabled(false);
+        this.setTimeButtonEnable(false);
     }
 
     private void pause() {
@@ -190,10 +195,10 @@ public class GenerationPanel extends JPanel {
         this.bPause.setEnabled(false);
         this.bPlay.setEnabled(true);
         this.bEnd.setEnabled(true);
-        this.setEableTimeOption(true);
+        this.setTimeButtonEnable(true);
     }
 
-    private void setEableTimeOption(final boolean flag) {
+    private void setTimeButtonEnable(final boolean flag) {
         this.bNext.setEnabled(flag);
         this.bPrev.setEnabled(flag);
         this.bGoTo.setEnabled(flag);

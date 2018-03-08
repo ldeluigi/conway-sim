@@ -78,9 +78,7 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void reset() {
-        this.currentGeneration = GenerationFactory.from(new ListMatrix<>(100, 100, () -> new CellImpl(Status.DEAD)), EnvironmentFactory.standardRules(100, 100));
-        this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        this.currentGenerationNumber = 0L;
+        this.loadGeneration(0L);
         this.view.refreshView();
     }
 
@@ -100,7 +98,6 @@ public class GenerationControllerImpl implements GenerationController {
         } else if (generationNumber > this.getCurrentNumberGeneration()) {
             final Long difference = generationNumber - this.getCurrentNumberGeneration();
             final int threadNumber = difference.intValue() < THREAD_FIRST_STEP ? 1 : difference.intValue() < THREAD_SECOND_STEP ? 2 : 4;
-            System.err.println(threadNumber + " thread");
             final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentGeneration(), threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);

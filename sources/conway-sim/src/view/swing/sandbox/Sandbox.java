@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.util.Objects;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -39,26 +40,33 @@ public class Sandbox extends JPanel {
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
-        genController = new GenerationControllerImpl();
+        this.genController = new GenerationControllerImpl();
         this.generationPanel = new GenerationPanel(genController);
-        genController.setView(this);
+        this.genController.setView(this);
         this.mainGUI = mainGUI;
-        grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
+        this.grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
 
-        this.add(generationPanel, BorderLayout.NORTH);
+        final JPanel north = new JPanel(new BorderLayout());
+        north.add(generationPanel, BorderLayout.AFTER_LINE_ENDS);
+        north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
+        this.add(north, BorderLayout.NORTH);
 
         final JButton bExit = new JButton("EXIT");
 
-        final JPanel south = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
-        bBook.setFont(new Font(bBook.getFont().getFontName(), bBook.getFont().getStyle(), this.fontSize));
+        final JPanel south = new JPanel(new BorderLayout());
+        this.bBook.setFont(new Font(bBook.getFont().getFontName(), bBook.getFont().getStyle(), this.fontSize));
         bExit.setFont(new Font(bExit.getFont().getFontName(), bExit.getFont().getStyle(), this.fontSize));
+        final JPanel southLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        south.add(bBook);
-        south.add(bExit);
-
+        southLeft.add(new JLabel("Current generation number : "));
+        southLeft.add(generationPanel.getNumGeneration());
+        southRight.add(bBook);
+        southRight.add(bExit);
+        south.add(southLeft, BorderLayout.WEST);
+        south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 
         bBook.addActionListener(e -> callBook());
