@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import javax.swing.BorderFactory;
@@ -14,8 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import controller.editor.GridController;
+import controller.editor.GridControllerImpl;
 import core.model.Status;
 import core.utils.ListMatrix;
+import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.GUI;
 import view.swing.menu.MenuSettings;
@@ -38,11 +42,13 @@ public class GridPanel extends JScrollPane {
     private int borderWidth = INITIAL_BORDER_WIDTH;
     private final Color borderColor = INITIAL_BORDER_COLOR;
     private final JPanel grid;
-    private final Matrix<JLabel> labelMatrix;
+    private Matrix<JLabel> labelMatrix;
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
-    private Matrix<Boolean> pattern;
+    private final GridController controller;
+//    private Matrix<Color> save;
+//    private Boolean isStopped = false;
 
     /**
      * 
@@ -60,7 +66,7 @@ public class GridPanel extends JScrollPane {
             final JLabel l = new JLabel("");
             l.setSize(cellSize);
             l.setPreferredSize(cellSize);
-            l.setBackground(Color.white);
+            l.setBackground(Color.WHITE);
             l.setOpaque(true);
             return l;
         });
@@ -100,6 +106,7 @@ public class GridPanel extends JScrollPane {
                 }
             }
         });
+        this.controller = new GridControllerImpl(width, height);
     }
 
     /**
@@ -171,17 +178,21 @@ public class GridPanel extends JScrollPane {
 
     /**
      * A fr nvrogòwn  ng .
-     * @param boolMatrix is the to.
+     * @param colorMatrix is the to.
      */
-    public void paintCells(final Matrix<Boolean> boolMatrix) { //aggiungere gli opzionali
-        this.displayColors(boolMatrix.map(b -> b ? Color.black : Color.white));
+    public void paintGrid(final Matrix<Color> colorMatrix) {
+        if (this.labelMatrix.getHeight() != colorMatrix.getHeight() || this.labelMatrix.getWidth() != colorMatrix.getWidth()) {
+            throw new IllegalArgumentException("Dimensions not corresponding.");
+        }
+            displayColors(colorMatrix, 0, 0);
     }
 
-    private void displayColors(final Matrix<Color> colorMatrix) { //aggiun gere gli opzionali
-        SwingUtilities.invokeLater(() -> {
+    private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) { //aggiun gere gli opzionali
+        //TODO controllo input
+    	SwingUtilities.invokeLater(() -> {
             this.grid.setVisible(this.shouldGridStayVisible);
-            IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
-                IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
+            IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
+                IntStream.range(startColumn, colorMatrix.getWidth()).forEach(column -> {
                     labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
                 });
             });
@@ -189,29 +200,17 @@ public class GridPanel extends JScrollPane {
         });
     }
 
-    /**
-     * 
-     */
-    public void showPattern() {
-        this.paintCells(this.pattern);
+    public GridController getController() { 
+    	return this.controller;
     }
 
     /**
      * 
+     * @param row
+     * @param column
      */
-    public void getModifiedGrid() {
-
-    }
-
-    /**
-     * 
-     */
-    public void setPattern(final Matrix<Status> toPlace) {
-        this.pattern = toPlace.map(c -> c.equals(Status.ALIVE) ? true : false);
-    }
-
-    private void discardPattern() {
-        this.pattern = null; //optional
+    public void displayPattern(final Matrix<Color> colorMatrix, final int  row, final int column) { /* method to invoke from mouse.enter   ricordarsi di mettere il /2*/
+         displayColors(colorMatrix, row, column);
     }
 
     private final class CellListener implements MouseListener {
@@ -233,11 +232,11 @@ public class GridPanel extends JScrollPane {
         }
 
         public void mouseEntered(final MouseEvent e) {
-            System.out.println("Enter: " + row + ";" + column);
+        	GridPanel.this.controller.mouseEntered(row, column);
         }
 
         public void mouseClicked(final MouseEvent e) {
-            System.out.println("Click: " + row + ";" + column);
+        	GridPanel.this.controller.mouseClicked(row, column);
         }
     }
 }
