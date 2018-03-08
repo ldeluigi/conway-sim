@@ -7,11 +7,11 @@ import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
 
-public class GridControllerImpl implements GridController {
+public class GridEditorImpl implements GridEditor {
 
 	private final Matrix<Cell> current;
 
-	public GridControllerImpl(final int width, final int height) {
+	public GridEditorImpl(final int width, final int height) {
 		this.current = new ListMatrix<>(width, height, () -> new CellImpl(Status.DEAD));
 	}
 	
@@ -24,7 +24,7 @@ public class GridControllerImpl implements GridController {
 	}
 	
 	public void setAlive(int x, int y, boolean alive) {
-		
+
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class GridControllerImpl implements GridController {
 	}
 
 	@Override
-	public void place(Matrix<Status> statusMatrix, int startRow, int startColumn) {
+	public void place(Matrix<Status> statusMatrix) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -57,4 +57,5 @@ public class GridControllerImpl implements GridController {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 }

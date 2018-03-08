@@ -8,7 +8,7 @@ import core.utils.Matrix;
 /**
  * 
  */
-public interface GridController {
+public interface GridEditor {
 
 	void mouseEntered(int row, int column);
 

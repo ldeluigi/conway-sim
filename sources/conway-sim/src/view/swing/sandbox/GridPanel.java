@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import controller.editor.GridController;
-import controller.editor.GridControllerImpl;
+import controller.editor.GridEditor;
+import controller.editor.GridEditorImpl;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
@@ -46,7 +46,7 @@ public class GridPanel extends JScrollPane {
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
-    private final GridController controller;
+    private final GridEditor controller;
 //    private Matrix<Color> save;
 //    private Boolean isStopped = false;
 
@@ -106,7 +106,7 @@ public class GridPanel extends JScrollPane {
                 }
             }
         });
-        this.controller = new GridControllerImpl(width, height);
+        this.controller = new GridEditorImpl(width, height);
     }
 
     /**
@@ -122,7 +122,7 @@ public class GridPanel extends JScrollPane {
         SwingUtilities.invokeLater(() -> {
             this.grid.setVisible(false);
             this.cellSize.setSize(this.cellSize.getWidth() + byPixels, this.cellSize.getHeight() + byPixels);
-            this.labelMatrix.forEach(label -> {
+            this.labelMatrix.stream().forEach(label -> {
                 label.setSize(this.cellSize);
                 label.setPreferredSize(this.cellSize);
             });
@@ -189,7 +189,7 @@ public class GridPanel extends JScrollPane {
 
     private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) { //aggiun gere gli opzionali
         //TODO controllo input
-    	SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
             this.grid.setVisible(this.shouldGridStayVisible);
             IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
                 IntStream.range(startColumn, colorMatrix.getWidth()).forEach(column -> {
@@ -200,12 +200,17 @@ public class GridPanel extends JScrollPane {
         });
     }
 
-    public GridController getController() { 
-    	return this.controller;
+    /**
+     * 
+     * @return
+     */
+    public GridEditor getEditor() {
+        return this.controller;
     }
 
     /**
      * 
+     * @param colorMatrix
      * @param row
      * @param column
      */
