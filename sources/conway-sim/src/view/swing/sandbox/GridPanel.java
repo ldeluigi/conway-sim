@@ -17,6 +17,7 @@ import javax.swing.SwingUtilities;
 
 import controller.editor.GridEditor;
 import controller.editor.GridEditorImpl;
+import controller.editor.PatternEditor;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
@@ -46,7 +47,7 @@ public class GridPanel extends JScrollPane {
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
-    private final GridEditor controller;
+    private final PatternEditor controller;
 //    private Matrix<Color> save;
 //    private Boolean isStopped = false;
 
@@ -204,7 +205,7 @@ public class GridPanel extends JScrollPane {
      * 
      * @return
      */
-    public GridEditor getEditor() {
+    public PatternEditor getEditor() {
         return this.controller;
     }
 
@@ -237,11 +238,9 @@ public class GridPanel extends JScrollPane {
         }
 
         public void mouseEntered(final MouseEvent e) {
-        	GridPanel.this.controller.mouseEntered(row, column);
         }
 
         public void mouseClicked(final MouseEvent e) {
-        	GridPanel.this.controller.mouseClicked(row, column);
         }
     }
 }
