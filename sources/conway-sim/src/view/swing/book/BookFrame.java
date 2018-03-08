@@ -16,8 +16,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
+import controller.book.RecipeImpl;
 import controller.io.IOLoader;
-
+import controller.io.RecipeLoader;
 /**
  * 
  *
@@ -33,26 +34,33 @@ public class BookFrame extends JInternalFrame {
     // screenSize.getWidth();
     private static final int WIDTH = 150;
     private static final int HEIGHT = 280;
+    private static final int HEIGHTOFCELL = 20;
     /**
      * 
      */
     public BookFrame() {
         super("Book", false, true);
+        RecipeLoader rl = new RecipeLoader();
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-        this.setSize(WIDTH, HEIGHT);
+        // SIZE BY DIMENSION
+        this.setSize(WIDTH, HEIGHTOFCELL * rl.getRecipeBook().getRecipeBookSize());
+        //this.setSize(WIDTH, HEIGHT);
         // TEST FOR THE JList WITH A TEMP ARRAY
         List<String> arrList = new ArrayList<String>();
-        arrList.add("Glider");
-        arrList.add("Blinker (period 2)");
-        arrList.add("Toad (period 2)");
-        arrList.add("Beacon (period 2)");
-        arrList.add("Pulsar (period 3)");
-        arrList.add("Pentadecathlon (period 15)");
-        arrList.add("Lightweight spaceship (LWSS)");
-        arrList.add("Gosper glider gun");
-        arrList.add(" ");
-        arrList.add(" ");
-        arrList.add(" ");
+        for (RecipeImpl recipe : rl.getRecipeBook().getBookList()) {
+            arrList.add(recipe.getName());
+        }
+        //arrList.add("Glider");
+        //arrList.add("Blinker (period 2)");
+        //arrList.add("Toad (period 2)");
+        //arrList.add("Beacon (period 2)");
+        //arrList.add("Pulsar (period 3)");
+        //arrList.add("Pentadecathlon (period 15)");
+        //arrList.add("Lightweight spaceship (LWSS)");
+        //arrList.add("Gosper glider gun");
+        //arrList.add(" ");
+        //arrList.add(" ");
+        //arrList.add(" ");
         String[] elems = arrList.toArray(new String[arrList.size()]);
         JList list = new JList(elems);
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);

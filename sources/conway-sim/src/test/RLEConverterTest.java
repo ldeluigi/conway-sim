@@ -9,9 +9,11 @@ class RLEConverterTest {
                                     + "x = 3, y = 3\n"
                                     + "bo$2bo$3o!";
     private static RLEConvert rleC = new RLEConvert(TESTRLE);
-    public RLEConverterTest() {
+
+    RLEConverterTest() {
     }
-    public static void convert(boolean mat[][]){
+    public static void printMatrix(boolean mat[][]) {
+
         // Loop through all rows
         for (boolean[] row : mat) {
  
@@ -22,6 +24,6 @@ class RLEConverterTest {
     }
     public static void main(String[] args) {
         System.out.println(TESTRLE);
-        convert(rleC.convert());
+        printMatrix(rleC.convert());
     }
 }
