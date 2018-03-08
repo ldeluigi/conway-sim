@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Objects;
-import java.util.stream.Stream;
-
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JInternalFrame;
@@ -71,6 +69,7 @@ public class Sandbox extends JPanel {
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         final JButton bColor = new JButton("Cell color");
+        bColor.setFont(new Font(bColor.getFont().getFontName(), bColor.getFont().getStyle(), this.fontSize));
         southRight.add(bColor);
         bColor.addActionListener(e -> selectColorFromChooser());
 
@@ -87,8 +86,6 @@ public class Sandbox extends JPanel {
         this.generationPanel.refreshView();
 
     }
-
-    
 
     private void selectColorFromChooser() {
         if (Objects.isNull(colorFrame)) {
