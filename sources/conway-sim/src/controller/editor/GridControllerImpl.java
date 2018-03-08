@@ -51,4 +51,10 @@ public class GridControllerImpl implements GridController {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean isPlacing() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

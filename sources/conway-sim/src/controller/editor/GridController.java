@@ -17,4 +17,6 @@ public interface GridController {
 	void mouseClicked(int row, int column);
 	
 	void draw(final Generation gen);
+	
+	boolean isPlacing();
 }
