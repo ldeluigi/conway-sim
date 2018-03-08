@@ -27,6 +27,7 @@ public class Sandbox extends JPanel {
      * 
      */
     private static final long serialVersionUID = -9015811419136279771L;
+
     private static final String BOOK_NAME = "BOOK";
     private static final int DEFAULT_SIZE = 100;
 

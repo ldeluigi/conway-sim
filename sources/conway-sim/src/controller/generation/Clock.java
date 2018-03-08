@@ -5,7 +5,9 @@ package controller.generation;
  */
 public class Clock {
 
-    private static final int MAX_TIME_GENERATION = 100000;
+    private static final int MAX_TIME_GENERATION = 1000;
+    private static final int MAX_SPEED = 10;
+    private static final int SPEED_PART = MAX_TIME_GENERATION / MAX_SPEED;
     private final AgentClock clockAgent = new AgentClock();
     private final Runnable runnable;
 
@@ -43,17 +45,17 @@ public class Clock {
      * @param speed Set the speed of this clock. wait ( 1000 / speed ) ms between every computation.
      */
     public void setSpeed(final int speed) {
-        final Long sleepTime = 1000 / Long.valueOf(speed);
-        if (sleepTime > 0 && sleepTime < MAX_TIME_GENERATION) {
-            this.clockAgent.setStep(Long.valueOf(sleepTime));
-        } else {
+        if (speed < 0 || speed > MAX_SPEED) {
             throw new IllegalArgumentException();
         }
+        final Long sleepTime = Long.valueOf(MAX_SPEED - speed + 1) * SPEED_PART;
+        this.clockAgent.setStep(Long.valueOf(sleepTime));
+        System.err.println("current speed = " + speed + " sleep time = " + sleepTime);
     }
 
     class AgentClock extends Thread {
 
-        private static final long INIT_STEP = 900L;
+        private static final long INIT_STEP = 1000L;
         private Long step = INIT_STEP;
         private boolean clock;
 

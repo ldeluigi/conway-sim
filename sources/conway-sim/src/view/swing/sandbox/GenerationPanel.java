@@ -35,7 +35,7 @@ public class GenerationPanel extends JPanel {
     private static final long serialVersionUID = 9060069868596999045L;
 
     private static final int MIN_SPEED = 1;
-    private static final int MAX_SPEED = 20;
+    private static final int MAX_SPEED = 10;
 
     private final JSlider speedSlider;
     private final JButton bNew;
