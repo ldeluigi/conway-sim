@@ -45,4 +45,10 @@ public class GridControllerImpl implements GridController {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void draw(Generation gen) {
+		// TODO Auto-generated method stub
+		
+	}
 }
