@@ -12,4 +12,6 @@ public interface PatternEditor extends GridEditor {
     void placeCurrentPattern(int row, int column);
 
     boolean isPlacing();
+    
+    void rotateCurrentPattern();
 }
