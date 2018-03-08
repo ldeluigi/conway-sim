@@ -46,7 +46,8 @@ public class GenerationPanel extends JPanel {
     private final JButton bPrev;
     private final JButton bPlay;
 
-    private final JLabel numGeneration;
+    private final JLabel numGenerationLabel;
+    private final JLabel numSpeedLabel;
     private final GenerationController generationController;
 
     private final int fontSize = MenuSettings.getFontSize();
@@ -77,12 +78,14 @@ public class GenerationPanel extends JPanel {
         //speed control
         speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
         speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        //display for current speed
+        numSpeedLabel = new JLabel("speed value " + speedSlider.getValue());
+        numSpeedLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         this.add(speedSlider);
-
         //display for current generation
-        numGeneration = new JLabel("0");
-        numGeneration.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
-
+        numGenerationLabel = new JLabel("Current generation number : " + "0");
+        numGenerationLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        //add button to the layout
         this.add(bPlay);
         this.add(bPause);
         this.add(bEnd);
@@ -90,14 +93,12 @@ public class GenerationPanel extends JPanel {
         this.add(bNext);
         this.add(bGoTo);
 
-        this.add(spinner);
+        this.add(spinner); //to use the go to button
 
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
-        /*
-         * Start conditions.
-         */
+        //Start conditions.
         bNew.setEnabled(true);
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
@@ -105,8 +106,6 @@ public class GenerationPanel extends JPanel {
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
-
-        this.setVisible(true);
 
         speedSlider.addChangeListener(e -> this.speedControl());
         bNew.addActionListener(e -> this.newStart());
@@ -124,7 +123,15 @@ public class GenerationPanel extends JPanel {
      * @return the JLabel that show the number of the current generation.
      */
     public JLabel getNumGeneration() {
-        return numGeneration;
+        return this.numGenerationLabel;
+    }
+
+    /**
+     * 
+     * @return a JLabel with the current speed, that will be automatic update
+     */
+    public JLabel getCurrentSpeed() {
+        return this.numSpeedLabel;
     }
 
     private void speedControl() {
@@ -208,7 +215,8 @@ public class GenerationPanel extends JPanel {
      * 
      */
     public void refreshView() {
-        this.numGeneration.setText(this.generationController.getCurrentNumberGeneration().toString());
+        this.numGenerationLabel.setText("Current generation number : " + this.generationController.getCurrentNumberGeneration().toString());
+        numSpeedLabel.setText("speed value " + speedSlider.getValue());
     }
 
     private JButton newJButton(final String name, final String tooltipText) {

@@ -66,8 +66,8 @@ public class Sandbox extends JPanel {
         final JPanel southLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        southLeft.add(new JLabel("Current generation number : "));
         southLeft.add(generationPanel.getNumGeneration());
+        southLeft.add(generationPanel.getCurrentSpeed());
         southRight.add(bBook);
         southRight.add(bExit);
         south.add(southLeft, BorderLayout.WEST);
@@ -85,8 +85,8 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
-        // TODO fix grid update
-        //this.grid.getController().draw(this.genController.getCurrentGeneration());
+//         TODO fix grid update
+//        this.grid.getController().draw(this.genController.getCurrentGeneration());
         this.grid.paintGrid(this.genController.getCurrentGeneration().getCellMatrix().map(e -> e.getStatus() == Status.ALIVE ? alive : dead));
     }
 
