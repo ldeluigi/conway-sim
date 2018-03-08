@@ -85,6 +85,8 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
+        // TODO fix grid update
+        //this.grid.getController().draw(this.genController.getCurrentGeneration());
         this.grid.paintGrid(this.genController.getCurrentGeneration().getCellMatrix().map(e -> e.getStatus() == Status.ALIVE ? alive : dead));
     }
 
