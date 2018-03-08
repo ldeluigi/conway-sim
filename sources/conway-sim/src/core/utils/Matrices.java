@@ -39,7 +39,7 @@ public final class Matrices {
     /**
      * Copies a rectangular portion of a given {@link Matrix} to a new matrix of the required dimension.
      * @param <X> the generic type of matrix
-     * @param from the matrix from which the new one is cut and copied
+     * @param from the matrix from which the new one is copied
      * @param fromRow the first row to copy
      * @param toRow the last (inclusive) row to copy
      * @param fromColumn the first column to copy
