@@ -3,6 +3,7 @@ package core.utils;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -22,7 +23,6 @@ public final class Matrices {
      * @return the modified matrix
      */
     public static <X> Matrix<X> mergeXY(final Matrix<X> main, final int x, final int y, final Matrix<X> smaller) {
-    	//TODO supportare ogni tipo di input
         Objects.requireNonNull(main);
         Objects.requireNonNull(smaller);
         if (x < 0 || y < 0 || x + smaller.getHeight() > main.getHeight() || y + smaller.getWidth() > main.getWidth()) {
@@ -37,6 +37,31 @@ public final class Matrices {
     }
 
     /**
+     * Copies a rectangular portion of a given {@link Matrix} to a new matrix of the required dimension.
+     * @param <X> the generic type of matrix
+     * @param from the matrix from which the new one is cut and copied
+     * @param fromRow the first row to copy
+     * @param toRow the last (inclusive) row to copy
+     * @param fromColumn the first column to copy
+     * @param toColumn  the last (inclusive) column to copy
+     * @return a new matrix taken from the given one
+     */
+    public static <X> Matrix<X> cut(final Matrix<X> from, final int fromRow, final int toRow, final int fromColumn,
+            final int toColumn) {
+        if (fromRow < 0 || toRow < fromRow || toRow >= from.getHeight() || fromColumn < 0 || toColumn < fromColumn
+                || toColumn >= from.getWidth()) {
+            throw new IllegalArgumentException("Input coordinates are invalid (from row: " + fromRow + " to " + toRow
+                    + "; from column: " + fromColumn + " to " + toColumn + ")");
+        }
+        return new ListMatrix<>(
+                IntStream.rangeClosed(fromRow, toRow)
+                         .mapToObj(r -> IntStream.rangeClosed(fromColumn, toColumn)
+                                                 .mapToObj(c -> from.get(r, c))
+                                                 .collect(Collectors.toList()))
+                        .collect(Collectors.toList()));
+    }
+
+    /**
      *  Returns an unmodifiable view of the specified matrix.
      * @param matrix the {@link Matrix} to wrap
      * @param <X> the generic type of the matrix
@@ -48,38 +73,47 @@ public final class Matrices {
             public X get(final int row, final int column) {
                 return matrix.get(row, column);
             }
+
             @Override
             public void rotateClockwise(final int times) {
                 throw new UnsupportedOperationException("This matrix cannot be modified");
             }
+
             @Override
             public void set(final int row, final int column, final X value) {
                 throw new UnsupportedOperationException("This matrix cannot be modified");
             }
+
             @Override
             public int getHeight() {
                 return matrix.getHeight();
             }
+
             @Override
             public int getWidth() {
                 return matrix.getWidth();
             }
+
             @Override
             public <Y> Matrix<Y> map(final Function<? super X, ? extends Y> mapper) {
                 return matrix.map(mapper);
             }
+
             @Override
             public String toString() {
                 return matrix.toString();
             }
+
             @Override
             public boolean equals(final Object obj) {
                 return matrix.equals(obj);
             }
+
             @Override
             public int hashCode() {
                 return matrix.hashCode();
             }
+
             @Override
             public void forEach(final Consumer<? super X> action) {
                 matrix.forEach(action);
