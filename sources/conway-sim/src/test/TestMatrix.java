@@ -104,7 +104,7 @@ public class TestMatrix {
     @Test
     void testForEach() {
         Matrix<List<Boolean>> m = new ListMatrix<>(10, 10, () -> new LinkedList<Boolean>());
-        m.forEach(x -> { x.add(true); x.add(true); });
+        m.stream().forEach(x -> { x.add(true); x.add(true); });
         assertEquals(new ListMatrix<>(10, 10, () -> new LinkedList<>(Arrays.asList(true, true))), m);
     }
 

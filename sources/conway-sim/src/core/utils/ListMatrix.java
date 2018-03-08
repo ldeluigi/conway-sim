@@ -5,10 +5,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import java.util.function.Supplier;
 
 /**
@@ -168,12 +168,8 @@ public final class ListMatrix<X> implements Matrix<X> {
     }
 
     @Override
-    public void forEach(final Consumer<? super X> action) {
-        this.matrix.forEach(row -> {
-            row.forEach(cell -> {
-                action.accept(cell);
-            });
-        });
+    public Stream<X> stream() {
+        return this.matrix.stream().flatMap(l -> l.stream());
     }
 
 }
