@@ -14,16 +14,20 @@ public class RecipeLoader {
      *  than it loads it in the recipebook.
      */
     public RecipeLoader() {
-        File folder = new File("../../test/recipebook/");
+        File folder = new File("./src/test/recipebook");
         File[] listOfFiles = folder.listFiles();
         ArrayList<String> filespaths = new ArrayList<String>();
         this.recipebook = new RecipeBookImpl();
 
-        for (File file : listOfFiles) {
-            if (file.isFile()) {
-                filespaths.add(file.getAbsolutePath());
-                this.recipebook.addRecipe(file.toString(), file.getName());
+        try {
+            for (File file : listOfFiles) {
+                if (file.isFile()) {
+                    filespaths.add(file.getAbsolutePath());
+                    this.recipebook.addRecipe(file.toString(), file.getName());
+                }
             }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
     }
     /**
