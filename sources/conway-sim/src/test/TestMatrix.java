@@ -25,6 +25,7 @@ public class TestMatrix {
     private static final Integer[][] ROTATEDMATRIXRET = {{7, 4, 1}, {8, 5, 2}, {9, 6, 3}, {12, 11, 10}};
     private static final Integer[][] MODIFIEDMATRIX = {{999, 2, 3}, {4, 5, 6}, {7, 8, 999}};
     private static final String[][] MAPPEDRETMATRIX = {{"2", "3", "4", "11"}, {"5", "6", "7", "12"}, {"8", "9", "10", "13"}};
+    private static final Integer[][] CUTMATRIX = {{2, 3}, {5, 6}};
     @Test
     void testGet() {
         final Matrix<Integer> m = new ListMatrix<>(INTMATRIX);
@@ -99,11 +100,16 @@ public class TestMatrix {
     void testEquals() {
         assertEquals(new ListMatrix<>(2, 2, () -> true), Matrices.unmodifiableMatrix(new ListMatrix<>(2, 2, () -> true)));
     }
-    
+
     @Test
     void testForEach() {
         Matrix<List<Boolean>> m = new ListMatrix<>(10, 10, () -> new LinkedList<Boolean>());
         m.forEach(x -> { x.add(true); x.add(true); });
         assertEquals(new ListMatrix<>(10, 10, () -> new LinkedList<>(Arrays.asList(true, true))), m);
+    }
+
+    @Test
+    void testCut() {
+        assertEquals(new ListMatrix<>(CUTMATRIX), Matrices.cut(new ListMatrix<>(INTMATRIX), 0, 1, 1, 2));
     }
 }

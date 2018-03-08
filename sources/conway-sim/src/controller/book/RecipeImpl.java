@@ -10,7 +10,7 @@ public class RecipeImpl implements Recipe {
     private String name;
     private String content;
     private String author;
-    private Random rand = new Random();
+    private final Random rand = new Random();
     /**
      * 
      * @param name of recipe
@@ -18,9 +18,9 @@ public class RecipeImpl implements Recipe {
      * @param author of recipe
      */
     public RecipeImpl(final String content, final String name, final String author) {
-        this.setName(name);
-        this.setContent(content);
-        this.setAuthor(author);
+        this.name = name;
+        this.content = content;
+        this.author = author;
     }
     /**
      * 
@@ -28,8 +28,8 @@ public class RecipeImpl implements Recipe {
      * @param name of recipe
      */
     public RecipeImpl(final String content, final String name) {
-        this.setName(name);
-        this.setContent(content);
+        this.name = name;
+        this.content = content;
         this.setAuthor("AuthorNotSet:" + rand.nextInt());
     }
     /**
@@ -38,7 +38,7 @@ public class RecipeImpl implements Recipe {
      */
     public RecipeImpl(final String content) {
         this.setName("NameNotSet:" + rand.nextInt());
-        this.setContent(content);
+        this.content = content;
         this.setAuthor("AuthorNotSet:" + rand.nextInt());
     }
     /**

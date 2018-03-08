@@ -28,7 +28,7 @@ public class RecipeBookImpl implements RecipeBook {
      */
     public RecipeImpl getRecipeByName(final String name) {
         try {
-            for (RecipeImpl e : this.rb) {
+            for (final RecipeImpl e : this.rb) {
                 if (e.getName() == name) {
                     return e;
                 }

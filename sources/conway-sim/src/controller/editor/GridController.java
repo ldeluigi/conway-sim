@@ -12,7 +12,7 @@ public interface GridController {
 
 	void mouseEntered(int row, int column);
 
-	void place(final Matrix<Status> statusMatrix, final int startRow, final int startColumn);
+	void place(final Matrix<Status> statusMatrix);
 
 	void mouseClicked(int row, int column);
 	
