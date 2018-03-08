@@ -50,7 +50,6 @@ public class Clock {
         }
         final Long sleepTime = Long.valueOf(MAX_SPEED - speed + 1) * SPEED_PART;
         this.clockAgent.setStep(Long.valueOf(sleepTime));
-        System.err.println("current speed = " + speed + " sleep time = " + sleepTime);
     }
 
     class AgentClock extends Thread {

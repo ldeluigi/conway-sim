@@ -6,8 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Objects;
 import javax.swing.JButton;
-import javax.swing.JColorChooser;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -39,9 +37,8 @@ public class Sandbox extends JPanel {
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
 
-    private JInternalFrame colorFrame;
-    private Color alive = Color.BLACK;
-    private Color dead = Color.WHITE;
+    private final Color alive = Color.BLACK;
+    private final Color dead = Color.WHITE;
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
@@ -69,11 +66,6 @@ public class Sandbox extends JPanel {
         final JPanel southLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        final JButton bColor = new JButton("Cell color");
-        bColor.setFont(new Font(bColor.getFont().getFontName(), bColor.getFont().getStyle(), this.fontSize));
-        southRight.add(bColor);
-        bColor.addActionListener(e -> selectColorFromChooser());
-
         southLeft.add(new JLabel("Current generation number : "));
         southLeft.add(generationPanel.getNumGeneration());
         southRight.add(bBook);
@@ -86,46 +78,6 @@ public class Sandbox extends JPanel {
         bExit.addActionListener(e -> exit());
         this.generationPanel.refreshView();
 
-    }
-
-    private void selectColorFromChooser() {
-        if (Objects.isNull(colorFrame)) {
-            colorFrame = new JInternalFrame("Color selector", false, true);
-            this.mainGUI.popUpFrame(colorFrame);
-            final JPanel p = new JPanel(new BorderLayout());
-            final JPanel buttonPanel = new JPanel(new FlowLayout());
-            final JColorChooser colorChooser = new JColorChooser();
-            p.add(colorChooser, BorderLayout.CENTER);
-            colorFrame.setVisible(true);
-            colorChooser.setVisible(true);
-            final JButton bAlive = new JButton("Select alive cell");
-            final JButton bDead = new JButton("Select dead cell");
-            buttonPanel.add(bAlive);
-            buttonPanel.add(bDead);
-            p.add(buttonPanel, BorderLayout.SOUTH);
-            colorFrame.add(p, BorderLayout.CENTER);
-            bAlive.addActionListener(a -> {
-                this.setColorAlive((Color) colorChooser.getColor());
-                this.refreshView();
-            });
-            bDead.addActionListener(d -> {
-                this.setColorDead((Color) colorChooser.getColor());
-                this.refreshView();
-            });
-        } else {
-            this.mainGUI.popUpFrame(colorFrame);
-            colorFrame.show();
-            colorFrame.setVisible(true);
-        }
-        colorFrame.pack();
-    }
-
-    private void setColorDead(final Color color) {
-        this.dead = color;
-    }
-
-    private void setColorAlive(final Color color) {
-        this.alive = color;
     }
 
     /**
