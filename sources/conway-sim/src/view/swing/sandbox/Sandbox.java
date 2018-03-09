@@ -1,7 +1,6 @@
 package view.swing.sandbox;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Objects;
@@ -11,7 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
-import core.model.Status;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
@@ -36,9 +34,6 @@ public class Sandbox extends JPanel {
     private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
-
-    private final Color alive = Color.BLACK;
-    private final Color dead = Color.WHITE;
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
@@ -85,7 +80,7 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
-        this.grid.paintGrid(this.genController.getCurrentGeneration().getCellMatrix().map(e -> e.getStatus() == Status.ALIVE ? alive : dead));
+        this.grid.getEditor().draw(this.genController.getCurrentGeneration());
     }
 
     private void callBook() {
