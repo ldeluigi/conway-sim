@@ -37,7 +37,7 @@ public class GridPanel extends JScrollPane {
     private static final int INITIAL_BORDER_WIDTH = 1;
     private static final Color INITIAL_BORDER_COLOR = Color.darkGray;
     private static final int MAX_CELL_SIZE_RATIO = 15;
-    private static final int MIN_CELL_SIZE_RATIO = 105;
+    private static final int MIN_CELL_SIZE_RATIO = 210;
 
     private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
     private int borderWidth = INITIAL_BORDER_WIDTH;
@@ -111,7 +111,7 @@ public class GridPanel extends JScrollPane {
     }
 
     /**
-     * Alters Cell size value.
+     * Alters Cell size value. Non-thread safe.
      * 
      * @param byPixels
      *            to add
@@ -120,7 +120,6 @@ public class GridPanel extends JScrollPane {
         if (this.cellSize.getWidth() + byPixels <= 0 || this.cellSize.getHeight() + byPixels <= 0) {
             throw new IllegalStateException("Final Dimensions are 0 or less.");
         }
-        SwingUtilities.invokeLater(() -> {
             this.grid.setVisible(false);
             this.cellSize.setSize(this.cellSize.getWidth() + byPixels, this.cellSize.getHeight() + byPixels);
             this.labelMatrix.stream().forEach(label -> {
@@ -129,29 +128,6 @@ public class GridPanel extends JScrollPane {
             });
             this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
             this.grid.setVisible(true);
-        });
-    }
-
-    /**
-     * Alters Border width value.
-     * 
-     * @param byPixels
-     *            to add
-     */
-    public void alterBorderWidth(final int byPixels) {
-        if (this.borderWidth + byPixels < 1) {
-            throw new IllegalStateException("Final Border Width is 0 or less.");
-        }
-        SwingUtilities.invokeLater(() -> {
-            this.grid.setVisible(false);
-            this.borderWidth += byPixels;
-            for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
-                for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                    setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
-                }
-            }
-            this.grid.setVisible(true);
-        });
     }
 
     private void setBorder(final JLabel label, final int row, final int col, final Color c, final int borderWidth)  {
