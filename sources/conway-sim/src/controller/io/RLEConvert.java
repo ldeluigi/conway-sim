@@ -9,6 +9,10 @@ import java.io.StringReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import core.model.Status;
+import core.utils.ListMatrix;
+import core.utils.Matrix;
+
 /**
  * 
  * 
@@ -84,8 +88,7 @@ public class RLEConvert {
                     return line;
                 }
             }
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
         }
     }
@@ -105,8 +108,7 @@ public class RLEConvert {
             if (i > -1) {
                 sb.append(line.substring(0, i));
                 break;
-            }
-            else {
+            } else {
                 sb.append(line);
             }
         }
@@ -116,13 +118,32 @@ public class RLEConvert {
         }
         return sb.toString();
     }
-
+    /**
+     * 
+     * @param grid boolean grid
+     * @param row size of row
+     * @param col size of col
+     * @return matrix converted
+     */
+    public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row, final int col) {
+        Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
+        for (int i = 0; i < row; i++) {
+            for (int k = 0; k < col; k++) {
+                if (grid[i][k]) {
+                    matrix.set(row, col, Status.ALIVE);
+                } else {
+                    matrix.set(row, col, Status.DEAD);
+                }
+            }
+        }
+        return null;
+    }
     /**
      * This is the main method, it returns the matrix (grid[][]) converted from the 
      * RLE format.
      * @return grid
      */
-    public boolean[][] convert() {
+    public Matrix<Status> convert() {
         try {
             String header = getHeaderLine();
             Matcher headerMatcher = Pattern.compile(String.format("^%s, ?%s(, ?%s)?$",
@@ -155,15 +176,13 @@ public class RLEConvert {
 
                 if (headerMatcher.group(4) != null) {
                     rule = headerMatcher.group(4);
-                }
-                else {
+                } else {
                     rule = DEFAULTRULE;
                 }
                 while (cellRunMatcher.find()) {
                     if (cellRunMatcher.group(1) != null) {
                         runLength = Integer.parseInt(cellRunMatcher.group(1));
-                    }
-                    else {
+                    } else {
                         runLength = 1;
                     }
                     tag = cellRunMatcher.group(2);
@@ -173,30 +192,26 @@ public class RLEConvert {
                             for (int i = 0; i < runLength; i++) {
                                 grid[row][col++] = tag.equals("o");
                             }
-                        }
-                        catch (ArrayIndexOutOfBoundsException e) {
+                        } catch (ArrayIndexOutOfBoundsException e) {
                             throw new IllegalArgumentException("Too many cells in row.");
                         }
-                    }
-                    else {
+                    } else {
                         row += runLength;
                     }
                 }
             }
-            return grid;
-        }
-        catch (IOException e) {
+            return mBoolToStatus(grid, grid.length, grid[0].length);
+        } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         return null;
     }
+
 
 }

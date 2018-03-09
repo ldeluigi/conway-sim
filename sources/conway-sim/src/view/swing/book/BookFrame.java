@@ -4,6 +4,9 @@ package view.swing.book;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +20,9 @@ import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
 import controller.book.RecipeImpl;
+import controller.editor.PatternEditor;
 import controller.io.IOLoader;
+import controller.io.RLEConvert;
 import controller.io.RecipeLoader;
 import core.model.Status;
 /**
@@ -31,13 +36,18 @@ public class BookFrame extends JInternalFrame {
     private static final long serialVersionUID = -1045414565623185058L;
 
 
+    
+
     private static final int WIDTH = 150;
     //private static final int HEIGHT = 280;
     private static final int HEIGHTOFCELL = 20;
+    
+    String selectedItem = null;
     /**
+     * @param patternE the PatternManager
      * 
      */
-    public BookFrame() {
+    public BookFrame(final PatternEditor patternE) {
         super("Book", false, true);
 
         final RecipeLoader rl = new RecipeLoader();
@@ -58,12 +68,48 @@ public class BookFrame extends JInternalFrame {
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
         list.setVisibleRowCount(-1);
+
+        list.addMouseListener(new MouseListener() {
+            public void mousePressed(final MouseEvent e) {
+                selectedItem = list.getSelectedValue();
+            }
+
+            @Override
+            public void mouseClicked(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void mouseEntered(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void mouseExited(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+
+
+            @Override
+            public void mouseReleased(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+
+        });
+
         this.add(list);
 
         //BUTTON PANEL
         JPanel ioPanel = new JPanel();
         this.add(ioPanel);
         JButton placeBtn = new JButton("Place");
+
+        //ACTION LISTENER TESSSSST
+        ActionListener alPlace = e -> {
+            //TBI
+            patternE.addPatternToPlace(new RLEConvert(rl.getRecipeBook().getRecipeByName(selectedItem).getContent()).convert());
+        };
+        placeBtn.addActionListener(alPlace);
         ioPanel.add(placeBtn);
 
         //JFILECHOOSER
@@ -73,7 +119,7 @@ public class BookFrame extends JInternalFrame {
         JButton loadBtn = new JButton("Load");
 
         //ACTION LISTENER TESSSSST
-        ActionListener ac = e -> {
+        ActionListener alLoad = e -> {
             final JButton jb = (JButton) e.getSource();
             if (fc.showOpenDialog(jb) == JFileChooser.APPROVE_OPTION) {
                 final String filepath;
@@ -89,7 +135,7 @@ public class BookFrame extends JInternalFrame {
             }
         };
 
-        loadBtn.addActionListener(ac);
+        loadBtn.addActionListener(alLoad);
         //ADD THE BUTTON
         ioPanel.add(loadBtn);
 
