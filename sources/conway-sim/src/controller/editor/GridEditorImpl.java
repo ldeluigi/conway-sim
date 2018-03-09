@@ -14,18 +14,6 @@ public class GridEditorImpl implements PatternEditor {
 	public GridEditorImpl(final int width, final int height) {
 		this.current = new ListMatrix<>(width, height, () -> new CellImpl(Status.DEAD));
 	}
-	
-	public Matrix<Boolean> getAliveMatrix() {
-		return this.current.map(s -> s.getStatus().equals(Status.ALIVE) ? true : false);
-	}
-	
-	public Generation getGeneration() {
-		return null;
-	}
-	
-	public void setAlive(int x, int y, boolean alive) {
-
-	}
 
 	@Override
 	public void showPreview(int row, int column) {

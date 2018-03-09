@@ -19,4 +19,10 @@ public interface GridEditor {
      * @param column the column
      */
     void hit(int row, int column);
+
+    /**
+     * Returns the first generation of the computation. 
+     * @return the {@link Generation} to compute
+     */
+    Generation getGeneration();
 }
