@@ -5,6 +5,8 @@ import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.beans.PropertyVetoException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
@@ -98,6 +100,7 @@ public final class MainGUI implements DesktopGUI {
      * This method pops up a {@link JInternalFrame} in a fixed position.
      * @param iFrame the frame that pops up
      */
+    @Override
     public void popUpFrame(final JInternalFrame iFrame) {
         final Dimension minDim = new Dimension(
                 Math.max(iFrame.getMinimumSize().width, this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
@@ -110,36 +113,26 @@ public final class MainGUI implements DesktopGUI {
         iFrame.setLayer(JDesktopPane.PALETTE_LAYER);
     }
 
-    /**
-     * This method closes all open {@link JInternalFrame} in the application.
-     */
-    public void closeFrames() {
-        for (final JInternalFrame iframe : this.desktop.getAllFrames()) {
-            iframe.doDefaultCloseAction();
-        }
+    @Override
+    public List<JInternalFrame> getAllFrames() {
+        return Arrays.asList(this.desktop.getAllFrames());
     }
 
-    /**
-     * Gets frame width.
-     * @return current frame width
-     */
+    @Override
+    public void detachFrame(final JInternalFrame iFrame) {
+        this.desktop.remove(iFrame);
+    }
+
     @Override
     public int getCurrentWidth() {
         return this.frame.getWidth();
     }
 
-    /**
-     * Gets frame height.
-     * @return current frame height
-     */
     @Override
     public int getCurrentHeight() {
         return this.frame.getHeight();
     }
 
-    /**
-     * Removes current view and replaces it with main menu.
-     */
     @Override
     public void backToMainMenu() {
         setView(new MainMenu(this));

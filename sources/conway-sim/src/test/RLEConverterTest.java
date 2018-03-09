@@ -12,18 +12,8 @@ class RLEConverterTest {
 
     RLEConverterTest() {
     }
-    public static void printMatrix(boolean mat[][]) {
-
-        // Loop through all rows
-        for (boolean[] row : mat) {
- 
-            // converting each row as string
-            // and then printing in a separate line
-            System.out.println(Arrays.toString(row));
-        }
-    }
     public static void main(String[] args) {
         System.out.println(TESTRLE);
-        printMatrix(rleC.convert());
+        System.out.println(rleC.convert());
     }
 }

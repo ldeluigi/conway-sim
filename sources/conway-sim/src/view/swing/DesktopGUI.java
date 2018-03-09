@@ -1,5 +1,7 @@
 package view.swing;
 
+import java.util.List;
+
 import javax.swing.JInternalFrame;
 
 /**
@@ -15,7 +17,14 @@ public interface DesktopGUI extends GUI {
   void popUpFrame(JInternalFrame iFrame);
 
   /**
-   * Closes all open frames.
+   * Returns all {@link JInternalFrame} attached.
+   * @return the list of all frames attached to the desktopGUI.
    */
-  void closeFrames();
+  List<JInternalFrame> getAllFrames();
+
+  /**
+   * Detaches permanently a open or closed {@link JInternalFrame} from the DesktopGUI.
+   * @param iFrame the {@link JInternalFrame} to detach
+   */
+  void detachFrame(JInternalFrame iFrame);
 }

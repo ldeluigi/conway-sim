@@ -89,12 +89,13 @@ public class Sandbox extends JPanel {
     }
 
     private void callBook() {
-        if (Objects.isNull(book)) {
-            book = new BookFrame();
-            this.mainGUI.popUpFrame(book);
-        } else if (!book.isShowing()) {
-            this.book = new BookFrame();
-            this.mainGUI.popUpFrame(book);
+        if (Objects.isNull(this.book)) {
+            this.book = new BookFrame(this.grid.getEditor());
+            this.mainGUI.popUpFrame(this.book);
+        } else if (book.isClosed()) {
+            this.mainGUI.detachFrame(this.book);
+            this.book = new BookFrame(this.grid.getEditor());
+            this.mainGUI.popUpFrame(this.book);
         }
     }
 
