@@ -8,6 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import controller.editor.GridEditorImpl;
+import controller.editor.PatternEditor;
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import view.swing.DesktopGUI;
@@ -30,7 +33,7 @@ public class Sandbox extends JPanel {
     private final GenerationPanel generationPanel;
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
-    private final GridPanel grid;
+    private final PatternEditor gridEditor;
     private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
@@ -44,9 +47,10 @@ public class Sandbox extends JPanel {
         this.generationPanel = new GenerationPanel(genController);
         this.genController.setView(this);
         this.mainGUI = mainGUI;
-        this.grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
+        final GridPanel grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
+        this.gridEditor = new GridEditorImpl(grid);
 
         final JPanel north = new JPanel(new BorderLayout());
         north.add(generationPanel, BorderLayout.AFTER_LINE_ENDS);
@@ -80,16 +84,16 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
-        this.grid.getEditor().draw(this.genController.getCurrentGeneration());
+        this.gridEditor.draw(this.genController.getCurrentGeneration());
     }
 
     private void callBook() {
         if (Objects.isNull(this.book)) {
-            this.book = new BookFrame(this.grid.getEditor());
+            this.book = new BookFrame(this.gridEditor);
             this.mainGUI.popUpFrame(this.book);
         } else if (book.isClosed()) {
             this.mainGUI.detachFrame(this.book);
-            this.book = new BookFrame(this.grid.getEditor());
+            this.book = new BookFrame(this.gridEditor);
             this.mainGUI.popUpFrame(this.book);
         }
     }
