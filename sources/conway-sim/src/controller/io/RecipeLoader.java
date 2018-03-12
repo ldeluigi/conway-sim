@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 import controller.book.RecipeBookImpl;
 /**
@@ -44,7 +48,14 @@ public class RecipeLoader {
                         e.printStackTrace();
                     }
                     System.out.println("testLine: " + testLine);
-                    this.recipebook.addRecipe(file.toString(), flagName ? testLine : file.getName());
+                    Path filepath = Paths.get(file.getAbsolutePath());
+                    try {
+                        String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
+                        this.recipebook.addRecipe(content, flagName ? testLine : file.getName());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         } catch (NullPointerException e) {

@@ -84,13 +84,17 @@ public class RLEConvert {
         try {
             while (true) {
                 line = readLine();
+                //DEBUG TBR
+                System.out.println("Read line: " + line);
                 if (!line.startsWith(HASH)) {
+
                     return line;
                 }
             }
         } catch (NullPointerException e) {
             throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
         }
+
     }
     /**
      * 
