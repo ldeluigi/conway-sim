@@ -47,7 +47,7 @@ public class GridPanel extends JScrollPane {
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
-    private final PatternEditor controller;
+    // private final GridEditorImpl controller;
 //    private Matrix<Color> save;
 //    private Boolean isStopped = false;
 
@@ -81,7 +81,6 @@ public class GridPanel extends JScrollPane {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
                 c.gridx = j;
                 c.gridy = i;
-                this.labelMatrix.get(i, j).addMouseListener(new GridPanel.CellListener(i, j));
                 setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
                 this.grid.add(this.labelMatrix.get(i, j), c);
             }
@@ -107,7 +106,6 @@ public class GridPanel extends JScrollPane {
                 }
             }
         });
-        this.controller = new GridEditorImpl(width, height);
     }
 
     /**
@@ -177,13 +175,6 @@ public class GridPanel extends JScrollPane {
         });
     }
 
-    /**
-     * 
-     * @return
-     */
-    public PatternEditor getEditor() {
-        return this.controller;
-    }
 
     /**
      * 
@@ -194,29 +185,7 @@ public class GridPanel extends JScrollPane {
     public void displayPattern(final Matrix<Color> colorMatrix, final int  row, final int column) { /* method to invoke from mouse.enter   ricordarsi di mettere il /2*/
          displayColors(colorMatrix, row, column);
     }
-
-    private final class CellListener implements MouseListener {
-
-        private final int row, column;
-
-        private CellListener(final int row, final int column) {
-            this.row = row;
-            this.column = column;
-        }
-
-        public void mouseReleased(final MouseEvent e) {
-        }
-
-        public void mousePressed(final MouseEvent e) {
-        }
-
-        public void mouseExited(final MouseEvent e) {
-        }
-
-        public void mouseEntered(final MouseEvent e) {
-        }
-
-        public void mouseClicked(final MouseEvent e) {
-        }
+    
+    public void addListenerToGrid(MouseListener mouse) {
     }
 }
