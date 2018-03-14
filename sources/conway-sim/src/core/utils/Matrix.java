@@ -1,7 +1,7 @@
 package core.utils;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * A generic matrix with useful utility methods.
@@ -57,8 +57,8 @@ public interface Matrix<X> {
     <Y> Matrix<Y> map(Function<? super X, ? extends Y> mapper);
 
     /**
-     * Iterates the matrix and applies the given action.
-     * @param action to apply to each element
+     * Generates a stream from the matrix.
+     * @return the stream
      */
-    void forEach(Consumer<? super X> action);
+    Stream<X> stream();
 }

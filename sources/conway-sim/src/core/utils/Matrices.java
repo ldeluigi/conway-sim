@@ -1,10 +1,10 @@
 package core.utils;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Utility class for {@link Matrix} objects.
@@ -115,8 +115,8 @@ public final class Matrices {
             }
 
             @Override
-            public void forEach(final Consumer<? super X> action) {
-                matrix.forEach(action);
+            public Stream<X> stream() {
+                return matrix.stream();
             }
         };
     }

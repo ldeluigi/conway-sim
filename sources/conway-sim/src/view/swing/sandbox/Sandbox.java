@@ -1,7 +1,6 @@
 package view.swing.sandbox;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Objects;
@@ -9,9 +8,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import controller.editor.GridEditorImpl;
+import controller.editor.PatternEditor;
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
-import core.model.Status;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
@@ -32,13 +33,10 @@ public class Sandbox extends JPanel {
     private final GenerationPanel generationPanel;
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
-    private final GridPanel grid;
+    private final PatternEditor gridEditor;
     private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
-
-    private final Color alive = Color.BLACK;
-    private final Color dead = Color.WHITE;
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
@@ -49,9 +47,10 @@ public class Sandbox extends JPanel {
         this.generationPanel = new GenerationPanel(genController);
         this.genController.setView(this);
         this.mainGUI = mainGUI;
-        this.grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
+        final GridPanel grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
+        this.gridEditor = new GridEditorImpl(grid);
 
         final JPanel north = new JPanel(new BorderLayout());
         north.add(generationPanel, BorderLayout.AFTER_LINE_ENDS);
@@ -85,18 +84,17 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
-//         TODO fix grid update
-//        this.grid.getController().draw(this.genController.getCurrentGeneration());
-        this.grid.paintGrid(this.genController.getCurrentGeneration().getCellMatrix().map(e -> e.getStatus() == Status.ALIVE ? alive : dead));
+        this.gridEditor.draw(this.genController.getCurrentGeneration());
     }
 
     private void callBook() {
-        if (Objects.isNull(book)) {
-            book = new BookFrame();
-            this.mainGUI.popUpFrame(book);
-        } else if (!book.isShowing()) {
-            this.book = new BookFrame();
-            this.mainGUI.popUpFrame(book);
+        if (Objects.isNull(this.book)) {
+            this.book = new BookFrame(this.gridEditor);
+            this.mainGUI.popUpFrame(this.book);
+        } else if (book.isClosed()) {
+            this.mainGUI.detachFrame(this.book);
+            this.book = new BookFrame(this.gridEditor);
+            this.mainGUI.popUpFrame(this.book);
         }
     }
 
