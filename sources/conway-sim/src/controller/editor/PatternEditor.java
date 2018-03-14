@@ -26,6 +26,7 @@ public interface PatternEditor extends GridEditor {
      * Ends the placement of the current pattern in the given position, permanently.
      * @param row the row
      * @param column the column
+     * @throws an IllegalStateException if there is no pattern or is invoked out of placing mode
      */
     void placeCurrentPattern(int row, int column);
 
@@ -33,13 +34,14 @@ public interface PatternEditor extends GridEditor {
      * Returns true if there is a pattern that is waiting to be placed.
      * @return true only if a pattern is waiting
      */
-    boolean isPlacing();
+    boolean isPlacingModeOn();
 
     /**
      * Rotates 90 degrees clockwise the pattern.
+     * @param hits is the number of times the mouse button has been clicked
      * @throws IllegalStateException if there is no pattern that waits to be placed
      */
-    void rotateCurrentPattern();
+    void rotateCurrentPattern(int hits);
 
     /**
      * Removes, if possible, the current pattern that is waiting to be placed.

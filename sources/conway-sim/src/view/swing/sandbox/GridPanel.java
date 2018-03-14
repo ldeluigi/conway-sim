@@ -7,6 +7,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
 import javax.swing.BorderFactory;
@@ -40,10 +41,10 @@ public class GridPanel extends JScrollPane {
     private static final int MIN_CELL_SIZE_RATIO = 210;
 
     private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
-    private int borderWidth = INITIAL_BORDER_WIDTH;
+    private final int borderWidth = INITIAL_BORDER_WIDTH;
     private final Color borderColor = INITIAL_BORDER_COLOR;
     private final JPanel grid;
-    private Matrix<JLabel> labelMatrix;
+    private final Matrix<JLabel> labelMatrix;
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
@@ -175,17 +176,23 @@ public class GridPanel extends JScrollPane {
         });
     }
 
+    /**
+     * 
+     * @return
+     */
+    public Matrix<Color> getColorMatrix() {
+        return this.labelMatrix.map(l -> l.getBackground());
+    }
 
     /**
      * 
-     * @param colorMatrix
-     * @param row
-     * @param column
+     * @param listenerDispencer
      */
-    public void displayPattern(final Matrix<Color> colorMatrix, final int  row, final int column) { /* method to invoke from mouse.enter   ricordarsi di mettere il /2*/
-         displayColors(colorMatrix, row, column);
-    }
-    
-    public void addListenerToGrid(MouseListener mouse) {
+    public void addListenerToGrid(final BiFunction<Integer, Integer, MouseListener> listenerDispencer) {
+        for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+            for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                this.labelMatrix.get(i, j).addMouseListener(listenerDispencer.apply(i, j));
+            }
+        }
     }
 }

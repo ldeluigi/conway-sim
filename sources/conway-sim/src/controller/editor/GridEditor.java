@@ -17,6 +17,7 @@ public interface GridEditor {
      * Applies a {@link Status} change in the given position.
      * @param row the row
      * @param column the column
+     * @throws an IllegalSateException if not in placing mode
      */
     void hit(int row, int column);
 
