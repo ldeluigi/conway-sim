@@ -26,4 +26,10 @@ public interface GridEditor {
      * @return the {@link Generation} to compute
      */
     Generation getGeneration();
+    
+    /**
+     * Sets if the editor should listen to user input.
+     * @param enabled true if the editor should listen to user input
+     */
+    void setEnabled(Boolean enabled);
 }
