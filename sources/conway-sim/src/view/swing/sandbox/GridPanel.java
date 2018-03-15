@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
@@ -16,12 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import controller.editor.GridEditor;
-import controller.editor.GridEditorImpl;
-import controller.editor.PatternEditor;
-import core.model.Status;
 import core.utils.ListMatrix;
-import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.GUI;
 import view.swing.menu.MenuSettings;
@@ -48,9 +41,6 @@ public class GridPanel extends JScrollPane {
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
-    // private final GridEditorImpl controller;
-//    private Matrix<Color> save;
-//    private Boolean isStopped = false;
 
     /**
      * 
