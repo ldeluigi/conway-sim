@@ -26,15 +26,16 @@ public interface GridEditor {
      * @return the {@link Generation} to compute
      */
     Generation getGeneration();
-    
+
     /**
-     * Sets if the editor should listen to user input.
-     * @param enabled true if the editor should listen to user input
+     * Set true if the editor is able to operate modifications on the grid.
+     * @param enabled true if the editor allows editing operations
      */
     void setEnabled(Boolean enabled);
-    
+
     /**
-     * 
+     * Returns true if the editor allows editing operations.
+     * @return true if the editor allows editing operations
      */
     boolean isEnabled();
 }
