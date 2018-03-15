@@ -3,6 +3,7 @@ package view.swing.sandbox;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -32,6 +33,7 @@ public class Sandbox extends JPanel {
 
     private final GenerationPanel generationPanel;
     private final JButton bBook = new JButton(BOOK_NAME);
+    
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private final GenerationController genController;
@@ -62,14 +64,15 @@ public class Sandbox extends JPanel {
         final JPanel south = new JPanel(new BorderLayout());
         this.bBook.setFont(new Font(bBook.getFont().getFontName(), bBook.getFont().getStyle(), this.fontSize));
         bExit.setFont(new Font(bExit.getFont().getFontName(), bExit.getFont().getStyle(), this.fontSize));
-        final JPanel southLeft = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel statsPanel = new JPanel(new GridLayout(2, 2));
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        southLeft.add(generationPanel.getNumGeneration());
-        southLeft.add(generationPanel.getCurrentSpeed());
+        statsPanel.add(generationPanel.getNumGeneration());
+        statsPanel.add(generationPanel.getCurrentSpeed());
+        statsPanel.add(generationPanel.getAliveCellLabel());
         southRight.add(bBook);
         southRight.add(bExit);
-        south.add(southLeft, BorderLayout.WEST);
+        south.add(statsPanel, BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 

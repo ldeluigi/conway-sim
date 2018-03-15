@@ -6,17 +6,20 @@ package controller.generation;
 public class Clock {
 
     private static final int MAX_TIME_GENERATION = 1000;
-    private static final int MAX_SPEED = 10;
-    private static final int SPEED_PART = MAX_TIME_GENERATION / MAX_SPEED;
+    private final int maxSpeed;
+    private final int speedPart;
     private final AgentClock clockAgent = new AgentClock();
     private final Runnable runnable;
 
     /**
      * 
      * @param runnable the runnable of this clock.
+     * @param maxSpeed the maxSpeed for the clock.
      */
-    public Clock(final Runnable runnable) {
+    public Clock(final Runnable runnable, final int maxSpeed) {
         this.runnable = runnable;
+        this.maxSpeed = maxSpeed;
+        this.speedPart = MAX_TIME_GENERATION / maxSpeed;
     }
 
     /**
@@ -45,10 +48,10 @@ public class Clock {
      * @param speed Set the speed of this clock. wait ( 1000 / speed ) ms between every computation.
      */
     public void setSpeed(final int speed) {
-        if (speed < 0 || speed > MAX_SPEED) {
+        if (speed < 0 || speed > maxSpeed) {
             throw new IllegalArgumentException();
         }
-        final Long sleepTime = Long.valueOf(MAX_SPEED - speed + 1) * SPEED_PART;
+        final Long sleepTime = Long.valueOf(maxSpeed - speed + 1) * speedPart;
         this.clockAgent.setStep(Long.valueOf(sleepTime));
     }
 

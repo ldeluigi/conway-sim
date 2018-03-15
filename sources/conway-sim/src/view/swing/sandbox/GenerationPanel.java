@@ -1,6 +1,7 @@
 package view.swing.sandbox;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -48,6 +49,8 @@ public class GenerationPanel extends JPanel {
 
     private final JLabel numGenerationLabel;
     private final JLabel numSpeedLabel;
+    private final JLabel aliveCell;
+
     private final GenerationController generationController;
 
     private final int fontSize = MenuSettings.getFontSize();
@@ -79,12 +82,15 @@ public class GenerationPanel extends JPanel {
         speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
         speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         //display for current speed
-        numSpeedLabel = new JLabel("speed value " + speedSlider.getValue());
+        numSpeedLabel = new JLabel("|Speed value " + speedSlider.getValue());
         numSpeedLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         this.add(speedSlider);
         //display for current generation
-        numGenerationLabel = new JLabel("Current generation number : " + "0");
+        numGenerationLabel = new JLabel("|Current generation number:" + "0");
         numGenerationLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        //display the number of the alive cell
+        aliveCell = new JLabel("|Alive cell " + this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(e -> e).count());
+        aliveCell.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         //add button to the layout
         this.add(bPlay);
         this.add(bPause);
@@ -132,6 +138,14 @@ public class GenerationPanel extends JPanel {
      */
     public JLabel getCurrentSpeed() {
         return this.numSpeedLabel;
+    }
+
+    /**
+     * 
+     * @return a JLabel with the number of the alive cell
+     */
+    public Component getAliveCellLabel() {
+        return this.aliveCell;
     }
 
     private void speedControl() {
@@ -215,8 +229,9 @@ public class GenerationPanel extends JPanel {
      * 
      */
     public void refreshView() {
-        this.numGenerationLabel.setText("Current generation number : " + this.generationController.getCurrentNumberGeneration().toString());
-        numSpeedLabel.setText("speed value " + speedSlider.getValue());
+        this.numGenerationLabel.setText("|Current generation number:" + this.generationController.getCurrentNumberGeneration().toString());
+        this.numSpeedLabel.setText("|Speed value:" + speedSlider.getValue());
+        this.aliveCell.setText("|Alive cell " + this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(e -> e).count());
     }
 
     private JButton newJButton(final String name, final String tooltipText) {

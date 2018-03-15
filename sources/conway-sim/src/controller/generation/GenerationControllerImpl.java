@@ -24,12 +24,13 @@ public class GenerationControllerImpl implements GenerationController {
 
     private static final int THREAD_FIRST_STEP = 3000;
     private static final int THREAD_SECOND_STEP = 7000;
+    private static final int MAX_SPEED = 10;
 
     private Long currentGenerationNumber = 0L;
     private Sandbox view;
     private Generation currentGeneration;
     private Memento<Generation> oldGeneration;
-    private final Clock clock = new Clock(() -> this.computeNextGeneration());
+    private final Clock clock = new Clock(() -> this.computeNextGeneration(), MAX_SPEED);
     private boolean firstStart = true;
 
     private final List<Long> savedState = new LinkedList<>();
@@ -139,7 +140,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public Long getCurrentNumberGeneration() {
+    public synchronized Long getCurrentNumberGeneration() {
         return this.currentGenerationNumber;
     }
 
@@ -148,7 +149,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void computeNextGeneration() {
+    public synchronized void computeNextGeneration() {
         if (Objects.isNull(fTask) || this.fTask.isDone()) {
             fTask = new FutureTask<>(() -> {
                 this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
