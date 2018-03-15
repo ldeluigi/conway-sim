@@ -3,8 +3,8 @@ package controller.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -16,14 +16,19 @@ import controller.book.RecipeBookImpl;
  *
  */
 public class RecipeLoader {
-    private RecipeBookImpl recipebook;
+    private final RecipeBookImpl recipebook;
+    private static final String RECIPEFOLDER = "./src/test/recipebook";
     /** This class parses all the files in the preset folder.
      *  than it loads it in the recipebook.
      * @throws IOException 
      */
     public RecipeLoader() {
-        File folder = new File("./src/test/recipebook");
-        File[] listOfFiles = folder.listFiles();
+        final File folder = new File(RECIPEFOLDER);
+        final File[] listOfFiles = folder.listFiles(new FilenameFilter() {
+            public boolean accept(final File folder, final String name) {
+                return name.toLowerCase().endsWith(".rle");
+            }
+        });
         ArrayList<String> filespaths = new ArrayList<String>();
         this.recipebook = new RecipeBookImpl();
         String testLine = "testLine: NOT_INITIALIZED";

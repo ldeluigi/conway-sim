@@ -1,10 +1,6 @@
 package view.swing.book;
 
-
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.FileNotFoundException;
@@ -24,7 +20,6 @@ import controller.editor.PatternEditor;
 import controller.io.IOLoader;
 import controller.io.RLEConvert;
 import controller.io.RecipeLoader;
-import core.model.Status;
 /**
  * 
  *
@@ -36,13 +31,26 @@ public class BookFrame extends JInternalFrame {
     private static final long serialVersionUID = -1045414565623185058L;
 
 
-    
 
-    private static final int WIDTH = 150;
+    private static final int WIDTH = 250;
     //private static final int HEIGHT = 280;
-    private static final int HEIGHTOFCELL = 20;
-    
-    String selectedItem = null;
+    private static final int HEIGHTOFCELL = 30;
+    private String selectedItem = null;
+
+    /**
+     * 
+     * @return selectedItem
+     */
+    public final String getSelectedItem() {
+        return selectedItem;
+    }
+    /**
+     * 
+     * @param selectedItem the item to select
+     */
+    public void setSelectedItem(final String selectedItem) {
+        this.selectedItem = selectedItem;
+    }
     /**
      * @param patternE the PatternManager
      * 
@@ -71,7 +79,7 @@ public class BookFrame extends JInternalFrame {
 
         list.addMouseListener(new MouseListener() {
             public void mousePressed(final MouseEvent e) {
-                selectedItem = list.getSelectedValue();
+                setSelectedItem(list.getSelectedValue());
             }
 
             @Override
@@ -107,7 +115,7 @@ public class BookFrame extends JInternalFrame {
         //ACTION LISTENER TESSSSST
         ActionListener alPlace = e -> {
             //TBI
-            patternE.addPatternToPlace(new RLEConvert(rl.getRecipeBook().getRecipeByName(selectedItem).getContent()).convert());
+            patternE.addPatternToPlace(new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert());
         };
         placeBtn.addActionListener(alPlace);
         ioPanel.add(placeBtn);
