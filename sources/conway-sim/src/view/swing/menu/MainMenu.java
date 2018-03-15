@@ -51,7 +51,7 @@ public final class MainMenu extends JPanel {
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
             SwingUtilities.invokeLater(() -> {
-               // mainGUI.setView(new Sandbox(mainGUI));
+               mainGUI.setView(new Sandbox(mainGUI));
             });
         });
         sandbox.setToolTipText("Start Sandbox Mode");
