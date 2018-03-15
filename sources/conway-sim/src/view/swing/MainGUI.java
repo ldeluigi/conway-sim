@@ -8,12 +8,10 @@ import java.beans.PropertyVetoException;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;

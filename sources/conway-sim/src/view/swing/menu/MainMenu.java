@@ -1,15 +1,12 @@
 package view.swing.menu;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -117,14 +114,7 @@ public final class MainMenu extends JPanel {
             super(new GridBagLayout());
             final JLabel loading = new JLabel("Loading...");
             loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
-//            loading.setBackground(Color.WHITE);
-//            loading.setOpaque(true);
             this.add(loading);
         }
-        
-//        public void paintComponent(Graphics g) {   
-//            Dimension d = getSize();     
-//            g.drawImage(new ImageIcon("maxresdefault.jpg").getImage(), 0, 0, (int)d.getWidth(), (int)d.getHeight() , this);         
-//        }
     }
 }
