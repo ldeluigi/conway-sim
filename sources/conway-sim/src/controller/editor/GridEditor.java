@@ -32,4 +32,9 @@ public interface GridEditor {
      * @param enabled true if the editor should listen to user input
      */
     void setEnabled(Boolean enabled);
+    
+    /**
+     * 
+     */
+    boolean isEnabled();
 }

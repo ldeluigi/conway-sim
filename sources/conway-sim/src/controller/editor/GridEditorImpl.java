@@ -3,17 +3,17 @@ package controller.editor;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.swing.SwingUtilities;
 
-import core.model.Cell;
 import core.model.CellImpl;
 import core.model.Environment;
+import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
 import core.model.Status;
-import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
@@ -25,9 +25,8 @@ import view.swing.sandbox.GridPanel;
 public class GridEditorImpl implements GridEditor, PatternEditor {
 
     private final GridPanel gameGrid;
-    private Optional<Matrix<Status>> pattern = Optional.ofNullable(null);
+    private Optional<Matrix<Status>> pattern;
     private Matrix<Status> currentStatus;
-    private Environment env;
     private boolean placingState;
     private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
@@ -39,6 +38,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.gameGrid = grid;
         this.placingState = false;
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
+        this.pattern = Optional.empty();
     }
 
     /**
@@ -52,32 +52,24 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     /**
      * 
      */
-    public void getBackUpMatrix() {
+    /*public void getBackUpMatrix() {
         this.currentStatus = this.gameGrid.getColorMatrix().map(c -> c.equals(Color.BLACK) ? Status.ALIVE : Status.DEAD);
-    }
-
-    /**
-     * 
-     */
-    public void setPlacingState() {
-        this.placingState = true;
-        this.getBackUpMatrix();
-    }
+    }*/
 
     /**
      * 
      * @param e
      */
-    public void setEnvironment(Environment e) {
+    /*public void setEnvironment(final Environment e) {
         this.env = e;
-    }
+    }*/
 
     /**
      * 
      */
     @Override
     public void hit(final int row, final int column) {
-        if (!this.placingState || !this.pattern.isPresent()) {
+        if (!this.placingState) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         } 
         this.currentStatus.set(row, column, this.currentStatus.get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
@@ -89,7 +81,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public Generation getGeneration() {
-        return GenerationFactory.from(this.currentStatus.map(s -> new CellImpl(s)) , this.env);
+        return GenerationFactory.from(this.currentStatus.map(s -> new CellImpl(s)) , EnvironmentFactory.standardRules(this.currentStatus.getWidth(), this.currentStatus.getHeight()));
     }
 
     /**
@@ -108,7 +100,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void addPatternToPlace(final Matrix<Status> statusMatrix) {
-        this.pattern = Optional.ofNullable(statusMatrix);
+        this.pattern = Optional.of(Objects.requireNonNull(statusMatrix));
     }
 
     /**
@@ -121,6 +113,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
         this.currentStatus = Matrices.mergeXY(this.currentStatus, row, column, this.pattern.get());
         this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK));
+        this.removePatternToPlace();
     }
 
     /**
@@ -128,7 +121,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public boolean isPlacingModeOn() {
-        return this.placingState;
+        return this.pattern.isPresent();
     }
 
     /**
@@ -147,8 +140,21 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void removePatternToPlace() {
-        this.pattern = Optional.ofNullable(null);
+        this.pattern = Optional.empty();
     }
+    
+    @Override
+	public boolean isEnabled() {
+		return this.placingState;
+	}
+    
+    /**
+     * 
+     */
+    @Override
+	public void setEnabled(final Boolean enabled) {
+		this.placingState = enabled;
+	}
 
     class CellListener implements MouseListener {
 
@@ -167,9 +173,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         @Override
         public void mouseClicked(final MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e)) {
-                hit(row, column);
-            } else if (SwingUtilities.isRightMouseButton(e)) {
+            if (SwingUtilities.isLeftMouseButton(e) && isEnabled()) {
+                hit(row, column); //is placing mode on
+            } else if (SwingUtilities.isRightMouseButton(e) && isEnabled() && isPlacingModeOn()) {
                 rotateCurrentPattern(e.getClickCount());
             }
         }
@@ -193,7 +199,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     }
 
-
+	
 }
 
 
