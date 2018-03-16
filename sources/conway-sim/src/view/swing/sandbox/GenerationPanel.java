@@ -173,7 +173,7 @@ public class GenerationPanel extends JPanel {
                 generationController.loadGeneration(value);
 
                 menu.setVisible(false);
-
+                //TODO swing.util.invokelater()
                 bPlay.setEnabled(true);
                 bEnd.setEnabled(true);
                 this.setTimeButtonEnable(true);
