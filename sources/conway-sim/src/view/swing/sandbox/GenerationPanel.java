@@ -20,6 +20,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import controller.generation.GenerationController;
 import core.model.Generation;
@@ -46,6 +48,8 @@ public class GenerationPanel extends JPanel {
     private final JButton bGoTo;
     private final JButton bPrev;
     private final JButton bPlay;
+    private final JProgressBar progresBar;
+
 
     private final JLabel numGenerationLabel;
     private final JLabel numSpeedLabel;
@@ -70,6 +74,9 @@ public class GenerationPanel extends JPanel {
         bGoTo = this.newJButton("Go to", "Go back in time to N generations");
         bPrev = this.newJButton("Previous", "Go to the previous generation");
         bPlay = this.newJButton("Play", "Play the current game");
+        progresBar = new JProgressBar();
+        progresBar.setIndeterminate(true);
+        progresBar.setVisible(false);
 
         this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
@@ -98,6 +105,7 @@ public class GenerationPanel extends JPanel {
         this.add(bPrev);
         this.add(bNext);
         this.add(bGoTo);
+        this.add(progresBar);
 
         this.add(spinner); //to use the go to button
 
@@ -155,30 +163,26 @@ public class GenerationPanel extends JPanel {
     private void goTo(final Long value) {
         if (value < 0) {
             JOptionPane.showMessageDialog(this, "Impossible undo to " + value + " from " + this.generationController.getCurrentNumberGeneration());
-        } else {
+        } else if (!value.equals(this.generationController.getCurrentNumberGeneration())) {
+            this.bPlay.setEnabled(false);
+            this.bEnd.setEnabled(false);
+            this.setTimeButtonEnable(false);
+
+            this.bGoTo.setVisible(false);
+            this.progresBar.setVisible(true);
+
             final FutureTask<Generation> fTask = new FutureTask<>(() -> {
-                bPlay.setEnabled(false);
-                bEnd.setEnabled(false);
-                this.setTimeButtonEnable(false);
 
-                final JProgressBar pb = new JProgressBar();
-                pb.setIndeterminate(true);
-                final JPopupMenu menu = new JPopupMenu();
-                menu.add(pb);
-                pb.setComponentPopupMenu(menu);
-                final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-                menu.setLocation((int) dim.getWidth() / 2, (int) dim.getHeight() / 2);
-                menu.setVisible(true);
+                this.generationController.loadGeneration(value);
 
-                generationController.loadGeneration(value);
-
-                menu.setVisible(false);
-                //TODO swing.util.invokelater()
-                bPlay.setEnabled(true);
-                bEnd.setEnabled(true);
-                this.setTimeButtonEnable(true);
-
-                this.refreshView();
+                SwingUtilities.invokeLater(() -> {
+                    this.progresBar.setVisible(false);
+                    this.bGoTo.setVisible(true);
+                    this.bPlay.setEnabled(true);
+                    this.bEnd.setEnabled(true);
+                    this.setTimeButtonEnable(true);
+                    this.refreshView();
+                });
             }, null);
             executor.execute(fTask);
         }

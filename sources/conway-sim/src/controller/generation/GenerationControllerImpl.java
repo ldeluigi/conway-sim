@@ -102,14 +102,15 @@ public class GenerationControllerImpl implements GenerationController {
             final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentGeneration(), threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
+            this.oldGeneration.addElem(generationNumber, valueGeneration);
         } else {
             final Long value = this.oldGeneration.getSavedState().keySet().stream()
                             .filter(l -> l <= generationNumber)
                             .max((x, y) -> Long.compare(x, y))
-                            .orElse(0L);
+                            .orElse(-1L);
             Generation valueGeneration;
             Long difference;
-            if (value.longValue() == 0L) {
+            if (value.equals(-1L)) {
                 valueGeneration = this.oldGeneration.getFirst();
             } else {
                 valueGeneration = this.oldGeneration.getSavedState().get(value);
@@ -117,12 +118,12 @@ public class GenerationControllerImpl implements GenerationController {
             difference = generationNumber - value;
             if (difference.longValue() != 0L) {
                     final int threadNumber = difference.intValue() < THREAD_FIRST_STEP ? 1 : difference.intValue() < THREAD_SECOND_STEP ? 2 : 4;
-                    System.err.println(threadNumber + " thread");
                     valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
             }
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
             this.oldGeneration.removeAllElemsAfter(this.getCurrentNumberGeneration());
+            this.oldGeneration.addElem(generationNumber, valueGeneration);
         }
         this.savedState.removeAll(savedState.stream()
                                             .filter(l -> l > 1 && l > this.getCurrentNumberGeneration())

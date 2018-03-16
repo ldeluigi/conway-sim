@@ -33,7 +33,6 @@ public class Sandbox extends JPanel {
 
     private final GenerationPanel generationPanel;
     private final JButton bBook = new JButton(BOOK_NAME);
-    
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private final GenerationController genController;
