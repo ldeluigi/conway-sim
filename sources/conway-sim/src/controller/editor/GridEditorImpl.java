@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.swing.SwingUtilities;
 
 import core.model.CellImpl;
+import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
@@ -27,6 +28,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private Optional<Matrix<Status>> pattern;
     private Matrix<Status> currentStatus;
     private boolean placingState;
+    private final Environment env;
     private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
     /**
@@ -38,6 +40,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.placingState = false;
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         this.pattern = Optional.empty();
+        this.env = EnvironmentFactory.standardRules(this.gameGrid.getWidth(), this.gameGrid.getHeight());
+        this.currentStatus = this.gameGrid.getColorMatrix().map(c -> c.equals(Color.WHITE) ? Status.DEAD : Status.ALIVE);
     }
 
     /**
@@ -66,7 +70,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public Generation getGeneration() {
-        return GenerationFactory.from(this.currentStatus.map(s -> new CellImpl(s)), EnvironmentFactory.standardRules(this.currentStatus.getWidth(), this.currentStatus.getHeight()));
+        return GenerationFactory.from(this.currentStatus.map(s -> new CellImpl(s)), this.env);
     }
 
     /**
@@ -91,7 +95,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which merges together the existing matrix and the pattern.
-     * @param row is the index describing the row where to add the first parrten label.
+     * @param row is the index describing the row where to add the first pattern label.
      * @param column is the index of the column where to add the first pattern label.
      */
     @Override
@@ -189,7 +193,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         @Override
         public void mouseEntered(final MouseEvent e) {
-            showPreview(row, column);
+            if (isPlacingModeOn() && isEnabled()) {
+                showPreview(row, column);
+            }
         }
 
         @Override

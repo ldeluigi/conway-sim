@@ -21,7 +21,7 @@ import view.swing.menu.MenuSettings;
 
 
 /**
- * 
+ * GridPanel is the visual panel which displays a scrollable grid of mutating cells.
  * 
  */
 public class GridPanel extends JScrollPane {
@@ -43,7 +43,7 @@ public class GridPanel extends JScrollPane {
     private final int minCellSize;
 
     /**
-     * 
+     * Is the constructor method for a new GridPanel.
      * @param width of the matrix
      * @param height of the matrix
      * @param gui for dynamic dimensions
@@ -143,8 +143,8 @@ public class GridPanel extends JScrollPane {
     }
 
     /**
-     * A fr nvrogòwn  ng .
-     * @param colorMatrix is the to.
+     * Is the method to invoke in order to color up the components of the grid.
+     * @param colorMatrix is the matrix containing the colors to paint.
      */
     public void paintGrid(final Matrix<Color> colorMatrix) {
         if (this.labelMatrix.getHeight() != colorMatrix.getHeight() || this.labelMatrix.getWidth() != colorMatrix.getWidth()) {
@@ -153,30 +153,31 @@ public class GridPanel extends JScrollPane {
             displayColors(colorMatrix, 0, 0);
     }
 
-    private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) { //aggiun gere gli opzionali
-        //TODO controllo input
-        SwingUtilities.invokeLater(() -> {
-            this.grid.setVisible(this.shouldGridStayVisible);
-            IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
-                IntStream.range(startColumn, colorMatrix.getWidth()).forEach(column -> {
-                    labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
+    private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) {
+        if (colorMatrix != null && startRow != 0 && startColumn != 0) {
+            SwingUtilities.invokeLater(() -> {
+                this.grid.setVisible(this.shouldGridStayVisible);
+                IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
+                    IntStream.range(startColumn, colorMatrix.getWidth()).forEach(column -> {
+                        labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
+                    });
                 });
+                this.grid.setVisible(true);
             });
-            this.grid.setVisible(true);
-        });
+        }
     }
 
     /**
-     * 
-     * @return
+     * Is the method which gives a color matrix showing the current grid.
+     * @return the color matrix as overview of the current state of the grid.
      */
     public Matrix<Color> getColorMatrix() {
         return this.labelMatrix.map(l -> l.getBackground());
     }
 
     /**
-     * 
-     * @param listenerDispencer
+     * Is the method to invoke in order to add an observer to the components of the grid.
+     * @param listenerDispencer is the BiFunction dispensing the listener.
      */
     public void addListenerToGrid(final BiFunction<Integer, Integer, MouseListener> listenerDispencer) {
         for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
