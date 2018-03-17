@@ -141,14 +141,17 @@ public class RLEConvert {
      */
     public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row, final int col) {
         Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
+        //System.out.println("Converting a matrix of COL (X): " + col + " ROW (Y): " + row);
         for (int i = 0; i < row; i++) {
             for (int k = 0; k < col; k++) {
+                //System.out.println("Trying to access: \nCOL: " + k + " ROW: " + i);
                 if (grid[i][k]) {
-                    matrix.set(i, k, Status.ALIVE);
+                    matrix.set(k, i, Status.ALIVE);
+                    //System.out.println("\nACCESSED AND SETTED\n");
                 }
             }
         }
-        return null;
+        return matrix;
     }
     /**
      * This is the main method, it returns the matrix (Matrix<Status>) converted from the 

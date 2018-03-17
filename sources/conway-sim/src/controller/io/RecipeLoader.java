@@ -20,7 +20,7 @@ public class RecipeLoader {
     private static final String RECIPEFOLDER = "./src/test/recipebook";
     /** This class parses all the files in the preset folder.
      *  than it loads it in the recipebook.
-     * @throws IOException 
+     * @throws IOException .
      */
     public RecipeLoader() {
         final File folder = new File(RECIPEFOLDER);
