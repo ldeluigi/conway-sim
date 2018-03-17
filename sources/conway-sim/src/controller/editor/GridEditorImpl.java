@@ -37,10 +37,10 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     public GridEditorImpl(final GridPanel grid) {
         this.gameGrid = grid;
-        this.placingState = false;
+        this.placingState = true;
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         this.pattern = Optional.empty();
-        this.env = EnvironmentFactory.standardRules(this.gameGrid.getWidth(), this.gameGrid.getHeight());
+        this.env = EnvironmentFactory.standardRules(this.gameGrid.getColorMatrix().getWidth(), this.gameGrid.getColorMatrix().getHeight());
         this.currentStatus = this.gameGrid.getColorMatrix().map(c -> c.equals(Color.WHITE) ? Status.DEAD : Status.ALIVE);
     }
 
@@ -81,7 +81,10 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        this.gameGrid.paintGrid(Matrices.mergeXY(this.currentStatus, row, column, this.pattern.get()).map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY));
+        this.gameGrid.paintGrid(Matrices
+                                        .mergeXY(this.currentStatus
+                                        .map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column, this.pattern
+                                        .get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
     }
 
     /**
@@ -173,7 +176,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         @Override
         public void mouseClicked(final MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && isEnabled()) {
-                if (pattern.isPresent()) {
+                if (isPlacingModeOn()) {
                     placeCurrentPattern(this.row, this.column);
                 } else {
                     hit(this.row, this.column);

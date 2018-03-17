@@ -154,7 +154,7 @@ public class GridPanel extends JScrollPane {
     }
 
     private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) {
-        if (colorMatrix != null && startRow != 0 && startColumn != 0) {
+        if (colorMatrix != null && startRow > 0 && startColumn > 0) {
             SwingUtilities.invokeLater(() -> {
                 this.grid.setVisible(this.shouldGridStayVisible);
                 IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
