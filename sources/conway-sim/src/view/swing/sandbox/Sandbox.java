@@ -43,7 +43,7 @@ public class Sandbox extends JPanel {
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
-        this.sandboxUtil = new SandboxUtils(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        this.sandboxUtil = new SandboxUtils();
         Objects.requireNonNull(mainGUI);
         this.genController = new GenerationControllerImpl();
         this.generationPanel = new GenerationPanel(genController);

@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
+import view.swing.menu.MenuSettings;
+
 /**
  * An utility class for Sandbox.
  */
@@ -25,15 +27,7 @@ public class SandboxUtils {
     private JLabel numSpeedLabel;
     private JLabel aliveCell;
 
-    private final Font font;
-
-    /**
-     * 
-     * @param font the font for all the panel
-     */
-    public SandboxUtils(final Font font) {
-        this.font = font;
-    }
+    private final Font font = new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
 
     /**
      * 
