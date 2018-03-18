@@ -5,7 +5,7 @@ package core.model;
  * 
  */
 
-public class CellImpl implements Cell {
+public class SimpleCell implements Cell {
 
     private Status current;
 
@@ -13,7 +13,7 @@ public class CellImpl implements Cell {
      * Constructor for a new Cell.
      * @param firstStatus is the status to be assumed the first time
      */
-    public CellImpl(final Status firstStatus) {
+    public SimpleCell(final Status firstStatus) {
         this.current = firstStatus;
     }
 
@@ -36,11 +36,11 @@ public class CellImpl implements Cell {
     }
 
     /**
-     * Returns a new {@link CellImpl} with the same status.
+     * Returns a new {@link SimpleCell} with the same status.
      */
     @Override
     public Cell copy() {
-        return new CellImpl(this.getStatus());
+        return new SimpleCell(this.getStatus());
     }
 
     /**
@@ -73,7 +73,7 @@ public class CellImpl implements Cell {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CellImpl other = (CellImpl) obj;
+        final SimpleCell other = (SimpleCell) obj;
         return current.equals(other.current);
     }
 }

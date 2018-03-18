@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import javax.swing.SwingUtilities;
 
 import core.model.Cell;
-import core.model.CellImpl;
+import core.model.SimpleCell;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
@@ -44,14 +44,14 @@ public class GenerationControllerImpl implements GenerationController {
      * New Generation controller empty.
      */
     public GenerationControllerImpl() {
-        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new CellImpl(Status.DEAD));
+        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new SimpleCell(Status.DEAD));
         this.currentGeneration = GenerationFactory.from(m, EnvironmentFactory.standardRules(100, 100));
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
     }
 
     @Override
     public void newGame() {
-        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new CellImpl(Math.random() > 0.5 ? Status.ALIVE : Status.DEAD));
+        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new SimpleCell(Math.random() > 0.5 ? Status.ALIVE : Status.DEAD));
         this.currentGeneration = GenerationFactory.from(m, EnvironmentFactory.standardRules(100, 100));
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
         clock.stopClock();

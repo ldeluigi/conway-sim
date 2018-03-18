@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import javax.swing.SwingUtilities;
 
-import core.model.CellImpl;
+import core.model.SimpleCell;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
@@ -72,7 +72,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public Generation getGeneration() {
-        return GenerationFactory.from(this.currentStatus.map(s -> new CellImpl(s)), this.env);
+        return GenerationFactory.from(this.currentStatus.map(s -> new SimpleCell(s)), this.env);
     }
 
     /**

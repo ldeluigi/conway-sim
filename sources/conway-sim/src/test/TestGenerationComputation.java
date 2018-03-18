@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import core.model.CellEnvironment;
-import core.model.CellImpl;
+import core.model.SimpleCell;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
@@ -41,7 +41,7 @@ public class TestGenerationComputation {
     @Test
     void testOneComputation() {
         Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
+        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
         assertEquals(AFTER_STANDARD, Generations.compute(start).getAliveMatrix());
         System.out.println("First:\n" + start.getAliveMatrix().map(b -> b ? "■" : "□") + "\nSecond:\n" + Generations.compute(start).getAliveMatrix().map(b -> b ? "■" : "□"));
     }
@@ -49,7 +49,7 @@ public class TestGenerationComputation {
     @Test
     void testSomeComputations() {
             Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-            Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
+            Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
             assertEquals(AFTER_THREE_STANDARD, Generations.compute(3, start).getAliveMatrix());
             assertEquals(Generations.compute(20, start).getAliveMatrix(), Generations.compute(13, start).getAliveMatrix());
      }
@@ -57,7 +57,7 @@ public class TestGenerationComputation {
     @Test
     void testOneComputationMultithread() {
         Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
+        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
         assertEquals(AFTER_STANDARD, Generations.compute(start, 4).getAliveMatrix());
         System.out.println("First:\n" + start.getAliveMatrix().map(b -> b ? "■" : "□") + "\nSecond:\n" + Generations.compute(start, 4).getAliveMatrix().map(b -> b ? "■" : "□"));
     }
@@ -65,7 +65,7 @@ public class TestGenerationComputation {
     @Test
     void testSomeComputationsMultithread() {
             Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-            Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
+            Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
             assertEquals(AFTER_THREE_STANDARD, Generations.compute(3, start, 4).getAliveMatrix());
             assertEquals(Generations.compute(20, start, 4).getAliveMatrix(), Generations.compute(13, start, 4).getAliveMatrix());
      }
@@ -73,7 +73,7 @@ public class TestGenerationComputation {
     @Test
     void testMultithreadPerformances() {
         Environment env = EnvironmentFactory.standardRules(1000, 1000);
-        Generation start = GenerationFactory.from(new ListMatrix<>(1000, 1000, () -> new CellImpl(Math.random() > 0.5 ? ALIVE : DEAD)), env);
+        Generation start = GenerationFactory.from(new ListMatrix<>(1000, 1000, () -> new SimpleCell(Math.random() > 0.5 ? ALIVE : DEAD)), env);
         long startTime = System.currentTimeMillis();
         Generations.compute(100, start, 1);
         long first = System.currentTimeMillis() - startTime;
@@ -101,7 +101,7 @@ public class TestGenerationComputation {
     
     public static void main(String ...args) {
         Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new CellImpl(b ? ALIVE : DEAD)), env);
+        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
         Generations.compute(3, start);
         Generations.compute(Generations.compute(start));
     }
