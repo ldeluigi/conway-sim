@@ -6,6 +6,8 @@ import java.util.Objects;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
+import javax.swing.SwingUtilities;
+
 import core.model.Cell;
 import core.model.CellImpl;
 import core.model.EnvironmentFactory;
@@ -39,7 +41,7 @@ public class GenerationControllerImpl implements GenerationController {
     private FutureTask<Boolean> fTask;
 
     /**
-     * Create a new Generation Controller.
+     * New Generation controller empty.
      */
     public GenerationControllerImpl() {
         final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new CellImpl(Status.DEAD));
@@ -57,7 +59,7 @@ public class GenerationControllerImpl implements GenerationController {
             this.firstStart = false;
             this.clock.start();
         }
-        this.view.refreshView();
+        SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     @Override
@@ -80,12 +82,13 @@ public class GenerationControllerImpl implements GenerationController {
     @Override
     public void reset() {
         this.loadGeneration(0L);
-        this.view.refreshView();
+        SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     @Override
     public void setSpeed(final int speed) {
         this.clock.setSpeed(speed);
+        SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     @Override
@@ -102,7 +105,6 @@ public class GenerationControllerImpl implements GenerationController {
             final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentGeneration(), threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
-            this.oldGeneration.addElem(generationNumber, valueGeneration);
         } else {
             final Long value = this.oldGeneration.getSavedState().keySet().stream()
                             .filter(l -> l <= generationNumber)
@@ -123,12 +125,11 @@ public class GenerationControllerImpl implements GenerationController {
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
             this.oldGeneration.removeAllElemsAfter(this.getCurrentNumberGeneration());
-            this.oldGeneration.addElem(generationNumber, valueGeneration);
         }
         this.savedState.removeAll(savedState.stream()
                                             .filter(l -> l > 1 && l > this.getCurrentNumberGeneration())
                                             .collect(Collectors.toList()));
-        this.view.refreshView();
+        SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     @Override
@@ -156,7 +157,7 @@ public class GenerationControllerImpl implements GenerationController {
                 this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
                 this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
                 this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
-                this.view.refreshView();
+                SwingUtilities.invokeLater(() -> this.view.refreshView());
             }, true);
             fTask.run();
         } else {

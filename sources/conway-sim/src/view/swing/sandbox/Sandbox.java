@@ -3,13 +3,11 @@ package view.swing.sandbox;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-
 import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.generation.GenerationController;
@@ -38,11 +36,14 @@ public class Sandbox extends JPanel {
     private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
+    private final SandboxUtils sandboxUtil;
+
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
+        this.sandboxUtil = new SandboxUtils(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         Objects.requireNonNull(mainGUI);
         this.genController = new GenerationControllerImpl();
         this.generationPanel = new GenerationPanel(genController);
@@ -54,8 +55,10 @@ public class Sandbox extends JPanel {
         this.gridEditor = new GridEditorImpl(grid);
 
         final JPanel north = new JPanel(new BorderLayout());
+        final JPanel gridOption = sandboxUtil.newGridOptionDimension();
         north.add(generationPanel, BorderLayout.AFTER_LINE_ENDS);
         north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
+        north.add(gridOption, BorderLayout.WEST);
         this.add(north, BorderLayout.NORTH);
 
         final JButton bExit = new JButton("EXIT");
@@ -63,15 +66,11 @@ public class Sandbox extends JPanel {
         final JPanel south = new JPanel(new BorderLayout());
         this.bBook.setFont(new Font(bBook.getFont().getFontName(), bBook.getFont().getStyle(), this.fontSize));
         bExit.setFont(new Font(bExit.getFont().getFontName(), bExit.getFont().getStyle(), this.fontSize));
-        final JPanel statsPanel = new JPanel(new GridLayout(2, 2));
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        statsPanel.add(generationPanel.getNumGeneration());
-        statsPanel.add(generationPanel.getCurrentSpeed());
-        statsPanel.add(generationPanel.getAliveCellLabel());
         southRight.add(bBook);
         southRight.add(bExit);
-        south.add(statsPanel, BorderLayout.WEST);
+        south.add(sandboxUtil.newJPanelStatistics(), BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 
@@ -85,6 +84,11 @@ public class Sandbox extends JPanel {
      * refresh all the view.
      */
     public void refreshView() {
+        this.sandboxUtil.refreshStatistics(
+                this.generationPanel.getCurrentSpeed(),
+                this.genController.getCurrentNumberGeneration().intValue(),
+                (int) this.genController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()
+                );
         this.generationPanel.refreshView();
         this.gridEditor.draw(this.genController.getCurrentGeneration());
     }
