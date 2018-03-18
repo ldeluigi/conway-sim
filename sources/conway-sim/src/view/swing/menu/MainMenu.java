@@ -93,7 +93,7 @@ public final class MainMenu extends JPanel {
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BorderLayout());
-        final JLabel version = new JLabel("0.0.11 (Alpha)");
+        final JLabel version = new JLabel("0.1.0 (Alpha)");
         final JLabel author = new JLabel("LDLM-Project, All Rights Reserved");
         version.setFont(new Font(version.getFont().getFontName(), version.getFont().getStyle(), MenuSettings.getFontSize()));
         author.setFont(new Font(author.getFont().getFontName(), author.getFont().getStyle(), MenuSettings.getFontSize()));
