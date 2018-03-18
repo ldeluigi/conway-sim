@@ -1,12 +1,8 @@
 package controller.generation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
@@ -21,7 +17,6 @@ import core.model.Generations;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
-import view.swing.MainGUI;
 import view.swing.sandbox.Sandbox;
 
 /**
@@ -37,7 +32,7 @@ public class GenerationControllerImpl implements GenerationController {
     private Memento<Generation> oldGeneration;
     private final Clock clock = new Clock(() -> this.computeNextGeneration(), MAX_SPEED);
     private boolean firstStart = true;
-    private int saveGap = 100;
+    private final int saveGap = 100;
 
     private final List<Long> savedState = new LinkedList<>();
     private static final int MAX_SAVED_STATE = 20;
