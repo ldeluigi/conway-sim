@@ -36,14 +36,14 @@ public class Sandbox extends JPanel {
     private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
-    private final SandboxUtils sandboxUtil;
+    private final SandboxTools sandboxUtil;
 
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
-        this.sandboxUtil = new SandboxUtils();
+        this.sandboxUtil = new SandboxTools();
         Objects.requireNonNull(mainGUI);
         this.genController = new GenerationControllerImpl();
         this.generationPanel = new GenerationPanel(genController);

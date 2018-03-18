@@ -18,7 +18,7 @@ import view.swing.menu.MenuSettings;
 /**
  * An utility class for Sandbox.
  */
-public class SandboxUtils {
+public class SandboxTools {
 
     private JSpinner spinnerWidth;
     private JSpinner spinnerHeight;
