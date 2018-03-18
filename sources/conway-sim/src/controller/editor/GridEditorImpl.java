@@ -14,6 +14,7 @@ import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
 import core.model.Status;
+import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
@@ -41,7 +42,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         this.pattern = Optional.empty();
         this.env = EnvironmentFactory.standardRules(this.gameGrid.getColorMatrix().getWidth(), this.gameGrid.getColorMatrix().getHeight());
-        this.currentStatus = this.gameGrid.getColorMatrix().map(c -> c.equals(Color.WHITE) ? Status.DEAD : Status.ALIVE);
+        this.currentStatus = new ListMatrix<>(this.gameGrid.getWidth(), this.gameGrid.getHeight(), () -> Status.DEAD);
+        this.draw(GenerationFactory.from(this.currentStatus.map(s -> new CellImpl(s)), this.env));
     }
 
     /**
@@ -183,6 +185,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
                 }
             } else if (SwingUtilities.isRightMouseButton(e) && isEnabled() && isPlacingModeOn()) {
                 rotateCurrentPattern(e.getClickCount());
+                showPreview(this.row, this.column);
             }
         }
 

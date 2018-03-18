@@ -41,6 +41,8 @@ public class GridPanel extends JScrollPane {
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
+    private final int gridHeight;
+    private final int gridWidth;
 
     /**
      * Is the constructor method for a new GridPanel.
@@ -52,6 +54,8 @@ public class GridPanel extends JScrollPane {
         if (width < 1 || height < 1) {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
+        this.gridWidth = width;
+        this.gridHeight = height;
         this.maxCellSize = gui.getCurrentWidth() / MAX_CELL_SIZE_RATIO;
         this.minCellSize = gui.getCurrentWidth() / MIN_CELL_SIZE_RATIO;
         this.labelMatrix = new ListMatrix<>(width, height, () -> {
@@ -154,7 +158,7 @@ public class GridPanel extends JScrollPane {
     }
 
     private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) {
-        if (colorMatrix != null && startRow > 0 && startColumn > 0) {
+        if (colorMatrix != null && startRow >= 0 && startColumn >= 0) {
             SwingUtilities.invokeLater(() -> {
                 this.grid.setVisible(this.shouldGridStayVisible);
                 IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
@@ -164,6 +168,8 @@ public class GridPanel extends JScrollPane {
                 });
                 this.grid.setVisible(true);
             });
+        } else {
+            throw new IllegalArgumentException("Used not consistent parameter(s)");
         }
     }
 
@@ -185,5 +191,21 @@ public class GridPanel extends JScrollPane {
                 this.labelMatrix.get(i, j).addMouseListener(listenerDispencer.apply(i, j));
             }
         }
+    }
+
+    /**
+     * Is the method to invoke in order to discover the number of horizontal cells.
+     * @return the width of the grid.
+     */
+    public int getWidth() {
+        return this.gridWidth;
+    }
+
+    /**
+     * Is the method to invoke in order to discover the number of vertical cells.
+     * @return the height of the grid.
+     */
+    public int getHeight() {
+        return this.gridHeight;
     }
 }
