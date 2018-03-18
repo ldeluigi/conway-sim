@@ -18,7 +18,7 @@ import core.model.Generation;
  */
 public class GenerationHistory implements Memento<Generation> {
 
-    private static final int NUMBER_OF_GENERATION_STORED = 5;
+    private static final int NUMBER_OF_GENERATION_STORED = 20;
 
     private final Generation firstGeneration;
     private final Map<Long, Generation> historyGeneration;

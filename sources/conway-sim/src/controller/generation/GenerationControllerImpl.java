@@ -1,8 +1,12 @@
 package controller.generation;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
@@ -17,6 +21,7 @@ import core.model.Generations;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
+import view.swing.MainGUI;
 import view.swing.sandbox.Sandbox;
 
 /**
@@ -24,8 +29,6 @@ import view.swing.sandbox.Sandbox;
  */
 public class GenerationControllerImpl implements GenerationController {
 
-    private static final int THREAD_FIRST_STEP = 3000;
-    private static final int THREAD_SECOND_STEP = 7000;
     private static final int MAX_SPEED = 10;
 
     private Long currentGenerationNumber = 0L;
@@ -34,11 +37,13 @@ public class GenerationControllerImpl implements GenerationController {
     private Memento<Generation> oldGeneration;
     private final Clock clock = new Clock(() -> this.computeNextGeneration(), MAX_SPEED);
     private boolean firstStart = true;
+    private int saveGap = 100;
 
     private final List<Long> savedState = new LinkedList<>();
-    private static final int MAX_SAVED_STATE = 6;
+    private static final int MAX_SAVED_STATE = 20;
 
     private FutureTask<Boolean> fTask;
+
 
     /**
      * New Generation controller empty.
@@ -101,7 +106,7 @@ public class GenerationControllerImpl implements GenerationController {
             throw new IllegalArgumentException();
         } else if (generationNumber > this.getCurrentNumberGeneration()) {
             final Long difference = generationNumber - this.getCurrentNumberGeneration();
-            final int threadNumber = difference.intValue() < THREAD_FIRST_STEP ? 1 : difference.intValue() < THREAD_SECOND_STEP ? 2 : 4;
+            final int threadNumber = Runtime.getRuntime().availableProcessors();
             final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentGeneration(), threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
@@ -119,7 +124,7 @@ public class GenerationControllerImpl implements GenerationController {
             }
             difference = generationNumber - value;
             if (difference.longValue() != 0L) {
-                    final int threadNumber = difference.intValue() < THREAD_FIRST_STEP ? 1 : difference.intValue() < THREAD_SECOND_STEP ? 2 : 4;
+                    final int threadNumber = Runtime.getRuntime().availableProcessors();
                     valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
             }
             this.setCurrentGeneration(valueGeneration);
@@ -169,7 +174,7 @@ public class GenerationControllerImpl implements GenerationController {
         if (this.savedState.size() < MAX_SAVED_STATE) {
             this.savedState.add(generationNumber);
             this.oldGeneration.addElem(generationNumber, generationToSave);
-        } else if (this.savedState.stream().reduce((x, y) -> x + y).get() + 1 == generationNumber) {
+        } else if (generationNumber % saveGap == 0) {
             if (this.savedState.size() >= MAX_SAVED_STATE) {
                 this.savedState.remove(0);
             }
