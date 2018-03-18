@@ -13,7 +13,6 @@ import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import view.swing.menu.MainMenu;
@@ -69,8 +68,7 @@ public final class MainGUI implements DesktopGUI {
         this.background.setLayer(JDesktopPane.DEFAULT_LAYER);
         this.background.setEnabled(false);
         final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background.getUI());
-        final BasicInternalFrameTitlePane titlePane = (BasicInternalFrameTitlePane) basicInternalFrameUI.getNorthPane();
-        this.background.remove(titlePane);
+        basicInternalFrameUI.setNorthPane(null);
         this.background.setBorder(null);
         this.background.setVisible(true);
         //Start with MainMenu
