@@ -197,7 +197,7 @@ public class GridPanel extends JScrollPane {
      * Is the method to invoke in order to discover the number of horizontal cells.
      * @return the width of the grid.
      */
-    public int getWidth() {
+    public int getGridWidth() {
         return this.gridWidth;
     }
 
@@ -205,7 +205,7 @@ public class GridPanel extends JScrollPane {
      * Is the method to invoke in order to discover the number of vertical cells.
      * @return the height of the grid.
      */
-    public int getHeight() {
+    public int getGridHeight() {
         return this.gridHeight;
     }
 }

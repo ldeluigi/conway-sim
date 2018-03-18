@@ -42,8 +42,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         this.pattern = Optional.empty();
         this.env = EnvironmentFactory.standardRules(this.gameGrid.getColorMatrix().getWidth(), this.gameGrid.getColorMatrix().getHeight());
-        this.currentStatus = new ListMatrix<>(this.gameGrid.getWidth(), this.gameGrid.getHeight(), () -> Status.DEAD);
-        this.draw(GenerationFactory.from(this.currentStatus.map(s -> new CellImpl(s)), this.env));
+        this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
+        this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
     }
 
     /**
