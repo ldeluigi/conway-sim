@@ -60,7 +60,7 @@ public class GenerationPanel extends JPanel {
         bEnd = this.newJButton("End", "End the current game");
         bPause = this.newJButton("Pause", "Stop the time");
         bNext = this.newJButton("Next", "Go to the next generation");
-        bGoTo = this.newJButton("Go to", "Go back in time to N generations");
+        bGoTo = this.newJButton("Go to", "Go at the indicated generations");
         bPrev = this.newJButton("Previous", "Go to the previous generation");
         bPlay = this.newJButton("Play", "Play the current game");
         progresBar = new JProgressBar();
