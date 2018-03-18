@@ -92,7 +92,7 @@ public class RLEConvert {
             while (true) {
                 line = readLine();
                 //DEBUG TBR
-                System.out.println("Read line: " + line);
+                //System.out.println("Read line: " + line);
                 if (!line.startsWith(HASH)) {
 
                     return line;

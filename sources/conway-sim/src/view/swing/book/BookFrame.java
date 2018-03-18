@@ -80,7 +80,7 @@ public class BookFrame extends JInternalFrame {
         list.addMouseListener(new MouseListener() {
             public void mousePressed(final MouseEvent e) {
                 setSelectedItem(list.getSelectedValue());
-                System.out.println("Selected Item " + list.getSelectedValue());
+                System.out.println("DEBUG | Selected Item: " + list.getSelectedValue());
             }
 
             @Override
@@ -115,8 +115,7 @@ public class BookFrame extends JInternalFrame {
 
         //ACTION LISTENER TESSSSST
         ActionListener alPlace = e -> {
-            //TBI
-            System.out.println("Button Pressed, handling the pattern: \nName: " + new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getName()));
+            System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
             patternE.addPatternToPlace(new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert());
             this.doDefaultCloseAction();
         };

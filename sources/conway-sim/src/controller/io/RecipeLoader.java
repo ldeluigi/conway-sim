@@ -40,7 +40,7 @@ public class RecipeLoader {
                 if (file.isFile()) {
                     flagName = false;
                     filespaths.add(file.getAbsolutePath());
-                    System.out.println(file.getAbsolutePath());
+                    System.out.println("DEBUG | RLE found in folder: " + file.getPath());
                     try {
                         namereader = new FileReader(file);
                         in = new BufferedReader(namereader);
@@ -52,7 +52,7 @@ public class RecipeLoader {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    System.out.println("testLine: " + testLine);
+                    System.out.println("DEBUG | Name: " + testLine);
                     Path filepath = Paths.get(file.getAbsolutePath());
                     try {
                         String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
