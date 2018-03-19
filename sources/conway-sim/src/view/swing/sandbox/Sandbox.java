@@ -3,6 +3,7 @@ package view.swing.sandbox;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,6 +13,7 @@ import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
+import core.model.Generation;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
@@ -36,26 +38,27 @@ public class Sandbox extends JPanel {
     private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
-    private final SandboxTools sandboxUtil;
+    private final SandboxTools sandboxTools;
 
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
-        this.sandboxUtil = new SandboxTools();
+        this.sandboxTools = new SandboxTools();
         Objects.requireNonNull(mainGUI);
-        this.genController = new GenerationControllerImpl();
-        this.generationPanel = new GenerationPanel(genController);
-        this.genController.setView(this);
         this.mainGUI = mainGUI;
-        final GridPanel grid = new GridPanel(Sandbox.DEFAULT_SIZE, Sandbox.DEFAULT_SIZE, mainGUI);
+        GridSize gridSize = GridSize.gridSize();
+        final GridPanel grid = new GridPanel(gridSize.getGridWidht(), gridSize.getGridHeight(), mainGUI);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
         this.gridEditor = new GridEditorImpl(grid);
+        this.gridEditor.setEnabled(false);
+        this.genController = new GenerationControllerImpl(this);
+        this.generationPanel = new GenerationPanel(this);
 
         final JPanel north = new JPanel(new BorderLayout());
-        final JPanel gridOption = sandboxUtil.newGridOptionDimension();
+        final JPanel gridOption = sandboxTools.newGridOptionDimension(this);
         north.add(generationPanel, BorderLayout.AFTER_LINE_ENDS);
         north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
         north.add(gridOption, BorderLayout.WEST);
@@ -70,27 +73,57 @@ public class Sandbox extends JPanel {
 
         southRight.add(bBook);
         southRight.add(bExit);
-        south.add(sandboxUtil.newJPanelStatistics(), BorderLayout.WEST);
+        south.add(sandboxTools.newJPanelStatistics(), BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 
         bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
         this.generationPanel.refreshView();
+    }
 
+    /**
+     * 
+     * @return the sandbox tools
+     */
+    public SandboxTools getSandboxTools() {
+        return this.sandboxTools;
+    }
+
+    /**
+     * 
+     * @return the book button
+     */
+    public JButton getBookButton() {
+        return this.bBook;
+    }
+
+    /**
+     * 
+     */
+    public void reset() {
+        this.mainGUI.setView(new Sandbox(mainGUI));
+    }
+
+    /**
+     * @return the gridEtitor
+     */
+    public PatternEditor getGridEditor() {
+        return this.gridEditor;
     }
 
     /**
      * refresh all the view.
      */
     public void refreshView() {
-        this.sandboxUtil.refreshStatistics(
+        final Generation gen = this.gridEditor.isEnabled() ? this.gridEditor.getGeneration() : this.genController.getCurrentGeneration();
+        this.sandboxTools.refreshStatistics(
                 this.generationPanel.getCurrentSpeed(),
                 this.genController.getCurrentNumberGeneration().intValue(),
-                (int) this.genController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()
+                (int) gen.getAliveMatrix().stream().filter(cell -> cell).count()
                 );
         this.generationPanel.refreshView();
-        this.gridEditor.draw(this.genController.getCurrentGeneration());
+        this.gridEditor.draw(gen);
     }
 
     private void callBook() {
@@ -112,6 +145,10 @@ public class Sandbox extends JPanel {
         } else if (result == JOptionPane.NO_OPTION) {
             this.mainGUI.backToMainMenu();
         }
+    }
+
+    public GenerationController getGenerationController() {
+        return this.genController;
     }
 
 }

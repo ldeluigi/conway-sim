@@ -45,6 +45,7 @@ public class GenerationPanel extends JPanel {
     private final JProgressBar progresBar;
 
     private final GenerationController generationController;
+    private final Sandbox view;
 
     private final int fontSize = MenuSettings.getFontSize();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -53,8 +54,9 @@ public class GenerationPanel extends JPanel {
      * 
      * @param controller the controller of the generation
      */
-    public GenerationPanel(final GenerationController controller) {
-        this.generationController = controller;
+    public GenerationPanel(final Sandbox view) {
+        this.view = view;
+        this.generationController = view.getGenerationController();
 
         bNew = this.newJButton("New", "New game");
         bEnd = this.newJButton("End", "End the current game");
@@ -125,6 +127,7 @@ public class GenerationPanel extends JPanel {
     }
 
     private void goTo(final Long value) {
+        this.view.getBookButton().setEnabled(false);
         if (value < 0) {
             JOptionPane.showMessageDialog(this, "Impossible undo to " + value + " from " + this.generationController.getCurrentNumberGeneration());
         } else if (!value.equals(this.generationController.getCurrentNumberGeneration())) {
@@ -153,16 +156,13 @@ public class GenerationPanel extends JPanel {
     }
 
     private void end() {
-        bNew.setEnabled(true);
-        bPlay.setEnabled(false);
-        bPause.setEnabled(false);
-        bEnd.setEnabled(false);
-        this.setTimeButtonEnable(false);
-        this.generationController.reset();
+        this.view.reset();
     }
 
     private void newStart() {
         this.generationController.newGame();
+        this.view.getSandboxTools().getbSetView().setEnabled(false);
+        this.view.getGridEditor().setEnabled(true);
         this.bNew.setEnabled(false);
         this.bPause.setEnabled(false);
         bPlay.setEnabled(true);
@@ -171,6 +171,7 @@ public class GenerationPanel extends JPanel {
     }
 
     private void resume() {
+        this.view.getBookButton().setEnabled(false);
         this.generationController.play();
         this.bPause.setEnabled(true);
         this.bPlay.setEnabled(false);

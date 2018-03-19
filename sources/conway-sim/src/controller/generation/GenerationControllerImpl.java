@@ -16,6 +16,7 @@ import core.model.GenerationFactory;
 import core.model.Generations;
 import core.model.Status;
 import core.utils.ListMatrix;
+import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.Sandbox;
 
@@ -42,17 +43,16 @@ public class GenerationControllerImpl implements GenerationController {
 
     /**
      * New Generation controller empty.
+     * @param view the view
      */
-    public GenerationControllerImpl() {
-        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new SimpleCell(Status.DEAD));
-        this.currentGeneration = GenerationFactory.from(m, EnvironmentFactory.standardRules(100, 100));
+    public GenerationControllerImpl(final Sandbox view) {
+        this.view = view;
+        this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
     }
 
     @Override
     public void newGame() {
-        final Matrix<Cell> m = new ListMatrix<>(100, 100, () -> new SimpleCell(Math.random() > 0.5 ? Status.ALIVE : Status.DEAD));
-        this.currentGeneration = GenerationFactory.from(m, EnvironmentFactory.standardRules(100, 100));
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
         clock.stopClock();
         if (firstStart) {
@@ -70,6 +70,11 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void play() {
+        if (this.view.getGridEditor().isEnabled()) {
+            this.view.getGridEditor().setEnabled(false);
+            this.setCurrentGeneration(this.view.getGridEditor().getGeneration());
+            this.oldGeneration.setFirst(this.getCurrentGeneration());
+        }
         this.clock.restartClock();
     }
 
@@ -93,6 +98,11 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void loadGeneration(final Long generationNumber) {
+        if (this.view.getGridEditor().isEnabled()) {
+            this.view.getGridEditor().setEnabled(false);
+            this.setCurrentGeneration(this.view.getGridEditor().getGeneration());
+            this.oldGeneration.setFirst(this.getCurrentGeneration());
+        }
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);

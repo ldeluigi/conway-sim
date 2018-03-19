@@ -20,7 +20,7 @@ public class GenerationHistory implements Memento<Generation> {
 
     private static final int NUMBER_OF_GENERATION_STORED = 20;
 
-    private final Generation firstGeneration;
+    private Generation firstGeneration;
     private final Map<Long, Generation> historyGeneration;
 
     /**
@@ -35,6 +35,11 @@ public class GenerationHistory implements Memento<Generation> {
     @Override
     public Map<Long, Generation> getSavedState() {
         return Collections.unmodifiableMap(this.historyGeneration);
+    }
+
+    @Override
+    public void setFirst(final Generation newFirst) {
+        this.firstGeneration = newFirst;
     }
 
     @Override

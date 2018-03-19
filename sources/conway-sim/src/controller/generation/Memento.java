@@ -5,6 +5,8 @@ package controller.generation;
 
 import java.util.Map;
 
+import core.model.Generation;
+
 /**
  * pattern memento for type X.
  * @param <X> type
@@ -42,4 +44,10 @@ interface Memento<X> {
      * @param numberGeneration remove all elements that have an higher numberGeneration this element, not included
      */
     void removeAllElemsAfter(Long numberGeneration);
+
+    /**
+     * 
+     * @param newFirst
+     */
+    void setFirst(Generation newFirst);
 }
