@@ -3,6 +3,7 @@ package view.swing.sandbox;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -52,7 +53,7 @@ public class GenerationPanel extends JPanel {
 
     /**
      * 
-     * @param controller the controller of the generation
+     * @param view the controller of the generation
      */
     public GenerationPanel(final Sandbox view) {
         this.view = view;
@@ -69,27 +70,35 @@ public class GenerationPanel extends JPanel {
         progresBar.setIndeterminate(true);
         progresBar.setVisible(false);
 
-        this.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        this.setLayout(new GridLayout(2, 2));
+        final JPanel northL = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel northR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        final JPanel southL = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        final JPanel southR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        this.add(northL);
+        this.add(northR);
+        this.add(southL);
+        this.add(southR);
 
         final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 100000, 10);
         final JSpinner spinner = new JSpinner(spin);
 
-        this.add(bNew);
+        northL.add(bNew);
 
         //speed control
         speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
         speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
-        this.add(speedSlider);
+        northL.add(speedSlider);
         //add button to the layout
-        this.add(bPlay);
-        this.add(bPause);
-        this.add(bEnd);
-        this.add(bPrev);
-        this.add(bNext);
-        this.add(bGoTo);
-        this.add(progresBar);
+        southL.add(bPlay);
+        southL.add(bPause);
+        southL.add(bEnd);
+        southR.add(bPrev);
+        southR.add(bNext);
+        northR.add(bGoTo);
+        northR.add(progresBar);
 
-        this.add(spinner); //to use the go to button
+        northR.add(spinner); //to use the go to button
 
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
