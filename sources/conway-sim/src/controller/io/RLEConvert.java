@@ -34,6 +34,7 @@ public class RLEConvert {
     private static final char ALT = '!';
     private static final String DOLLAR = "$";
     private static final String HASH = "#";
+    private static final String DCSLASH = "\\";
 
     //ALIVE CELL
     private static final String AC = "o";
@@ -111,26 +112,28 @@ public class RLEConvert {
      * @throws IllegalArgumentException
      */
     private String getCellString() throws IOException, IllegalArgumentException {
-        final StringBuilder sb = new StringBuilder();
+        final StringBuilder cellString = new StringBuilder();
         String line;
+        //Index
         int i;
 
         line = readLine();
         while (line != null) {
+            //Extracting the end of CellString (ALT = !)
             i = line.indexOf(ALT);
             if (i > -1) {
-                sb.append(line.substring(0, i));
+                cellString.append(line.substring(0, i));
                 break;
             } else {
-                sb.append(line);
+                cellString.append(line);
             }
             line = readLine();
         }
 
-        if (sb.length() == 0) {
-            throw new IllegalArgumentException("No cell data.");
+        if (cellString.length() == 0) {
+            throw new IllegalArgumentException("No cell info in RLE.");
         }
-        return sb.toString();
+        return cellString.toString();
     }
     /**
      * This method converts the Matrix from the format Boolean[][] into a Matrix<Status>.
@@ -141,12 +144,15 @@ public class RLEConvert {
      */
     public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row, final int col) {
         Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
+        //DEBUG TBR
         //System.out.println("Converting a matrix of COL (X): " + col + " ROW (Y): " + row);
         for (int i = 0; i < row; i++) {
             for (int k = 0; k < col; k++) {
+                //DEBUG TBR
                 //System.out.println("Trying to access: \nCOL: " + k + " ROW: " + i);
                 if (grid[i][k]) {
                     matrix.set(k, i, Status.ALIVE);
+                    //DEBUG TBR
                     //System.out.println("\nACCESSED AND SETTED\n");
                 }
             }
@@ -160,23 +166,25 @@ public class RLEConvert {
      */
     public Matrix<Status> convert() {
         try {
-
             final String header = getHeaderLine();
             final Matcher headerMatcher = Pattern.compile(String.format("^%s, ?%s(, ?%s)?$",
                     XCOORDPATTERN, YCOORDPATTERN, RULEPATTERN), Pattern.CASE_INSENSITIVE).matcher(header);
             if (!headerMatcher.matches()) {
                 throw new IllegalArgumentException("Invalid header.");
             }
-
-            int x = Integer.parseInt(headerMatcher.group(1)), y = Integer.parseInt(headerMatcher.group(2));
+            //Get the pattern dimension by parsing the header and extracting the x and y values
+            final int x = Integer.parseInt(headerMatcher.group(1));
+            final int y = Integer.parseInt(headerMatcher.group(2));
+            //Handle dimension <= 0
             if (x < 1 || y < 1) {
                 throw new IllegalArgumentException("Grid size must be at least 1x1.");
             }
-
+            //Create a new boolean matrix
             boolean[][] grid = new boolean[y][x];
 
-            String[] cellStrings = getCellString().split("\\" + DOLLAR);
-            Pattern p = Pattern.compile(CELLRUNPATTERN);
+            //Split cellString by wildchars
+            final String[] cellStrings = getCellString().split(DCSLASH + DOLLAR);
+            final Pattern p = Pattern.compile(CELLRUNPATTERN);
             Matcher cellRunMatcher;
 
             int row = 0;

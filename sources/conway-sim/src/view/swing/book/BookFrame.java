@@ -24,6 +24,7 @@ import controller.io.RecipeLoader;
  * 
  *
  */
+
 public class BookFrame extends JInternalFrame {
 /**
      * 
@@ -55,6 +56,7 @@ public class BookFrame extends JInternalFrame {
      * @param patternE the PatternManager
      * 
      */
+
     public BookFrame(final PatternEditor patternE) {
         super("Book", false, true);
 
@@ -68,11 +70,11 @@ public class BookFrame extends JInternalFrame {
         // TEST FOR THE JList WITH A TEMP ARRAY
         final List<String> arrList = new ArrayList<String>();
 
-        for (RecipeImpl recipe : rl.getRecipeBook().getBookList()) {
+        for (final RecipeImpl recipe : rl.getRecipeBook().getBookList()) {
             arrList.add(recipe.getName());
         }
 
-        JList<String> list = new JList<String>(arrList.toArray(new String[arrList.size()]));
+        final JList<String> list = new JList<String>(arrList.toArray(new String[arrList.size()]));
         list.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         list.setLayoutOrientation(JList.VERTICAL);
         list.setVisibleRowCount(-1);
@@ -109,9 +111,9 @@ public class BookFrame extends JInternalFrame {
         this.add(list);
 
         //BUTTON PANEL
-        JPanel ioPanel = new JPanel();
+        final JPanel ioPanel = new JPanel();
         this.add(ioPanel);
-        JButton placeBtn = new JButton("Place");
+        final JButton placeBtn = new JButton("Place");
 
         //ACTION LISTENER TESSSSST
         ActionListener alPlace = e -> {
