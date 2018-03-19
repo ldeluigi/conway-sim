@@ -171,6 +171,7 @@ public class GenerationPanel extends JPanel {
 
     private void end() {
         this.view.getGridEditor().setEnabled(true);
+        this.view.getBookButton().setEnabled(true);
         bStart.setEnabled(true);
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
