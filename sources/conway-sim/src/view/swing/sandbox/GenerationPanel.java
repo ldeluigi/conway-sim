@@ -20,6 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 import controller.generation.GenerationController;
+import controller.generation.GenerationControllerImpl;
 import core.model.Generation;
 import view.swing.menu.MenuSettings;
 
@@ -58,7 +59,7 @@ public class GenerationPanel extends JPanel {
      */
     public GenerationPanel(final Sandbox view) {
         this.view = view;
-        this.generationController = view.getGenerationController();
+        this.generationController = new GenerationControllerImpl(view);
 
         bStart = this.newJButton("Start", "Start the game mode");
         bEnd = this.newJButton("End", "End the current game");
@@ -122,7 +123,6 @@ public class GenerationPanel extends JPanel {
         bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
         bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
     }
-
 
     /**
      * 
@@ -220,6 +220,12 @@ public class GenerationPanel extends JPanel {
      * 
      */
     public void refreshView() {
+        this.view.getSandboxTools().refreshStatistics(
+                this.getCurrentSpeed(),
+                this.generationController.getCurrentNumberGeneration().intValue(),
+                (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()
+                );
+        this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
     }
 
     private JButton newJButton(final String name, final String tooltipText) {

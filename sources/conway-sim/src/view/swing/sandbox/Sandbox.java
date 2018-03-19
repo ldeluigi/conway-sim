@@ -10,9 +10,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
-import controller.generation.GenerationController;
-import controller.generation.GenerationControllerImpl;
-import core.model.Generation;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
@@ -34,7 +31,6 @@ public class Sandbox extends JPanel {
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
-    private final GenerationController genController;
     private BookFrame book;
     private final int fontSize = MenuSettings.getFontSize();
     private final SandboxTools sandboxTools;
@@ -52,7 +48,6 @@ public class Sandbox extends JPanel {
         this.add(grid, BorderLayout.CENTER);
         this.gridEditor = new GridEditorImpl(grid);
         this.gridEditor.setEnabled(true);
-        this.genController = new GenerationControllerImpl(this);
         this.generationPanel = new GenerationPanel(this);
 
         final JPanel north = new JPanel(new BorderLayout());
@@ -97,13 +92,6 @@ public class Sandbox extends JPanel {
     }
 
     /**
-     * 
-     */
-    public void reset() {
-        this.mainGUI.setView(new Sandbox(mainGUI));
-    }
-
-    /**
      * @return the gridEtitor
      */
     public PatternEditor getGridEditor() {
@@ -114,13 +102,7 @@ public class Sandbox extends JPanel {
      * refresh all the view.
      */
     public void refreshView() {
-        this.sandboxTools.refreshStatistics(
-                this.generationPanel.getCurrentSpeed(),
-                this.genController.getCurrentNumberGeneration().intValue(),
-                (int) this.genController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()
-                );
         this.generationPanel.refreshView();
-        this.gridEditor.draw(this.genController.getCurrentGeneration());
     }
 
     private void callBook() {
@@ -143,9 +125,4 @@ public class Sandbox extends JPanel {
             this.mainGUI.backToMainMenu();
         }
     }
-
-    public GenerationController getGenerationController() {
-        return this.genController;
-    }
-
 }

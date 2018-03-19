@@ -64,6 +64,7 @@ public class SandboxTools {
 
     /**
      * 
+     * @param sandbox the sandbox
      * @return a JPanel with the grid dimension option.
      */
     public JPanel newGridOptionDimension(final Sandbox sandbox) {

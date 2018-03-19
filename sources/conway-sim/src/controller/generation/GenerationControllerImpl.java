@@ -16,17 +16,17 @@ import view.swing.sandbox.Sandbox;
 public class GenerationControllerImpl implements GenerationController {
 
     private static final int MAX_SPEED = 10;
+    private static final int MAX_SAVED_STATE = 20;
+    private static final int SAVE_GAP = 100;
 
+    private final Clock clock = new Clock(() -> this.computeNextGeneration(), MAX_SPEED);
+    private final List<Long> savedState = new LinkedList<>();
     private Long currentGenerationNumber = 0L;
     private Sandbox view;
     private Generation currentGeneration;
     private Memento<Generation> oldGeneration;
-    private final Clock clock = new Clock(() -> this.computeNextGeneration(), MAX_SPEED);
     private boolean firstStart = true;
-    private final int saveGap = 100;
 
-    private final List<Long> savedState = new LinkedList<>();
-    private static final int MAX_SAVED_STATE = 20;
 
     /**
      * New Generation controller empty.
@@ -59,12 +59,6 @@ public class GenerationControllerImpl implements GenerationController {
     @Override
     public void play() {
         this.clock.restartClock();
-    }
-
-    @Override
-    public void end() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -150,7 +144,7 @@ public class GenerationControllerImpl implements GenerationController {
         if (this.savedState.size() < MAX_SAVED_STATE) {
             this.savedState.add(generationNumber);
             this.oldGeneration.addElem(generationNumber, generationToSave);
-        } else if (generationNumber % saveGap == 0) {
+        } else if (generationNumber % SAVE_GAP == 0) {
             if (this.savedState.size() >= MAX_SAVED_STATE) {
                 this.savedState.remove(0);
             }
