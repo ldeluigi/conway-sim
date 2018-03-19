@@ -1,9 +1,8 @@
 package controller.generation;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.FutureTask;
 import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
@@ -29,9 +28,6 @@ public class GenerationControllerImpl implements GenerationController {
 
     private final List<Long> savedState = new LinkedList<>();
     private static final int MAX_SAVED_STATE = 20;
-
-    private FutureTask<Boolean> fTask;
-
 
     /**
      * New Generation controller empty.
@@ -155,16 +151,14 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public synchronized void computeNextGeneration() {
-        if (Objects.isNull(fTask) || this.fTask.isDone()) {
-            fTask = new FutureTask<>(() -> {
-                this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
-                this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
-                this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
-                SwingUtilities.invokeLater(() -> this.view.refreshView());
-            }, true);
-            fTask.run();
-        } else {
-            System.err.println("wait for end of task");
+        this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
+        this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
+        this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
+        try {
+            SwingUtilities.invokeAndWait(() -> this.view.refreshView());
+        } catch (InvocationTargetException e) {
+            throw new IllegalStateException();
+        } catch (InterruptedException e) {
         }
     }
 

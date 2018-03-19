@@ -21,7 +21,7 @@ public class SandboxTools {
     private JSpinner spinnerWidth;
     private JSpinner spinnerHeight;
 
-    private JButton bSetView;
+    private JButton bApply;
 
     private JLabel numGenerationLabel;
     private JLabel numSpeedLabel;
@@ -71,12 +71,12 @@ public class SandboxTools {
         final JPanel topGrid = new JPanel(new FlowLayout());
         final JPanel bottomGrid = new JPanel(new FlowLayout());
         gridOption.setFont(this.font);
-        bSetView = new JButton("Apply");
-        bSetView.setFont(this.font);
+        bApply = new JButton("Apply");
+        bApply.setFont(this.font);
         final JLabel gridText = new JLabel("Grid dimension ");
         gridText.setFont(this.font);
         topGrid.add(gridText);
-        topGrid.add(bSetView);
+        topGrid.add(bApply);
         gridOption.add(topGrid);
         spinnerWidth = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
         spinnerWidth.setFont(this.font);
@@ -91,7 +91,7 @@ public class SandboxTools {
         bottomGrid.add(labelHeight);
         bottomGrid.add(spinnerHeight);
         gridOption.add(bottomGrid);
-        bSetView.addActionListener(e -> {
+        bApply.addActionListener(e -> {
         });
         return gridOption;
     }
@@ -101,7 +101,7 @@ public class SandboxTools {
      * @return the setView button
      */
     public JButton getbSetView() {
-        return bSetView;
+        return bApply;
     }
 
     /**

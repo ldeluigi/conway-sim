@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -150,14 +151,19 @@ public class GenerationPanel extends JPanel {
 
                 this.generationController.loadGeneration(value);
 
-                SwingUtilities.invokeLater(() -> {
-                    this.progresBar.setVisible(false);
-                    this.bGoTo.setVisible(true);
-                    this.bPlay.setEnabled(true);
-                    this.bEnd.setEnabled(true);
-                    this.setTimeButtonEnable(true);
-                    this.refreshView();
-                });
+                try {
+                    SwingUtilities.invokeAndWait(() -> {
+                        this.progresBar.setVisible(false);
+                        this.bGoTo.setVisible(true);
+                        this.bPlay.setEnabled(true);
+                        this.bEnd.setEnabled(true);
+                        this.setTimeButtonEnable(true);
+                        this.refreshView();
+                    });
+                } catch (InvocationTargetException e) {
+                    throw new IllegalStateException();
+                } catch (InterruptedException e) {
+                }
             }, null);
             executor.execute(fTask);
         }
