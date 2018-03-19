@@ -114,14 +114,13 @@ public class Sandbox extends JPanel {
      * refresh all the view.
      */
     public void refreshView() {
-        final Generation gen = this.gridEditor.isEnabled() ? this.gridEditor.getGeneration() : this.genController.getCurrentGeneration();
         this.sandboxTools.refreshStatistics(
                 this.generationPanel.getCurrentSpeed(),
                 this.genController.getCurrentNumberGeneration().intValue(),
-                (int) gen.getAliveMatrix().stream().filter(cell -> cell).count()
+                (int) this.genController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()
                 );
         this.generationPanel.refreshView();
-        this.gridEditor.draw(gen);
+        this.gridEditor.draw(this.genController.getCurrentGeneration());
     }
 
     private void callBook() {

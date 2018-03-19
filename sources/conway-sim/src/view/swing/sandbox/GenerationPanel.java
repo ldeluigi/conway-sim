@@ -171,12 +171,19 @@ public class GenerationPanel extends JPanel {
 
     private void end() {
         this.view.getGridEditor().setEnabled(true);
+        bStart.setEnabled(true);
+        bPlay.setEnabled(false);
+        bPause.setEnabled(false);
+        bEnd.setEnabled(false);
+        bNext.setEnabled(false);
+        bPrev.setEnabled(false);
+        bGoTo.setEnabled(false);
     }
 
     private void start() {
+        this.view.getGridEditor().setEnabled(false);
         this.generationController.newGame();
         this.view.getSandboxTools().getbSetView().setEnabled(false);
-        this.view.getGridEditor().setEnabled(false);
         this.view.getBookButton().setEnabled(false);
         this.bStart.setEnabled(false);
         this.bPause.setEnabled(false);

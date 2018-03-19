@@ -1,6 +1,5 @@
 package controller.generation;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,11 +58,6 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void play() {
-        if (this.view.getGridEditor().isEnabled()) {
-            this.view.getGridEditor().setEnabled(false);
-            this.setCurrentGeneration(this.view.getGridEditor().getGeneration());
-            this.oldGeneration.setFirst(this.getCurrentGeneration());
-        }
         this.clock.restartClock();
     }
 
@@ -87,11 +81,6 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void loadGeneration(final Long generationNumber) {
-        if (this.view.getGridEditor().isEnabled()) {
-            this.view.getGridEditor().setEnabled(false);
-            this.setCurrentGeneration(this.view.getGridEditor().getGeneration());
-            this.oldGeneration.setFirst(this.getCurrentGeneration());
-        }
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);
@@ -154,12 +143,7 @@ public class GenerationControllerImpl implements GenerationController {
         this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
         this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
         this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
-        try {
-            SwingUtilities.invokeAndWait(() -> this.view.refreshView());
-        } catch (InvocationTargetException e) {
-            throw new IllegalStateException();
-        } catch (InterruptedException e) {
-        }
+        SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     private void saveGeneration(final Generation generationToSave, final Long generationNumber) {
