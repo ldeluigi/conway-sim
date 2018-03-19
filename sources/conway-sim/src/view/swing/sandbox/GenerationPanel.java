@@ -36,7 +36,7 @@ public class GenerationPanel extends JPanel {
     private static final int MAX_SPEED = 10;
 
     private final JSlider speedSlider;
-    private final JButton bNew;
+    private final JButton bStart;
     private final JButton bEnd;
     private final JButton bPause;
     private final JButton bNext;
@@ -59,7 +59,7 @@ public class GenerationPanel extends JPanel {
         this.view = view;
         this.generationController = view.getGenerationController();
 
-        bNew = this.newJButton("New", "New game");
+        bStart = this.newJButton("Start", "Start the game mode");
         bEnd = this.newJButton("End", "End the current game");
         bPause = this.newJButton("Pause", "Stop the time");
         bNext = this.newJButton("Next", "Go to the next generation");
@@ -83,7 +83,7 @@ public class GenerationPanel extends JPanel {
         final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 100000, 10);
         final JSpinner spinner = new JSpinner(spin);
 
-        northL.add(bNew);
+        northL.add(bStart);
 
         //speed control
         speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
@@ -104,7 +104,7 @@ public class GenerationPanel extends JPanel {
         this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
         //Start conditions.
-        bNew.setEnabled(true);
+        bStart.setEnabled(true);
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
         bEnd.setEnabled(false);
@@ -113,7 +113,7 @@ public class GenerationPanel extends JPanel {
         bGoTo.setEnabled(false);
 
         speedSlider.addChangeListener(e -> this.speedControl());
-        bNew.addActionListener(e -> this.newStart());
+        bStart.addActionListener(e -> this.start());
         bEnd.addActionListener(e -> this.end());
         bPlay.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
@@ -136,7 +136,6 @@ public class GenerationPanel extends JPanel {
     }
 
     private void goTo(final Long value) {
-        this.view.getBookButton().setEnabled(false);
         if (value < 0) {
             JOptionPane.showMessageDialog(this, "Impossible undo to " + value + " from " + this.generationController.getCurrentNumberGeneration());
         } else if (!value.equals(this.generationController.getCurrentNumberGeneration())) {
@@ -165,22 +164,23 @@ public class GenerationPanel extends JPanel {
     }
 
     private void end() {
-        this.view.reset();
+        this.view.getGridEditor().setEnabled(true);
+        this.view.refreshView();
     }
 
-    private void newStart() {
+    private void start() {
         this.generationController.newGame();
         this.view.getSandboxTools().getbSetView().setEnabled(false);
-        this.view.getGridEditor().setEnabled(true);
-        this.bNew.setEnabled(false);
+        this.view.getGridEditor().setEnabled(false);
+        this.view.getBookButton().setEnabled(false);
+        this.bStart.setEnabled(false);
         this.bPause.setEnabled(false);
-        bPlay.setEnabled(true);
-        bEnd.setEnabled(true);
+        this.bPlay.setEnabled(true);
+        this.bEnd.setEnabled(true);
         this.setTimeButtonEnable(true);
     }
 
     private void resume() {
-        this.view.getBookButton().setEnabled(false);
         this.generationController.play();
         this.bPause.setEnabled(true);
         this.bPlay.setEnabled(false);

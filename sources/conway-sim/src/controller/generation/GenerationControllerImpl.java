@@ -53,8 +53,9 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void newGame() {
+        this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        clock.stopClock();
+        this.clock.stopClock();
         if (firstStart) {
             this.firstStart = false;
             this.clock.start();

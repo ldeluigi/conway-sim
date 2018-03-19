@@ -53,7 +53,7 @@ public class Sandbox extends JPanel {
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
         this.gridEditor = new GridEditorImpl(grid);
-        this.gridEditor.setEnabled(false);
+        this.gridEditor.setEnabled(true);
         this.genController = new GenerationControllerImpl(this);
         this.generationPanel = new GenerationPanel(this);
 
