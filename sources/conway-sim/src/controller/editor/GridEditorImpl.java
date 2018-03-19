@@ -30,6 +30,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private Matrix<Status> currentStatus;
     private boolean placingState;
     private final Environment env;
+    private boolean mouseBeingPressed;
     private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
     /**
@@ -43,7 +44,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.pattern = Optional.empty();
         this.env = EnvironmentFactory.standardRules(this.gameGrid.getColorMatrix().getWidth(), this.gameGrid.getColorMatrix().getHeight());
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
-        this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+        this.applyChanges();
     }
 
     /**
@@ -63,7 +64,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         } 
         this.currentStatus.set(row, column, this.currentStatus.get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
-        this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+        this.applyChanges();
     }
 
     /**
@@ -84,9 +85,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.gameGrid.paintGrid(Matrices
-                                        .mergeXY(this.currentStatus
-                                        .map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column, this.pattern
-                                        .get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
+                .mergeXY(this.currentStatus
+                        .map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column, this.pattern
+                        .get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
     }
 
     /**
@@ -109,7 +110,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.currentStatus = Matrices.mergeXY(this.currentStatus, row, column, this.pattern.get());
-        this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK));
+        this.applyChanges();
         this.removePatternToPlace();
     }
 
@@ -158,8 +159,14 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     @Override
     public void setEnabled(final Boolean enabled) {
         this.placingState = enabled;
+        if (enabled) {
+            this.applyChanges();
+        }
     }
 
+    private void applyChanges() {
+        this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+    }
     class CellListener implements MouseListener {
 
         private final int row;
@@ -177,6 +184,11 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         @Override
         public void mouseClicked(final MouseEvent e) {
+        }
+
+        @Override
+        public void mousePressed(final MouseEvent e) {
+            mouseBeingPressed = true;
             if (SwingUtilities.isLeftMouseButton(e) && isEnabled()) {
                 if (isPlacingModeOn()) {
                     placeCurrentPattern(this.row, this.column);
@@ -190,17 +202,17 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
 
         @Override
-        public void mousePressed(final MouseEvent e) {
-        }
-
-        @Override
         public void mouseReleased(final MouseEvent e) {
+            mouseBeingPressed = false;
         }
 
         @Override
         public void mouseEntered(final MouseEvent e) {
             if (isPlacingModeOn() && isEnabled()) {
                 showPreview(row, column);
+            }
+            if (mouseBeingPressed) {
+                hit(this.row, this.column);
             }
         }
 
