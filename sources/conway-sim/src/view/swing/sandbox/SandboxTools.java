@@ -6,17 +6,11 @@ package view.swing.sandbox;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.util.Objects;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
-
 import view.swing.menu.MenuSettings;
 
 /**
@@ -73,7 +67,6 @@ public class SandboxTools {
      * @return a JPanel with the grid dimension option.
      */
     public JPanel newGridOptionDimension(final Sandbox sandbox) {
-        GridSize gridSize = GridSize.gridSize();
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
         final JPanel topGrid = new JPanel(new FlowLayout());
         final JPanel bottomGrid = new JPanel(new FlowLayout());
@@ -85,13 +78,13 @@ public class SandboxTools {
         topGrid.add(gridText);
         topGrid.add(bSetView);
         gridOption.add(topGrid);
-        spinnerWidth = new JSpinner(new SpinnerNumberModel(gridSize.getGridWidht(), 0, 1000, 1));
+        spinnerWidth = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
         spinnerWidth.setFont(this.font);
         final JLabel labelWidth = new JLabel("Dimension");
         labelWidth.setFont(this.font);
         bottomGrid.add(labelWidth);
         bottomGrid.add(spinnerWidth);
-        spinnerHeight = new JSpinner(new SpinnerNumberModel(gridSize.getGridHeight(), 0, 1000, 1));
+        spinnerHeight = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
         spinnerHeight.setFont(this.font);
         final JLabel labelHeight = new JLabel(" x ");
         labelHeight.setFont(this.font);
@@ -99,9 +92,6 @@ public class SandboxTools {
         bottomGrid.add(spinnerHeight);
         gridOption.add(bottomGrid);
         bSetView.addActionListener(e -> {
-            gridSize.setGridHeight((int) spinnerHeight.getValue());
-            gridSize.setGridWidht((int) spinnerWidth.getValue());
-            SwingUtilities.invokeLater(() -> sandbox.reset());
         });
         return gridOption;
     }

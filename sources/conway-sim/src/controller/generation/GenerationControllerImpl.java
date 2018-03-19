@@ -8,16 +8,8 @@ import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
 
-import core.model.Cell;
-import core.model.SimpleCell;
-import core.model.EnvironmentFactory;
 import core.model.Generation;
-import core.model.GenerationFactory;
 import core.model.Generations;
-import core.model.Status;
-import core.utils.ListMatrix;
-import core.utils.Matrices;
-import core.utils.Matrix;
 import view.swing.sandbox.Sandbox;
 
 /**
