@@ -29,14 +29,14 @@ public class RecipeLoader {
                 return name.toLowerCase().endsWith(".rle");
             }
         });
-        ArrayList<String> filespaths = new ArrayList<String>();
+        final ArrayList<String> filespaths = new ArrayList<String>();
         this.recipebook = new RecipeBookImpl();
         String testLine = "testLine: NOT_INITIALIZED";
         FileReader namereader;
         BufferedReader in;
         Boolean flagName;
         try {
-            for (File file : listOfFiles) {
+            for (final File file : listOfFiles) {
                 if (file.isFile()) {
                     flagName = false;
                     filespaths.add(file.getAbsolutePath());
