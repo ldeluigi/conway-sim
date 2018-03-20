@@ -1,5 +1,6 @@
 package view.swing.book;
 
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,6 +21,10 @@ import controller.editor.PatternEditor;
 import controller.io.IOLoader;
 import controller.io.RLEConvert;
 import controller.io.RecipeLoader;
+import core.model.Status;
+import core.utils.ListMatrix;
+import core.utils.Matrix;
+import view.swing.sandbox.GridPanel;
 /**
  * 
  *
@@ -33,7 +38,7 @@ public class BookFrame extends JInternalFrame {
 
 
 
-    private static final int WIDTH = 250;
+    private static final int FRAME_WIDTH = 250;
     //private static final int HEIGHT = 280;
     private static final int HEIGHTOFCELL = 30;
     private String selectedItem = null;
@@ -64,8 +69,12 @@ public class BookFrame extends JInternalFrame {
 
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         // SIZE BY DIMENSION
-        this.setSize(WIDTH, HEIGHTOFCELL * rl.getRecipeBook().getRecipeBookSize());
+        this.setSize(FRAME_WIDTH, HEIGHTOFCELL * rl.getRecipeBook().getRecipeBookSize());
         //this.setSize(WIDTH, HEIGHT);
+
+        //PATTERN PREVIEW GRID
+        //The final GridPanel constructor will have as 3rd argument int SIZE_OF_CELL
+        final GridPanel pg = new GridPanel(FRAME_WIDTH / 3, FRAME_WIDTH / 3, null);
 
         // TEST FOR THE JList WITH A TEMP ARRAY
         final List<String> arrList = new ArrayList<String>();
@@ -118,7 +127,20 @@ public class BookFrame extends JInternalFrame {
         //ACTION LISTENER TESSSSST
         ActionListener alPlace = e -> {
             System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
-            patternE.addPatternToPlace(new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert());
+            final Matrix<Status> mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+            patternE.addPatternToPlace(mat);
+            final Matrix<Color> matC = new ListMatrix(mat.getHeight(), mat.getWidth(), () -> Color.WHITE);
+            //Cleaning the grid by painting a white matrix
+            pg.paintGrid(matC);
+            for (int i = 0; i < mat.getHeight(); i++) {
+                for (int k = 0; k < mat.getWidth(); k++) {
+                    if (mat.get(i, k).equals(Status.DEAD)) {
+                        matC.set(i, k, Color.BLACK);
+                    }
+                }
+            }
+            //Painting the selected pattern
+            pg.paintGrid(matC);
             this.doDefaultCloseAction();
         };
         placeBtn.addActionListener(alPlace);
