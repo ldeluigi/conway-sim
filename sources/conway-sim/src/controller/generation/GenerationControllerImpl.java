@@ -25,8 +25,6 @@ public class GenerationControllerImpl implements GenerationController {
     private Sandbox view;
     private Generation currentGeneration;
     private Memento<Generation> oldGeneration;
-    private boolean firstStart = true;
-
 
     /**
      * New Generation controller empty.
@@ -42,11 +40,6 @@ public class GenerationControllerImpl implements GenerationController {
     public void newGame() {
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        this.clock.stopClock();
-        if (firstStart) {
-            this.firstStart = false;
-            this.clock.start();
-        }
         SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
@@ -58,7 +51,7 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void play() {
-        this.clock.restartClock();
+        this.clock.start();
     }
 
     @Override

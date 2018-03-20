@@ -1,14 +1,17 @@
 package controller.generation;
 
+import java.util.Optional;
+
 /**
  * 
  */
 public class Clock {
 
     private static final int MAX_TIME_GENERATION = 1000;
+    private int speed = 1;
     private final int maxSpeed;
     private final int speedPart;
-    private final AgentClock clockAgent = new AgentClock();
+    private Optional<AgentClock> clockAgent = Optional.empty();
     private final Runnable runnable;
 
     /**
@@ -26,21 +29,25 @@ public class Clock {
      * Stop the clock.
      */
     public void stopClock() {
-        this.clockAgent.setClock(false);
-    }
-
-    /**
-     * Start the clock.
-     */
-    public void restartClock() {
-        this.clockAgent.setClock(true);
+        this.clockAgent.get().setClock(false);
+        try {
+            this.clockAgent.get().join();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException("Thread not terminated corectly");
+        }
     }
 
     /**
      * Start the Agent clock.
      */
     public void start() {
-        this.clockAgent.start();
+        if (this.clockAgent.isPresent() && this.clockAgent.get().isAlive()) {
+            throw new IllegalStateException("Clock is just alive");
+        }
+        this.clockAgent = Optional.of(new AgentClock());
+        this.setSpeed(this.speed);
+        this.clockAgent.get().setClock(true);
+        this.clockAgent.get().start();
     }
 
     /**
@@ -51,28 +58,24 @@ public class Clock {
         if (speed < 0 || speed > maxSpeed) {
             throw new IllegalArgumentException();
         }
-        final Long sleepTime = Long.valueOf(maxSpeed - speed + 1) * speedPart;
-        this.clockAgent.setStep(Long.valueOf(sleepTime));
+        this.speed = speed;
+        if (this.clockAgent.isPresent()) {
+            final Long sleepTime = Long.valueOf(maxSpeed - speed + 1) * speedPart;
+            this.clockAgent.get().setStep(Long.valueOf(sleepTime));            
+        }
     }
 
     class AgentClock extends Thread {
 
         private static final long INIT_STEP = 1000L;
-        private Long step = INIT_STEP;
-        private boolean clock;
+        private volatile Long step = INIT_STEP;
+        private volatile boolean clock;
 
         public void run() {
-            while (true) {
-                while (clock) {
-                    runnable.run();
-                    try {
-                        sleep(step);
-                    } catch (Exception e) {
-                        System.err.println("Errore nella sleep!" + e.getMessage());
-                    }
-                }
+            while (clock) {
+                runnable.run();
                 try {
-                    sleep(step * 2);
+                    sleep(this.getStep());
                 } catch (Exception e) {
                     System.err.println("Errore nella sleep!" + e.getMessage());
                 }
@@ -83,8 +86,12 @@ public class Clock {
             this.clock = flag;
         }
 
-        public void setStep(final Long step) {
+        public synchronized void setStep(final Long step) {
             this.step = step;
+        }
+
+        private synchronized Long getStep() {
+            return this.step;
         }
     }
 }
