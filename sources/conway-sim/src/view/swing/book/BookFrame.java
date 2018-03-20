@@ -93,19 +93,7 @@ public class BookFrame extends JInternalFrame {
                 setSelectedItem(list.getSelectedValue());
                 System.out.println("DEBUG | Selected Item: " + list.getSelectedValue());
                 final Matrix<Status> mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
-                //TODO USE MAP INSTEAD OF THIS
-                final Matrix<Color> matC = new ListMatrix(mat.getHeight(), mat.getWidth(), () -> Color.WHITE);
-                //Cleaning the grid by painting a white matrix
-                pg.paintGrid(matC);
-                for (int i = 0; i < mat.getHeight(); i++) {
-                    for (int k = 0; k < mat.getWidth(); k++) {
-                        if (mat.get(i, k).equals(Status.DEAD)) {
-                            matC.set(i, k, Color.BLACK);
-                        }
-                    }
-                }
-                //Painting the selected pattern
-                pg.paintGrid(matC);
+                pg.paintGrid(mat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
 
             @Override
