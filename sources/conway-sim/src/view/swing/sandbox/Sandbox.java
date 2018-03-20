@@ -45,7 +45,7 @@ public class Sandbox extends JPanel {
         this.sandboxTools = new SandboxTools();
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
-        final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, mainGUI.getCurrentWidth() / CELL_SIZE_RATIO);
+        final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(mainGUI.getCurrentWidth(), mainGUI.getCurrentHeight()) / CELL_SIZE_RATIO);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
         this.gridEditor = new GridEditorImpl(grid);
