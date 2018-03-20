@@ -27,6 +27,8 @@ public class Sandbox extends JPanel {
     private static final String BOOK_NAME = "BOOK";
     private static final int DEFAULT_SIZE = 100;
 
+    private static final int CELL_SIZE_RATIO = 100;
+
     private final GenerationPanel generationPanel;
     private final JButton bBook = new JButton(BOOK_NAME);
     private final DesktopGUI mainGUI;
@@ -43,7 +45,7 @@ public class Sandbox extends JPanel {
         this.sandboxTools = new SandboxTools();
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
-        final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, mainGUI);
+        final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, mainGUI.getCurrentWidth() / CELL_SIZE_RATIO);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
         this.gridEditor = new GridEditorImpl(grid);
