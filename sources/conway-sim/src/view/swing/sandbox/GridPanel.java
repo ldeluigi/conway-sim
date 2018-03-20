@@ -16,7 +16,6 @@ import javax.swing.SwingUtilities;
 
 import core.utils.ListMatrix;
 import core.utils.Matrix;
-import view.swing.GUI;
 import view.swing.menu.MenuSettings;
 
 
@@ -27,13 +26,13 @@ import view.swing.menu.MenuSettings;
 public class GridPanel extends JScrollPane {
 
     private static final long serialVersionUID = -1;
-    private static final int INITIAL_SIZE = 20;
     private static final int INITIAL_BORDER_WIDTH = 1;
     private static final Color INITIAL_BORDER_COLOR = Color.darkGray;
-    private static final int MAX_CELL_SIZE_RATIO = 15;
-    private static final int MIN_CELL_SIZE_RATIO = 210;
+    private static final int MIN_CELL_SIZE_RATIO = 2;
+    private static final int MAX_CELL_SIZE_RATIO = 4;
+    private static final int MIN_CELL_SIZE = 5;
 
-    private final Dimension cellSize = new Dimension(INITIAL_SIZE, INITIAL_SIZE);
+    private final Dimension cellSize;
     private final int borderWidth = INITIAL_BORDER_WIDTH;
     private final Color borderColor = INITIAL_BORDER_COLOR;
     private final JPanel grid;
@@ -50,14 +49,15 @@ public class GridPanel extends JScrollPane {
      * @param height of the matrix
      * @param gui for dynamic dimensions
      */
-    public GridPanel(final int width, final int height, final GUI gui) {
-        if (width < 1 || height < 1) {
+    public GridPanel(final int width, final int height, final int startingCellSize) {
+        if (width < 1 || height < 1 || startingCellSize < 1) {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
         this.gridWidth = width;
         this.gridHeight = height;
-        this.maxCellSize = gui.getCurrentWidth() / MAX_CELL_SIZE_RATIO;
-        this.minCellSize = gui.getCurrentWidth() / MIN_CELL_SIZE_RATIO;
+        this.maxCellSize = startingCellSize * MAX_CELL_SIZE_RATIO;
+        this.minCellSize = Math.max(startingCellSize / MIN_CELL_SIZE_RATIO, MIN_CELL_SIZE);
+        this.cellSize = new Dimension(startingCellSize, startingCellSize);
         this.labelMatrix = new ListMatrix<>(width, height, () -> {
             final JLabel l = new JLabel("");
             l.setSize(cellSize);
