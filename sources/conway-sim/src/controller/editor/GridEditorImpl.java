@@ -80,12 +80,12 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * Is the method which displays the future pattern together with the matrix already existing.
      */
     @Override
-    public void showPreview(final int row, final int column) {
+    public void showPreview(final int row, final int column) { //TODO centrare il mouse
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.gameGrid.paintGrid(Matrices
-                .mergeXY(this.currentStatus
+                    .mergeXY(this.currentStatus
                         .map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column, this.pattern
                         .get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
     }
@@ -105,7 +105,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * @param column is the index of the column where to add the first pattern label.
      */
     @Override
-    public void placeCurrentPattern(final int row, final  int column) {
+    public void placeCurrentPattern(final int row, final  int column) { //TODO centrare il mouse
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
@@ -164,9 +164,19 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
     }
 
+    /**
+     * Is the method which shows a full white grid as every cell was dead or a new grid was just created.
+     */
+    public void killThemAll() {
+        this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
+        this.applyChanges();
+    }
+
     private void applyChanges() {
         this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
     }
+
+
     class CellListener implements MouseListener {
 
         private final int row;
@@ -188,31 +198,39 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         @Override
         public void mousePressed(final MouseEvent e) {
-            mouseBeingPressed = true;
-            if (SwingUtilities.isLeftMouseButton(e) && isEnabled()) {
-                if (isPlacingModeOn()) {
-                    placeCurrentPattern(this.row, this.column);
+            if (SwingUtilities.isLeftMouseButton(e) && GridEditorImpl.this.isEnabled()) {
+                GridEditorImpl.this.mouseBeingPressed = true;
+                if (GridEditorImpl.this.isPlacingModeOn()) {
+                    GridEditorImpl.this.placeCurrentPattern(this.row, this.column);
                 } else {
-                    hit(this.row, this.column);
+                    GridEditorImpl.this.hit(this.row, this.column);
                 }
-            } else if (SwingUtilities.isRightMouseButton(e) && isEnabled() && isPlacingModeOn()) {
-                rotateCurrentPattern(e.getClickCount());
-                showPreview(this.row, this.column);
+            } else if (SwingUtilities.isRightMouseButton(e) && GridEditorImpl.this.isEnabled() && GridEditorImpl.this.isPlacingModeOn()) {
+                if (e.isControlDown()) {
+                    GridEditorImpl.this.pattern = Optional.of(new ListMatrix<>(GridEditorImpl.this.pattern.get().getWidth(), GridEditorImpl.this.pattern.get().getHeight(), () -> Status.DEAD));
+                    GridEditorImpl.this.showPreview(this.row, this.column);
+                    GridEditorImpl.this.pattern = Optional.empty();
+                } else {
+                    GridEditorImpl.this.rotateCurrentPattern(e.getClickCount());
+                    GridEditorImpl.this.showPreview(this.row, this.column);
+                }
             }
         }
 
         @Override
         public void mouseReleased(final MouseEvent e) {
-            mouseBeingPressed = false;
+            GridEditorImpl.this.mouseBeingPressed = false;
         }
 
         @Override
         public void mouseEntered(final MouseEvent e) {
-            if (isPlacingModeOn() && isEnabled()) {
-                showPreview(row, column);
-            }
-            if (mouseBeingPressed) {
-                hit(this.row, this.column);
+            if (GridEditorImpl.this.isEnabled()) {
+                if (GridEditorImpl.this.isPlacingModeOn() && (GridEditorImpl.this.gameGrid.getGridWidth() - this.column) >= GridEditorImpl.this.pattern.get().getWidth() 
+                        && (GridEditorImpl.this.gameGrid.getGridHeight() - this.row) >= GridEditorImpl.this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
+                    GridEditorImpl.this.showPreview(row, column);
+                } else if (mouseBeingPressed) {
+                    GridEditorImpl.this.hit(this.row, this.column);
+                }
             }
         }
 
@@ -221,6 +239,4 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
 
     }
-
-
 }

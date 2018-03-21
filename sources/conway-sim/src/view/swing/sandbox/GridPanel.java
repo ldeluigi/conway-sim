@@ -47,7 +47,7 @@ public class GridPanel extends JScrollPane {
      * Is the constructor method for a new GridPanel.
      * @param width of the matrix
      * @param height of the matrix
-     * @param gui for dynamic dimensions
+     * @param startingCellSize the initial dimension for the square cell
      */
     public GridPanel(final int width, final int height, final int startingCellSize) {
         if (width < 1 || height < 1 || startingCellSize < 1) {
@@ -124,22 +124,18 @@ public class GridPanel extends JScrollPane {
     }
 
     private void setBorder(final JLabel label, final int row, final int col, final Color c, final int borderWidth)  {
-        if (row == 0) {
+        if (row == 0) { //already existing implementation
             if (col == 0) {
-                // Top left corner, draw all sides
                 label.setBorder(BorderFactory.createLineBorder(c, borderWidth));
             } else {
-                // Top edge, draw all sides except left edge
                 label.setBorder(BorderFactory.createMatteBorder(borderWidth, 0, borderWidth,
                         borderWidth, c));
             }
         } else {
             if (col == 0) {
-                // Left-hand edge, draw all sides except top
                 label.setBorder(BorderFactory.createMatteBorder(0, borderWidth, borderWidth,
                         borderWidth, c));
             } else {
-                // Neither top edge nor left edge, skip both top and left lines
                 label.setBorder(BorderFactory.createMatteBorder(0, 0, borderWidth, borderWidth,
                         c));
             }
