@@ -45,7 +45,7 @@ public class GenerationPanel extends JPanel {
     private final JButton bGoTo;
     private final JButton bPrev;
     private final JButton bPlay;
-    private final JButton bClean;
+    private final JButton bClear;
     private final JProgressBar progresBar;
 
     private final GenerationController generationController;
@@ -69,7 +69,7 @@ public class GenerationPanel extends JPanel {
         bGoTo = this.newJButton("Go to", "Go at the indicated generations");
         bPrev = this.newJButton("Previous", "Go to the previous generation");
         bPlay = this.newJButton("Play", "Play the current game");
-        bClean = this.newJButton("Clean", "Clean the grid");
+        bClear = this.newJButton("Clear", "Clear the grid");
         progresBar = new JProgressBar();
         progresBar.setIndeterminate(true);
         progresBar.setVisible(false);
@@ -97,7 +97,7 @@ public class GenerationPanel extends JPanel {
         southL.add(bPlay);
         southL.add(bPause);
         southL.add(bEnd);
-        southL.add(bClean);
+        southL.add(bClear);
         southR.add(bPrev);
         southR.add(bNext);
         northR.add(bGoTo);
@@ -113,7 +113,7 @@ public class GenerationPanel extends JPanel {
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
         bEnd.setEnabled(false);
-        bClean.setEnabled(true);
+        bClear.setEnabled(true);
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
@@ -126,10 +126,10 @@ public class GenerationPanel extends JPanel {
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
         bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
         bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
-        bClean.addActionListener(e -> this.clean());
+        bClear.addActionListener(e -> this.clear());
     }
 
-    private void clean() {
+    private void clear() {
         this.view.getGridEditor().killThemAll();
     }
 
@@ -166,7 +166,7 @@ public class GenerationPanel extends JPanel {
                         this.bGoTo.setVisible(true);
                         this.bPlay.setEnabled(true);
                         this.bEnd.setEnabled(true);
-                        this.bClean.setEnabled(true);
+                        this.bClear.setEnabled(true);
                         this.setTimeButtonEnable(true);
                         this.refreshView();
                     });
@@ -189,7 +189,7 @@ public class GenerationPanel extends JPanel {
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
-        this.bClean.setEnabled(true);
+        this.bClear.setEnabled(true);
     }
 
     private void start() {
@@ -202,7 +202,7 @@ public class GenerationPanel extends JPanel {
         this.bPlay.setEnabled(true);
         this.bEnd.setEnabled(true);
         this.setTimeButtonEnable(true);
-        this.bClean.setEnabled(false);
+        this.bClear.setEnabled(false);
     }
 
     private void resume() {
