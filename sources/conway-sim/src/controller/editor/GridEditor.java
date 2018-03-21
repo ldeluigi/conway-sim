@@ -38,4 +38,6 @@ public interface GridEditor {
      * @return true if the editor allows editing operations
      */
     boolean isEnabled();
+
+    void killThemAll();
 }

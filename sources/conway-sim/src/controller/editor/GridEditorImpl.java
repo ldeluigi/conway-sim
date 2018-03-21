@@ -167,6 +167,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     /**
      * Is the method which shows a full white grid as every cell was dead or a new grid was just created.
      */
+    @Override
     public void killThemAll() {
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
         this.applyChanges();
