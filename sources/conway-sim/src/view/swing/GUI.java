@@ -39,7 +39,7 @@ public interface GUI {
      * @return screen height in pixels
      */
     int getScreenHeight();
-    
+
     /**
      * @return screen width in pixels
      */
