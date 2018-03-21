@@ -35,4 +35,14 @@ public interface GUI {
      */
     void backToMainMenu();
 
+    /**
+     * @return screen height in pixels
+     */
+    int getScreenHeight();
+    
+    /**
+     * @return screen width in pixels
+     */
+    int getScreenWidth();
+
 }

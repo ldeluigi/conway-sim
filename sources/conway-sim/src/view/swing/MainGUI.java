@@ -136,4 +136,14 @@ public final class MainGUI implements DesktopGUI {
         setView(new MainMenu(this));
     }
 
+    @Override
+    public int getScreenHeight() {
+        return Toolkit.getDefaultToolkit().getScreenSize().height;
+    }
+
+    @Override
+    public int getScreenWidth() {
+        return Toolkit.getDefaultToolkit().getScreenSize().width;
+    }
+
 }
