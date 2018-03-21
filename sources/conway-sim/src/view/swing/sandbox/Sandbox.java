@@ -3,6 +3,7 @@ package view.swing.sandbox;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -45,7 +46,10 @@ public class Sandbox extends JPanel {
         this.sandboxTools = new SandboxTools();
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
-        final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(mainGUI.getCurrentWidth(), mainGUI.getCurrentHeight()) / CELL_SIZE_RATIO);
+        final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
+                mainGUI.getScreenHeight(),
+                mainGUI.getScreenWidth())
+                / CELL_SIZE_RATIO);
         this.setLayout(new BorderLayout());
         this.add(grid, BorderLayout.CENTER);
         this.gridEditor = new GridEditorImpl(grid);

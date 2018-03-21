@@ -1,10 +1,6 @@
 package test;
 
-import javax.swing.JInternalFrame;
-
 import view.swing.MainGUI;
-import view.swing.sandbox.GridPanel;
-import view.swing.sandbox.Sandbox;
 
 public class TestView {
 
