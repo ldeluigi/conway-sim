@@ -144,7 +144,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.pattern.get().rotateClockwise(hits);
-        GridEditorImpl.this.showPreview(this.lastPreviewRow, this.lastPreviewColumn);
+        this.showPreview(this.lastPreviewRow, this.lastPreviewColumn);
     }
 
     /**
@@ -152,7 +152,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void removePatternToPlace() {
-        GridEditorImpl.this.pattern = Optional.empty();
+        this.pattern = Optional.empty();
         this.applyChanges();
     }
 
