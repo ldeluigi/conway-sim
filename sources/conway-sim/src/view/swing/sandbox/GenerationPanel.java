@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -127,6 +128,39 @@ public class GenerationPanel extends JPanel {
         bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
         bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
         bClear.addActionListener(e -> this.clear());
+        final KeyListenerFactory keyFactory = new KeyListenerFactory(this.view);
+        keyFactory.addKeyListener("space", () -> {
+            if (bPlay.isEnabled()) {
+                resume();
+            } else if (bPause.isEnabled()) {
+                pause();
+            }
+        }, KeyEvent.VK_SPACE);
+        keyFactory.addKeyListener("start", () -> {
+            if (bStart.isEnabled()) {
+                start();
+            }
+        }, KeyEvent.VK_ENTER);
+        keyFactory.addKeyListener("end", () -> {
+            if (bEnd.isEnabled()) {
+                end();
+            }
+        }, KeyEvent.VK_ESCAPE);
+        keyFactory.addKeyListener("clear", () -> {
+            if (bClear.isEnabled()) {
+                clear();
+            }
+        }, KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
+        keyFactory.addKeyListener("next", () -> {
+            if (bNext.isEnabled()) {
+                goTo(this.generationController.getCurrentNumberGeneration() + 1L);
+            }
+        }, KeyEvent.VK_RIGHT);
+        keyFactory.addKeyListener("previous", () -> {
+            if (bNext.isEnabled()) {
+                goTo(this.generationController.getCurrentNumberGeneration() - 1L);
+            }
+        }, KeyEvent.VK_LEFT);
     }
 
     private void clear() {
@@ -166,7 +200,6 @@ public class GenerationPanel extends JPanel {
                         this.bGoTo.setVisible(true);
                         this.bPlay.setEnabled(true);
                         this.bEnd.setEnabled(true);
-                        this.bClear.setEnabled(true);
                         this.setTimeButtonEnable(true);
                         this.refreshView();
                     });
