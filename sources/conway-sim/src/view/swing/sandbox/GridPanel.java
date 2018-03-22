@@ -87,7 +87,8 @@ public class GridPanel extends JScrollPane {
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
-        this.shouldGridStayVisible = !MenuSettings.areTransitionsInstant(); //cambiare con getter-setter
+        this.getHorizontalScrollBar().setUnitIncrement(this.cellSize.width);
+        this.shouldGridStayVisible = !MenuSettings.areTransitionsInstant();
         this.addMouseWheelListener(e -> {
             if (e.isControlDown()) {
                 if (e.getWheelRotation() < 0) {
