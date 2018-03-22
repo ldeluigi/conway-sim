@@ -31,6 +31,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private boolean placingState;
     private final Environment env;
     private boolean mouseBeingPressed;
+    private int lastPreviewRow;
+    private int lastPreviewColumn;
     private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
     /**
@@ -84,10 +86,14 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        this.gameGrid.paintGrid(Matrices
-                    .mergeXY(this.currentStatus
-                        .map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column, this.pattern
-                        .get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
+        if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
+                && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
+            this.gameGrid.paintGrid(Matrices.mergeXY(
+                    this.currentStatus.map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column,
+                    this.pattern.get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
+            this.lastPreviewRow = row;
+            this.lastPreviewColumn = column;
+        }
     }
 
     /**
@@ -101,7 +107,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which merges together the existing matrix and the pattern.
-     * @param row is the index describing the row where to add the first pattern label.
+     * @param row is the index describing the lastPreviewRow where to add the first pattern label.
      * @param column is the index of the column where to add the first pattern label.
      */
     @Override
@@ -109,9 +115,14 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
+        if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
+                && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
         this.currentStatus = Matrices.mergeXY(this.currentStatus, row, column, this.pattern.get());
         this.applyChanges();
         this.removePatternToPlace();
+        } else if (!(row == this.lastPreviewRow && column == this.lastPreviewColumn)) {
+            placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
+        }
     }
 
     /**
@@ -133,6 +144,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.pattern.get().rotateClockwise(hits);
+        GridEditorImpl.this.showPreview(this.lastPreviewRow, this.lastPreviewColumn);
     }
 
     /**
@@ -140,7 +152,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void removePatternToPlace() {
-        this.pattern = Optional.empty();
+        GridEditorImpl.this.pattern = Optional.empty();
+        this.applyChanges();
     }
 
     /**
@@ -208,12 +221,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
                 }
             } else if (SwingUtilities.isRightMouseButton(e) && GridEditorImpl.this.isEnabled() && GridEditorImpl.this.isPlacingModeOn()) {
                 if (e.isControlDown()) {
-                    GridEditorImpl.this.pattern = Optional.of(new ListMatrix<>(GridEditorImpl.this.pattern.get().getWidth(), GridEditorImpl.this.pattern.get().getHeight(), () -> Status.DEAD));
-                    GridEditorImpl.this.showPreview(this.row, this.column);
-                    GridEditorImpl.this.pattern = Optional.empty();
+                    GridEditorImpl.this.removePatternToPlace();
                 } else {
-                    GridEditorImpl.this.rotateCurrentPattern(e.getClickCount());
-                    GridEditorImpl.this.showPreview(this.row, this.column);
+                    GridEditorImpl.this.rotateCurrentPattern(1);
                 }
             }
         }
@@ -226,8 +236,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         @Override
         public void mouseEntered(final MouseEvent e) {
             if (GridEditorImpl.this.isEnabled()) {
-                if (GridEditorImpl.this.isPlacingModeOn() && (GridEditorImpl.this.gameGrid.getGridWidth() - this.column) >= GridEditorImpl.this.pattern.get().getWidth() 
-                        && (GridEditorImpl.this.gameGrid.getGridHeight() - this.row) >= GridEditorImpl.this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
+                if (GridEditorImpl.this.isPlacingModeOn()) {
                     GridEditorImpl.this.showPreview(row, column);
                 } else if (mouseBeingPressed) {
                     GridEditorImpl.this.hit(this.row, this.column);
