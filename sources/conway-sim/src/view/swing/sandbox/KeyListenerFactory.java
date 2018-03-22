@@ -11,6 +11,7 @@ import javax.swing.KeyStroke;
 /**
  * 
  */
+//TODO make class static
 public class KeyListenerFactory {
 
     private final InputMap inputMap;
