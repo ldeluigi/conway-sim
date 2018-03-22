@@ -1,6 +1,3 @@
-/**
- * 
- */
 package view.swing.sandbox;
 
 import java.awt.FlowLayout;
@@ -16,6 +13,7 @@ import view.swing.menu.MenuSettings;
 /**
  * An utility class for Sandbox.
  */
+//TODO make class static-final
 public class SandboxTools {
 
     private JSpinner spinnerWidth;
