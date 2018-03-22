@@ -29,11 +29,11 @@ public class KeyListenerFactory {
     /**
      * 
      * @param name the unique name of this listener
-     * @param event the event
      * @param keyCode the KeyEvent that start the event
      * @param modifier a bitwise-ored combination of any modifiers
+     * @param event the event
      */
-    public void addKeyListener(final String name, final Runnable event, final int keyCode, final int modifier) {
+    public void addKeyListener(final String name, final int keyCode, final int modifier, final Runnable event) {
         inputMap.put(KeyStroke.getKeyStroke(keyCode, modifier), name);
         actionMap.put(name, new AbstractAction() {
            /**
@@ -51,10 +51,10 @@ public class KeyListenerFactory {
     /**
      * 
      * @param name the name of this listener
-     * @param event the event
      * @param keyCode the KeyEvent that start the event
+     * @param event the event
      */
-    public void addKeyListener(final String name, final Runnable event, final int keyCode) {
-        this.addKeyListener(name, event, keyCode, 0);
+    public void addKeyListener(final String name, final int keyCode, final Runnable event) {
+        this.addKeyListener(name, keyCode, 0, event);
     }
 }

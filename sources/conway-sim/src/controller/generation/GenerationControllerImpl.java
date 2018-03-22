@@ -38,6 +38,7 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void newGame() {
+        this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
         SwingUtilities.invokeLater(() -> this.view.refreshView());
@@ -56,8 +57,6 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void reset() {
-        this.loadGeneration(0L);
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     @Override

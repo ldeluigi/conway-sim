@@ -3,11 +3,14 @@ package view.swing.sandbox;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.Objects;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+
 import view.swing.menu.MenuSettings;
 
 /**
@@ -20,6 +23,8 @@ public class SandboxTools {
     private JSpinner spinnerHeight;
 
     private JButton bApply;
+    private JButton bClear;
+
 
     private JLabel numGenerationLabel;
     private JLabel numSpeedLabel;
@@ -70,7 +75,7 @@ public class SandboxTools {
         final JPanel topGrid = new JPanel(new FlowLayout());
         final JPanel bottomGrid = new JPanel(new FlowLayout());
         gridOption.setFont(this.font);
-        bApply = new JButton("Apply");
+        bApply = this.newJButton("Apply", "Change the grid dimension");
         bApply.setFont(this.font);
         final JLabel gridText = new JLabel("Grid dimension ");
         gridText.setFont(this.font);
@@ -97,6 +102,17 @@ public class SandboxTools {
 
     /**
      * 
+     * @return the Clear JButton
+     */
+    public JButton getClearButton() {
+        if (Objects.isNull(bClear)) {
+            bClear = this.newJButton("Clear", "Clear the grid");
+        }
+        return bClear;
+    }
+
+    /**
+     * 
      * @return the setView button
      */
     public JButton getbSetView() {
@@ -117,5 +133,19 @@ public class SandboxTools {
      */
     public int getWidthSelect() {
         return (int) spinnerWidth.getValue();
+    }
+
+    /**
+     * 
+     * @param name the name of the button
+     * @param tooltipText the tool tip of the button
+     * @return a new button
+     */
+    public JButton newJButton(final String name, final String tooltipText) {
+        final JButton button = new JButton(name);
+        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
+        button.setToolTipText(tooltipText);
+        button.setFocusPainted(false);
+        return button;
     }
 }

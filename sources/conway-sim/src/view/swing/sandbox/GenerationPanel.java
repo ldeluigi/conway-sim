@@ -63,14 +63,14 @@ public class GenerationPanel extends JPanel {
         this.view = view;
         this.generationController = new GenerationControllerImpl(view);
 
-        bStart = this.newJButton("Start", "Start the game mode");
-        bEnd = this.newJButton("End", "End the current game");
-        bPause = this.newJButton("Pause", "Stop the time");
-        bNext = this.newJButton("Next", "Go to the next generation");
-        bGoTo = this.newJButton("Go to", "Go at the indicated generations");
-        bPrev = this.newJButton("Previous", "Go to the previous generation");
-        bPlay = this.newJButton("Play", "Play the current game");
-        bClear = this.newJButton("Clear", "Clear the grid");
+        bStart = this.view.getSandboxTools().newJButton("Start", "Start the game mode");
+        bEnd = this.view.getSandboxTools().newJButton("End", "End the current game");
+        bPause = this.view.getSandboxTools().newJButton("Pause", "Stop the time");
+        bNext = this.view.getSandboxTools().newJButton("Next", "Go to the next generation");
+        bGoTo = this.view.getSandboxTools().newJButton("Go to", "Go at the indicated generations");
+        bPrev = this.view.getSandboxTools().newJButton("Previous", "Go to the previous generation");
+        bPlay = this.view.getSandboxTools().newJButton("Play", "Play the current game");
+        bClear = this.view.getSandboxTools().getClearButton();
         progresBar = new JProgressBar();
         progresBar.setIndeterminate(true);
         progresBar.setVisible(false);
@@ -98,7 +98,6 @@ public class GenerationPanel extends JPanel {
         southL.add(bPlay);
         southL.add(bPause);
         southL.add(bEnd);
-        southL.add(bClear);
         southR.add(bPrev);
         southR.add(bNext);
         northR.add(bGoTo);
@@ -129,38 +128,37 @@ public class GenerationPanel extends JPanel {
         bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
         bClear.addActionListener(e -> this.clear());
         final KeyListenerFactory keyFactory = new KeyListenerFactory(this.view);
-        keyFactory.addKeyListener("space", () -> {
-            if (bPlay.isEnabled()) {
+        keyFactory.addKeyListener("space", KeyEvent.VK_SPACE, () -> {
+            if (bStart.isEnabled()) {
+                start();
+            } else if (bPlay.isEnabled()) {
                 resume();
             } else if (bPause.isEnabled()) {
                 pause();
             }
-        }, KeyEvent.VK_SPACE);
-        keyFactory.addKeyListener("start", () -> {
-            if (bStart.isEnabled()) {
-                start();
-            }
-        }, KeyEvent.VK_ENTER);
-        keyFactory.addKeyListener("end", () -> {
+        });
+        keyFactory.addKeyListener("end", KeyEvent.VK_ESCAPE, () -> {
             if (bEnd.isEnabled()) {
                 end();
             }
-        }, KeyEvent.VK_ESCAPE);
-        keyFactory.addKeyListener("clear", () -> {
+        });
+        keyFactory.addKeyListener("clear", KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK, () -> {
             if (bClear.isEnabled()) {
                 clear();
             }
-        }, KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK);
-        keyFactory.addKeyListener("next", () -> {
+        });
+        keyFactory.addKeyListener("next", KeyEvent.VK_RIGHT, () -> {
             if (bNext.isEnabled()) {
                 goTo(this.generationController.getCurrentNumberGeneration() + 1L);
             }
-        }, KeyEvent.VK_RIGHT);
-        keyFactory.addKeyListener("previous", () -> {
+        });
+        keyFactory.addKeyListener("previous", KeyEvent.VK_LEFT, () -> {
             if (bNext.isEnabled()) {
                 goTo(this.generationController.getCurrentNumberGeneration() - 1L);
             }
-        }, KeyEvent.VK_LEFT);
+        });
+        keyFactory.addKeyListener("speedUp", KeyEvent.VK_UP, () -> speedSlider.setValue(speedSlider.getValue() + 1));
+        keyFactory.addKeyListener("speedDown", KeyEvent.VK_DOWN, () -> speedSlider.setValue(speedSlider.getValue() - 1));
     }
 
     private void clear() {
@@ -271,13 +269,5 @@ public class GenerationPanel extends JPanel {
                 (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()
                 );
         this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
-    }
-
-    private JButton newJButton(final String name, final String tooltipText) {
-        final JButton button = new JButton(name);
-        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
-        button.setToolTipText(tooltipText);
-        button.setFocusPainted(false);
-        return button;
     }
 }

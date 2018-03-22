@@ -2,7 +2,6 @@ package view.swing.sandbox;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.util.Objects;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,7 +11,6 @@ import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
-import view.swing.menu.MenuSettings;
 
 /**
  * 
@@ -24,17 +22,15 @@ public class Sandbox extends JPanel {
      */
     private static final long serialVersionUID = -9015811419136279771L;
 
-    private static final String BOOK_NAME = "BOOK";
     private static final int DEFAULT_SIZE = 100;
 
     private static final int CELL_SIZE_RATIO = 100;
 
     private final GenerationPanel generationPanel;
-    private final JButton bBook = new JButton(BOOK_NAME);
+    private final JButton bBook;
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private BookFrame book;
-    private final int fontSize = MenuSettings.getFontSize();
     private final SandboxTools sandboxTools;
 
     /**
@@ -62,13 +58,13 @@ public class Sandbox extends JPanel {
         north.add(gridOption, BorderLayout.WEST);
         this.add(north, BorderLayout.NORTH);
 
-        final JButton bExit = new JButton("EXIT");
+        this.bBook = this.sandboxTools.newJButton("BOOK", "Open the book");
+        final JButton bExit = this.sandboxTools.newJButton("EXIT", "Exit from this mode");
 
         final JPanel south = new JPanel(new BorderLayout());
-        this.bBook.setFont(new Font(bBook.getFont().getFontName(), bBook.getFont().getStyle(), this.fontSize));
-        bExit.setFont(new Font(bExit.getFont().getFontName(), bExit.getFont().getStyle(), this.fontSize));
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
+        southRight.add(this.sandboxTools.getClearButton());
         southRight.add(bBook);
         southRight.add(bExit);
         south.add(sandboxTools.newJPanelStatistics(), BorderLayout.WEST);
