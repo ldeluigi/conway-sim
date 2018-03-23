@@ -12,19 +12,18 @@ import core.utils.Matrix;
  *
  */
 public class GridSaver {
-    private static final String path = "./src/test/saves";
+    private static final String PATH = "./src/test/saves";
     /**
      * 
      * @param matrix d
      */
     public GridSaver(final Matrix<Status> matrix) {
-        final LocalDateTime dateNow = LocalDateTime.now();
-        String now = dateNow.now().toString();
+        String now = LocalDateTime.now().toString();
         now = now.replace(" ", "");
         now = now.replace(":", "");
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(path + "/" + now + ".save"));
+            writer = new BufferedWriter(new FileWriter(PATH + "/" + now + ".save"));
             writer.write(matStatusToString(matrix));
 
         } catch (IOException e) {
