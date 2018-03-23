@@ -127,8 +127,7 @@ public class GenerationPanel extends JPanel {
         bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
         bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
         bClear.addActionListener(e -> this.clear());
-        final KeyListenerFactory keyFactory = new KeyListenerFactory(this.view);
-        keyFactory.addKeyListener("space", KeyEvent.VK_SPACE, () -> {
+        KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (bStart.isEnabled()) {
                 start();
             } else if (bPlay.isEnabled()) {
@@ -137,28 +136,28 @@ public class GenerationPanel extends JPanel {
                 pause();
             }
         });
-        keyFactory.addKeyListener("end", KeyEvent.VK_ESCAPE, () -> {
+        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> {
             if (bEnd.isEnabled()) {
                 end();
             }
         });
-        keyFactory.addKeyListener("clear", KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK, () -> {
+        KeyListenerFactory.addKeyListener(this.view, "clear", KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK, () -> {
             if (bClear.isEnabled()) {
                 clear();
             }
         });
-        keyFactory.addKeyListener("next", KeyEvent.VK_RIGHT, () -> {
+        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> {
             if (bNext.isEnabled()) {
                 goTo(this.generationController.getCurrentNumberGeneration() + 1L);
             }
         });
-        keyFactory.addKeyListener("previous", KeyEvent.VK_LEFT, () -> {
+        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> {
             if (bNext.isEnabled()) {
                 goTo(this.generationController.getCurrentNumberGeneration() - 1L);
             }
         });
-        keyFactory.addKeyListener("speedUp", KeyEvent.VK_UP, () -> speedSlider.setValue(speedSlider.getValue() + 1));
-        keyFactory.addKeyListener("speedDown", KeyEvent.VK_DOWN, () -> speedSlider.setValue(speedSlider.getValue() - 1));
+        KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP, () -> speedSlider.setValue(speedSlider.getValue() + 1));
+        KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN, () -> speedSlider.setValue(speedSlider.getValue() - 1));
     }
 
     private void clear() {

@@ -51,7 +51,7 @@ public class Sandbox extends JPanel {
 
         final JPanel north = new JPanel(new BorderLayout());
         final JPanel gridOption = SandboxTools.newGridOptionDimension(this);
-        north.add(generationPanel, BorderLayout.AFTER_LINE_ENDS);
+        north.add(this.generationPanel, BorderLayout.AFTER_LINE_ENDS);
         north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
         north.add(gridOption, BorderLayout.WEST);
         this.add(north, BorderLayout.NORTH);
@@ -63,13 +63,13 @@ public class Sandbox extends JPanel {
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
         southRight.add(SandboxTools.getClearButton());
-        southRight.add(bBook);
+        southRight.add(this.bBook);
         southRight.add(bExit);
         south.add(SandboxTools.newJPanelStatistics(), BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 
-        bBook.addActionListener(e -> callBook());
+        this.bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
         this.generationPanel.refreshView();
     }
@@ -109,10 +109,8 @@ public class Sandbox extends JPanel {
 
     private void exit() {
         //TODO save option name
-        final int result = JOptionPane.showOptionDialog(this, "Save before going back to menu?", "Warning", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+        final int result = JOptionPane.showOptionDialog(this, "Going back to menu?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
         if (result == JOptionPane.YES_OPTION) {
-            this.mainGUI.backToMainMenu();
-        } else if (result == JOptionPane.NO_OPTION) {
             this.mainGUI.backToMainMenu();
         }
     }

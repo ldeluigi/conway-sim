@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -12,31 +11,25 @@ import javax.swing.KeyStroke;
  * 
  */
 //TODO make class static
-public class KeyListenerFactory {
+public final class KeyListenerFactory {
 
-    private final InputMap inputMap;
-    private final ActionMap actionMap;
-
-    /**
-     * 
-     * @param panel the panel that have to contain the key listener
-     */
-    public KeyListenerFactory(final JPanel panel) {
-        this.inputMap = panel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-        this.actionMap = panel.getActionMap();
-    }
+    private KeyListenerFactory() { }
 
     /**
      * 
+     * @param panel the panel that should contain the keyListener 
      * @param name the unique name of this listener
-     * @param keyCode the KeyEvent that start the event
+     * @param keyCode the int (KeyEvent.VK_*) that start the event
      * @param modifier a bitwise-ored combination of any modifiers
      * @param event the event
      */
-    public void addKeyListener(final String name, final int keyCode, final int modifier, final Runnable event) {
+    public static void addKeyListener(final JPanel panel, final String name, final int keyCode, final int modifier, final Runnable event) {
+        final InputMap inputMap = new InputMap();
+        final ActionMap actionMap = new ActionMap();
         inputMap.put(KeyStroke.getKeyStroke(keyCode, modifier), name);
         actionMap.put(name, new AbstractAction() {
-           /**
+
+            /**
              * 
              */
             private static final long serialVersionUID = 1L;
@@ -50,11 +43,12 @@ public class KeyListenerFactory {
 
     /**
      * 
+     * @param panel the JPanel
      * @param name the name of this listener
-     * @param keyCode the KeyEvent that start the event
+     * @param keyCode the int (KeyEvent.VK_*) that start the event
      * @param event the event
      */
-    public void addKeyListener(final String name, final int keyCode, final Runnable event) {
-        this.addKeyListener(name, keyCode, 0, event);
+    public static void addKeyListener(final JPanel panel, final String name, final int keyCode, final Runnable event) {
+        KeyListenerFactory.addKeyListener(panel, name, keyCode, 0, event);
     }
 }

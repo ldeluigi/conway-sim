@@ -98,6 +98,7 @@ public final class SandboxTools {
         bottomGrid.add(spinnerHeight);
         gridOption.add(bottomGrid);
         bApply.addActionListener(e -> {
+//            System.err.println("new Grid : " + spinnerHeight.getValue().toString() + " x " + spinnerWidth.getValue().toString());
         });
         return gridOption;
     }
