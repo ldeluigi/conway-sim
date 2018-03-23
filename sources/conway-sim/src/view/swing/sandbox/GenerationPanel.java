@@ -63,14 +63,14 @@ public class GenerationPanel extends JPanel {
         this.view = view;
         this.generationController = new GenerationControllerImpl(view);
 
-        bStart = this.view.getSandboxTools().newJButton("Start", "Start the game mode");
-        bEnd = this.view.getSandboxTools().newJButton("End", "End the current game");
-        bPause = this.view.getSandboxTools().newJButton("Pause", "Stop the time");
-        bNext = this.view.getSandboxTools().newJButton("Next", "Go to the next generation");
-        bGoTo = this.view.getSandboxTools().newJButton("Go to", "Go at the indicated generations");
-        bPrev = this.view.getSandboxTools().newJButton("Previous", "Go to the previous generation");
-        bPlay = this.view.getSandboxTools().newJButton("Play", "Play the current game");
-        bClear = this.view.getSandboxTools().getClearButton();
+        bStart = SandboxTools.newJButton("Start", "Start the game mode");
+        bEnd = SandboxTools.newJButton("End", "End the current game");
+        bPause = SandboxTools.newJButton("Pause", "Stop the time");
+        bNext = SandboxTools.newJButton("Next", "Go to the next generation");
+        bGoTo = SandboxTools.newJButton("Go to", "Go at the indicated generations");
+        bPrev = SandboxTools.newJButton("Previous", "Go to the previous generation");
+        bPlay = SandboxTools.newJButton("Play", "Play the current game");
+        bClear = SandboxTools.getClearButton();
         progresBar = new JProgressBar();
         progresBar.setIndeterminate(true);
         progresBar.setVisible(false);
@@ -226,7 +226,7 @@ public class GenerationPanel extends JPanel {
     private void start() {
         this.view.getGridEditor().setEnabled(false);
         this.generationController.newGame();
-        this.view.getSandboxTools().getbSetView().setEnabled(false);
+        SandboxTools.getbSetView().setEnabled(false);
         this.view.getBookButton().setEnabled(false);
         this.bStart.setEnabled(false);
         this.bPause.setEnabled(false);
@@ -263,7 +263,7 @@ public class GenerationPanel extends JPanel {
      * 
      */
     public void refreshView() {
-        this.view.getSandboxTools().refreshStatistics(
+        SandboxTools.refreshStatistics(
                 this.getCurrentSpeed(),
                 this.generationController.getCurrentNumberGeneration().intValue(),
                 (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()

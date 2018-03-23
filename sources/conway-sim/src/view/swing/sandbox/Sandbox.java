@@ -31,14 +31,12 @@ public class Sandbox extends JPanel {
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private BookFrame book;
-    private final SandboxTools sandboxTools;
 
     /**
      * 
      * @param mainGUI the mainGui that call this SandBox
      */
     public Sandbox(final DesktopGUI mainGUI) {
-        this.sandboxTools = new SandboxTools();
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
         final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
@@ -52,36 +50,28 @@ public class Sandbox extends JPanel {
         this.generationPanel = new GenerationPanel(this);
 
         final JPanel north = new JPanel(new BorderLayout());
-        final JPanel gridOption = sandboxTools.newGridOptionDimension(this);
+        final JPanel gridOption = SandboxTools.newGridOptionDimension(this);
         north.add(generationPanel, BorderLayout.AFTER_LINE_ENDS);
         north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
         north.add(gridOption, BorderLayout.WEST);
         this.add(north, BorderLayout.NORTH);
 
-        this.bBook = this.sandboxTools.newJButton("BOOK", "Open the book");
-        final JButton bExit = this.sandboxTools.newJButton("EXIT", "Exit from this mode");
+        this.bBook = SandboxTools.newJButton("BOOK", "Open the book");
+        final JButton bExit = SandboxTools.newJButton("EXIT", "Exit from this mode");
 
         final JPanel south = new JPanel(new BorderLayout());
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        southRight.add(this.sandboxTools.getClearButton());
+        southRight.add(SandboxTools.getClearButton());
         southRight.add(bBook);
         southRight.add(bExit);
-        south.add(sandboxTools.newJPanelStatistics(), BorderLayout.WEST);
+        south.add(SandboxTools.newJPanelStatistics(), BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 
         bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
         this.generationPanel.refreshView();
-    }
-
-    /**
-     * 
-     * @return the sandbox tools
-     */
-    public SandboxTools getSandboxTools() {
-        return this.sandboxTools;
     }
 
     /**

@@ -17,36 +17,38 @@ import view.swing.menu.MenuSettings;
  * An utility class for Sandbox.
  */
 //TODO make class static-final
-public class SandboxTools {
+public final class SandboxTools {
 
-    private JSpinner spinnerWidth;
-    private JSpinner spinnerHeight;
+    private static JSpinner spinnerWidth;
+    private static JSpinner spinnerHeight;
 
-    private JButton bApply;
-    private JButton bClear;
+    private static JButton bApply;
+    private static JButton bClear;
 
 
-    private JLabel numGenerationLabel;
-    private JLabel numSpeedLabel;
-    private JLabel aliveCell;
+    private static JLabel numGenerationLabel;
+    private static JLabel numSpeedLabel;
+    private static JLabel aliveCell;
 
-    private final Font font = new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
+    private static final Font FONT = new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
+
+    private SandboxTools() { }
 
     /**
      * 
      * @return a panel with all the statistics of the game
      */
-    public JPanel newJPanelStatistics() {
+    public static JPanel newJPanelStatistics() {
         final JPanel statsPanel = new JPanel(new GridLayout(2, 2));
         // display for current speed
         numSpeedLabel = new JLabel("|Speed value " + 1);
-        numSpeedLabel.setFont(this.font);
+        numSpeedLabel.setFont(SandboxTools.FONT);
         // display for current generation
         numGenerationLabel = new JLabel("|Current generation number:" + "0");
-        numGenerationLabel.setFont(this.font);
+        numGenerationLabel.setFont(SandboxTools.FONT);
         // display the number of the alive cell
         aliveCell = new JLabel("|Alive cell " + "0");
-        aliveCell.setFont(this.font);
+        aliveCell.setFont(SandboxTools.FONT);
         statsPanel.add(numGenerationLabel);
         statsPanel.add(numSpeedLabel);
         statsPanel.add(aliveCell);
@@ -59,10 +61,10 @@ public class SandboxTools {
      * @param genNumber the current genNumber
      * @param aliveCell the current number of alive cell
      */
-    public void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell) {
-        this.numGenerationLabel.setText("|Current generation number:" + genNumber);
-        this.numSpeedLabel.setText("|Speed value " + speedSlider);
-        this.aliveCell.setText("|Alive cell " + aliveCell);
+    public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell) {
+        SandboxTools.numGenerationLabel.setText("|Current generation number:" + genNumber);
+        SandboxTools.numSpeedLabel.setText("|Speed value " + speedSlider);
+        SandboxTools.aliveCell.setText("|Alive cell " + aliveCell);
     }
 
     /**
@@ -70,28 +72,28 @@ public class SandboxTools {
      * @param sandbox the sandbox
      * @return a JPanel with the grid dimension option.
      */
-    public JPanel newGridOptionDimension(final Sandbox sandbox) {
+    public static JPanel newGridOptionDimension(final Sandbox sandbox) {
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
         final JPanel topGrid = new JPanel(new FlowLayout());
         final JPanel bottomGrid = new JPanel(new FlowLayout());
-        gridOption.setFont(this.font);
-        bApply = this.newJButton("Apply", "Change the grid dimension");
-        bApply.setFont(this.font);
+        gridOption.setFont(SandboxTools.FONT);
+        bApply = SandboxTools.newJButton("Apply", "Change the grid dimension");
+        bApply.setFont(SandboxTools.FONT);
         final JLabel gridText = new JLabel("Grid dimension ");
-        gridText.setFont(this.font);
+        gridText.setFont(SandboxTools.FONT);
         topGrid.add(gridText);
         topGrid.add(bApply);
         gridOption.add(topGrid);
         spinnerWidth = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
-        spinnerWidth.setFont(this.font);
+        spinnerWidth.setFont(SandboxTools.FONT);
         final JLabel labelWidth = new JLabel("Dimension");
-        labelWidth.setFont(this.font);
+        labelWidth.setFont(SandboxTools.FONT);
         bottomGrid.add(labelWidth);
         bottomGrid.add(spinnerWidth);
         spinnerHeight = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
-        spinnerHeight.setFont(this.font);
+        spinnerHeight.setFont(SandboxTools.FONT);
         final JLabel labelHeight = new JLabel(" x ");
-        labelHeight.setFont(this.font);
+        labelHeight.setFont(SandboxTools.FONT);
         bottomGrid.add(labelHeight);
         bottomGrid.add(spinnerHeight);
         gridOption.add(bottomGrid);
@@ -104,9 +106,9 @@ public class SandboxTools {
      * 
      * @return the Clear JButton
      */
-    public JButton getClearButton() {
+    public static JButton getClearButton() {
         if (Objects.isNull(bClear)) {
-            bClear = this.newJButton("Clear", "Clear the grid");
+            bClear = newJButton("Clear", "Clear the grid");
         }
         return bClear;
     }
@@ -115,7 +117,7 @@ public class SandboxTools {
      * 
      * @return the setView button
      */
-    public JButton getbSetView() {
+    public static JButton getbSetView() {
         return bApply;
     }
 
@@ -123,7 +125,7 @@ public class SandboxTools {
      * 
      * @return an int that represent the height value of the grid.
      */
-    public int getHeightSelect() {
+    public static int getHeightSelect() {
         return (int) spinnerHeight.getValue();
     }
 
@@ -131,7 +133,7 @@ public class SandboxTools {
      * 
      * @return an int that represent the width value of the grid.
      */
-    public int getWidthSelect() {
+    public static int getWidthSelect() {
         return (int) spinnerWidth.getValue();
     }
 
@@ -141,7 +143,7 @@ public class SandboxTools {
      * @param tooltipText the tool tip of the button
      * @return a new button
      */
-    public JButton newJButton(final String name, final String tooltipText) {
+    public static JButton newJButton(final String name, final String tooltipText) {
         final JButton button = new JButton(name);
         button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         button.setToolTipText(tooltipText);
