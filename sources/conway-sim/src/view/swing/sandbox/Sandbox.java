@@ -2,11 +2,17 @@ package view.swing.sandbox;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.KeyEvent;
 import java.util.Objects;
+
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.UIManager;
+
 import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import view.swing.DesktopGUI;
@@ -28,6 +34,8 @@ public class Sandbox extends JPanel {
 
     private final GenerationPanel generationPanel;
     private final JButton bBook;
+    private final JButton bApply;
+    private final JButton bClear;
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private BookFrame book;
@@ -39,6 +47,7 @@ public class Sandbox extends JPanel {
     public Sandbox(final DesktopGUI mainGUI) {
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
+        this.bClear = SandboxTools.newJButton("Clear", "Clear the grid");
         final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
                 mainGUI.getScreenHeight(),
                 mainGUI.getScreenWidth())
@@ -50,7 +59,8 @@ public class Sandbox extends JPanel {
         this.generationPanel = new GenerationPanel(this);
 
         final JPanel north = new JPanel(new BorderLayout());
-        final JPanel gridOption = SandboxTools.newGridOptionDimension(this);
+        bApply = SandboxTools.newJButton("Apply", "Change the grid dimension");
+        final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply);
         north.add(this.generationPanel, BorderLayout.AFTER_LINE_ENDS);
         north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
         north.add(gridOption, BorderLayout.WEST);
@@ -62,7 +72,7 @@ public class Sandbox extends JPanel {
         final JPanel south = new JPanel(new BorderLayout());
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        southRight.add(SandboxTools.getClearButton());
+        southRight.add(bClear);
         southRight.add(this.bBook);
         southRight.add(bExit);
         south.add(SandboxTools.newJPanelStatistics(), BorderLayout.WEST);
@@ -71,14 +81,39 @@ public class Sandbox extends JPanel {
 
         this.bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
+
+        final InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
+        im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
+        im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
+        this.bClear.addActionListener(e -> this.generationPanel.clear());
+        KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> {
+            if (bClear.isEnabled()) {
+                this.generationPanel.clear();
+            }
+        });
         this.generationPanel.refreshView();
+    }
+
+    /**
+     *@param flag a boolean flag
+     */
+    public void setButtonClearEnabled(final boolean flag) {
+        this.bClear.setEnabled(flag);
+    }
+
+    /**
+     * 
+     * @param flag a boolean flag
+     */
+    public void setButtonApplyEnabled(final boolean flag) {
+        this.bApply.setEnabled(flag);
     }
 
     /**
      * 
      * @return the book button
      */
-    public JButton getBookButton() {
+    public JButton getButtonBook() {
         return this.bBook;
     }
 
@@ -94,6 +129,7 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
+        this.grabFocus();
     }
 
     private void callBook() {

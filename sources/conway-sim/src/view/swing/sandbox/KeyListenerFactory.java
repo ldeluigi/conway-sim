@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 /**
  * 
  */
-//TODO make class static
 public final class KeyListenerFactory {
 
     private KeyListenerFactory() { }
@@ -24,8 +24,8 @@ public final class KeyListenerFactory {
      * @param event the event
      */
     public static void addKeyListener(final JPanel panel, final String name, final int keyCode, final int modifier, final Runnable event) {
-        final InputMap inputMap = new InputMap();
-        final ActionMap actionMap = new ActionMap();
+        final InputMap inputMap = panel.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+        final ActionMap actionMap = panel.getActionMap();
         inputMap.put(KeyStroke.getKeyStroke(keyCode, modifier), name);
         actionMap.put(name, new AbstractAction() {
 
@@ -51,4 +51,5 @@ public final class KeyListenerFactory {
     public static void addKeyListener(final JPanel panel, final String name, final int keyCode, final Runnable event) {
         KeyListenerFactory.addKeyListener(panel, name, keyCode, 0, event);
     }
+
 }

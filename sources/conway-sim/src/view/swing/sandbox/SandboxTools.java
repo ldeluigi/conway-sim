@@ -3,8 +3,6 @@ package view.swing.sandbox;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.Objects;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,15 +14,10 @@ import view.swing.menu.MenuSettings;
 /**
  * An utility class for Sandbox.
  */
-//TODO make class static-final
 public final class SandboxTools {
 
     private static JSpinner spinnerWidth;
     private static JSpinner spinnerHeight;
-
-    private static JButton bApply;
-    private static JButton bClear;
-
 
     private static JLabel numGenerationLabel;
     private static JLabel numSpeedLabel;
@@ -70,14 +63,14 @@ public final class SandboxTools {
     /**
      * 
      * @param sandbox the sandbox
+     * @param bApply the apply button
      * @return a JPanel with the grid dimension option.
      */
-    public static JPanel newGridOptionDimension(final Sandbox sandbox) {
+    public static JPanel newGridOptionDimension(final Sandbox sandbox, final JButton bApply) {
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
         final JPanel topGrid = new JPanel(new FlowLayout());
         final JPanel bottomGrid = new JPanel(new FlowLayout());
         gridOption.setFont(SandboxTools.FONT);
-        bApply = SandboxTools.newJButton("Apply", "Change the grid dimension");
         bApply.setFont(SandboxTools.FONT);
         final JLabel gridText = new JLabel("Grid dimension ");
         gridText.setFont(SandboxTools.FONT);
@@ -101,25 +94,6 @@ public final class SandboxTools {
 //            System.err.println("new Grid : " + spinnerHeight.getValue().toString() + " x " + spinnerWidth.getValue().toString());
         });
         return gridOption;
-    }
-
-    /**
-     * 
-     * @return the Clear JButton
-     */
-    public static JButton getClearButton() {
-        if (Objects.isNull(bClear)) {
-            bClear = newJButton("Clear", "Clear the grid");
-        }
-        return bClear;
-    }
-
-    /**
-     * 
-     * @return the setView button
-     */
-    public static JButton getbSetView() {
-        return bApply;
     }
 
     /**
@@ -149,6 +123,7 @@ public final class SandboxTools {
         button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         button.setToolTipText(tooltipText);
         button.setFocusPainted(false);
+//        button.setFocusable(false);
         return button;
     }
 }

@@ -46,7 +46,6 @@ public class GenerationPanel extends JPanel {
     private final JButton bGoTo;
     private final JButton bPrev;
     private final JButton bPlay;
-    private final JButton bClear;
     private final JProgressBar progresBar;
 
     private final GenerationController generationController;
@@ -70,7 +69,6 @@ public class GenerationPanel extends JPanel {
         bGoTo = SandboxTools.newJButton("Go to", "Go at the indicated generations");
         bPrev = SandboxTools.newJButton("Previous", "Go to the previous generation");
         bPlay = SandboxTools.newJButton("Play", "Play the current game");
-        bClear = SandboxTools.getClearButton();
         progresBar = new JProgressBar();
         progresBar.setIndeterminate(true);
         progresBar.setVisible(false);
@@ -113,7 +111,7 @@ public class GenerationPanel extends JPanel {
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
         bEnd.setEnabled(false);
-        bClear.setEnabled(true);
+        this.view.setButtonClearEnabled(true);
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
@@ -126,7 +124,6 @@ public class GenerationPanel extends JPanel {
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
         bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
         bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
-        bClear.addActionListener(e -> this.clear());
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (bStart.isEnabled()) {
                 start();
@@ -141,11 +138,6 @@ public class GenerationPanel extends JPanel {
                 end();
             }
         });
-        KeyListenerFactory.addKeyListener(this.view, "clear", KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK, () -> {
-            if (bClear.isEnabled()) {
-                clear();
-            }
-        });
         KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> {
             if (bNext.isEnabled()) {
                 goTo(this.generationController.getCurrentNumberGeneration() + 1L);
@@ -158,9 +150,13 @@ public class GenerationPanel extends JPanel {
         });
         KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP, () -> speedSlider.setValue(speedSlider.getValue() + 1));
         KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN, () -> speedSlider.setValue(speedSlider.getValue() - 1));
+        this.requestFocusInWindow();
     }
 
-    private void clear() {
+    /**
+     * 
+     */
+    public void clear() {
         this.view.getGridEditor().killThemAll();
     }
 
@@ -211,7 +207,7 @@ public class GenerationPanel extends JPanel {
 
     private void end() {
         this.view.getGridEditor().setEnabled(true);
-        this.view.getBookButton().setEnabled(true);
+        this.view.getButtonBook().setEnabled(true);
         bStart.setEnabled(true);
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
@@ -219,20 +215,20 @@ public class GenerationPanel extends JPanel {
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
-        this.bClear.setEnabled(true);
+        this.view.setButtonClearEnabled(true);
     }
 
     private void start() {
         this.view.getGridEditor().setEnabled(false);
         this.generationController.newGame();
-        SandboxTools.getbSetView().setEnabled(false);
-        this.view.getBookButton().setEnabled(false);
+        this.view.setButtonApplyEnabled(false);
+        this.view.getButtonBook().setEnabled(false);
         this.bStart.setEnabled(false);
         this.bPause.setEnabled(false);
         this.bPlay.setEnabled(true);
         this.bEnd.setEnabled(true);
         this.setTimeButtonEnable(true);
-        this.bClear.setEnabled(false);
+        this.view.setButtonClearEnabled(false);
     }
 
     private void resume() {
