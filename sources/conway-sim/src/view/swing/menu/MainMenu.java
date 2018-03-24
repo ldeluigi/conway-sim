@@ -3,6 +3,7 @@ package view.swing.menu;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
 import view.swing.sandbox.Sandbox;
 
@@ -116,5 +118,10 @@ public final class MainMenu extends JPanel {
             loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
             this.add(loading);
         }
+    }
+
+    @Override
+    public void paintComponent(final Graphics g) {
+        g.drawImage(ResourceLoader.loadImage("background.main"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 }
