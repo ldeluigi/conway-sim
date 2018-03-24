@@ -37,6 +37,7 @@ public final class MainMenu extends JPanel {
     public MainMenu(final DesktopGUI mainGUI) {
         this.setLayout(new BorderLayout());
         final JPanel center = new JPanel(new GridBagLayout());
+        center.setOpaque(false);
         this.add(center, BorderLayout.CENTER);
         final JLabel title = new JLabel("Conway's Game of Life");
         title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
@@ -44,6 +45,7 @@ public final class MainMenu extends JPanel {
         title.setBorder(new EmptyBorder((mainGUI.getCurrentHeight() * 2) / BUTTON_RATIO_Y, 0, 0, 0));
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
+        centralButtons.setOpaque(false);
         final JButton sandbox = new JButton("Sandbox");
         sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
         sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
@@ -94,6 +96,7 @@ public final class MainMenu extends JPanel {
         centralButtons.add(exit, c);
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
+        lowerPanel.setOpaque(false);
         lowerPanel.setLayout(new BorderLayout());
         final JLabel version = new JLabel("0.1.1 (Alpha)");
         final JLabel author = new JLabel("LDLM-Project, All Rights Reserved");
