@@ -1,6 +1,7 @@
 package view.swing.menu;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -8,10 +9,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import controller.io.ResourceLoader;
@@ -35,18 +39,20 @@ public final class MainMenu extends JPanel {
      * @param mainGUI the main GUI
      */
     public MainMenu(final DesktopGUI mainGUI) {
+        UIManager.put("Button.select", Color.LIGHT_GRAY);
         this.setLayout(new BorderLayout());
         final JPanel center = new JPanel(new GridBagLayout());
         center.setOpaque(false);
         this.add(center, BorderLayout.CENTER);
-        final JLabel title = new JLabel("Conway's Game of Life");
-        title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
+        final JLabel title = new JLabel(new ImageIcon(ResourceLoader.loadImage("main.title")));
+        //title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setBorder(new EmptyBorder((mainGUI.getCurrentHeight() * 2) / BUTTON_RATIO_Y, 0, 0, 0));
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         centralButtons.setOpaque(false);
         final JButton sandbox = new JButton("Sandbox");
+        setBackgroundAndBorder(sandbox);
         sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
         sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         sandbox.addActionListener(e -> {
@@ -58,6 +64,7 @@ public final class MainMenu extends JPanel {
         sandbox.setToolTipText("Start Sandbox Mode");
         sandbox.setFocusPainted(false);
         final JButton exit = new JButton("Exit");
+        setBackgroundAndBorder(exit);
         final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X, 
                 mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * 2));
         exit.setPreferredSize(bottomCoupleDimension);
@@ -67,6 +74,7 @@ public final class MainMenu extends JPanel {
         exit.setFocusPainted(false);
         exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
         final JButton settings = new JButton("Settings");
+        setBackgroundAndBorder(settings);
         settings.setPreferredSize(bottomCoupleDimension);
         settings.addActionListener(e -> {
             mainGUI.setView(new MenuSettings(mainGUI));
@@ -106,6 +114,13 @@ public final class MainMenu extends JPanel {
         lowerPanel.add(author, BorderLayout.WEST);
         this.add(lowerPanel, BorderLayout.SOUTH);
     }
+
+    private void setBackgroundAndBorder(final JButton button) {
+        button.setBackground(Color.WHITE);
+        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
+        button.setForeground(Color.BLACK);
+    }
+
     /**
      * {@link JPanel} representing a simple loading screen.
      */
@@ -125,6 +140,6 @@ public final class MainMenu extends JPanel {
 
     @Override
     public void paintComponent(final Graphics g) {
-        g.drawImage(ResourceLoader.loadImage("background.main"), 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("main.background"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 }

@@ -191,4 +191,5 @@ public final class MenuSettings extends JPanel {
     public static synchronized boolean areTransitionsInstant() {
         return instantTransitions;
     }
+
 }

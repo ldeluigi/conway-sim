@@ -7,17 +7,18 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 /**
- *
+ * Resource loader.
  */
 public final class ResourceLoader {
 
-    private static final Image DEFAULT_IMAGE = null;
     private static final Map<String, String> RESOURCE_MAP = new HashMap<>();
     private static final Map<String, Boolean> IS_BUFFERED = new HashMap<>();
     private static final Map<String, Image> IMG_BUFFER = new HashMap<>();
+    private static final Image DEFAULT_IMAGE = null;
 
     static { 
-        RESOURCE_MAP.put("background.main", "/bg_main.jpg");
+        RESOURCE_MAP.put("main.background", "/bg_main.jpg");
+        RESOURCE_MAP.put("main.title", "/logo_main.png");
     }
 
     private ResourceLoader() { }
@@ -28,11 +29,10 @@ public final class ResourceLoader {
      * @return loaded image if found, or else throws ResourceNotFoundException
      */
     public static Image loadImage(final String resource) {
-        final String path = getPath(resource);
-        System.out.println(path);
         if (isBuffered(resource)) {
             return getBufferedImage(resource);
         }
+        final String path = getPath(resource);
         try {
             final Image result = ImageIO.read(ResourceLoader.class.getResource(path));
             addBufferedImage(resource, result);
@@ -57,5 +57,14 @@ public final class ResourceLoader {
 
     private static String getPath(final String resource) {
         return RESOURCE_MAP.get(resource);
+    }
+
+    /**
+     * 
+     * @param resource the resource tag to load
+     * @return the string loaded or null
+     */
+    public static String loadString(final String resource) {
+        return resource; //TODO implement smarter way
     }
 }

@@ -3,6 +3,7 @@ package view.swing.sandbox;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -124,6 +125,15 @@ public final class SandboxTools {
         button.setToolTipText(tooltipText);
         button.setFocusPainted(false);
 //        button.setFocusable(false);
+        setBackgroundAndBorder(button);
         return button;
+    }
+
+    /**
+     * Sets background and border of a button.
+     * @param button to edit
+     */
+    public static void setBackgroundAndBorder(final JButton button) {
+        //TODO aggiungere modifiche
     }
 }
