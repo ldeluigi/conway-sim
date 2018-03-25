@@ -1,9 +1,11 @@
 package view.swing.menu;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -19,6 +22,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
+
+import controller.io.ResourceLoader;
+
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
@@ -54,8 +60,10 @@ public final class MenuSettings extends JPanel {
     public MenuSettings(final GUI mainGUI) {
         this.setLayout(new GridBagLayout());
         final JPanel centralButtons = new JPanel(new GridBagLayout());
+        centralButtons.setOpaque(false);
         final GridBagConstraints c = new GridBagConstraints();
         final JCheckBox checkLookAndFeel = new JCheckBox();
+        checkLookAndFeel.setOpaque(false);
         checkLookAndFeel.setSelected(isUsingSystemLF());
         checkLookAndFeel.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -83,6 +91,7 @@ public final class MenuSettings extends JPanel {
         final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(),
                 MIN_FONT_SIZE, MAX_FONT_SIZE, 1);
         final JSpinner fontSizeSelector = new JSpinner(fontSizeSelectorModel);
+        fontSizeSelector.setOpaque(false);
         fontSizeSelector.setFont(generateFont());
         fontSizeSelector.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / MINI_BUTTON_RATIO_X,
                 mainGUI.getCurrentHeight() / MINI_BUTTON_RATIO_Y));
@@ -94,6 +103,7 @@ public final class MenuSettings extends JPanel {
         final JLabel fontLabel = new JLabel("Font dimension");
         fontLabel.setFont(MenuSettings.generateFont());
         final JCheckBox checkInstantAnimations = new JCheckBox();
+        checkInstantAnimations.setOpaque(false);
         checkInstantAnimations.setSelected(areTransitionsInstant());
         checkInstantAnimations.addItemListener(e -> {
             if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -117,6 +127,8 @@ public final class MenuSettings extends JPanel {
         addToCenter(GridBagConstraints.WEST, 0, 2, 3, fontLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 2, 1, fontSizeSelector, c, centralButtons);
         final JButton ret = new JButton("Return");
+        ret.setBackground(Color.WHITE);
+        ret.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
         ret.setFocusPainted(false);
         ret.setPreferredSize(
                 new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
@@ -190,6 +202,11 @@ public final class MenuSettings extends JPanel {
      */
     public static synchronized boolean areTransitionsInstant() {
         return instantTransitions;
+    }
+
+    @Override
+    public void paintComponent(final Graphics g) {
+        g.drawImage(ResourceLoader.loadImage("settings.background"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
 }
