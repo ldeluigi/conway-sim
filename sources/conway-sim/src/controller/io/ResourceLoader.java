@@ -11,14 +11,16 @@ import javax.imageio.ImageIO;
  */
 public final class ResourceLoader {
 
+    private static final String RES_DIR = "/res/";
     private static final Map<String, String> RESOURCE_MAP = new HashMap<>();
     private static final Map<String, Boolean> IS_BUFFERED = new HashMap<>();
     private static final Map<String, Image> IMG_BUFFER = new HashMap<>();
     private static final Image DEFAULT_IMAGE = null;
 
     static { 
-        RESOURCE_MAP.put("main.background", "/bg_main.jpg");
-        RESOURCE_MAP.put("main.title", "/logo_main.png");
+        RESOURCE_MAP.put("main.background", "bg_main.jpg");
+        RESOURCE_MAP.put("main.title", "logo_main.png");
+        RESOURCE_MAP.put("sandbox.background", "bg_blank.jpg");
     }
 
     private ResourceLoader() { }
@@ -56,7 +58,7 @@ public final class ResourceLoader {
     }
 
     private static String getPath(final String resource) {
-        return RESOURCE_MAP.get(resource);
+        return RES_DIR + RESOURCE_MAP.get(resource);
     }
 
     /**
