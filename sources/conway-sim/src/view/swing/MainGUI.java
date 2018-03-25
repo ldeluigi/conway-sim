@@ -15,6 +15,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
+import controller.io.ResourceLoader;
 import view.swing.menu.MainMenu;
 /**
  * 
@@ -75,6 +76,7 @@ public final class MainGUI implements DesktopGUI {
         final JPanel menuPanel = new MainMenu(this);
         setView(menuPanel);
         this.frame.setVisible(true);
+        this.frame.setIconImage(ResourceLoader.loadImage("main.icon"));
     }
 
     /**
