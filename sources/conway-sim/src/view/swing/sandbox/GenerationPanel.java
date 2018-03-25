@@ -1,6 +1,5 @@
 package view.swing.sandbox;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -10,7 +9,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,7 +17,6 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
-
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import core.model.Generation;
@@ -103,7 +100,7 @@ public class GenerationPanel extends JPanel {
 
         northR.add(spinner); //to use the go to button
 
-        this.setBorder(BorderFactory.createLineBorder(Color.black));
+//        this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
         //Start conditions.

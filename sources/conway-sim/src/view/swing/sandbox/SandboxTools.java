@@ -1,15 +1,16 @@
 package view.swing.sandbox;
 
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-
 import view.swing.menu.MenuSettings;
 
 /**
@@ -130,10 +131,38 @@ public final class SandboxTools {
     }
 
     /**
-     * Sets background and border of a button.
+     * Sets default background and border of a button.
      * @param button to edit
      */
     public static void setBackgroundAndBorder(final JButton button) {
-        //TODO aggiungere modifiche
+        setBackgroundAndBorder(button, Color.WHITE, Color.GRAY, Color.BLACK);
+    }
+
+    /**
+     * Sets background and border of a button.
+     * @param button to edit
+     * @param background color
+     * @param border color
+     * @param forground color
+     */
+    public static void setBackgroundAndBorder(final JButton button, final Color background, final Color border, final Color forground) {
+        button.setBackground(background);
+        button.setBorder(BorderFactory.createLineBorder(border, 1, false));
+        button.setForeground(forground);
+    }
+
+    /**
+     * 
+     * @param name of the button
+     * @param tooltipText of the button
+     * @param background color
+     * @param border color
+     * @param forground color
+     * @return a new JButton
+     */
+    public static JButton newJButtonWithBackgroundAndBorder(final String name, final String tooltipText, final Color background, final Color border, final Color forground) {
+        final JButton newButton = newJButton(name, tooltipText);
+        setBackgroundAndBorder(newButton, background, border, forground);
+        return newButton;
     }
 }

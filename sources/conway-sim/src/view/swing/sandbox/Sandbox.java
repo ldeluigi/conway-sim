@@ -1,7 +1,9 @@
 package view.swing.sandbox;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
 
@@ -15,6 +17,7 @@ import javax.swing.UIManager;
 
 import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
+import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 
@@ -47,7 +50,7 @@ public class Sandbox extends JPanel {
     public Sandbox(final DesktopGUI mainGUI) {
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
-        this.bClear = SandboxTools.newJButton("Clear", "Clear the grid");
+        this.bClear = SandboxTools.newJButton("CLEAR", "Clear the grid");
         final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
                 mainGUI.getScreenHeight(),
                 mainGUI.getScreenWidth())
@@ -91,7 +94,14 @@ public class Sandbox extends JPanel {
                 this.generationPanel.clear();
             }
         });
+        this.setOpaque(false);
+        this.setBackground(Color.RED);
         this.generationPanel.refreshView();
+    }
+
+    @Override
+    public void paintComponent(final Graphics g) {
+        g.drawImage(ResourceLoader.loadImage("main.background"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     /**
