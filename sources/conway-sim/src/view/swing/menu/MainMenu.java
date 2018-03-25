@@ -51,7 +51,7 @@ public final class MainMenu extends JPanel {
         this.add(title, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         centralButtons.setOpaque(false);
-        final JButton sandbox = new JButton("Sandbox");
+        final JButton sandbox = new JButton(ResourceLoader.loadString("main.sandbox"));
         setBackgroundAndBorder(sandbox);
         sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
         sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
@@ -61,9 +61,9 @@ public final class MainMenu extends JPanel {
                mainGUI.setView(new Sandbox(mainGUI));
             });
         });
-        sandbox.setToolTipText("Start Sandbox Mode");
+        sandbox.setToolTipText(ResourceLoader.loadString("main.tooltip.sandbox"));
         sandbox.setFocusPainted(false);
-        final JButton exit = new JButton("Exit");
+        final JButton exit = new JButton(ResourceLoader.loadString("main.exit"));
         setBackgroundAndBorder(exit);
         final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X, 
                 mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * 2));
@@ -73,7 +73,7 @@ public final class MainMenu extends JPanel {
         });
         exit.setFocusPainted(false);
         exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
-        final JButton settings = new JButton("Settings");
+        final JButton settings = new JButton(ResourceLoader.loadString("main.settings"));
         setBackgroundAndBorder(settings);
         settings.setPreferredSize(bottomCoupleDimension);
         settings.addActionListener(e -> {
@@ -106,8 +106,8 @@ public final class MainMenu extends JPanel {
         final JPanel lowerPanel = new JPanel();
         lowerPanel.setOpaque(false);
         lowerPanel.setLayout(new BorderLayout());
-        final JLabel version = new JLabel("0.1.1 (Alpha)");
-        final JLabel author = new JLabel("LDLM-Project, All Rights Reserved");
+        final JLabel version = new JLabel(ResourceLoader.loadString("main.version"));
+        final JLabel author = new JLabel(ResourceLoader.loadString("main.author"));
         version.setFont(new Font(version.getFont().getFontName(), version.getFont().getStyle(), MenuSettings.getFontSize()));
         author.setFont(new Font(author.getFont().getFontName(), author.getFont().getStyle(), MenuSettings.getFontSize()));
         lowerPanel.add(version, BorderLayout.EAST);
@@ -132,7 +132,7 @@ public final class MainMenu extends JPanel {
          */
         public LoadingScreen() {
             super(new GridBagLayout());
-            final JLabel loading = new JLabel("Loading...");
+            final JLabel loading = new JLabel(ResourceLoader.loadString("main.loading"));
             loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
             this.add(loading);
         }
