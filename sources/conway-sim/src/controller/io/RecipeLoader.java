@@ -17,7 +17,7 @@ import controller.book.RecipeBookImpl;
  */
 public class RecipeLoader {
     private final RecipeBookImpl recipebook;
-    private static final String RECIPEFOLDER = "./src/test/recipebook";
+    private static final String RECIPEFOLDER = "./res/recipebook";
     /** This class parses all the files in the preset folder.
      *  than it loads it in the recipebook.
      * @throws IOException .
