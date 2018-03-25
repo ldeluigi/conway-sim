@@ -3,9 +3,13 @@ package controller.io;
 import java.awt.Image;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.ResourceBundle.Control;
 
 import javax.imageio.ImageIO;
+
 /**
  * Resource loader.
  */
@@ -15,21 +19,22 @@ public final class ResourceLoader {
     private static final Map<String, String> RESOURCE_MAP = new HashMap<>();
     private static final Map<String, Boolean> IS_BUFFERED = new HashMap<>();
     private static final Map<String, Image> IMG_BUFFER = new HashMap<>();
-    private static final Image DEFAULT_IMAGE = null;
 
-    static { 
+    static {
         RESOURCE_MAP.put("main.background", "bg_main.jpg");
         RESOURCE_MAP.put("main.title", "logo_main.png");
-        RESOURCE_MAP.put("main.icon", "main_icon.jpg");
+        RESOURCE_MAP.put("main.icon", "main_icon.png");
         RESOURCE_MAP.put("settings.background", "bg_main_blurred.jpg");
         RESOURCE_MAP.put("sandbox.background", "bg_blank_blurred.jpg");
     }
 
-    private ResourceLoader() { }
+    private ResourceLoader() {
+    }
 
     /**
      * 
-     * @param resource the resource tag to load
+     * @param resource
+     *            the resource tag to load
      * @return loaded image if found, or else throws ResourceNotFoundException
      */
     public static Image loadImage(final String resource) {
@@ -42,7 +47,7 @@ public final class ResourceLoader {
             addBufferedImage(resource, result);
             return result;
         } catch (IOException e) {
-            return DEFAULT_IMAGE;
+            throw new IllegalStateException("Resource " + resource + " not found (or not accessible) in " + path);
         }
     }
 
@@ -65,10 +70,25 @@ public final class ResourceLoader {
 
     /**
      * 
-     * @param resource the resource tag to load
+     * @param resource
+     *            the resource tag to load
+     * @param language
+     *            a Locale representing the language of the required string
+     * @return the string loaded or null
+     */
+    public static String loadString(final String resource, final Locale language) {
+        final ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle", language,
+                Control.getControl(Control.FORMAT_PROPERTIES));
+        return labels.getString(resource);
+    }
+
+    /**
+     * 
+     * @param resource
+     *            the resource tag to load
      * @return the string loaded or null
      */
     public static String loadString(final String resource) {
-        return resource; //TODO implement smarter way
+        return loadString(resource, Locale.ROOT);
     }
 }
