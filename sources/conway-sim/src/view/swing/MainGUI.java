@@ -36,7 +36,7 @@ public final class MainGUI implements DesktopGUI {
      * Starts the application.
      */
     public MainGUI() {
-        this.frame = new JFrame("Conway's Game of Life");
+        this.frame = new JFrame(ResourceLoader.loadString("frame.title"));
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.frame.addWindowListener(new WindowListener() {
             public void windowOpened(final WindowEvent e) {  }

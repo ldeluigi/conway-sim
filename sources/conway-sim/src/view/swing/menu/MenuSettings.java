@@ -71,22 +71,22 @@ public final class MenuSettings extends JPanel {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     setUsingSystemLF(true);
                 } catch (Exception e1) {
-                    final JLabel l = new JLabel("No System Look and Feel found.");
-                    JOptionPane.showMessageDialog(this, l, "Unavailable", JOptionPane.ERROR_MESSAGE);
+                    final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.SysLookAndFeelNotFound"));
+                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("error.unavailable"), JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getStateChange() == ItemEvent.DESELECTED) {
                 try {
                     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                     setUsingSystemLF(false);
                 } catch (Exception e1) {
-                    final JLabel l = new JLabel("No System Look and Feel found.");
-                    JOptionPane.showMessageDialog(this, l, "Error", JOptionPane.ERROR_MESSAGE);
+                    final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.CrossLookAndFeelNotFound"));
+                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("settings.error.unavailable"), JOptionPane.ERROR_MESSAGE);
                 }
             }
             checkLookAndFeel.setSelected(isUsingSystemLF());
             this.repaint();
         });
-        final JLabel checkLFLabel = new JLabel("Use System Look and Feel (if available)");
+        final JLabel checkLFLabel = new JLabel(ResourceLoader.loadString("settings.sysLF"));
         checkLFLabel.setFont(MenuSettings.generateFont());
         final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(),
                 MIN_FONT_SIZE, MAX_FONT_SIZE, 1);
@@ -100,7 +100,7 @@ public final class MenuSettings extends JPanel {
             resizeFonts();
         });
         ((DefaultEditor) fontSizeSelector.getEditor()).getTextField().setEditable(false);
-        final JLabel fontLabel = new JLabel("Font dimension");
+        final JLabel fontLabel = new JLabel(ResourceLoader.loadString("settings.fontDimension"));
         fontLabel.setFont(MenuSettings.generateFont());
         final JCheckBox checkInstantAnimations = new JCheckBox();
         checkInstantAnimations.setOpaque(false);
@@ -112,7 +112,7 @@ public final class MenuSettings extends JPanel {
                 setInstantTransitions(false);
             }
         });
-        final JLabel checkInstantAnimationsLabel = new JLabel("Enable instant transitions between generations");
+        final JLabel checkInstantAnimationsLabel = new JLabel(ResourceLoader.loadString("settings.instantTransitions"));
         checkInstantAnimationsLabel.setFont(MenuSettings.generateFont());
         c.insets = new Insets(mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0,
                 mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0);
@@ -126,7 +126,7 @@ public final class MenuSettings extends JPanel {
         addToCenter(GridBagConstraints.EAST, 4, 1, 1, checkInstantAnimations, c, centralButtons);
         addToCenter(GridBagConstraints.WEST, 0, 2, 3, fontLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 2, 1, fontSizeSelector, c, centralButtons);
-        final JButton ret = new JButton("Return");
+        final JButton ret = new JButton(ResourceLoader.loadString("settings.return"));
         ret.setBackground(Color.WHITE);
         ret.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
         ret.setFocusPainted(false);
