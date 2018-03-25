@@ -15,7 +15,8 @@ import javax.imageio.ImageIO;
  */
 public final class ResourceLoader {
 
-    private static final String RES_DIR = "/res/";
+    private static final String RES_DIR = "/";
+    private static final String IMG_DIR = "img/";
     private static final Map<String, String> RESOURCE_MAP = new HashMap<>();
     private static final Map<String, Boolean> IS_BUFFERED = new HashMap<>();
     private static final Map<String, Image> IMG_BUFFER = new HashMap<>();
@@ -41,7 +42,7 @@ public final class ResourceLoader {
         if (isBuffered(resource)) {
             return getBufferedImage(resource);
         }
-        final String path = getPath(resource);
+        final String path = getImagePath(resource);
         try {
             final Image result = ImageIO.read(ResourceLoader.class.getResource(path));
             addBufferedImage(resource, result);
@@ -64,8 +65,8 @@ public final class ResourceLoader {
         return IS_BUFFERED.containsKey(resource);
     }
 
-    private static String getPath(final String resource) {
-        return RES_DIR + RESOURCE_MAP.get(resource);
+    private static String getImagePath(final String resource) {
+        return RES_DIR + IMG_DIR + RESOURCE_MAP.get(resource);
     }
 
     /**
