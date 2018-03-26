@@ -33,22 +33,22 @@ public class GenerationHistory implements Memento<Generation> {
     }
 
     @Override
-    public Map<Long, Generation> getSavedState() {
+    public final Map<Long, Generation> getSavedState() {
         return Collections.unmodifiableMap(this.historyGeneration);
     }
 
     @Override
-    public void setFirst(final Generation newFirst) {
+    public final void setFirst(final Generation newFirst) {
         this.firstGeneration = newFirst;
     }
 
     @Override
-    public Generation getFirst() {
+    public final Generation getFirst() {
         return this.firstGeneration;
     }
 
     @Override
-    public void addElem(final Long numberGeneration, final Generation generation) {
+    public final void addElem(final Long numberGeneration, final Generation generation) {
         if (this.historyGeneration.keySet().size() >= NUMBER_OF_GENERATION_STORED) {
             this.historyGeneration.remove(this.historyGeneration.keySet().stream().min((x, y) -> Long.compare(x, y)).get());
         }
@@ -59,12 +59,12 @@ public class GenerationHistory implements Memento<Generation> {
     }
 
     @Override
-    public void removeElem(final Long numberGeneartion) {
+    public final void removeElem(final Long numberGeneartion) {
         this.historyGeneration.remove(numberGeneartion);
     }
 
     @Override
-    public void removeAllElemsAfter(final Long numberGeneration) {
+    public final void removeAllElemsAfter(final Long numberGeneration) {
         Objects.requireNonNull(this.historyGeneration);
         final List<Long> longToRemove = new LinkedList<>();
         if (!this.historyGeneration.isEmpty()) {

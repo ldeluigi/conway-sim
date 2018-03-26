@@ -37,7 +37,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void newGame() {
+    public final void newGame() {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
@@ -45,18 +45,18 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void pause() {
+    public final void pause() {
         this.clock.stopClock();
         this.view.refreshView();
     }
 
     @Override
-    public void play() {
+    public final void play() {
         this.clock.start();
     }
 
     @Override
-    public void reset() {
+    public final void reset() {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
@@ -64,13 +64,13 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void setSpeed(final int speed) {
+    public final void setSpeed(final int speed) {
         this.clock.setSpeed(speed);
         SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     @Override
-    public void loadGeneration(final Long generationNumber) {
+    public final void loadGeneration(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);
@@ -111,7 +111,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public Generation getCurrentGeneration() {
+    public final Generation getCurrentGeneration() {
         return this.currentGeneration;
     }
 
@@ -120,7 +120,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public synchronized Long getCurrentNumberGeneration() {
+    public final synchronized Long getCurrentNumberGeneration() {
         return this.currentGenerationNumber;
     }
 
@@ -129,7 +129,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public synchronized void computeNextGeneration() {
+    public final synchronized void computeNextGeneration() {
         this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
         this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
         this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
@@ -150,7 +150,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     @Override
-    public void setView(final Sandbox viewPanel) {
+    public final void setView(final Sandbox viewPanel) {
         this.view = viewPanel;
     }
 

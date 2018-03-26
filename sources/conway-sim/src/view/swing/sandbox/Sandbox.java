@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 import controller.editor.GridEditorImpl;
@@ -33,6 +34,7 @@ public class Sandbox extends JPanel {
     private static final long serialVersionUID = -9015811419136279771L;
 
     private static final int DEFAULT_SIZE = 100;
+    private static final int TITLE_SIZE = 80;
 
     private static final int CELL_SIZE_RATIO = 100;
 
@@ -110,23 +112,30 @@ public class Sandbox extends JPanel {
      */
     public void resetGrid() {
         this.remove(grid);
-        grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
-                mainGUI.getScreenHeight(),
-                mainGUI.getScreenWidth())
-                / CELL_SIZE_RATIO);
-        this.add(grid, BorderLayout.CENTER);
-        this.gridEditor = new GridEditorImpl(grid);
-        this.gridEditor.setEnabled(true);
-        this.generationPanel.resetGrid();
+        final JLabel loading = new JLabel(ResourceLoader.loadString("main.loading"));
+        loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
+        this.add(loading);
+        this.mainGUI.setView(loading);
+        SwingUtilities.invokeLater(() -> {
+            grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
+                    mainGUI.getScreenHeight(),
+                    mainGUI.getScreenWidth())
+                    / CELL_SIZE_RATIO);
+            this.add(grid, BorderLayout.CENTER);
+            this.gridEditor = new GridEditorImpl(grid);
+            this.gridEditor.setEnabled(true);
+            this.generationPanel.resetGrid();
+            this.mainGUI.setView(this);
+        });
     }
 
     @Override
-    public Font getFont() {
+    public final Font getFont() {
         return new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
     }
 
     @Override
-    public void paintComponent(final Graphics g) {
+    public final void paintComponent(final Graphics g) {
         g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
