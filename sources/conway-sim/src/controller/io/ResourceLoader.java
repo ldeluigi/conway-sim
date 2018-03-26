@@ -47,6 +47,9 @@ public final class ResourceLoader {
         final String path = getImagePath(resource);
         try {
             final Image result = ImageIO.read(ResourceLoader.class.getResource(path));
+            if (result == null) {
+                throw new IllegalStateException("The image cannot be read.");
+            }
             addBufferedImage(resource, result);
             return result;
         } catch (IOException e) {
