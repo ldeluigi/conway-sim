@@ -26,9 +26,7 @@ import view.swing.sandbox.Sandbox;
  * This class displays the main menu. Pattern: Singleton.
  */
 public final class MainMenu extends JPanel {
-
     private static final long serialVersionUID = 1L;
-    private static final int TITLE_SIZE = 80;
     private static final int BUTTON_TEXT_PLUS = 25;
     private static final int MINOR_BUTTON_TEXT_PLUS = 15;
     private static final int BUTTON_RATIO_Y = 10;
@@ -119,28 +117,6 @@ public final class MainMenu extends JPanel {
         button.setBackground(Color.WHITE);
         button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
         button.setForeground(Color.BLACK);
-    }
-
-    /**
-     * {@link JPanel} representing a simple loading screen.
-     */
-    public final class LoadingScreen extends JPanel {
-        private static final long serialVersionUID = 1L;
-
-        /**
-         * Constructor that builds the scene.
-         */
-        public LoadingScreen() {
-            super(new GridBagLayout());
-            final JLabel loading = new JLabel(ResourceLoader.loadString("main.loading"));
-            loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
-            this.add(loading);
-        }
-
-        @Override
-        public void paintComponent(final Graphics g) {
-            g.drawImage(ResourceLoader.loadImage("loading.background"), 0, 0, this.getWidth(), this.getHeight(), this);
-        }
     }
 
     @Override
