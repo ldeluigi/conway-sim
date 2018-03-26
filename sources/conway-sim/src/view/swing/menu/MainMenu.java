@@ -58,7 +58,7 @@ public final class MainMenu extends JPanel {
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
             SwingUtilities.invokeLater(() -> {
-               mainGUI.setView(new Sandbox(mainGUI));
+                mainGUI.setView(new Sandbox(mainGUI));
             });
         });
         sandbox.setToolTipText(ResourceLoader.loadString("main.tooltip.sandbox"));
@@ -124,7 +124,7 @@ public final class MainMenu extends JPanel {
     /**
      * {@link JPanel} representing a simple loading screen.
      */
-    public class LoadingScreen extends JPanel {
+    public final class LoadingScreen extends JPanel {
         private static final long serialVersionUID = 1L;
 
         /**
@@ -135,6 +135,11 @@ public final class MainMenu extends JPanel {
             final JLabel loading = new JLabel(ResourceLoader.loadString("main.loading"));
             loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
             this.add(loading);
+        }
+
+        @Override
+        public void paintComponent(final Graphics g) {
+            g.drawImage(ResourceLoader.loadImage("loading.background"), 0, 0, this.getWidth(), this.getHeight(), this);
         }
     }
 

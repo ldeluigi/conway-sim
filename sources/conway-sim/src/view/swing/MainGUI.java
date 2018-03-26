@@ -75,8 +75,8 @@ public final class MainGUI implements DesktopGUI {
         //Start with MainMenu
         final JPanel menuPanel = new MainMenu(this);
         setView(menuPanel);
-        this.frame.setVisible(true);
         this.frame.setIconImage(ResourceLoader.loadImage("main.icon"));
+        this.frame.setVisible(true);
     }
 
     /**
