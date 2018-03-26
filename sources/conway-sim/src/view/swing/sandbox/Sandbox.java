@@ -112,10 +112,11 @@ public class Sandbox extends JPanel {
      * 
      */
     public void resetGrid() {
+        this.setVisible(false);
         this.remove(grid);
         final JPanel loading = new LoadingScreen();
         this.add(loading, BorderLayout.CENTER);
-        this.repaint();
+        this.setVisible(true);
         SwingUtilities.invokeLater(() -> {
             grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
                     mainGUI.getScreenHeight(),
