@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.plaf.metal.MetalButtonUI;
+
 import view.swing.menu.MenuSettings;
 
 /**
@@ -25,25 +27,24 @@ public final class SandboxTools {
     private static JLabel numSpeedLabel;
     private static JLabel aliveCell;
 
-    private static final Font FONT = new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
-
     private SandboxTools() { }
 
     /**
-     * 
+     * @param font the font
      * @return a panel with all the statistics of the game
      */
-    public static JPanel newJPanelStatistics() {
+    public static JPanel newJPanelStatistics(final Font font) {
         final JPanel statsPanel = new JPanel(new GridLayout(2, 2));
+        statsPanel.setOpaque(false);
         // display for current speed
         numSpeedLabel = new JLabel("|Speed value " + 1);
-        numSpeedLabel.setFont(SandboxTools.FONT);
+        numSpeedLabel.setFont(font);
         // display for current generation
         numGenerationLabel = new JLabel("|Current generation number:" + "0");
-        numGenerationLabel.setFont(SandboxTools.FONT);
+        numGenerationLabel.setFont(font);
         // display the number of the alive cell
         aliveCell = new JLabel("|Alive cell " + "0");
-        aliveCell.setFont(SandboxTools.FONT);
+        aliveCell.setFont(font);
         statsPanel.add(numGenerationLabel);
         statsPanel.add(numSpeedLabel);
         statsPanel.add(aliveCell);
@@ -55,41 +56,48 @@ public final class SandboxTools {
      * @param speedSlider the current speed
      * @param genNumber the current genNumber
      * @param aliveCell the current number of alive cell
+     * @param font the new font
      */
-    public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell) {
+    public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell, final Font font) {
         SandboxTools.numGenerationLabel.setText("|Current generation number:" + genNumber);
         SandboxTools.numSpeedLabel.setText("|Speed value " + speedSlider);
         SandboxTools.aliveCell.setText("|Alive cell " + aliveCell);
+        SandboxTools.numGenerationLabel.setFont(font);
+        SandboxTools.numSpeedLabel.setFont(font);
+        SandboxTools.aliveCell.setFont(font);
     }
 
     /**
      * 
-     * @param sandbox the sandbox
-     * @param bApply the apply button
-     * @return a JPanel with the grid dimension option.
+     * @param sandbox a
+     * @param bApply a
+     * @param font the font
+     * @return a JPanel
      */
-    public static JPanel newGridOptionDimension(final Sandbox sandbox, final JButton bApply) {
+    public static JPanel newGridOptionDimension(final Sandbox sandbox, final JButton bApply, final Font font) {
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
+        gridOption.setOpaque(false);
         final JPanel topGrid = new JPanel(new FlowLayout());
+        topGrid.setOpaque(false);
         final JPanel bottomGrid = new JPanel(new FlowLayout());
-        gridOption.setFont(SandboxTools.FONT);
-        bApply.setFont(SandboxTools.FONT);
-        final JLabel gridText = new JLabel("Grid dimension ");
-        gridText.setFont(SandboxTools.FONT);
+        bottomGrid.setOpaque(false);
+        gridOption.setFont(font);
+        final JLabel gridText = new JLabel("Grid option ");
+        gridText.setFont(font);
         topGrid.add(gridText);
         topGrid.add(bApply);
         gridOption.add(topGrid);
         spinnerWidth = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
-        spinnerWidth.setFont(SandboxTools.FONT);
-        final JLabel labelWidth = new JLabel("Dimension");
-        labelWidth.setFont(SandboxTools.FONT);
-        bottomGrid.add(labelWidth);
+        spinnerWidth.setFont(font);
+        final JLabel labelDimension = new JLabel("Dimension ");
+        labelDimension.setFont(font);
+        bottomGrid.add(labelDimension);
         bottomGrid.add(spinnerWidth);
         spinnerHeight = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
-        spinnerHeight.setFont(SandboxTools.FONT);
-        final JLabel labelHeight = new JLabel(" x ");
-        labelHeight.setFont(SandboxTools.FONT);
-        bottomGrid.add(labelHeight);
+        spinnerHeight.setFont(font);
+        final JLabel division = new JLabel(" x ");
+        division.setFont(font);
+        bottomGrid.add(division);
         bottomGrid.add(spinnerHeight);
         gridOption.add(bottomGrid);
         bApply.addActionListener(e -> {
@@ -126,7 +134,19 @@ public final class SandboxTools {
         button.setToolTipText(tooltipText);
         button.setFocusPainted(false);
 //        button.setFocusable(false);
-        setBackgroundAndBorder(button);
+        setEnabledBackgroundAndBorder(button);
+        button.setUI(new MetalButtonUI() {
+            protected Color getDisabledTextColor() {
+                return Color.WHITE;
+            }
+        });
+        button.addChangeListener(e -> {
+            if (button.isEnabled()) {
+                setEnabledBackgroundAndBorder(button);
+            } else {
+                setDisabledBackgroundAndBorder(button);
+            }
+        });
         return button;
     }
 
@@ -134,8 +154,16 @@ public final class SandboxTools {
      * Sets default background and border of a button.
      * @param button to edit
      */
-    public static void setBackgroundAndBorder(final JButton button) {
+    public static void setEnabledBackgroundAndBorder(final JButton button) {
         setBackgroundAndBorder(button, Color.WHITE, Color.GRAY, Color.BLACK);
+    }
+
+    /**
+     * Sets default background and border of a button.
+     * @param button to edit
+     */
+    public static void setDisabledBackgroundAndBorder(final JButton button) {
+        setBackgroundAndBorder(button, Color.LIGHT_GRAY, Color.GRAY, Color.BLACK);
     }
 
     /**
@@ -147,7 +175,7 @@ public final class SandboxTools {
      */
     public static void setBackgroundAndBorder(final JButton button, final Color background, final Color border, final Color forground) {
         button.setBackground(background);
-        button.setBorder(BorderFactory.createLineBorder(border, 1, false));
+        button.setBorder(BorderFactory.createLineBorder(border, 2, false));
         button.setForeground(forground);
     }
 

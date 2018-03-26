@@ -27,7 +27,8 @@ public final class ResourceLoader {
         RESOURCE_MAP.put("main.icon", "main_icon.png");
         RESOURCE_MAP.put("settings.background", "bg_main_blurred.jpg");
         RESOURCE_MAP.put("loading.background", "bg_main_blurred.jpg");
-        RESOURCE_MAP.put("sandbox.background", "bg_blank_blurred.jpg");
+        RESOURCE_MAP.put("sandbox.background1", "bg_blank_blurred.jpg");
+        RESOURCE_MAP.put("sandbox.background2", "corner.sandbox.jpg");
     }
 
     private ResourceLoader() {

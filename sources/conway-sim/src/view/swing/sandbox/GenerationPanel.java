@@ -57,6 +57,7 @@ public class GenerationPanel extends JPanel {
      */
     public GenerationPanel(final Sandbox view) {
         this.view = view;
+        this.setOpaque(false);
         this.generationController = new GenerationControllerImpl(view);
 
         bStart = SandboxTools.newJButton("Start", "Start the game mode");
@@ -72,9 +73,13 @@ public class GenerationPanel extends JPanel {
 
         this.setLayout(new GridLayout(2, 2));
         final JPanel northL = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        northL.setOpaque(false);
         final JPanel northR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        northR.setOpaque(false);
         final JPanel southL = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        southL.setOpaque(false);
         final JPanel southR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        southR.setOpaque(false);
         this.add(northL);
         this.add(northR);
         this.add(southL);
@@ -258,7 +263,8 @@ public class GenerationPanel extends JPanel {
         SandboxTools.refreshStatistics(
                 this.getCurrentSpeed(),
                 this.generationController.getCurrentNumberGeneration().intValue(),
-                (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count()
+                (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count(),
+                this.view.getFont()
                 );
         this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
     }

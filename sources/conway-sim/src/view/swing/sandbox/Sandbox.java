@@ -3,6 +3,7 @@ package view.swing.sandbox;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
@@ -20,6 +21,7 @@ import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
+import view.swing.menu.MenuSettings;
 
 /**
  * 
@@ -62,8 +64,10 @@ public class Sandbox extends JPanel {
         this.generationPanel = new GenerationPanel(this);
 
         final JPanel north = new JPanel(new BorderLayout());
+        north.setOpaque(false);
         bApply = SandboxTools.newJButton("Apply", "Change the grid dimension");
-        final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply);
+        final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply, this.getFont());
+        gridOption.setOpaque(false);
         north.add(this.generationPanel, BorderLayout.AFTER_LINE_ENDS);
         north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
         north.add(gridOption, BorderLayout.WEST);
@@ -73,12 +77,14 @@ public class Sandbox extends JPanel {
         final JButton bExit = SandboxTools.newJButton("EXIT", "Exit from this mode");
 
         final JPanel south = new JPanel(new BorderLayout());
+        south.setOpaque(false);
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        southRight.setOpaque(false);
 
         southRight.add(bClear);
         southRight.add(this.bBook);
         southRight.add(bExit);
-        south.add(SandboxTools.newJPanelStatistics(), BorderLayout.WEST);
+        south.add(SandboxTools.newJPanelStatistics(this.getFont()), BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 
@@ -100,8 +106,13 @@ public class Sandbox extends JPanel {
     }
 
     @Override
+    public Font getFont() {
+        return new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
+    }
+
+    @Override
     public void paintComponent(final Graphics g) {
-        g.drawImage(ResourceLoader.loadImage("main.background"), 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     /**
