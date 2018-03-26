@@ -19,6 +19,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
+import controller.io.ResourceLoader;
 import core.model.Generation;
 import view.swing.menu.MenuSettings;
 
@@ -60,13 +61,13 @@ public class GenerationPanel extends JPanel {
         this.setOpaque(false);
         this.generationController = new GenerationControllerImpl(view);
 
-        bStart = SandboxTools.newJButton("Start", "Start the game mode");
-        bEnd = SandboxTools.newJButton("End", "End the current game");
-        bPause = SandboxTools.newJButton("Pause", "Stop the time");
-        bNext = SandboxTools.newJButton("Next", "Go to the next generation");
-        bGoTo = SandboxTools.newJButton("Go to", "Go at the indicated generations");
-        bPrev = SandboxTools.newJButton("Previous", "Go to the previous generation");
-        bPlay = SandboxTools.newJButton("Play", "Play the current game");
+        bStart = SandboxTools.newJButton(ResourceLoader.loadString("generation.start"), ResourceLoader.loadString("generation.start.tooltip"));
+        bEnd = SandboxTools.newJButton(ResourceLoader.loadString("generation.end"), ResourceLoader.loadString("generation.end.tooltip"));
+        bPause = SandboxTools.newJButton(ResourceLoader.loadString("generation.pause"), ResourceLoader.loadString("generation.pause.tooltip"));
+        bNext = SandboxTools.newJButton(ResourceLoader.loadString("generation.next"), ResourceLoader.loadString("generation.next.tooltip"));
+        bGoTo = SandboxTools.newJButton(ResourceLoader.loadString("generation.goto"), ResourceLoader.loadString("generation.goto.tooltip"));
+        bPrev = SandboxTools.newJButton(ResourceLoader.loadString("generation.previous"), ResourceLoader.loadString("generation.previous.tooltip"));
+        bPlay = SandboxTools.newJButton(ResourceLoader.loadString("generation.play"), ResourceLoader.loadString("generation.play.tooltip"));
         progresBar = new JProgressBar();
         progresBar.setIndeterminate(true);
         progresBar.setVisible(false);
@@ -217,6 +218,7 @@ public class GenerationPanel extends JPanel {
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
+        this.view.setButtonApplyEnabled(true);
         this.view.setButtonClearEnabled(true);
     }
 
@@ -254,6 +256,13 @@ public class GenerationPanel extends JPanel {
         this.bNext.setEnabled(flag);
         this.bPrev.setEnabled(flag);
         this.bGoTo.setEnabled(flag);
+    }
+
+    /**
+     * 
+     */
+    public void resetGrid() {
+        this.generationController.reset();
     }
 
     /**

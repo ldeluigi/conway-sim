@@ -1,7 +1,6 @@
 package view.swing.sandbox;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -42,7 +41,8 @@ public class Sandbox extends JPanel {
     private final JButton bApply;
     private final JButton bClear;
     private final DesktopGUI mainGUI;
-    private final PatternEditor gridEditor;
+    private PatternEditor gridEditor;
+    private GridPanel grid;
     private BookFrame book;
 
     /**
@@ -53,7 +53,7 @@ public class Sandbox extends JPanel {
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
         this.bClear = SandboxTools.newJButton("CLEAR", "Clear the grid");
-        final GridPanel grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
+        grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
                 mainGUI.getScreenHeight(),
                 mainGUI.getScreenWidth())
                 / CELL_SIZE_RATIO);
@@ -65,44 +65,59 @@ public class Sandbox extends JPanel {
 
         final JPanel north = new JPanel(new BorderLayout());
         north.setOpaque(false);
-        bApply = SandboxTools.newJButton("Apply", "Change the grid dimension");
-        final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply, this.getFont());
+        bApply = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.apply"), ResourceLoader.loadString("sandbox.apply.tooltip"));
+        final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply, new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         gridOption.setOpaque(false);
         north.add(this.generationPanel, BorderLayout.AFTER_LINE_ENDS);
         north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
         north.add(gridOption, BorderLayout.WEST);
         this.add(north, BorderLayout.NORTH);
 
-        this.bBook = SandboxTools.newJButton("BOOK", "Open the book");
-        final JButton bExit = SandboxTools.newJButton("EXIT", "Exit from this mode");
+        this.bBook = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.book"), ResourceLoader.loadString("sandbox.book.tooltip"));
+        final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"), ResourceLoader.loadString("sandbox.exit.tooltip"));
 
         final JPanel south = new JPanel(new BorderLayout());
         south.setOpaque(false);
         final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         southRight.setOpaque(false);
-
         southRight.add(bClear);
         southRight.add(this.bBook);
         southRight.add(bExit);
-        south.add(SandboxTools.newJPanelStatistics(this.getFont()), BorderLayout.WEST);
+        south.add(SandboxTools.newJPanelStatistics(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())), BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
 
         this.bBook.addActionListener(e -> callBook());
         bExit.addActionListener(e -> exit());
 
+        //To ignore the space keyStroke
         final InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
         im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
         im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
         this.bClear.addActionListener(e -> this.generationPanel.clear());
+
+        //Button clear keylistener
         KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> {
             if (bClear.isEnabled()) {
                 this.generationPanel.clear();
             }
         });
-        this.setOpaque(false);
-        this.setBackground(Color.RED);
         this.generationPanel.refreshView();
+    }
+
+    /**
+     * 
+     */
+    public void resetGrid() {
+        this.remove(grid);
+        grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
+                mainGUI.getScreenHeight(),
+                mainGUI.getScreenWidth())
+                / CELL_SIZE_RATIO);
+        this.add(grid, BorderLayout.CENTER);
+        this.gridEditor = new GridEditorImpl(grid);
+        this.gridEditor.setEnabled(true);
+        this.generationPanel.resetGrid();
     }
 
     @Override

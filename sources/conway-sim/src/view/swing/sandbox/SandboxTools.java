@@ -13,6 +13,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.plaf.metal.MetalButtonUI;
 
+import controller.io.ResourceLoader;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -37,13 +38,13 @@ public final class SandboxTools {
         final JPanel statsPanel = new JPanel(new GridLayout(2, 2));
         statsPanel.setOpaque(false);
         // display for current speed
-        numSpeedLabel = new JLabel("|Speed value " + 1);
+        numSpeedLabel = new JLabel(ResourceLoader.loadString("sandbox.label.speed") + "1" + "|");
         numSpeedLabel.setFont(font);
         // display for current generation
-        numGenerationLabel = new JLabel("|Current generation number:" + "0");
+        numGenerationLabel = new JLabel(ResourceLoader.loadString("sandbox.label.generation") + "0" + "|");
         numGenerationLabel.setFont(font);
         // display the number of the alive cell
-        aliveCell = new JLabel("|Alive cell " + "0");
+        aliveCell = new JLabel(ResourceLoader.loadString("sandbox.label.alivecell") + "0" + "|");
         aliveCell.setFont(font);
         statsPanel.add(numGenerationLabel);
         statsPanel.add(numSpeedLabel);
@@ -59,9 +60,9 @@ public final class SandboxTools {
      * @param font the new font
      */
     public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell, final Font font) {
-        SandboxTools.numGenerationLabel.setText("|Current generation number:" + genNumber);
-        SandboxTools.numSpeedLabel.setText("|Speed value " + speedSlider);
-        SandboxTools.aliveCell.setText("|Alive cell " + aliveCell);
+        SandboxTools.numGenerationLabel.setText(ResourceLoader.loadString("sandbox.label.generation") + genNumber + "|");
+        SandboxTools.numSpeedLabel.setText(ResourceLoader.loadString("sandbox.label.speed") + speedSlider + "|");
+        SandboxTools.aliveCell.setText(ResourceLoader.loadString("sandbox.label.alivecell") + aliveCell + "|");
         SandboxTools.numGenerationLabel.setFont(font);
         SandboxTools.numSpeedLabel.setFont(font);
         SandboxTools.aliveCell.setFont(font);
@@ -101,7 +102,7 @@ public final class SandboxTools {
         bottomGrid.add(spinnerHeight);
         gridOption.add(bottomGrid);
         bApply.addActionListener(e -> {
-//            System.err.println("new Grid : " + spinnerHeight.getValue().toString() + " x " + spinnerWidth.getValue().toString());
+            sandbox.resetGrid();
         });
         return gridOption;
     }

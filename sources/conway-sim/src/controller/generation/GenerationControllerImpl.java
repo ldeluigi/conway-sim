@@ -57,6 +57,10 @@ public class GenerationControllerImpl implements GenerationController {
 
     @Override
     public void reset() {
+        this.setCurrentNumberGeneration(0);
+        this.currentGeneration = this.view.getGridEditor().getGeneration();
+        this.oldGeneration = new GenerationHistory(this.currentGeneration);
+        SwingUtilities.invokeLater(() -> this.view.refreshView());
     }
 
     @Override
