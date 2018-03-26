@@ -21,6 +21,7 @@ import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
+import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -112,20 +113,19 @@ public class Sandbox extends JPanel {
      */
     public void resetGrid() {
         this.remove(grid);
-        final JLabel loading = new JLabel(ResourceLoader.loadString("main.loading"));
-        loading.setFont(new Font(Font.DIALOG, Font.ITALIC, TITLE_SIZE / 2 + MenuSettings.getFontSize()));
-        this.add(loading);
-        this.mainGUI.setView(loading);
+        final JPanel loading = new LoadingScreen();
+        this.add(loading, BorderLayout.CENTER);
+        this.repaint();
         SwingUtilities.invokeLater(() -> {
             grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
                     mainGUI.getScreenHeight(),
                     mainGUI.getScreenWidth())
                     / CELL_SIZE_RATIO);
+            this.remove(loading);
             this.add(grid, BorderLayout.CENTER);
             this.gridEditor = new GridEditorImpl(grid);
             this.gridEditor.setEnabled(true);
             this.generationPanel.resetGrid();
-            this.mainGUI.setView(this);
         });
     }
 

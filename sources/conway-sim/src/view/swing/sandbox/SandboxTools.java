@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -134,7 +133,6 @@ public final class SandboxTools {
         button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         button.setToolTipText(tooltipText);
         button.setFocusPainted(false);
-//        button.setFocusable(false);
         setEnabledBackgroundAndBorder(button);
         button.setUI(new MetalButtonUI() {
             protected Color getDisabledTextColor() {
