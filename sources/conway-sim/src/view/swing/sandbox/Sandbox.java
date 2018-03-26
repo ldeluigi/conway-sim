@@ -35,7 +35,6 @@ public class Sandbox extends JPanel {
     private static final long serialVersionUID = -9015811419136279771L;
 
     private static final int DEFAULT_SIZE = 100;
-    private static final int TITLE_SIZE = 80;
 
     private static final int CELL_SIZE_RATIO = 100;
 
