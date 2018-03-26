@@ -35,7 +35,6 @@ public class Sandbox extends JPanel {
     private static final long serialVersionUID = -9015811419136279771L;
 
     private static final int DEFAULT_SIZE = 100;
-    private static final int TITLE_SIZE = 80;
 
     private static final int CELL_SIZE_RATIO = 100;
 
@@ -112,10 +111,11 @@ public class Sandbox extends JPanel {
      * 
      */
     public void resetGrid() {
+        this.setVisible(false);
         this.remove(grid);
         final JPanel loading = new LoadingScreen();
         this.add(loading, BorderLayout.CENTER);
-        this.repaint();
+        this.setVisible(true);
         SwingUtilities.invokeLater(() -> {
             grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
                     mainGUI.getScreenHeight(),
