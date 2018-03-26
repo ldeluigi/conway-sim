@@ -37,7 +37,7 @@ public final class ResourceLoader {
      * 
      * @param resource
      *            the resource tag to load
-     * @return loaded image if found, or else throws ResourceNotFoundException
+     * @return loaded image if found, or else throws IllegalStateException
      */
     public static Image loadImage(final String resource) {
         if (isBuffered(resource)) {
@@ -63,7 +63,7 @@ public final class ResourceLoader {
     }
 
     private static boolean isBuffered(final String resource) {
-        return IS_BUFFERED.containsKey(resource);
+        return IS_BUFFERED.containsKey(resource) ? IS_BUFFERED.get(resource) : false;
     }
 
     private static String getImagePath(final String resource) {
