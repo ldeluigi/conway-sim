@@ -205,4 +205,8 @@ public class GridPanel extends JScrollPane {
     public int getGridHeight() {
         return this.gridHeight;
     }
+    
+    public void changeGrid() {
+        
+    }
 }

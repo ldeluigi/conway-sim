@@ -160,7 +160,7 @@ public class GenerationPanel extends JPanel {
      * 
      */
     public void clear() {
-        this.view.getGridEditor().killThemAll();
+        this.view.getGridEditor().clean();
     }
 
     /**
