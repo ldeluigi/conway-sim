@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
-
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;

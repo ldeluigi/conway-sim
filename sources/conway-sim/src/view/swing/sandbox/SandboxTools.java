@@ -6,15 +6,14 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-
 import javax.swing.BorderFactory;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.metal.MetalButtonUI;
 
 import controller.io.ResourceLoader;
@@ -31,8 +30,6 @@ public final class SandboxTools {
 
     private static JSpinner spinnerWidth;
     private static JSpinner spinnerHeight;
-
-    private static final Icon BUTTON_ON = new ImageIcon(ResourceLoader.loadImage("sandbox.button.on"));
 
     private static JLabel numGenerationLabel;
     private static JLabel numSpeedLabel;
@@ -147,26 +144,32 @@ public final class SandboxTools {
     public static JButton newJButton(final String name, final String tooltipText) {
         final JButton button = new JButton(name);
         button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
+        button.setForeground(Color.BLACK);
         button.setToolTipText(tooltipText);
         button.setFocusPainted(false);
-//        button.setPreferredSize(new Dimension(120, 80));
-//        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(120, 80, Image.SCALE_DEFAULT)));
-//        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(120, 80, Image.SCALE_DEFAULT)));
-//        button.setIconTextGap(-100);
         setEnabledBackgroundAndBorder(button);
         button.setUI(new MetalButtonUI() {
             protected Color getDisabledTextColor() {
-                return Color.WHITE;
+                return Color.LIGHT_GRAY;
             }
         });
-        button.addChangeListener(e -> {
-            if (button.isEnabled()) {
-                setEnabledBackgroundAndBorder(button);
-            } else {
-                setDisabledBackgroundAndBorder(button);
-            }
-        });
+        SwingUtilities.invokeLater(() -> setIcon(button));
         return button;
+    }
+
+    /**
+     * 
+     * @param button the button
+     */
+    public static void setIcon(final JButton button) {
+            final Dimension dim = button.getSize();
+            dim.setSize(dim.getWidth() + 2, dim.getHeight() + 2);
+            button.setPreferredSize(dim);
+            button.setSize(dim);
+            button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance((int) button.getSize().getWidth(), (int) button.getSize().getHeight(), Image.SCALE_DEFAULT)));
+            button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance((int) button.getSize().getWidth(), (int) button.getSize().getHeight(), Image.SCALE_DEFAULT)));
+            button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed").getScaledInstance((int) button.getSize().getWidth(), (int) button.getSize().getHeight(), Image.SCALE_DEFAULT)));
+            button.setIconTextGap(-(int) button.getSize().getWidth() + 1);
     }
 
     /**
@@ -174,6 +177,7 @@ public final class SandboxTools {
      * @param button to edit
      */
     public static void setEnabledBackgroundAndBorder(final JButton button) {
+//                                      backgound       border      forground
         setBackgroundAndBorder(button, Color.WHITE, Color.GRAY, Color.BLACK);
     }
 
@@ -182,6 +186,7 @@ public final class SandboxTools {
      * @param button to edit
      */
     public static void setDisabledBackgroundAndBorder(final JButton button) {
+//                                          backgound       border      forground
         setBackgroundAndBorder(button, Color.LIGHT_GRAY, Color.GRAY, Color.BLACK);
     }
 
