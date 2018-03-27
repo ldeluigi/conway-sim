@@ -42,10 +42,12 @@ public interface GridEditor {
     /**
      * 
      */
-    public void clean();
-    
+    void clean();
+
     /**
      * 
+     * @param horizontal
+     * @param vertical
      */
-    public void changeSizes(int horizontal, int vertical);
+    void changeSizes(int horizontal, int vertical);
 }
