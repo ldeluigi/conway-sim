@@ -1,10 +1,15 @@
 package view.swing.sandbox;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
+
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,8 +25,14 @@ import view.swing.menu.MenuSettings;
  */
 public final class SandboxTools {
 
+    private static final int MAX_SIZE = 300;
+    private static final int MIN_SIZE = 2;
+    private static final int DEFAUL_SIZE = 100;
+
     private static JSpinner spinnerWidth;
     private static JSpinner spinnerHeight;
+
+    private static final Icon BUTTON_ON = new ImageIcon(ResourceLoader.loadImage("sandbox.button.on"));
 
     private static JLabel numGenerationLabel;
     private static JLabel numSpeedLabel;
@@ -87,13 +98,13 @@ public final class SandboxTools {
         topGrid.add(gridText);
         topGrid.add(bApply);
         gridOption.add(topGrid);
-        spinnerWidth = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
+        spinnerWidth = new JSpinner(new SpinnerNumberModel(DEFAUL_SIZE, MIN_SIZE, MAX_SIZE, 1));
         spinnerWidth.setFont(font);
         final JLabel labelDimension = new JLabel("Dimension ");
         labelDimension.setFont(font);
         bottomGrid.add(labelDimension);
         bottomGrid.add(spinnerWidth);
-        spinnerHeight = new JSpinner(new SpinnerNumberModel(100, 0, 1000, 1));
+        spinnerHeight = new JSpinner(new SpinnerNumberModel(DEFAUL_SIZE, MIN_SIZE, MAX_SIZE, 1));
         spinnerHeight.setFont(font);
         final JLabel division = new JLabel(" x ");
         division.setFont(font);
@@ -101,7 +112,12 @@ public final class SandboxTools {
         bottomGrid.add(spinnerHeight);
         gridOption.add(bottomGrid);
         bApply.addActionListener(e -> {
-            sandbox.resetGrid();
+            if (Integer.valueOf(spinnerHeight.getValue().toString()) >= MIN_SIZE
+                    && Integer.valueOf(spinnerHeight.getValue().toString()) <= MAX_SIZE
+                    && Integer.valueOf(spinnerWidth.getValue().toString()) >= MIN_SIZE
+                    && Integer.valueOf(spinnerWidth.getValue().toString()) <= MAX_SIZE) {
+                sandbox.resetGrid();
+            }
         });
         return gridOption;
     }
@@ -133,6 +149,10 @@ public final class SandboxTools {
         button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         button.setToolTipText(tooltipText);
         button.setFocusPainted(false);
+//        button.setPreferredSize(new Dimension(120, 80));
+//        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(120, 80, Image.SCALE_DEFAULT)));
+//        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(120, 80, Image.SCALE_DEFAULT)));
+//        button.setIconTextGap(-100);
         setEnabledBackgroundAndBorder(button);
         button.setUI(new MetalButtonUI() {
             protected Color getDisabledTextColor() {

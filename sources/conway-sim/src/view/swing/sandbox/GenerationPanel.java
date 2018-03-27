@@ -245,7 +245,6 @@ public class GenerationPanel extends JPanel {
 
     private void pause() {
         this.generationController.pause();
-        this.generationController.pause();
         this.bPause.setEnabled(false);
         this.bPlay.setEnabled(true);
         this.bEnd.setEnabled(true);
