@@ -49,7 +49,7 @@ public final class MenuSettings extends JPanel {
 
     private static int fontSize = INITIAL_FONT_SIZE;
     private static boolean usingSystemLF;
-    private static boolean instantTransitions;
+    private static boolean instantTransitions = true;
 
     private final List<JComponent> toResize = new LinkedList<>();
 
