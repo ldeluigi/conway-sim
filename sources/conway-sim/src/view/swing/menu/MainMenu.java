@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -42,11 +41,9 @@ public final class MainMenu extends JPanel {
         final JPanel center = new JPanel(new GridBagLayout());
         center.setOpaque(false);
         this.add(center, BorderLayout.CENTER);
-        final JLabel title = new JLabel(new ImageIcon(ResourceLoader.loadImage("main.title")));
-        //title.setFont(new Font(Font.MONOSPACED, Font.BOLD, TITLE_SIZE));
-        title.setHorizontalAlignment(JLabel.CENTER);
-        title.setBorder(new EmptyBorder((mainGUI.getCurrentHeight() * 2) / BUTTON_RATIO_Y, 0, 0, 0));
-        this.add(title, BorderLayout.NORTH);
+        final JLabel spaceForTitle = new JLabel();
+        spaceForTitle.setBorder(new EmptyBorder((mainGUI.getCurrentHeight() * 2) / BUTTON_RATIO_Y, 0, 0, 0));
+        this.add(spaceForTitle, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         centralButtons.setOpaque(false);
         final JButton sandbox = new JButton(ResourceLoader.loadString("main.sandbox"));
@@ -122,5 +119,6 @@ public final class MainMenu extends JPanel {
     @Override
     public void paintComponent(final Graphics g) {
         g.drawImage(ResourceLoader.loadImage("main.background"), 0, 0, this.getWidth(), this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("main.title"), this.getWidth() / 8, this.getHeight() / 4, this.getWidth() * 6 / 8, this.getHeight() / 7, this);
     }
 }
