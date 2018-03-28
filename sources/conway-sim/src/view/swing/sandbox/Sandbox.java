@@ -100,11 +100,9 @@ public class Sandbox extends JPanel {
         this.bClear.addActionListener(e -> this.generationPanel.clear());
 
         //Button clear keylistener
-        KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> {
-            if (bClear.isEnabled()) {
-                this.generationPanel.clear();
-            }
-        });
+        KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> bClear.doClick());
+        KeyListenerFactory.addKeyListener(this, "book", KeyEvent.VK_B, () -> bBook.doClick());
+
         this.generationPanel.refreshView();
     }
 
