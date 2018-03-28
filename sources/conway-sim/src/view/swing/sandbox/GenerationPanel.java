@@ -135,21 +135,10 @@ public class GenerationPanel extends JPanel {
                 pause();
             }
         });
-        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> {
-            if (bEnd.isEnabled()) {
-                end();
-            }
-        });
-        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> {
-            if (bNext.isEnabled()) {
-                goTo(this.generationController.getCurrentNumberGeneration() + 1L);
-            }
-        });
-        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> {
-            if (bNext.isEnabled()) {
-                goTo(this.generationController.getCurrentNumberGeneration() - 1L);
-            }
-        });
+        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> bEnd.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> bNext.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> bPrev.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER, () -> bGoTo.doClick());
         KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP, () -> speedSlider.setValue(speedSlider.getValue() + 1));
         KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN, () -> speedSlider.setValue(speedSlider.getValue() - 1));
         this.requestFocusInWindow();

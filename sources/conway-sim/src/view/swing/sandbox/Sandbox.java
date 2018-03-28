@@ -55,7 +55,7 @@ public class Sandbox extends JPanel {
     public Sandbox(final DesktopGUI mainGUI) {
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
-        this.bClear = SandboxTools.newJButton("CLEAR", "Clear the grid");
+        this.bClear = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.clear"), ResourceLoader.loadString("sandbox.clear.tooltip"));
         grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
                 mainGUI.getScreenHeight(),
                 mainGUI.getScreenWidth())
