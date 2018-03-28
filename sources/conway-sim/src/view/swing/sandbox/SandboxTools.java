@@ -162,14 +162,17 @@ public final class SandboxTools {
      * @param button the button
      */
     public static void setIcon(final JButton button) {
-            final Dimension dim = button.getSize();
-            dim.setSize(dim.getWidth() + 2, dim.getHeight() + 2);
-            button.setPreferredSize(dim);
-            button.setSize(dim);
-            button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance((int) button.getSize().getWidth(), (int) button.getSize().getHeight(), Image.SCALE_DEFAULT)));
-            button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance((int) button.getSize().getWidth(), (int) button.getSize().getHeight(), Image.SCALE_DEFAULT)));
-            button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed").getScaledInstance((int) button.getSize().getWidth(), (int) button.getSize().getHeight(), Image.SCALE_DEFAULT)));
-            button.setIconTextGap(-(int) button.getSize().getWidth() + 1);
+        final Dimension dim = button.getSize();
+        dim.setSize(dim.getWidth() + 2, dim.getHeight() + 2);
+        button.setPreferredSize(dim);
+        button.setSize(dim);
+        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(
+                button.getSize().width, button.getSize().height, Image.SCALE_SMOOTH)));
+        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(
+                button.getSize().width, button.getSize().height, Image.SCALE_SMOOTH)));
+        button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed").getScaledInstance(
+                button.getSize().width, button.getSize().height, Image.SCALE_SMOOTH)));
+        button.setIconTextGap(-button.getSize().width + 1);
     }
 
     /**

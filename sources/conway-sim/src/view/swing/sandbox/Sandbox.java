@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
+
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -19,6 +20,7 @@ import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
+import view.swing.Log;
 import view.swing.book.BookFrame;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
