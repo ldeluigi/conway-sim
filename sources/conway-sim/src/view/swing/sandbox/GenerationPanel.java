@@ -106,7 +106,6 @@ public class GenerationPanel extends JPanel {
 
         northR.add(spinner); //to use the go to button
 
-//        this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
         //Start conditions.
