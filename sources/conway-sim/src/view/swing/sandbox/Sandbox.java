@@ -116,13 +116,19 @@ public class Sandbox extends JPanel {
         this.add(loading, BorderLayout.CENTER);
         this.setVisible(true);
         SwingUtilities.invokeLater(() -> {
+//            this.gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
+//            this.remove(loading);
+//            this.add(grid);
+//            this.gridEditor.setEnabled(true);
+//            this.generationPanel.resetGrid();
+            gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
             grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
                     mainGUI.getScreenHeight(),
                     mainGUI.getScreenWidth())
                     / CELL_SIZE_RATIO);
-            this.remove(loading);
             this.add(grid, BorderLayout.CENTER);
             this.gridEditor = new GridEditorImpl(grid);
+            this.remove(loading);
             this.gridEditor.setEnabled(true);
             this.generationPanel.resetGrid();
         });
