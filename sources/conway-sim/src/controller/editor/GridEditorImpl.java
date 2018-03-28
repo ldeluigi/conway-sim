@@ -44,11 +44,11 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.placingState = true;
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         this.pattern = Optional.empty();
-        this.env = EnvironmentFactory.standardRules(this.gameGrid.getColorMatrix().getWidth(), this.gameGrid.getColorMatrix().getHeight());
+        this.env = EnvironmentFactory.standardRules(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight());
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
         this.applyChanges();
     }
-
+    
     /**
      * Is the method which draws the generation on the grid.
      */
@@ -181,9 +181,38 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * Is the method which shows a full white grid as every cell was dead or a new grid was just created.
      */
     @Override
-    public void killThemAll() {
+    public void clean() {
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
         this.applyChanges();
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void changeSizes(final int horizontal, final int vertical) {
+        if (this.currentStatus.getWidth() < horizontal) {
+            if (this.currentStatus.getHeight() < vertical) {
+                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.currentStatus);
+                this.currentStatus.map(s -> s == null ? Status.DEAD : s);
+                this.gameGrid.changeGrid(horizontal, vertical);
+            } else {
+                this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, this.currentStatus.getWidth());
+                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.currentStatus);
+                this.currentStatus.map(s -> s == null ? Status.DEAD : s);
+                this.gameGrid.changeGrid(horizontal, vertical);
+            }
+        } else {
+            if (this.currentStatus.getHeight() < vertical) {
+                this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight(), 0, horizontal);
+                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.currentStatus);
+                this.currentStatus.map(s -> s == null ? Status.DEAD : s);
+                this.gameGrid.changeGrid(horizontal, vertical);
+            } else {
+                this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, horizontal);
+                this.gameGrid.changeGrid(horizontal, vertical);
+            }
+        }
     }
 
     private void applyChanges() {
@@ -230,7 +259,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         @Override
         public void mouseReleased(final MouseEvent e) {
-            GridEditorImpl.this.mouseBeingPressed = false;
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                GridEditorImpl.this.mouseBeingPressed = false;
+            }
         }
 
         @Override
@@ -238,7 +269,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             if (GridEditorImpl.this.isEnabled()) {
                 if (GridEditorImpl.this.isPlacingModeOn()) {
                     GridEditorImpl.this.showPreview(row, column);
-                } else if (mouseBeingPressed) {
+                } else if (GridEditorImpl.this.mouseBeingPressed && SwingUtilities.isLeftMouseButton(e)) {
                     GridEditorImpl.this.hit(this.row, this.column);
                 }
             }

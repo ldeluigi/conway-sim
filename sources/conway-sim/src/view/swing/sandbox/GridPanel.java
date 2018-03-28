@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import core.utils.ListMatrix;
+import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.menu.MenuSettings;
 
@@ -36,12 +37,13 @@ public class GridPanel extends JScrollPane {
     private final int borderWidth = INITIAL_BORDER_WIDTH;
     private final Color borderColor = INITIAL_BORDER_COLOR;
     private final JPanel grid;
-    private final Matrix<JLabel> labelMatrix;
+    private Matrix<JLabel> labelMatrix;
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
-    private final int gridHeight;
-    private final int gridWidth;
+    private final GridBagConstraints c = new GridBagConstraints();
+    private int gridHeight;
+    private int gridWidth;
 
     /**
      * Is the constructor method for a new GridPanel.
@@ -67,7 +69,6 @@ public class GridPanel extends JScrollPane {
             return l;
         });
         this.grid = new JPanel(new GridBagLayout());
-        final GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.CENTER;
         c.weightx = 0.5;
@@ -171,14 +172,6 @@ public class GridPanel extends JScrollPane {
     }
 
     /**
-     * Is the method which gives a color matrix showing the current grid.
-     * @return the color matrix as overview of the current state of the grid.
-     */
-    public Matrix<Color> getColorMatrix() {
-        return this.labelMatrix.map(l -> l.getBackground());
-    }
-
-    /**
      * Is the method to invoke in order to add an observer to the components of the grid.
      * @param listenerDispencer is the BiFunction dispensing the listener.
      */
@@ -204,5 +197,75 @@ public class GridPanel extends JScrollPane {
      */
     public int getGridHeight() {
         return this.gridHeight;
+    }
+
+    /**
+     * 
+     * @param horizontal
+     * @param vertical
+     */
+    public void changeGrid(final int horizontal, final int vertical) {
+        this.gridWidth = horizontal;
+        this.gridHeight = vertical;
+
+        if (this.labelMatrix.getWidth() < horizontal) {
+            if (this.labelMatrix.getWidth() < horizontal) {
+                if (this.labelMatrix.getHeight() < vertical) {
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.labelMatrix);
+                    this.labelMatrix.map(s -> s == null ? new JLabel("") : s);
+                    for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+                        for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                            final JLabel l = this.labelMatrix.get(i, j);
+                            l.setSize(cellSize);
+                            l.setPreferredSize(cellSize);
+                            l.setBackground(Color.WHITE);
+                            l.setOpaque(true);
+                            c.gridx = j;
+                            c.gridy = i;
+                            setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                            this.grid.add(this.labelMatrix.get(i, j), c);
+                        }
+                    }
+                } else {
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, this.labelMatrix.getWidth());
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.labelMatrix);
+                    this.labelMatrix.map(s -> s == null ? new JLabel("") : s);
+                    for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+                        for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                            final JLabel l = this.labelMatrix.get(i, j);
+                            l.setSize(cellSize);
+                            l.setPreferredSize(cellSize);
+                            l.setBackground(Color.WHITE);
+                            l.setOpaque(true);
+                            c.gridx = j;
+                            c.gridy = i;
+                            setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                            this.grid.add(this.labelMatrix.get(i, j), c);
+                        }
+                    }
+                }
+            } else {
+                if (this.labelMatrix.getHeight() < vertical) {
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight(), 0, horizontal);
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.labelMatrix);
+                    this.labelMatrix.map(s -> s == null ? new JLabel("") : s);
+                    for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+                        for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                            final JLabel l = this.labelMatrix.get(i, j);
+                            l.setSize(cellSize);
+                            l.setPreferredSize(cellSize);
+                            l.setBackground(Color.WHITE);
+                            l.setOpaque(true);
+                            c.gridx = j;
+                            c.gridy = i;
+                            setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                            this.grid.add(this.labelMatrix.get(i, j), c);
+                        }
+                    }
+                } else {
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, horizontal);
+                }
+            }
+        }
     }
 }

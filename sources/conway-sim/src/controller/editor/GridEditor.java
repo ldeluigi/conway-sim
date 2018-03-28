@@ -39,5 +39,15 @@ public interface GridEditor {
      */
     boolean isEnabled();
 
-    void killThemAll();
+    /**
+     * 
+     */
+    void clean();
+
+    /**
+     * 
+     * @param horizontal
+     * @param vertical
+     */
+    void changeSizes(int horizontal, int vertical);
 }
