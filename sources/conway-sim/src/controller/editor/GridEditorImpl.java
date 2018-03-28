@@ -48,7 +48,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
         this.applyChanges();
     }
-    
+
     /**
      * Is the method which draws the generation on the grid.
      */
@@ -191,22 +191,20 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
+        this.gameGrid.removeAll();
         if (this.currentStatus.getWidth() < horizontal) {
             if (this.currentStatus.getHeight() < vertical) {
-                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.currentStatus);
-                this.currentStatus.map(s -> s == null ? Status.DEAD : s);
+                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
                 this.gameGrid.changeGrid(horizontal, vertical);
             } else {
                 this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, this.currentStatus.getWidth());
-                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.currentStatus);
-                this.currentStatus.map(s -> s == null ? Status.DEAD : s);
+                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
                 this.gameGrid.changeGrid(horizontal, vertical);
             }
         } else {
             if (this.currentStatus.getHeight() < vertical) {
                 this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight(), 0, horizontal);
-                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.currentStatus);
-                this.currentStatus.map(s -> s == null ? Status.DEAD : s);
+                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
                 this.gameGrid.changeGrid(horizontal, vertical);
             } else {
                 this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, horizontal);
