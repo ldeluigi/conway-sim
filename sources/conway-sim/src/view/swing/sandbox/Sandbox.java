@@ -121,7 +121,6 @@ public class Sandbox extends JPanel {
 //            this.add(grid);
 //            this.gridEditor.setEnabled(true);
 //            this.generationPanel.resetGrid();
-            gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
             grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
                     mainGUI.getScreenHeight(),
                     mainGUI.getScreenWidth())
