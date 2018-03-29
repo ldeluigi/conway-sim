@@ -42,8 +42,6 @@ public class GridPanel extends JScrollPane {
     private final int maxCellSize;
     private final int minCellSize;
     private final GridBagConstraints c = new GridBagConstraints();
-    private int gridHeight;
-    private int gridWidth;
 
     /**
      * Is the constructor method for a new GridPanel.
@@ -56,8 +54,6 @@ public class GridPanel extends JScrollPane {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
 
-        this.gridWidth = width;
-        this.gridHeight = height;
         this.maxCellSize = startingCellSize * MAX_CELL_SIZE_RATIO;
         this.minCellSize = Math.max(startingCellSize / MIN_CELL_SIZE_RATIO, MIN_CELL_SIZE);
         this.cellSize = new Dimension(startingCellSize, startingCellSize);
@@ -184,7 +180,7 @@ public class GridPanel extends JScrollPane {
      * @return the width of the grid.
      */
     public int getGridWidth() {
-        return this.gridWidth;
+        return this.labelMatrix.getWidth();
     }
 
     /**
@@ -192,7 +188,7 @@ public class GridPanel extends JScrollPane {
      * @return the height of the grid.
      */
     public int getGridHeight() {
-        return this.gridHeight;
+        return this.labelMatrix.getHeight();
     }
 
     /**
@@ -201,48 +197,43 @@ public class GridPanel extends JScrollPane {
      * @param vertical
      */
     public void changeGrid(final int horizontal, final int vertical) {
-        this.gridWidth = horizontal;
-        this.gridHeight = vertical;
-
         if (this.labelMatrix.getWidth() < horizontal) {
-            if (this.labelMatrix.getWidth() < horizontal) {
-                if (this.labelMatrix.getHeight() < vertical) {
-                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
-                    for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
-                        for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                            c.gridx = j;
-                            c.gridy = i;
-                            setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
-                            this.grid.add(this.labelMatrix.get(i, j), c);
-                        }
-                    }
-                } else {
-                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, this.labelMatrix.getWidth());
-                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
-                    for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
-                        for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                            c.gridx = j;
-                            c.gridy = i;
-                            setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
-                            this.grid.add(this.labelMatrix.get(i, j), c);
-                        }
+            if (this.labelMatrix.getHeight() < vertical) {
+                this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
+                for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+                    for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                        c.gridx = j;
+                        c.gridy = i;
+                        setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                        this.grid.add(this.labelMatrix.get(i, j), c);
                     }
                 }
             } else {
-                if (this.labelMatrix.getHeight() < vertical) {
-                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight(), 0, horizontal);
-                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
-                    for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
-                        for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                            c.gridx = j;
-                            c.gridy = i;
-                            setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
-                            this.grid.add(this.labelMatrix.get(i, j), c);
-                        }
+                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, this.labelMatrix.getWidth());
+                this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
+                for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+                    for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                        c.gridx = j;
+                        c.gridy = i;
+                        setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                        this.grid.add(this.labelMatrix.get(i, j), c);
                     }
-                } else {
-                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, horizontal);
                 }
+            }
+        } else {
+            if (this.labelMatrix.getHeight() < vertical) {
+                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight(), 0, horizontal);
+                this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
+                for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
+                    for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
+                        c.gridx = j;
+                        c.gridy = i;
+                        setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
+                        this.grid.add(this.labelMatrix.get(i, j), c);
+                    }
+                }
+            } else {
+                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, horizontal);
             }
         }
         this.repaint();
