@@ -6,6 +6,10 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 import javax.swing.InputMap;
 import javax.swing.JButton;
@@ -20,7 +24,6 @@ import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
-import view.swing.Log;
 import view.swing.book.BookFrame;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
@@ -110,11 +113,12 @@ public class Sandbox extends JPanel {
      * 
      */
     public void resetGrid() {
-        this.setVisible(false);
-        grid.setVisible(false);
-        final JPanel loading = new LoadingScreen();
-        this.add(loading, BorderLayout.CENTER);
-        this.setVisible(true);
+//        this.setVisible(false);
+//        grid.setVisible(false);
+//        this.remove(grid);
+//        final JPanel loading = new LoadingScreen();
+//        this.add(loading, BorderLayout.CENTER);
+//        this.setVisible(true);
         SwingUtilities.invokeLater(() -> {
             this.gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
 //            grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
@@ -122,11 +126,12 @@ public class Sandbox extends JPanel {
 //                    mainGUI.getScreenWidth())
 //                    / CELL_SIZE_RATIO);
 //            this.gridEditor = new GridEditorImpl(grid);
-            this.setVisible(false);
-            loading.setVisible(false);
-            this.remove(loading);
-            grid.setVisible(true);
-            this.setVisible(true);
+//            this.setVisible(false);
+//            loading.setVisible(false);
+//            this.remove(loading);
+//            this.add(grid, BorderLayout.CENTER);
+//            grid.setVisible(true);
+//            this.setVisible(true);
         });
     }
 
@@ -174,7 +179,12 @@ public class Sandbox extends JPanel {
      * refresh all the view.
      */
     public void refreshView() {
-        this.generationPanel.refreshView();
+        final ExecutorService gridExecutor = Executors.newCachedThreadPool();
+        final FutureTask<Object> gridTask = new FutureTask<>(() -> {
+            this.generationPanel.refreshView();
+            gridExecutor.shutdown();
+        }, null);
+        gridExecutor.execute(gridTask);
         this.grabFocus();
     }
 

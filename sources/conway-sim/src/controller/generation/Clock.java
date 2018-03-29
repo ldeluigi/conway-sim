@@ -61,7 +61,7 @@ public class Clock {
         this.speed = speed;
         if (this.clockAgent.isPresent()) {
             final Long sleepTime = Long.valueOf(maxSpeed - speed + 1) * speedPart;
-            this.clockAgent.get().setStep(Long.valueOf(sleepTime));            
+            this.clockAgent.get().setStep(Long.valueOf(sleepTime));
         }
     }
 

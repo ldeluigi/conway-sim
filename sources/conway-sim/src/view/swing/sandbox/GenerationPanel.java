@@ -256,12 +256,14 @@ public class GenerationPanel extends JPanel {
      * 
      */
     public void refreshView() {
-        SandboxTools.refreshStatistics(
+        final int aliveCell = (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count();
+        SwingUtilities.invokeLater(() -> {
+            SandboxTools.refreshStatistics(
                 this.getCurrentSpeed(),
                 this.generationController.getCurrentNumberGeneration().intValue(),
-                (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count(),
-                this.view.getFont()
-                );
+                aliveCell,
+                this.view.getFont());
+        });
         this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
     }
 }
