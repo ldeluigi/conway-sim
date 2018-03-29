@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -25,7 +24,6 @@ import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
-import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
 
 /**
