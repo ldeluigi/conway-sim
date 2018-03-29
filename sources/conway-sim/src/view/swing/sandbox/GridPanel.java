@@ -55,19 +55,13 @@ public class GridPanel extends JScrollPane {
         if (width < 1 || height < 1 || startingCellSize < 1) {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
+
         this.gridWidth = width;
         this.gridHeight = height;
         this.maxCellSize = startingCellSize * MAX_CELL_SIZE_RATIO;
         this.minCellSize = Math.max(startingCellSize / MIN_CELL_SIZE_RATIO, MIN_CELL_SIZE);
         this.cellSize = new Dimension(startingCellSize, startingCellSize);
-        this.labelMatrix = new ListMatrix<>(width, height, () -> {
-            final JLabel l = new JLabel("");
-            l.setSize(cellSize);
-            l.setPreferredSize(cellSize);
-            l.setBackground(Color.WHITE);
-            l.setOpaque(true);
-            return l;
-        });
+        this.labelMatrix = new ListMatrix<>(width, height, () -> new CLabel(this.cellSize, Color.WHITE, ""));
         this.grid = new JPanel(new GridBagLayout());
         this.grid.setOpaque(false);
         c.fill = GridBagConstraints.NONE;
@@ -84,6 +78,7 @@ public class GridPanel extends JScrollPane {
         }
         this.setDoubleBuffered(true);
         final JPanel gridWrapper = new JPanel();
+        gridWrapper.setOpaque(false);
         gridWrapper.add(grid);
         this.setViewportView(gridWrapper);
         this.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -212,15 +207,9 @@ public class GridPanel extends JScrollPane {
         if (this.labelMatrix.getWidth() < horizontal) {
             if (this.labelMatrix.getWidth() < horizontal) {
                 if (this.labelMatrix.getHeight() < vertical) {
-                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.labelMatrix);
-                    this.labelMatrix = this.labelMatrix.map(s -> s == null ? new JLabel("") : s);
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
                     for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
                         for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                            final JLabel l = this.labelMatrix.get(i, j);
-                            l.setSize(cellSize);
-                            l.setPreferredSize(cellSize);
-                            l.setBackground(Color.WHITE);
-                            l.setOpaque(true);
                             c.gridx = j;
                             c.gridy = i;
                             setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
@@ -229,15 +218,9 @@ public class GridPanel extends JScrollPane {
                     }
                 } else {
                     this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, this.labelMatrix.getWidth());
-                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.labelMatrix);
-                    this.labelMatrix = this.labelMatrix.map(s -> s == null ? new JLabel("") : s);
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
                     for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
                         for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                            final JLabel l = this.labelMatrix.get(i, j);
-                            l.setSize(cellSize);
-                            l.setPreferredSize(cellSize);
-                            l.setBackground(Color.WHITE);
-                            l.setOpaque(true);
                             c.gridx = j;
                             c.gridy = i;
                             setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
@@ -248,15 +231,9 @@ public class GridPanel extends JScrollPane {
             } else {
                 if (this.labelMatrix.getHeight() < vertical) {
                     this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight(), 0, horizontal);
-                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> null), 0, 0, this.labelMatrix);
-                    this.labelMatrix = this.labelMatrix.map(s -> s == null ? new JLabel("") : s);
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE, "")), 0, 0, this.labelMatrix);
                     for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
                         for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                            final JLabel l = this.labelMatrix.get(i, j);
-                            l.setSize(cellSize);
-                            l.setPreferredSize(cellSize);
-                            l.setBackground(Color.WHITE);
-                            l.setOpaque(true);
                             c.gridx = j;
                             c.gridy = i;
                             setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
@@ -268,5 +245,6 @@ public class GridPanel extends JScrollPane {
                 }
             }
         }
+        this.repaint();
     }
 }
