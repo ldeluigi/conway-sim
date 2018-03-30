@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.Image;
 import javax.swing.BorderFactory;
@@ -13,7 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
+import javax.swing.SwingConstants;
 import javax.swing.plaf.metal.MetalButtonUI;
 
 import controller.io.ResourceLoader;
@@ -27,6 +28,13 @@ public final class SandboxTools {
     private static final int MAX_SIZE = 300;
     private static final int MIN_SIZE = 2;
     private static final int DEFAUL_SIZE = 100;
+
+    private static final Color BORDERD_COLOR = Color.BLACK;
+    private static final Color DISABLE_TEXT_COLOR = Color.LIGHT_GRAY;
+    private static final String FONT_NAME = Font.MONOSPACED;
+    private static final int FONT_STYLE = Font.PLAIN;
+
+    private static final int BUTTON_TEXT_SIZE_RAPPOR = 12 / 10;
 
     private static JSpinner spinnerWidth;
     private static JSpinner spinnerHeight;
@@ -143,81 +151,41 @@ public final class SandboxTools {
      */
     public static JButton newJButton(final String name, final String tooltipText) {
         final JButton button = new JButton(name);
-        button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
-        button.setForeground(Color.BLACK);
+        final Font font = new Font(FONT_NAME, FONT_STYLE, MenuSettings.getFontSize());
+
+        final FontMetrics metrics = button.getFontMetrics(font); 
+        final int width = metrics.stringWidth(name + " ");
+        final int height = metrics.getHeight();
+        final Dimension newDimension =  new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
+        button.setPreferredSize(newDimension);
+
+        button.setFont(font);
         button.setToolTipText(tooltipText);
         button.setFocusPainted(false);
-        setEnabledBackgroundAndBorder(button);
+        button.setBorder(BorderFactory.createLineBorder(BORDERD_COLOR, 2, false));
         button.setUI(new MetalButtonUI() {
             protected Color getDisabledTextColor() {
-                return Color.LIGHT_GRAY;
+                return DISABLE_TEXT_COLOR;
             }
         });
-        SwingUtilities.invokeLater(() -> setIcon(button));
+        setIcon(button, newDimension);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
         return button;
     }
 
     /**
      * 
      * @param button the button
+     * @param dim the button dimension
      */
-    public static void setIcon(final JButton button) {
-        final Dimension dim = button.getSize();
-        dim.setSize(dim.getWidth() + 2, dim.getHeight() + 2);
-        button.setPreferredSize(dim);
-        button.setSize(dim);
-        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(
-                button.getSize().width, button.getSize().height, Image.SCALE_SMOOTH)));
+    public static void setIcon(final JButton button, final Dimension dim) {
         button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(
-                button.getSize().width, button.getSize().height, Image.SCALE_SMOOTH)));
+                dim.width, dim.height, Image.SCALE_SMOOTH)));
+        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(
+                dim.width, dim.height, Image.SCALE_SMOOTH)));
         button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed").getScaledInstance(
-                button.getSize().width, button.getSize().height, Image.SCALE_SMOOTH)));
-        button.setIconTextGap(-button.getSize().width + 1);
+                dim.width, dim.height, Image.SCALE_SMOOTH)));
     }
 
-    /**
-     * Sets default background and border of a button.
-     * @param button to edit
-     */
-    public static void setEnabledBackgroundAndBorder(final JButton button) {
-//                                      backgound       border      forground
-        setBackgroundAndBorder(button, Color.WHITE, Color.GRAY, Color.BLACK);
-    }
-
-    /**
-     * Sets default background and border of a button.
-     * @param button to edit
-     */
-    public static void setDisabledBackgroundAndBorder(final JButton button) {
-//                                          backgound       border      forground
-        setBackgroundAndBorder(button, Color.LIGHT_GRAY, Color.GRAY, Color.BLACK);
-    }
-
-    /**
-     * Sets background and border of a button.
-     * @param button to edit
-     * @param background color
-     * @param border color
-     * @param forground color
-     */
-    public static void setBackgroundAndBorder(final JButton button, final Color background, final Color border, final Color forground) {
-        button.setBackground(background);
-        button.setBorder(BorderFactory.createLineBorder(border, 2, false));
-        button.setForeground(forground);
-    }
-
-    /**
-     * 
-     * @param name of the button
-     * @param tooltipText of the button
-     * @param background color
-     * @param border color
-     * @param forground color
-     * @return a new JButton
-     */
-    public static JButton newJButtonWithBackgroundAndBorder(final String name, final String tooltipText, final Color background, final Color border, final Color forground) {
-        final JButton newButton = newJButton(name, tooltipText);
-        setBackgroundAndBorder(newButton, background, border, forground);
-        return newButton;
-    }
 }
