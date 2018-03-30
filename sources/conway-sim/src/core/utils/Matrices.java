@@ -11,15 +11,24 @@ import java.util.stream.Stream;
  */
 public final class Matrices {
 
-    private Matrices() { }
+    private Matrices() {
+    }
 
     /**
-     * A method to modify a {@link Matrix<X>} by applying a smaller matrix of the same type.
-     * @param <X> the generic type of matrix
-     * @param main is the larger {@link Matrix<X>} where the smaller should be applied
-     * @param x is the row of the top left cell of the matrix
-     * @param y is the column of the top left cell of the matrix
-     * @param smaller is the {@link Matrix<X>} to be merged with main
+     * A method to modify a {@link Matrix<X>} by applying a smaller matrix of the
+     * same type.
+     * 
+     * @param <X>
+     *            the generic type of matrix
+     * @param main
+     *            is the larger {@link Matrix<X>} where the smaller should be
+     *            applied
+     * @param x
+     *            is the row of the top left cell of the matrix
+     * @param y
+     *            is the column of the top left cell of the matrix
+     * @param smaller
+     *            is the {@link Matrix<X>} to be merged with main
      * @return the modified matrix
      */
     public static <X> Matrix<X> mergeXY(final Matrix<X> main, final int x, final int y, final Matrix<X> smaller) {
@@ -37,13 +46,21 @@ public final class Matrices {
     }
 
     /**
-     * Copies a rectangular portion of a given {@link Matrix} to a new matrix of the required dimension.
-     * @param <X> the generic type of matrix
-     * @param from the matrix from which the new one is copied
-     * @param fromRow the first row to copy
-     * @param toRow the last (inclusive) row to copy
-     * @param fromColumn the first column to copy
-     * @param toColumn  the last (inclusive) column to copy
+     * Copies a rectangular portion of a given {@link Matrix} to a new matrix of the
+     * required dimension.
+     * 
+     * @param <X>
+     *            the generic type of matrix
+     * @param from
+     *            the matrix from which the new one is copied
+     * @param fromRow
+     *            the first row to copy
+     * @param toRow
+     *            the last (inclusive) row to copy
+     * @param fromColumn
+     *            the first column to copy
+     * @param toColumn
+     *            the last (inclusive) column to copy
      * @return a new matrix taken from the given one
      */
     public static <X> Matrix<X> cut(final Matrix<X> from, final int fromRow, final int toRow, final int fromColumn,
@@ -51,20 +68,23 @@ public final class Matrices {
         if (fromRow < 0 || toRow < fromRow || toRow >= from.getHeight() || fromColumn < 0 || toColumn < fromColumn
                 || toColumn >= from.getWidth()) {
             throw new IllegalArgumentException("Input coordinates are invalid (from row: " + fromRow + " to " + toRow
-                    + "; from column: " + fromColumn + " to " + toColumn + ")");
+                    + " - max is " + (from.getHeight() - 1) + "; from column: " + fromColumn + " to " + toColumn
+                    + " - max is " + (from.getWidth() - 1) + ")");
         }
         return new ListMatrix<>(
-                IntStream.rangeClosed(fromRow, toRow)
-                         .mapToObj(r -> IntStream.rangeClosed(fromColumn, toColumn)
-                                                 .mapToObj(c -> from.get(r, c))
-                                                 .collect(Collectors.toList()))
+                IntStream
+                        .rangeClosed(fromRow, toRow).mapToObj(r -> IntStream.rangeClosed(fromColumn, toColumn)
+                                .mapToObj(c -> from.get(r, c)).collect(Collectors.toList()))
                         .collect(Collectors.toList()));
     }
 
     /**
-     *  Returns an unmodifiable view of the specified matrix.
-     * @param matrix the {@link Matrix} to wrap
-     * @param <X> the generic type of the matrix
+     * Returns an unmodifiable view of the specified matrix.
+     * 
+     * @param matrix
+     *            the {@link Matrix} to wrap
+     * @param <X>
+     *            the generic type of the matrix
      * @return a wrapped matrix that protects from modifications
      */
     public static <X> Matrix<X> unmodifiableMatrix(final Matrix<X> matrix) {
@@ -122,9 +142,13 @@ public final class Matrices {
     }
 
     /**
-     * Returns true only if the two Matrices have the same dimensions and every corresponding cell equals the counterpart.
-     * @param a a matrix
-     * @param b a second matrix
+     * Returns true only if the two Matrices have the same dimensions and every
+     * corresponding cell equals the counterpart.
+     * 
+     * @param a
+     *            a matrix
+     * @param b
+     *            a second matrix
      * @return true if they are equals
      */
     public static boolean areEquals(final Matrix<?> a, final Matrix<?> b) {
