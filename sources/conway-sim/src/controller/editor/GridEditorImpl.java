@@ -197,17 +197,17 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
                     this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
                     this.gameGrid.changeGrid(horizontal, vertical);
                 } else {
-                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, this.currentStatus.getWidth());
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical - 1, 0, this.currentStatus.getWidth() - 1);
                     this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
                     this.gameGrid.changeGrid(horizontal, vertical);
                 }
             } else {
                 if (this.currentStatus.getHeight() < vertical) {
-                    this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight(), 0, horizontal);
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight() - 1, 0, horizontal - 1);
                     this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
                     this.gameGrid.changeGrid(horizontal, vertical);
                 } else {
-                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, horizontal);
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical - 1, 0, horizontal - 1);
                     this.gameGrid.changeGrid(horizontal, vertical);
                 }
             }
