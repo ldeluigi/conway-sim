@@ -31,9 +31,15 @@ public final class MainMenu extends JPanel {
     private static final int BUTTON_RATIO_Y = 10;
     private static final int BUTTON_RATIO_X = 5;
     private static final int MINOR_BUTTON_RATIO_X = 6;
+    private static final int HORIZONTAL_TITLE_RATIO = 8;
+    private static final int UPPER_TITLE_SPACE_RATIO = 4;
+    private static final int TITLE_HEIGHT_RATIO = 6;
+
     /**
      * The constructor fills the panel.
-     * @param mainGUI the main GUI
+     * 
+     * @param mainGUI
+     *            the main GUI
      */
     public MainMenu(final DesktopGUI mainGUI) {
         UIManager.put("Button.select", Color.LIGHT_GRAY);
@@ -49,7 +55,8 @@ public final class MainMenu extends JPanel {
         final JButton sandbox = new JButton(ResourceLoader.loadString("main.sandbox"));
         setBackgroundAndBorder(sandbox);
         sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
-        sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        sandbox.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
             SwingUtilities.invokeLater(() -> {
@@ -60,7 +67,7 @@ public final class MainMenu extends JPanel {
         sandbox.setFocusPainted(false);
         final JButton exit = new JButton(ResourceLoader.loadString("main.exit"));
         setBackgroundAndBorder(exit);
-        final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X, 
+        final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X,
                 mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * 2));
         exit.setPreferredSize(bottomCoupleDimension);
         exit.addActionListener(e -> {
@@ -103,8 +110,10 @@ public final class MainMenu extends JPanel {
         lowerPanel.setLayout(new BorderLayout());
         final JLabel version = new JLabel(ResourceLoader.loadString("main.version"));
         final JLabel author = new JLabel(ResourceLoader.loadString("main.author"));
-        version.setFont(new Font(version.getFont().getFontName(), version.getFont().getStyle(), MenuSettings.getFontSize()));
-        author.setFont(new Font(author.getFont().getFontName(), author.getFont().getStyle(), MenuSettings.getFontSize()));
+        version.setFont(
+                new Font(version.getFont().getFontName(), version.getFont().getStyle(), MenuSettings.getFontSize()));
+        author.setFont(
+                new Font(author.getFont().getFontName(), author.getFont().getStyle(), MenuSettings.getFontSize()));
         lowerPanel.add(version, BorderLayout.EAST);
         lowerPanel.add(author, BorderLayout.WEST);
         this.add(lowerPanel, BorderLayout.SOUTH);
@@ -119,6 +128,9 @@ public final class MainMenu extends JPanel {
     @Override
     public void paintComponent(final Graphics g) {
         g.drawImage(ResourceLoader.loadImage("main.background"), 0, 0, this.getWidth(), this.getHeight(), this);
-        g.drawImage(ResourceLoader.loadImage("main.title"), this.getWidth() / 8, this.getHeight() / 4, this.getWidth() * 6 / 8, this.getHeight() / 7, this);
+        g.drawImage(ResourceLoader.loadImage("main.title"), this.getWidth() / HORIZONTAL_TITLE_RATIO,
+                this.getHeight() / UPPER_TITLE_SPACE_RATIO,
+                this.getWidth() * (HORIZONTAL_TITLE_RATIO - 2) / HORIZONTAL_TITLE_RATIO,
+                this.getHeight() / TITLE_HEIGHT_RATIO, this);
     }
 }

@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 
 import controller.io.ResourceLoader;
 
-
 /**
  * {@link JPanel} representing a simple loading screen.
  */

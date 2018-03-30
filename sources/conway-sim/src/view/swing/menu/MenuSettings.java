@@ -55,7 +55,9 @@ public final class MenuSettings extends JPanel {
 
     /**
      * This panel is a view of general settings.
-     * @param mainGUI the GUI to return
+     * 
+     * @param mainGUI
+     *            the GUI to return
      */
     public MenuSettings(final GUI mainGUI) {
         this.setLayout(new GridBagLayout());
@@ -72,7 +74,8 @@ public final class MenuSettings extends JPanel {
                     setUsingSystemLF(true);
                 } catch (Exception e1) {
                     final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.SysLookAndFeelNotFound"));
-                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("error.unavailable"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("error.unavailable"),
+                            JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getStateChange() == ItemEvent.DESELECTED) {
                 try {
@@ -80,7 +83,8 @@ public final class MenuSettings extends JPanel {
                     setUsingSystemLF(false);
                 } catch (Exception e1) {
                     final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.CrossLookAndFeelNotFound"));
-                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("settings.error.unavailable"), JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("settings.error.unavailable"),
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
             checkLookAndFeel.setSelected(isUsingSystemLF());
@@ -88,8 +92,8 @@ public final class MenuSettings extends JPanel {
         });
         final JLabel checkLFLabel = new JLabel(ResourceLoader.loadString("settings.sysLF"));
         checkLFLabel.setFont(MenuSettings.generateFont());
-        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(),
-                MIN_FONT_SIZE, MAX_FONT_SIZE, 1);
+        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(), MIN_FONT_SIZE,
+                MAX_FONT_SIZE, 1);
         final JSpinner fontSizeSelector = new JSpinner(fontSizeSelectorModel);
         fontSizeSelector.setOpaque(false);
         fontSizeSelector.setFont(generateFont());
