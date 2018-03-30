@@ -29,7 +29,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private Optional<Matrix<Status>> pattern;
     private Matrix<Status> currentStatus;
     private boolean placingState;
-    private final Environment env;
+    private Environment env;
     private boolean mouseBeingPressed;
     private int lastPreviewRow;
     private int lastPreviewColumn;
@@ -191,7 +191,6 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
-        this.gameGrid.removeAll();
         if (this.currentStatus.getWidth() < horizontal) {
             if (this.currentStatus.getHeight() < vertical) {
                 this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
@@ -211,6 +210,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
                 this.gameGrid.changeGrid(horizontal, vertical);
             }
         }
+        this.env = EnvironmentFactory.standardRules(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight());
+
     }
 
     private void applyChanges() {
