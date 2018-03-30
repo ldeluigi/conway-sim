@@ -21,6 +21,7 @@ import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import controller.io.ResourceLoader;
 import core.model.Generation;
+import core.model.Status;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -259,7 +260,7 @@ public class GenerationPanel extends JPanel {
         if (!this.view.getGridEditor().isEnabled()) {
             this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
         }
-        final int aliveCell = (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count();
+        final int aliveCell = (int) this.generationController.getCurrentGeneration().getCellMatrix().stream().filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
         SwingUtilities.invokeLater(() -> {
             SandboxTools.refreshStatistics(
                 this.getCurrentSpeed(),
