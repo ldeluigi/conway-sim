@@ -200,15 +200,15 @@ public class GridPanel extends JScrollPane {
                 if (this.labelMatrix.getHeight() < vertical) {
                     this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
                 } else {
-                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, this.labelMatrix.getWidth());
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical-1, 0, this.labelMatrix.getWidth()-1);
                     this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
                 }
             } else {
                 if (this.labelMatrix.getHeight() < vertical) {
-                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight(), 0, horizontal);
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight()-1, 0, horizontal-1);
                     this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
                 } else {
-                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, horizontal);
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical-1, 0, horizontal-1);
                 }
             }
             this.claspLabels();
