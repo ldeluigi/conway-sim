@@ -176,7 +176,6 @@ public class Sandbox extends JPanel {
      */
     public void refreshView() {
         this.generationPanel.refreshView();
-        this.grabFocus();
     }
 
     private void callBook() {
@@ -191,7 +190,7 @@ public class Sandbox extends JPanel {
     }
 
     private void exit() {
-        final int result = JOptionPane.showOptionDialog(this, "Going back to menu?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
+        final int result = JOptionPane.showOptionDialog(this, ResourceLoader.loadString("option.exit"), ResourceLoader.loadString("option.exit.title"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
         if (result == JOptionPane.YES_OPTION) {
             this.mainGUI.backToMainMenu();
         }
