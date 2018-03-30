@@ -113,25 +113,25 @@ public class Sandbox extends JPanel {
      * 
      */
     public void resetGrid() {
-        this.setVisible(false);
-        grid.setVisible(false);
+//        this.setVisible(false);
+//        grid.setVisible(false);
         this.remove(grid);
         final JPanel loading = new LoadingScreen();
         this.add(loading, BorderLayout.CENTER);
-        this.setVisible(true);
+//        this.setVisible(true);
         SwingUtilities.invokeLater(() -> {
-//            this.gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
-            grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
-                    mainGUI.getScreenHeight(),
-                    mainGUI.getScreenWidth())
-                    / CELL_SIZE_RATIO);
-            this.gridEditor = new GridEditorImpl(grid);
-            this.setVisible(false);
+          this.gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
+//            grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
+//                    mainGUI.getScreenHeight(),
+//                    mainGUI.getScreenWidth())
+//                    / CELL_SIZE_RATIO);
+//            this.gridEditor = new GridEditorImpl(grid);
+//            this.setVisible(false);
             loading.setVisible(false);
             this.remove(loading);
             this.add(grid, BorderLayout.CENTER);
             grid.setVisible(true);
-            this.setVisible(true);
+//            this.setVisible(true);
         });
     }
 
