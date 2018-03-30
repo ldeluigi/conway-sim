@@ -54,7 +54,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void draw(final Generation gen) {
-        this.gameGrid.paintGrid(gen.getAliveMatrix().map(b -> b ? Color.BLACK : Color.WHITE));
+        this.gameGrid.paintGrid(gen.getCellMatrix().map(c -> c.getStatus().equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
     }
 
     /**
