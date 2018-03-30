@@ -191,27 +191,28 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
-        if (this.currentStatus.getWidth() < horizontal) {
-            if (this.currentStatus.getHeight() < vertical) {
-                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
-                this.gameGrid.changeGrid(horizontal, vertical);
+        if (horizontal != this.currentStatus.getWidth() && vertical != this.currentStatus.getHeight()) {
+            if (this.currentStatus.getWidth() < horizontal) {
+                if (this.currentStatus.getHeight() < vertical) {
+                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
+                    this.gameGrid.changeGrid(horizontal, vertical);
+                } else {
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, this.currentStatus.getWidth());
+                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
+                    this.gameGrid.changeGrid(horizontal, vertical);
+                }
             } else {
-                this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, this.currentStatus.getWidth());
-                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
-                this.gameGrid.changeGrid(horizontal, vertical);
+                if (this.currentStatus.getHeight() < vertical) {
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight(), 0, horizontal);
+                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
+                    this.gameGrid.changeGrid(horizontal, vertical);
+                } else {
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, horizontal);
+                    this.gameGrid.changeGrid(horizontal, vertical);
+                }
             }
-        } else {
-            if (this.currentStatus.getHeight() < vertical) {
-                this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight(), 0, horizontal);
-                this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
-                this.gameGrid.changeGrid(horizontal, vertical);
-            } else {
-                this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical, 0, horizontal);
-                this.gameGrid.changeGrid(horizontal, vertical);
-            }
+            this.env = EnvironmentFactory.standardRules(horizontal, vertical);
         }
-        this.env = EnvironmentFactory.standardRules(horizontal, vertical);
-
     }
 
     private void applyChanges() {
