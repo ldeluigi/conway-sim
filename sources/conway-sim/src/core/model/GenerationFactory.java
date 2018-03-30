@@ -1,7 +1,5 @@
 package core.model;
 
-import static core.model.Status.ALIVE;
-
 import java.util.Objects;
 
 import core.utils.Matrices;
@@ -47,11 +45,6 @@ public final class GenerationFactory {
                             + cellMatrix.getHeight() + " - " + e.getWidth() + "," + e.getHeight() + ")");
         }
         return new Generation() {
-
-            @Override
-            public Matrix<Boolean> getAliveMatrix() {
-                return Matrices.unmodifiableMatrix(cellMatrix.map(c -> c.getStatus().equals(ALIVE)));
-            }
 
             @Override
             public int getWidth() {
