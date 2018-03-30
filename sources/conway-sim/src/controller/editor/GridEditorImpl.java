@@ -191,7 +191,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
-        if (horizontal != this.currentStatus.getWidth() && vertical != this.currentStatus.getHeight()) {
+        if (horizontal != this.currentStatus.getWidth() || vertical != this.currentStatus.getHeight()) {
             if (this.currentStatus.getWidth() < horizontal) {
                 if (this.currentStatus.getHeight() < vertical) {
                     this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
