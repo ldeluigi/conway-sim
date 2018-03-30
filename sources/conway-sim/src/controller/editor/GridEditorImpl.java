@@ -210,7 +210,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
                 this.gameGrid.changeGrid(horizontal, vertical);
             }
         }
-        this.env = EnvironmentFactory.standardRules(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight());
+        this.env = EnvironmentFactory.standardRules(horizontal, vertical);
 
     }
 
