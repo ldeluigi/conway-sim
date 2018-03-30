@@ -103,6 +103,10 @@ public class Sandbox extends JPanel {
         KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> bClear.doClick());
         KeyListenerFactory.addKeyListener(this, "book", KeyEvent.VK_B, () -> bBook.doClick());
         this.generationPanel.refreshView();
+        SwingUtilities.invokeLater(() -> {
+            this.setFocusable(true);
+            this.requestFocusInWindow();
+        });
     }
 
     /**
