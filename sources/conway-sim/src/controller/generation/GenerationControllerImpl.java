@@ -133,7 +133,7 @@ public class GenerationControllerImpl implements GenerationController {
         this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
         this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
         this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.refreshView();
     }
 
     private void saveGeneration(final Generation generationToSave, final Long generationNumber) {

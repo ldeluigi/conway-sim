@@ -256,6 +256,9 @@ public class GenerationPanel extends JPanel {
      * 
      */
     public void refreshView() {
+        if (!this.view.getGridEditor().isEnabled()) {
+            this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
+        }
         final int aliveCell = (int) this.generationController.getCurrentGeneration().getAliveMatrix().stream().filter(cell -> cell).count();
         SwingUtilities.invokeLater(() -> {
             SandboxTools.refreshStatistics(
@@ -264,6 +267,5 @@ public class GenerationPanel extends JPanel {
                 aliveCell,
                 this.view.getFont());
         });
-        this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
     }
 }

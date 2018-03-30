@@ -6,10 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
-
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -23,7 +19,9 @@ import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
+import view.swing.Log;
 import view.swing.book.BookFrame;
+import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -73,7 +71,9 @@ public class Sandbox extends JPanel {
         final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply, new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         gridOption.setOpaque(false);
         north.add(this.generationPanel, BorderLayout.AFTER_LINE_ENDS);
-        north.add(new JLabel("SANDBOX MODE"), BorderLayout.BEFORE_FIRST_LINE);
+        final JLabel mode = new JLabel(ResourceLoader.loadString("sandbox.mode"));
+        mode.setFont(getFont());
+        north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
         north.add(gridOption, BorderLayout.WEST);
         this.add(north, BorderLayout.NORTH);
 
@@ -103,7 +103,7 @@ public class Sandbox extends JPanel {
         //Button clear keylistener
         KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> bClear.doClick());
         KeyListenerFactory.addKeyListener(this, "book", KeyEvent.VK_B, () -> bBook.doClick());
-
+        KeyListenerFactory.addKeyListener(this, "messg", KeyEvent.VK_M, () -> Log.logPopMessage("Ciao"));
         this.generationPanel.refreshView();
     }
 
@@ -111,25 +111,25 @@ public class Sandbox extends JPanel {
      * 
      */
     public void resetGrid() {
-//        this.setVisible(false);
-//        grid.setVisible(false);
-//        this.remove(grid);
-//        final JPanel loading = new LoadingScreen();
-//        this.add(loading, BorderLayout.CENTER);
-//        this.setVisible(true);
+        this.setVisible(false);
+        grid.setVisible(false);
+        this.remove(grid);
+        final JPanel loading = new LoadingScreen();
+        this.add(loading, BorderLayout.CENTER);
+        this.setVisible(true);
         SwingUtilities.invokeLater(() -> {
-            this.gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
-//            grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
-//                    mainGUI.getScreenHeight(),
-//                    mainGUI.getScreenWidth())
-//                    / CELL_SIZE_RATIO);
-//            this.gridEditor = new GridEditorImpl(grid);
-//            this.setVisible(false);
-//            loading.setVisible(false);
-//            this.remove(loading);
-//            this.add(grid, BorderLayout.CENTER);
-//            grid.setVisible(true);
-//            this.setVisible(true);
+//            this.gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
+            grid = new GridPanel(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect(), Math.max(
+                    mainGUI.getScreenHeight(),
+                    mainGUI.getScreenWidth())
+                    / CELL_SIZE_RATIO);
+            this.gridEditor = new GridEditorImpl(grid);
+            this.setVisible(false);
+            loading.setVisible(false);
+            this.remove(loading);
+            this.add(grid, BorderLayout.CENTER);
+            grid.setVisible(true);
+            this.setVisible(true);
         });
     }
 
@@ -177,12 +177,7 @@ public class Sandbox extends JPanel {
      * refresh all the view.
      */
     public void refreshView() {
-        final ExecutorService gridExecutor = Executors.newCachedThreadPool();
-        final FutureTask<Object> gridTask = new FutureTask<>(() -> {
-            this.generationPanel.refreshView();
-            gridExecutor.shutdown();
-        }, null);
-        gridExecutor.execute(gridTask);
+        this.generationPanel.refreshView();
         this.grabFocus();
     }
 
@@ -198,7 +193,6 @@ public class Sandbox extends JPanel {
     }
 
     private void exit() {
-        //TODO save option name
         final int result = JOptionPane.showOptionDialog(this, "Going back to menu?", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
         if (result == JOptionPane.YES_OPTION) {
             this.mainGUI.backToMainMenu();
