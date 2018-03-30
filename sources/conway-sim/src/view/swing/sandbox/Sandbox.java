@@ -19,7 +19,6 @@ import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
-import view.swing.Log;
 import view.swing.book.BookFrame;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
