@@ -88,7 +88,7 @@ public class GridPanel extends JScrollPane {
                 }
             }
         });
-        
+
         this.getViewport().setOpaque(false);
         this.setOpaque(false);
     }
@@ -193,25 +193,27 @@ public class GridPanel extends JScrollPane {
      * @param vertical is the new number of rows
      */
     public void changeGrid(final int horizontal, final int vertical) {
-        this.grid.setVisible(false);
-        this.grid.removeAll();
-        if (this.labelMatrix.getWidth() < horizontal) {
-            if (this.labelMatrix.getHeight() < vertical) {
-                this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
+        SwingUtilities.invokeLater(() -> {
+            this.grid.setVisible(false);
+            this.grid.removeAll();
+            if (this.labelMatrix.getWidth() < horizontal) {
+                if (this.labelMatrix.getHeight() < vertical) {
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
+                } else {
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, this.labelMatrix.getWidth());
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
+                }
             } else {
-                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, this.labelMatrix.getWidth());
-                this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
+                if (this.labelMatrix.getHeight() < vertical) {
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight(), 0, horizontal);
+                    this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
+                } else {
+                    this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, horizontal);
+                }
             }
-        } else {
-            if (this.labelMatrix.getHeight() < vertical) {
-                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight(), 0, horizontal);
-                this.labelMatrix = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> new CLabel(this.cellSize, Color.WHITE)), 0, 0, this.labelMatrix);
-            } else {
-                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical, 0, horizontal);
-            }
-        }
-        this.claspLabels();
-        this.grid.setVisible(true);
+            this.claspLabels();
+            this.grid.setVisible(true);
+        });
     }
 
     private void claspLabels() {
