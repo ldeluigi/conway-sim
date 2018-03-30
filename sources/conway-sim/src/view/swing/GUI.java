@@ -9,12 +9,14 @@ public interface GUI {
 
     /**
      * Gets current frame height.
+     * 
      * @return height
      */
     int getCurrentHeight();
 
     /**
      * Gets current frame width.
+     * 
      * @return width
      */
     int getCurrentWidth();
@@ -26,7 +28,9 @@ public interface GUI {
 
     /**
      * Makes the given panel the main content pane of the view.
-     * @param viewPanel to be displayed as main view.
+     * 
+     * @param viewPanel
+     *            to be displayed as main view.
      */
     void setView(JComponent viewPanel);
 

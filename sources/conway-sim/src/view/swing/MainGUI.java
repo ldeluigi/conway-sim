@@ -18,15 +18,13 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 import controller.io.ResourceLoader;
 import view.swing.menu.MainMenu;
 /**
- * 
- *
+ * Implementation of a {@link DesktopGUI} with java.swing.
  */
 public final class MainGUI implements DesktopGUI {
 
     private static final int PIXELS_FROM_SCREEN_BORDERS = 50;
     private static final int MINIMUM_FRAME_RATIO = 2;
     private static final int INNER_FRAME_SCALE = 5;
-
 
     private final JFrame frame;
     private final JDesktopPane desktop;
@@ -39,23 +37,35 @@ public final class MainGUI implements DesktopGUI {
         this.frame = new JFrame(ResourceLoader.loadString("frame.title"));
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.frame.addWindowListener(new WindowListener() {
-            public void windowOpened(final WindowEvent e) {  }
-            public void windowIconified(final WindowEvent e) {  }
-            public void windowDeiconified(final WindowEvent e) {  }
-            public void windowDeactivated(final WindowEvent e) {  }
+            public void windowOpened(final WindowEvent e) {
+            }
+
+            public void windowIconified(final WindowEvent e) {
+            }
+
+            public void windowDeiconified(final WindowEvent e) {
+            }
+
+            public void windowDeactivated(final WindowEvent e) {
+            }
+
             public void windowClosing(final WindowEvent e) {
                 close();
             }
+
             public void windowClosed(final WindowEvent e) {
                 close();
             }
-            public void windowActivated(final WindowEvent e) {  }
+
+            public void windowActivated(final WindowEvent e) {
+            }
         });
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.frame.setMinimumSize(
                 new Dimension(screenSize.width / MINIMUM_FRAME_RATIO, screenSize.height / MINIMUM_FRAME_RATIO));
-        this.frame.setBounds(PIXELS_FROM_SCREEN_BORDERS, PIXELS_FROM_SCREEN_BORDERS,
-                screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2, screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
+        this.frame.setSize(screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2,
+                screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
+        this.frame.setLocationRelativeTo(null);
         this.desktop = new JDesktopPane();
         this.frame.setContentPane(this.desktop);
         this.desktop.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
@@ -72,7 +82,7 @@ public final class MainGUI implements DesktopGUI {
         basicInternalFrameUI.setNorthPane(null);
         this.background.setBorder(null);
         this.background.setVisible(true);
-        //Start with MainMenu
+        // Start with MainMenu
         final JPanel menuPanel = new MainMenu(this);
         setView(menuPanel);
         this.frame.setIconImage(ResourceLoader.loadImage("main.icon"));
@@ -81,7 +91,10 @@ public final class MainGUI implements DesktopGUI {
 
     /**
      * A method that changes the main view of the application (background).
-     * @param viewPanel the panel that will be shown as main screen on the application desktop.
+     * 
+     * @param viewPanel
+     *            the panel that will be shown as main screen on the application
+     *            desktop.
      */
     @Override
     public void setView(final JComponent viewPanel) {
@@ -98,7 +111,9 @@ public final class MainGUI implements DesktopGUI {
 
     /**
      * This method pops up a {@link JInternalFrame} in a fixed position.
-     * @param iFrame the frame that pops up
+     * 
+     * @param iFrame
+     *            the frame that pops up
      */
     @Override
     public void popUpFrame(final JInternalFrame iFrame) {
@@ -107,7 +122,8 @@ public final class MainGUI implements DesktopGUI {
                 Math.max(iFrame.getMinimumSize().height, this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
         iFrame.setMinimumSize(minDim);
         iFrame.setSize(Math.max(minDim.width, iFrame.getWidth()), Math.max(minDim.height, iFrame.getHeight()));
-        iFrame.setLocation((this.getCurrentWidth() - iFrame.getWidth()) / 2, this.desktop.getHeight() / INNER_FRAME_SCALE);
+        iFrame.setLocation((this.getCurrentWidth() - iFrame.getWidth()) / 2,
+                this.desktop.getHeight() / INNER_FRAME_SCALE);
         iFrame.setVisible(true);
         this.desktop.add(iFrame);
         iFrame.setLayer(JDesktopPane.PALETTE_LAYER);
