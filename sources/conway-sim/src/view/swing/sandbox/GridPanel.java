@@ -140,7 +140,7 @@ public class GridPanel extends JScrollPane {
         if (this.labelMatrix.getHeight() != colorMatrix.getHeight() || this.labelMatrix.getWidth() != colorMatrix.getWidth()) {
             throw new IllegalArgumentException("Dimensions not corresponding.");
         }
-        displayColors(colorMatrix, 0, 0);
+        this.displayColors(colorMatrix, 0, 0);
     }
 
     private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) {
@@ -149,9 +149,27 @@ public class GridPanel extends JScrollPane {
                 this.grid.setVisible(this.shouldGridStayVisible);
                 IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
                     IntStream.range(startColumn, colorMatrix.getWidth()).forEach(column -> {
-                        labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
+                        this.labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
                     });
                 });
+                this.grid.setVisible(true);
+            });
+        } else {
+            throw new IllegalArgumentException("Used not consistent parameter(s)");
+        }
+    }
+
+    /**
+     * 
+     * @param row
+     * @param column
+     * @param col
+     */
+    public void displaySingleCell(final int row, final int column, final Color col) {
+        if (row >= 0 && column >= 0) {
+            SwingUtilities.invokeLater(() -> {
+                this.grid.setVisible(this.shouldGridStayVisible);
+                this.labelMatrix.get(row, column).setBackground(col);
                 this.grid.setVisible(true);
             });
         } else {

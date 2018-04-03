@@ -66,7 +66,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         } 
         this.currentStatus.set(row, column, this.currentStatus.get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
-        this.applyChanges();
+        this.gameGrid.displaySingleCell(row, column, this.currentStatus.get(row, column).equals(Status.DEAD) ? Color.WHITE : Color.BLACK);
     }
 
     /**
@@ -212,6 +212,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
                 }
             }
             this.env = EnvironmentFactory.standardRules(horizontal, vertical);
+            this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         }
     }
 
