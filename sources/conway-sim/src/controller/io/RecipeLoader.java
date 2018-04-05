@@ -16,27 +16,63 @@ import controller.book.RecipeBookImpl;
  *
  */
 public class RecipeLoader {
-    private final RecipeBookImpl recipebook;
-    private static final String RECIPEFOLDER = "./res/recipebook";
-    /** This class parses all the files in the preset folder.
+    private final RecipeBookImpl defaultbook;
+    private final RecipeBookImpl custombook;
+    private static final File PATH = new File("");
+    private static final String CURRENTPATH = PATH.getAbsolutePath();
+    private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + "/res/recipebook");
+    private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + "/recipebook");
+/** 
+This class parses all the files in the preset folder.
      *  than it loads it in the recipebook.
      * @throws IOException .
      */
     public RecipeLoader() {
-        final File folder = new File(RECIPEFOLDER);
-        final File[] listOfFiles = folder.listFiles(new FilenameFilter() {
+        System.out.println("\nCurrent Path: " + CURRENTPATH);
+        if (CUSTOMRECIPEFOLDER.isDirectory() && !CUSTOMRECIPEFOLDER.exists()) {
+            CUSTOMRECIPEFOLDER.mkdir();
+        }
+        System.out.println("\nDefauld Book Folder: " + DEFAULTRECIPEFOLDER);
+        System.out.println("\nCustom Book Folder: " + CUSTOMRECIPEFOLDER);
+        this.defaultbook = new RecipeBookImpl();
+        this.custombook = new RecipeBookImpl();
+        recipeParser(defaultbook, DEFAULTRECIPEFOLDER);
+        recipeParser(custombook, CUSTOMRECIPEFOLDER);
+    }
+    /**
+     * This methods returns the recipebook when loaded.
+     * @return the recipebook
+     */
+    @SuppressWarnings("PMD.AvoidCatchingNPE")
+    public RecipeBookImpl getRecipeBook() {
+        return this.defaultbook;
+    }
+    /**
+     * This methods returns the custmbook when loaded.
+     * @return the custombook
+     */
+    public RecipeBookImpl getCustomBook() {
+        return this.custombook;
+    }
+
+    /**
+     * 
+     * @param book to be filled
+     * @param folder to be parsed
+     */
+    private void recipeParser(final RecipeBookImpl book, final File folder) {
+        final File[] list = folder.listFiles(new FilenameFilter() {
             public boolean accept(final File folder, final String name) {
                 return name.toLowerCase().endsWith(".rle");
             }
         });
         final ArrayList<String> filespaths = new ArrayList<String>();
-        this.recipebook = new RecipeBookImpl();
         String testLine = "testLine: NOT_INITIALIZED";
         FileReader namereader;
         BufferedReader in;
         Boolean flagName;
         try {
-            for (final File file : listOfFiles) {
+            for (final File file : list) {
                 if (file.isFile()) {
                     flagName = false;
                     filespaths.add(file.getAbsolutePath());
@@ -56,7 +92,7 @@ public class RecipeLoader {
                     Path filepath = Paths.get(file.getAbsolutePath());
                     try {
                         String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
-                        this.recipebook.addRecipe(content, flagName ? testLine : file.getName());
+                        book.addRecipe(content, flagName ? testLine : file.getName());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -66,12 +102,5 @@ public class RecipeLoader {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-    }
-    /**
-     * This methods returns the recipebook when loaded.
-     * @return the recipebook
-     */
-    public RecipeBookImpl getRecipeBook() {
-        return this.recipebook;
     }
 }
