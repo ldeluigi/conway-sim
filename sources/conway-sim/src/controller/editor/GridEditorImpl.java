@@ -46,7 +46,6 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.pattern = Optional.empty();
         this.env = EnvironmentFactory.standardRules(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight());
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
-        this.applyChanges();
     }
 
     /**
@@ -195,22 +194,19 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             if (this.currentStatus.getWidth() < horizontal) {
                 if (this.currentStatus.getHeight() < vertical) {
                     this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
-                    this.gameGrid.changeGrid(horizontal, vertical);
                 } else {
                     this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical - 1, 0, this.currentStatus.getWidth() - 1);
                     this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
-                    this.gameGrid.changeGrid(horizontal, vertical);
                 }
             } else {
                 if (this.currentStatus.getHeight() < vertical) {
                     this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight() - 1, 0, horizontal - 1);
                     this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
-                    this.gameGrid.changeGrid(horizontal, vertical);
                 } else {
                     this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical - 1, 0, horizontal - 1);
-                    this.gameGrid.changeGrid(horizontal, vertical);
                 }
             }
+            this.gameGrid.changeGrid(horizontal, vertical);
             this.env = EnvironmentFactory.standardRules(horizontal, vertical);
             this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         }

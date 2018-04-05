@@ -160,15 +160,14 @@ public class GridPanel extends JScrollPane {
     }
 
     /**
-     * 
-     * @param row
-     * @param column
-     * @param col
+     * Is the method to invoke when a single cell changes instead of repainting the whole grid.
+     * @param row is the vertical index of the cell
+     * @param column is the horizontal index of the cell
+     * @param col is the color to be set as background for the given cell at (row,column) position
      */
     public void displaySingleCell(final int row, final int column, final Color col) {
         if (row >= 0 && column >= 0) {
             SwingUtilities.invokeLater(() -> {
-                this.grid.setVisible(this.shouldGridStayVisible);
                 this.labelMatrix.get(row, column).setBackground(col);
                 this.grid.setVisible(true);
             });
