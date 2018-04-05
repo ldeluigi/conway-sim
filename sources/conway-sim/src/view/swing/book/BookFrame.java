@@ -41,7 +41,7 @@ public class BookFrame extends JInternalFrame {
 
 
 
-    private static final int FRAME_WIDTH = 750;
+    private static final int FRAME_WIDTH = 800;
     //private static final int HEIGHT = 280;
     private static final int HEIGHTOFCELL = 50;
     private static final int INITIAL_GRID_SIZE = 50;
@@ -135,6 +135,34 @@ public class BookFrame extends JInternalFrame {
         JScrollPane customListPane = new JScrollPane(customList);
         TitledBorder customBookBord = new TitledBorder("Custom RecipeBook");
         customListPane.setBorder(customBookBord);
+        
+        customList.addMouseListener(new MouseListener() {
+            public void mousePressed(final MouseEvent e) {
+                setSelectedItem(customList.getSelectedValue());
+                System.out.println("DEBUG | Selected Item: " + customList.getSelectedValue());
+                final Matrix<Status> mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridHeight(), pg.getGridWidth(), () -> Status.DEAD);
+                Matrices.mergeXY(newmat, 0, 0, mat);
+                pg.paintGrid(newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+            }
+            @Override
+            public void mouseClicked(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+            @Override
+            public void mouseEntered(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+            @Override
+            public void mouseExited(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+            @Override
+            public void mouseReleased(final MouseEvent arg0) {
+                // TODO Auto-generated method stub
+            }
+
+        });
 
         this.add(pg);
         this.add(defaultListPane);
@@ -144,17 +172,29 @@ public class BookFrame extends JInternalFrame {
         final JPanel ioPanel = new JPanel();
         ioPanel.setLayout(new BoxLayout(ioPanel, BoxLayout.Y_AXIS));
         this.add(ioPanel);
-        final JButton placeBtn = new JButton("Place");
+        final JButton placeDefaultBtn = new JButton("Place from Default Recipe Book");
+        final JButton placeCustomBtn = new JButton("Place from Custom Recipe Book");
 
-        //ACTION LISTENER TESSSSST
-        ActionListener alPlace = e -> {
+        //ACTION LISTENER DEFAULT BOOK
+        ActionListener DBPlace = e -> {
             System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
             final Matrix<Status> mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             patternE.addPatternToPlace(mat);
             this.doDefaultCloseAction();
         };
-        placeBtn.addActionListener(alPlace);
-        ioPanel.add(placeBtn);
+        
+        //ACTION LISTENER CUSTOM BOOK
+        ActionListener CBPlace = e -> {
+            System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
+            final Matrix<Status> mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+            patternE.addPatternToPlace(mat);
+            this.doDefaultCloseAction();
+        };
+        
+        placeDefaultBtn.addActionListener(DBPlace);
+        placeCustomBtn.addActionListener(CBPlace);
+        ioPanel.add(placeDefaultBtn);
+        ioPanel.add(placeCustomBtn);
 
         //JFILECHOOSER
 //        JFileChooser fc = new JFileChooser();

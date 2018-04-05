@@ -29,7 +29,7 @@ This class parses all the files in the preset folder.
      */
     public RecipeLoader() {
         System.out.println("\nCurrent Path: " + CURRENTPATH);
-        if (CUSTOMRECIPEFOLDER.isDirectory() && !CUSTOMRECIPEFOLDER.exists()) {
+        if (!CUSTOMRECIPEFOLDER.exists()) {
             CUSTOMRECIPEFOLDER.mkdir();
         }
         System.out.println("\nDefauld Book Folder: " + DEFAULTRECIPEFOLDER);
