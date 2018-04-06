@@ -87,7 +87,7 @@ public class GenerationPanel extends JPanel {
         this.add(southL);
         this.add(southR);
 
-        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 100000, 10);
+        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000000, 10);
         final JSpinner spinner = new JSpinner(spin);
 
         northL.add(bStart);
