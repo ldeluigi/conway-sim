@@ -142,12 +142,12 @@ public class GridPanel extends JScrollPane {
     }
 
     private void displayColors(final int startRow, final int startColumn, final Matrix<Color> colorMatrix) {
-        if (colorMatrix != null && startRow >= 0 && startColumn >= 0 && this.labelMatrix.getHeight() > startRow && this.labelMatrix.getWidth() > startColumn) {
+        if (colorMatrix != null && startRow >= 0 && startColumn >= 0 && this.labelMatrix.getHeight() >= colorMatrix.getHeight() + startRow && this.labelMatrix.getWidth() >= colorMatrix.getWidth() + startColumn) {
             SwingUtilities.invokeLater(() -> {
                 this.grid.setVisible(this.shouldGridStayVisible);
-                IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
-                    IntStream.range(startColumn, colorMatrix.getWidth()).forEach(column -> {
-                        this.labelMatrix.get(line, column).setBackground(colorMatrix.get(line, column));
+                IntStream.range(0, colorMatrix.getHeight()).forEach(line -> {
+                    IntStream.range(0, colorMatrix.getWidth()).forEach(column -> {
+                        this.labelMatrix.get(line + startRow, column + startColumn).setBackground(colorMatrix.get(line, column));
                     });
                 });
                 this.grid.setVisible(true);

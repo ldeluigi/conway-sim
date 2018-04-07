@@ -87,9 +87,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
         if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
-            this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(
-                    this.currentStatus.map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column,
-                    this.pattern.get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
+            this.quellAltro(row, column, this.pattern.get());
             this.lastPreviewRow = row;
             this.lastPreviewColumn = column;
         }
@@ -117,7 +115,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
         this.currentStatus = Matrices.mergeXY(this.currentStatus, row, column, this.pattern.get());
-        this.applyChanges(row, column);
+        this.quellAltro(row, column, this.pattern.get());
         this.removePatternToPlace();
         } else if (!(row == this.lastPreviewRow && column == this.lastPreviewColumn)) {
             this.placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
@@ -152,7 +150,6 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     @Override
     public void removePatternToPlace() {
         this.pattern = Optional.empty();
-        this.applyChanges(0, 0); //TODO why questa cosa?
     }
 
     /**
@@ -165,14 +162,14 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     }
 
     /**
-     * Is the method to set enable (or disable) the placing mode.
+     * Is the method to set enable (or disable) the placing mode; it brings the grid to the initial state when the game ends.
      * @param enabled is the boolean describing the next setting.
      */
     @Override
     public void setEnabled(final Boolean enabled) {
         this.placingState = enabled;
-        if (enabled) { // TODO why questa cosa?
-            this.applyChanges(0, 0);
+        if (enabled) {
+            this.applyChanges();
         }
     }
 
@@ -182,7 +179,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     @Override
     public void clean() {
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
-        this.applyChanges(0, 0);
+        this.applyChanges();
     }
 
     /**
@@ -212,8 +209,12 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
     }
 
-    private void applyChanges(final int startRow, final int startCol) {
-        this.gameGrid.paintGrid(startRow, startCol, this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+    private void quellAltro(final int startRow, final int startCol, final Matrix<Status> matt) {
+        this.gameGrid.paintGrid(startRow, startCol, matt.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+    }
+
+    private void applyChanges() {
+        this.gameGrid.paintGrid(0, 0, this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
     }
 
 
@@ -248,6 +249,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             } else if (SwingUtilities.isRightMouseButton(e) && GridEditorImpl.this.isEnabled() && GridEditorImpl.this.isPlacingModeOn()) {
                 if (e.isControlDown()) {
                     GridEditorImpl.this.removePatternToPlace();
+                    GridEditorImpl.this.applyChanges();
                 } else {
                     GridEditorImpl.this.rotateCurrentPattern(1);
                 }
