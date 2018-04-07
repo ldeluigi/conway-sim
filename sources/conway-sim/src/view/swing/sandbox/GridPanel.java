@@ -88,7 +88,6 @@ public class GridPanel extends JScrollPane {
                 }
             }
         });
-
         this.getViewport().setOpaque(false);
         this.setOpaque(false);
     }
@@ -118,16 +117,13 @@ public class GridPanel extends JScrollPane {
             if (col == 0) {
                 label.setBorder(BorderFactory.createLineBorder(c, borderWidth));
             } else {
-                label.setBorder(BorderFactory.createMatteBorder(borderWidth, 0, borderWidth,
-                        borderWidth, c));
+                label.setBorder(BorderFactory.createMatteBorder(borderWidth, 0, borderWidth, borderWidth, c));
             }
         } else {
             if (col == 0) {
-                label.setBorder(BorderFactory.createMatteBorder(0, borderWidth, borderWidth,
-                        borderWidth, c));
+                label.setBorder(BorderFactory.createMatteBorder(0, borderWidth, borderWidth, borderWidth, c));
             } else {
-                label.setBorder(BorderFactory.createMatteBorder(0, 0, borderWidth, borderWidth,
-                        c));
+                label.setBorder(BorderFactory.createMatteBorder(0, 0, borderWidth, borderWidth, c));
             }
         }
     }
@@ -135,16 +131,18 @@ public class GridPanel extends JScrollPane {
     /**
      * Is the method to invoke in order to color up the components of the grid.
      * @param colorMatrix is the matrix containing the colors to paint.
+     * @param startRow is the vertical index explaining where the colorMatrix should start being applied.
+     * @param startCol is the horizontal index where the colorMatrix should start being applied.
      */
-    public void paintGrid(final Matrix<Color> colorMatrix) {
-        if (this.labelMatrix.getHeight() != colorMatrix.getHeight() || this.labelMatrix.getWidth() != colorMatrix.getWidth()) {
+    public void paintGrid(final int startRow, final int startCol, final Matrix<Color> colorMatrix) {
+        if (this.labelMatrix.getHeight() < colorMatrix.getHeight() || this.labelMatrix.getWidth() < colorMatrix.getWidth()) {
             throw new IllegalArgumentException("Dimensions not corresponding.");
         }
-        this.displayColors(colorMatrix, 0, 0);
+        this.displayColors(startRow, startCol, colorMatrix);
     }
 
-    private void displayColors(final Matrix<Color> colorMatrix, final int startRow, final int startColumn) {
-        if (colorMatrix != null && startRow >= 0 && startColumn >= 0) {
+    private void displayColors(final int startRow, final int startColumn, final Matrix<Color> colorMatrix) {
+        if (colorMatrix != null && startRow >= 0 && startColumn >= 0 && this.labelMatrix.getHeight() > startRow && this.labelMatrix.getWidth() > startColumn) {
             SwingUtilities.invokeLater(() -> {
                 this.grid.setVisible(this.shouldGridStayVisible);
                 IntStream.range(startRow, colorMatrix.getHeight()).forEach(line -> {
@@ -155,7 +153,7 @@ public class GridPanel extends JScrollPane {
                 this.grid.setVisible(true);
             });
         } else {
-            throw new IllegalArgumentException("Used not consistent parameter(s)");
+            throw new IllegalArgumentException("Used not consistent parameter(s).");
         }
     }
 
@@ -169,7 +167,6 @@ public class GridPanel extends JScrollPane {
         if (row >= 0 && column >= 0) {
             SwingUtilities.invokeLater(() -> {
                 this.labelMatrix.get(row, column).setBackground(col);
-                this.grid.setVisible(true);
             });
         } else {
             throw new IllegalArgumentException("Used not consistent parameter(s)");
@@ -183,7 +180,9 @@ public class GridPanel extends JScrollPane {
     public void addListenerToGrid(final BiFunction<Integer, Integer, MouseListener> listenerDispencer) {
         for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                this.labelMatrix.get(i, j).addMouseListener(listenerDispencer.apply(i, j));
+                if (this.labelMatrix.get(i, j).getMouseListeners() == null) {
+                    this.labelMatrix.get(i, j).addMouseListener(listenerDispencer.apply(i, j));
+                }
             }
         }
     }

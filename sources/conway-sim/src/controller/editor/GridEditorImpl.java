@@ -53,7 +53,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      */
     @Override
     public void draw(final Generation gen) {
-        this.gameGrid.paintGrid(gen.getCellMatrix().map(c -> c.getStatus().equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+        this.gameGrid.paintGrid(0, 0, gen.getCellMatrix().map(c -> c.getStatus().equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
     }
 
     /**
@@ -87,7 +87,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
         if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
-            this.gameGrid.paintGrid(Matrices.mergeXY(
+            this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(
                     this.currentStatus.map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.BLACK), row, column,
                     this.pattern.get().map(s -> s.equals(Status.DEAD) ? Color.WHITE : Color.LIGHT_GRAY)));
             this.lastPreviewRow = row;
@@ -117,10 +117,10 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
         this.currentStatus = Matrices.mergeXY(this.currentStatus, row, column, this.pattern.get());
-        this.applyChanges();
+        this.applyChanges(row, column);
         this.removePatternToPlace();
         } else if (!(row == this.lastPreviewRow && column == this.lastPreviewColumn)) {
-            placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
+            this.placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
         }
     }
 
@@ -152,7 +152,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     @Override
     public void removePatternToPlace() {
         this.pattern = Optional.empty();
-        this.applyChanges();
+        this.applyChanges(0, 0); //TODO why questa cosa?
     }
 
     /**
@@ -171,8 +171,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     @Override
     public void setEnabled(final Boolean enabled) {
         this.placingState = enabled;
-        if (enabled) {
-            this.applyChanges();
+        if (enabled) { // TODO why questa cosa?
+            this.applyChanges(0, 0);
         }
     }
 
@@ -182,7 +182,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     @Override
     public void clean() {
         this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
-        this.applyChanges();
+        this.applyChanges(0, 0);
     }
 
     /**
@@ -212,8 +212,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
     }
 
-    private void applyChanges() {
-        this.gameGrid.paintGrid(this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+    private void applyChanges(final int startRow, final int startCol) {
+        this.gameGrid.paintGrid(startRow, startCol, this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
     }
 
 

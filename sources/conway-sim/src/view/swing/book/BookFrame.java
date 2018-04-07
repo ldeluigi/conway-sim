@@ -97,7 +97,7 @@ public class BookFrame extends JInternalFrame {
                 final Matrix<Status> mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridHeight(), pg.getGridWidth(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
-                pg.paintGrid(newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+                pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE)); //aggiunto 0, 0 in testa alla chiamata del metodo 
             }
             @Override
             public void mouseClicked(final MouseEvent arg0) {

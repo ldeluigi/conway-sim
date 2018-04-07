@@ -62,4 +62,14 @@ public interface PatternEditor extends GridEditor {
      * Removes, if possible, the current pattern that is waiting to be placed.
      */
     void removePatternToPlace();
+
+    /**
+     * Resizes the status grid to the given dimensions.
+     * 
+     * @param horizontal
+     *            the number of columns
+     * @param vertical
+     *            the number of rows
+     */
+    void changeSizes(int horizontal, int vertical);
 }
