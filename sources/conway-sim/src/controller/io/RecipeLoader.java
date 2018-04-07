@@ -18,6 +18,7 @@ import controller.book.RecipeBookImpl;
 public class RecipeLoader {
     private final RecipeBookImpl defaultbook;
     private final RecipeBookImpl custombook;
+    //TBI - USE "getResourceAsStream" TO ACCESS FILESYSTEM
     private static final File PATH = new File("");
     private static final String CURRENTPATH = PATH.getAbsolutePath();
     private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + "/res/recipebook");
