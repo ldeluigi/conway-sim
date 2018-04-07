@@ -123,7 +123,7 @@ public class BookFrame extends JInternalFrame {
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
                 final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridHeight(), pg.getGridWidth(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
-                pg.paintGrid(newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+                pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
             @Override
             public void mouseClicked(final MouseEvent arg0) {
@@ -159,7 +159,7 @@ public class BookFrame extends JInternalFrame {
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
                 final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridHeight(), pg.getGridWidth(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
-                pg.paintGrid(newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+                pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
             @Override
             public void mouseClicked(final MouseEvent arg0) {
