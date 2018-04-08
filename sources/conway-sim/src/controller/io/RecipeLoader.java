@@ -22,7 +22,7 @@ public class RecipeLoader {
     private static final File PATH = new File("");
     private static final String CURRENTPATH = PATH.getAbsolutePath();
     private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + FS + "res" + FS + "recipebook");
-    private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "recipebook");
+    private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "PatternBook");
 /** 
 This class parses all the files in the preset folder.
      *  than it loads it in the recipebook.
