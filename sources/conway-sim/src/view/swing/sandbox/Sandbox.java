@@ -66,10 +66,10 @@ public class Sandbox extends JPanel {
 
         final JPanel north = new JPanel(new BorderLayout());
         north.setOpaque(false);
-        bApply = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.apply"), ResourceLoader.loadString("sandbox.apply.tooltip"));
+        this.bApply = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.apply"), ResourceLoader.loadString("sandbox.apply.tooltip"));
         final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply, new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         gridOption.setOpaque(false);
-        north.add(this.generationPanel, BorderLayout.AFTER_LINE_ENDS);
+        north.add(this.generationPanel, BorderLayout.EAST);
         final JLabel mode = new JLabel(ResourceLoader.loadString("sandbox.mode"));
         mode.setFont(getFont());
         north.add(mode, BorderLayout.BEFORE_FIRST_LINE);

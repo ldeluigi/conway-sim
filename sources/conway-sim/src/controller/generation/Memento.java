@@ -8,46 +8,61 @@ import java.util.Map;
 import core.model.Generation;
 
 /**
- * pattern memento for type X.
- * @param <X> type
+ * pattern memento.
+ * To store elements with key.
+ * @param <X> the type of the elements to store.
+ * @param <Y> key type, every key have a specific elements.
  */
-interface Memento<X> {
+interface Memento<X, Y extends Comparable<Y>> {
 
     /**
      * 
      * @return a Map<Long, X>, where Long is the long that represent the number of X, 
      * and X is the corresponding X 
      */
-    Map<Long, X> getSavedState();
+    Map<Y, X> getSavedState();
 
     /**
      * 
-     * @param numberGeneration the parameter that will be added only if numberGeneration > of all the
+     * @param keyElement the parameter that will be added only if numberGeneration > of all the
      *          numberGeneration into the memento
      * @param elem the generation to be added
      */
-    void addElem(Long numberGeneration, X elem);
+    void addElem(Y keyElement, X elem);
 
     /**
      * 
-     * @param numberGeneartion remove the generation with the specified numberGeneration
+     * @param keyElemet remove the generation with the specified numberGeneration
      */
-    void removeElem(Long numberGeneartion);
+    void removeElem(Y keyElemet);
 
     /**
      * 
-     * @return the first generation that have numberOfElement 0L
+     * @return the first element that have numberOfElement 0L
      */
     X getFirst();
 
     /**
-     * @param numberGeneration remove all elements that have an higher numberGeneration this element, not included
+     * Remove all elements that have an higher keyNumber of this element, not included.
+     * @param keyElement TODO
      */
-    void removeAllElemsAfter(Long numberGeneration);
+    void removeAllElemsAfter(Y keyElement);
 
     /**
      * 
-     * @param newFirst
+     * @param pivot the central element, this element doesn't be removed by removeAllElemsAfter
      */
-    void setFirst(Generation newFirst);
+    void setFirst(Generation pivot);
+
+    /**
+     * 
+     * @return the numberOfElementsStored
+     */
+    int getNumberOfElementsStored();
+
+    /**
+     * 
+     * @param numberOfElementsStored
+     */
+    void setNumberOfElementsStored(int numberOfElementsToStored);
 }
