@@ -20,6 +20,7 @@ import controller.book.RecipeImpl;
 import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
 import controller.io.RecipeLoader;
+import controller.io.ResourceLoader;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
@@ -108,7 +109,7 @@ public class BookFrame extends JInternalFrame {
         defaultList.setLayoutOrientation(JList.VERTICAL);
         defaultList.setVisibleRowCount(-1);
         JScrollPane defaultListPane = new JScrollPane(defaultList);
-        TitledBorder defaultBookBord = new TitledBorder("Default RecipeBook");
+        TitledBorder defaultBookBord = new TitledBorder(ResourceLoader.loadString("book.defaultbtitle"));
         defaultListPane.setBorder(defaultBookBord);
 
         defaultList.addMouseListener(new MouseListener() {
@@ -145,12 +146,12 @@ public class BookFrame extends JInternalFrame {
         customList.setLayoutOrientation(JList.VERTICAL);
         customList.setVisibleRowCount(-1);
         JScrollPane customListPane = new JScrollPane(customList);
-        TitledBorder customBookBord = new TitledBorder("Custom RecipeBook");
+        TitledBorder customBookBord = new TitledBorder(ResourceLoader.loadString("book.custombtitle"));
         customListPane.setBorder(customBookBord);
         customList.addMouseListener(new MouseListener() {
             public void mousePressed(final MouseEvent e) {
                 setSelectedItem(customList.getSelectedValue());
-                setSelectedList(DEFAULT);
+                setSelectedList(CUSTOM);
                 System.out.println("DEBUG | Selected Item: " + customList.getSelectedValue());
                 final Matrix<Status> mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
@@ -184,7 +185,7 @@ public class BookFrame extends JInternalFrame {
         final JPanel ioPanel = new JPanel();
         ioPanel.setLayout(new BoxLayout(ioPanel, BoxLayout.Y_AXIS));
         this.add(ioPanel);
-        final JButton placeBtn = new JButton("PLACE");
+        final JButton placeBtn = new JButton(ResourceLoader.loadString("book.place"));
 
         //ACTION LISTENER PLACE BUTTON
         ActionListener place = e -> {
