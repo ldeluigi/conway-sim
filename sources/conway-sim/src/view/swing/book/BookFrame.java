@@ -4,13 +4,11 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -20,7 +18,6 @@ import javax.swing.border.TitledBorder;
 
 import controller.book.RecipeImpl;
 import controller.editor.PatternEditor;
-import controller.io.IOLoader;
 import controller.io.RLEConvert;
 import controller.io.RecipeLoader;
 import core.model.Status;
@@ -121,7 +118,7 @@ public class BookFrame extends JInternalFrame {
                 System.out.println("DEBUG | Selected Item: " + defaultList.getSelectedValue());
                 final Matrix<Status> mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridHeight(), pg.getGridWidth(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
                 pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
@@ -157,7 +154,7 @@ public class BookFrame extends JInternalFrame {
                 System.out.println("DEBUG | Selected Item: " + customList.getSelectedValue());
                 final Matrix<Status> mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridHeight(), pg.getGridWidth(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
                 pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
