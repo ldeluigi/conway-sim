@@ -27,8 +27,6 @@ public final class KeyListenerFactory {
     public static void addKeyListener(final JComponent component, final String name, final int keyCode, final int modifier, final Runnable event) {
         final List<InputMap> inputMap = new LinkedList<>();
         inputMap.add(component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT));
-        inputMap.add(component.getInputMap(JComponent.WHEN_FOCUSED));
-        inputMap.add(component.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW));
         final ActionMap actionMap = component.getActionMap();
         inputMap.forEach(e -> {
             e.put(KeyStroke.getKeyStroke(keyCode, modifier), name + e.toString());
