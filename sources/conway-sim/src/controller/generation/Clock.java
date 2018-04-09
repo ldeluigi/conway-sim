@@ -4,13 +4,15 @@ import java.util.Optional;
 
 /**
  * 
+ * Max speed = 1000 -> 10 s.
+ *             100  -> 1 s.
+ *             1    -> 0.01 s.
  */
 public class Clock {
 
-    private static final int MAX_TIME_GENERATION = 1000;
+    private static final int SPEED_PART = 10;
     private int speed = 1;
     private final int maxSpeed;
-    private final int speedPart;
     private Optional<AgentClock> clockAgent = Optional.empty();
     private final Runnable runnable;
 
@@ -22,7 +24,6 @@ public class Clock {
     public Clock(final Runnable runnable, final int maxSpeed) {
         this.runnable = runnable;
         this.maxSpeed = maxSpeed;
-        this.speedPart = MAX_TIME_GENERATION / maxSpeed;
     }
 
     /**
@@ -60,7 +61,7 @@ public class Clock {
         }
         this.speed = speed;
         if (this.clockAgent.isPresent()) {
-            final Long sleepTime = Long.valueOf(maxSpeed - speed + 1) * speedPart;
+            final Long sleepTime = Long.valueOf(maxSpeed - speed + 1) * SPEED_PART;
             this.clockAgent.get().setStep(Long.valueOf(sleepTime));
         }
     }

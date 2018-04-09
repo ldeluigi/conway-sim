@@ -15,10 +15,12 @@ import core.model.Generation;
 
 /**
  *  The implementation of GenerationMemento.
+ *  With this class you can save 
  */
-public class GenerationHistory implements Memento<Generation> {
+public class GenerationHistory implements Memento<Generation, Long> {
 
-    private static final int NUMBER_OF_GENERATION_STORED = 20;
+    private static final int START_GENERATION_SAVED = 20;
+    private int numberOfGenerationStored = START_GENERATION_SAVED;
 
     private Generation firstGeneration;
     private final Map<Long, Generation> historyGeneration;
@@ -49,8 +51,11 @@ public class GenerationHistory implements Memento<Generation> {
 
     @Override
     public final void addElem(final Long numberGeneration, final Generation generation) {
-        if (this.historyGeneration.keySet().size() >= NUMBER_OF_GENERATION_STORED) {
-            this.historyGeneration.remove(this.historyGeneration.keySet().stream().min((x, y) -> Long.compare(x, y)).get());
+        if (this.historyGeneration.keySet().size() >= numberOfGenerationStored) {
+            this.historyGeneration.remove(
+                    this.historyGeneration.keySet().stream()
+                                                   .min((x, y) -> Long.compare(x, y))
+                                                   .get());
         }
         if (!this.historyGeneration.keySet().stream().allMatch(e -> e < numberGeneration)) {
             throw new IllegalArgumentException();
@@ -68,8 +73,20 @@ public class GenerationHistory implements Memento<Generation> {
         Objects.requireNonNull(this.historyGeneration);
         final List<Long> longToRemove = new LinkedList<>();
         if (!this.historyGeneration.isEmpty()) {
-            this.historyGeneration.keySet().stream().filter(l -> l > numberGeneration).forEach(l -> longToRemove.add(l));
+            this.historyGeneration.keySet().stream()
+                                           .filter(l -> l > numberGeneration)
+                                           .forEach(l -> longToRemove.add(l));
         }
         longToRemove.forEach(l -> this.historyGeneration.remove(l));
+    }
+
+    @Override
+    public final int getNumberOfElementsStored() {
+        return numberOfGenerationStored;
+    }
+
+    @Override
+    public final void setNumberOfElementsStored(final int numberOfGenerationToStored) {
+        this.numberOfGenerationStored = numberOfGenerationToStored;
     }
 }

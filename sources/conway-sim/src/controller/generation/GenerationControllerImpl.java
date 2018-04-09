@@ -15,8 +15,11 @@ import view.swing.sandbox.Sandbox;
  */
 public class GenerationControllerImpl implements GenerationController {
 
-    private static final int MAX_SPEED = 10;
-    private static final int MAX_SAVED_STATE = 20;
+    private static final int MAX_SPEED = 100;
+
+    /**
+     * Every SAVE_GAP generation the controller save a generation.
+     */
     private static final int SAVE_GAP = 100;
 
     private final Clock clock = new Clock(() -> this.computeNextGeneration(), MAX_SPEED);
@@ -24,7 +27,7 @@ public class GenerationControllerImpl implements GenerationController {
     private Long currentGenerationNumber = 0L;
     private Sandbox view;
     private Generation currentGeneration;
-    private Memento<Generation> oldGeneration;
+    private Memento<Generation, Long> oldGeneration;
 
     /**
      * New Generation controller empty.
@@ -137,11 +140,11 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     private void saveGeneration(final Generation generationToSave, final Long generationNumber) {
-        if (this.savedState.size() < MAX_SAVED_STATE) {
+        if (this.savedState.size() < this.oldGeneration.getNumberOfElementsStored()) {
             this.savedState.add(generationNumber);
             this.oldGeneration.addElem(generationNumber, generationToSave);
         } else if (generationNumber % SAVE_GAP == 0) {
-            if (this.savedState.size() >= MAX_SAVED_STATE) {
+            if (this.savedState.size() >= this.oldGeneration.getNumberOfElementsStored()) {
                 this.savedState.remove(0);
             }
             this.savedState.add(generationNumber);
@@ -154,4 +157,11 @@ public class GenerationControllerImpl implements GenerationController {
         this.view = viewPanel;
     }
 
+    /**
+     * 
+     * @return the max speed
+     */
+    public static int getMaxSpeed() {
+        return MAX_SPEED;
+    }
 }
