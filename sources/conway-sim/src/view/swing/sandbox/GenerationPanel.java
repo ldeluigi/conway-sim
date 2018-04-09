@@ -34,8 +34,8 @@ public class GenerationPanel extends JPanel {
      */
     private static final long serialVersionUID = 9060069868596999045L;
 
-    private static final int MIN_SPEED = 1;
-    private static final int MAX_SPEED = GenerationControllerImpl.getMaxSpeed();
+    private static final int MIN_SPEED = ResourceLoader.loadConstant("generation.MIN_SPEED");
+    private static final int MAX_SPEED = ResourceLoader.loadConstant("generation.MAX_SPEED");
 
     private final JSlider speedSlider;
     private final JButton bStart;

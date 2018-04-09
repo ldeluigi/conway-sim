@@ -10,10 +10,10 @@ import core.model.Generation;
 /**
  * pattern memento.
  * To store elements with key.
- * @param <X> the type of the elements to store.
  * @param <Y> key type, every key have a specific elements.
+ * @param <X> the type of the elements to store.
  */
-interface Memento<X, Y extends Comparable<Y>> {
+interface Memento<Y extends Comparable<Y>, X> {
 
     /**
      * 

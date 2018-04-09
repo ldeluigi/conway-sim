@@ -2,6 +2,8 @@ package controller.generation;
 
 import java.util.Optional;
 
+import controller.io.ResourceLoader;
+
 /**
  * 
  * Max speed = 1000 -> 10 s.
@@ -10,20 +12,20 @@ import java.util.Optional;
  */
 public class Clock {
 
-    private static final int SPEED_PART = 10;
-    private int speed = 1;
-    private final int maxSpeed;
+    private static final int MIN_CLOCK_TIME = ResourceLoader.loadConstant("clock.MIN_CLOCK_TIME");
+    private static final int MAX_CLOCK_TIME = ResourceLoader.loadConstant("clock.MAX_CLOCK_TIME");
+    private static final int MIN_SPEED = ResourceLoader.loadConstant("generation.MIN_SPEED");
+    private static final int MAX_SPEED = ResourceLoader.loadConstant("generation.MAX_SPEED");
+    private int speed = MIN_SPEED;
     private Optional<AgentClock> clockAgent = Optional.empty();
     private final Runnable runnable;
 
     /**
      * 
      * @param runnable the runnable of this clock.
-     * @param maxSpeed the maxSpeed for the clock.
      */
-    public Clock(final Runnable runnable, final int maxSpeed) {
+    public Clock(final Runnable runnable) {
         this.runnable = runnable;
-        this.maxSpeed = maxSpeed;
     }
 
     /**
@@ -56,12 +58,12 @@ public class Clock {
      * @param speed Set the speed of this clock. wait ( 1000 / speed ) ms between every computation.
      */
     public void setSpeed(final int speed) {
-        if (speed < 0 || speed > maxSpeed) {
+        if (speed < 0 || speed > MAX_SPEED) {
             throw new IllegalArgumentException();
         }
         this.speed = speed;
         if (this.clockAgent.isPresent()) {
-            final Long sleepTime = Long.valueOf(maxSpeed - speed + 1) * SPEED_PART;
+            final Long sleepTime = Long.valueOf(-(MAX_CLOCK_TIME - MIN_CLOCK_TIME) / (MAX_SPEED - MIN_SPEED) * speed + MAX_CLOCK_TIME + MIN_CLOCK_TIME);
             this.clockAgent.get().setStep(Long.valueOf(sleepTime));
         }
     }
