@@ -100,4 +100,14 @@ public final class ResourceLoader {
     public static String loadString(final String resource) {
         return loadString(resource, Locale.ROOT);
     }
+
+    /**
+     * 
+     * @param constant the constant
+     * @return the constant value
+     */
+    public static int loadConstant(final String constant) {
+        final ResourceBundle value = ResourceBundle.getBundle("ConstantBundle", Control.getControl(Control.FORMAT_PROPERTIES));
+        return Integer.parseInt(value.getString(constant));
+    }
 }

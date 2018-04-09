@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.swing.SwingUtilities;
 
+import controller.io.ResourceLoader;
 import core.model.Generation;
 import core.model.Generations;
 import view.swing.sandbox.Sandbox;
@@ -15,19 +16,17 @@ import view.swing.sandbox.Sandbox;
  */
 public class GenerationControllerImpl implements GenerationController {
 
-    private static final int MAX_SPEED = 100;
-
     /**
      * Every SAVE_GAP generation the controller save a generation.
      */
-    private static final int SAVE_GAP = 100;
+    private static final int SAVE_GAP = ResourceLoader.loadConstant("generation.SAVE_GAP");
 
-    private final Clock clock = new Clock(() -> this.computeNextGeneration(), MAX_SPEED);
+    private final Clock clock = new Clock(() -> this.computeNextGeneration());
     private final List<Long> savedState = new LinkedList<>();
-    private Long currentGenerationNumber = 0L;
-    private Sandbox view;
+    private final Sandbox view;
+    private Long currentGenerationNumber;
     private Generation currentGeneration;
-    private Memento<Generation, Long> oldGeneration;
+    private Memento<Long, Generation> oldGeneration;
 
     /**
      * New Generation controller empty.
@@ -152,16 +151,4 @@ public class GenerationControllerImpl implements GenerationController {
         }
     }
 
-    @Override
-    public final void setView(final Sandbox viewPanel) {
-        this.view = viewPanel;
-    }
-
-    /**
-     * 
-     * @return the max speed
-     */
-    public static int getMaxSpeed() {
-        return MAX_SPEED;
-    }
 }

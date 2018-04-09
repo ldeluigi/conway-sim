@@ -17,7 +17,7 @@ import core.model.Generation;
  *  The implementation of GenerationMemento.
  *  With this class you can save 
  */
-public class GenerationHistory implements Memento<Generation, Long> {
+public class GenerationHistory implements Memento<Long, Generation> {
 
     private static final int START_GENERATION_SAVED = 20;
     private int numberOfGenerationStored = START_GENERATION_SAVED;
