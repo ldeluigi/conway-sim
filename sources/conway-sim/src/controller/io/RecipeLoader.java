@@ -1,14 +1,22 @@
 package controller.io;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.CodeSource;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
+import org.apache.commons.io.IOUtils;
 
 import controller.book.RecipeBookImpl;
 /**
@@ -21,7 +29,7 @@ public class RecipeLoader {
     private static final String FS = File.separator;
     private static final File PATH = new File("");
     private static final String CURRENTPATH = PATH.getAbsolutePath();
-    private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + FS + "res" + FS + "recipebook");
+    //private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + FS + "res" + FS + "recipebook");
     private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "PatternBook");
 /** 
 This class parses all the files in the preset folder.
@@ -33,47 +41,14 @@ This class parses all the files in the preset folder.
         if (!CUSTOMRECIPEFOLDER.exists()) {
             CUSTOMRECIPEFOLDER.mkdir();
         }
-        System.out.println("\nDefauld Book Folder: " + DEFAULTRECIPEFOLDER);
+        //System.out.println("\nDefauld Book Folder: " + DEFAULTRECIPEFOLDER);
         System.out.println("\nCustom Book Folder: " + CUSTOMRECIPEFOLDER);
         this.defaultbook = new RecipeBookImpl();
         this.custombook = new RecipeBookImpl();
         recipeParser(custombook, CUSTOMRECIPEFOLDER);
-        //recipeParser(defaultbook, DEFAULTRECIPEFOLDER);
-        String testLine = "testLine: NOT_INITIALIZED";
-        FileReader namereader;
-        BufferedReader in;
-        Boolean flagName;
-        try {
-            for (File file : getResourceFolderFiles("recipebook")) {
-                if (file.isFile()) {
-                    flagName = false;
-                    //DEBUG
-                    System.out.println("DEBUG | RLE found in folder: " + file.getPath());
-                    try {
-                        namereader = new FileReader(file);
-                        in = new BufferedReader(namereader);
-                        testLine = in.readLine();
-                        if (testLine.startsWith("#N")) {
-                            flagName = true;
-                            testLine = testLine.split("#N ")[1];
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    System.out.println("DEBUG | Name: " + testLine);
-                    Path filepath = Paths.get(file.getAbsolutePath());
-                    try {
-                        String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
-                        defaultbook.addRecipe(content, flagName ? testLine : file.getName());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        System.out.println("USER DIR " + System.getProperty("user.dir"));
+        jarLoader();
 
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
     }
     /**
      * This methods returns the recipebook when loaded.
@@ -92,16 +67,71 @@ This class parses all the files in the preset folder.
     }
     /**
      * 
-     * @param folder hhh
-     * @return hhh
      */
-    private static File[] getResourceFolderFiles (final String folder) {
-        ClassLoader loader = RecipeLoader.class.getClassLoader();
-        URL url = loader.getResource(folder);
-        String path = url.getPath();
-        return new File(path).listFiles();
-      }
+    private void jarLoader() {
+        String testLine = "testLine: NOT_INITIALIZED";
+        BufferedReader in;
+        Boolean flagName;
+        CodeSource src = RecipeLoader.class.getProtectionDomain().getCodeSource();
+        if (src != null) {
+          URL jar = src.getLocation();
+          ZipInputStream zip = null;
+        try {
+            zip = new ZipInputStream(jar.openStream());
+        } catch (IOException e2) {
+            e2.printStackTrace();
+        }
+          while (true) {
+            ZipEntry e = null;
+            try {
+                e = zip.getNextEntry();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            if (e == null) {
+                break;
+            }
+            String name = e.getName();
+            if (name.contains(".rle")) {
+                //TROVATO FILE
+                System.out.println("NAME FOUND: " + name);
+                        flagName = false;
+                        //DEBUG
+                        System.out.println("DEBUG | RLE found in folder: " + name);
+                        try {
+                            InputStream is = getClass().getResourceAsStream(FS + name); 
+                            System.out.println("DEBUG | INPUTSTREAM: " + is);
+                            InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+                            in = new BufferedReader(isr);
+                            String content = IOUtils.toString(in);
+                            is = new ByteArrayInputStream(content.getBytes());
+                            isr = new InputStreamReader(is, "UTF-8");
+                            in = new BufferedReader(isr);
+                            System.out.println("DEBUG | CONTENT: " + content);
+                            testLine = in.readLine();
+                            System.out.println("DEBUG | TestLine: " + testLine);
+                            try {
+                                if (testLine.startsWith("#N")) {
+                                    flagName = true;
+                                    testLine = testLine.split("#N ")[1];
+                                }
+                            } catch (NullPointerException ex) {
+                                ex.printStackTrace();
+                            }
+                        System.out.println("DEBUG | Name: " + testLine);
+                            defaultbook.addRecipe(content, flagName ? testLine : name);
+                        } catch (IOException ex) {
+                            ex.printStackTrace();
+                        }
 
+              /* Do something with this entry. */
+            }
+          }
+        } else {
+            System.out.println("FAILED");
+          /* THIS COULD THROW AN EXCEPTIONs */
+        }
+    }
     /**
      * 
      * @param book to be filled
@@ -110,6 +140,7 @@ This class parses all the files in the preset folder.
     private void recipeParser(final RecipeBookImpl book, final File folder) {
         final File[] list = folder.listFiles(new FilenameFilter() {
             public boolean accept(final File folder, final String name) {
+                System.out.println("NAMEEEEE: " + name);
                 return name.toLowerCase().endsWith(".rle");
             }
         });
