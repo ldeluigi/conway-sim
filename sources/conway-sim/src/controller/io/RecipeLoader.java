@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.apache.commons.io.IOUtils;
-
 import controller.book.RecipeBookImpl;
 /**
  * 
@@ -29,7 +27,6 @@ public class RecipeLoader {
     private static final String FS = File.separator;
     private static final File PATH = new File("");
     private static final String CURRENTPATH = PATH.getAbsolutePath();
-    //private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + FS + "res" + FS + "recipebook");
     private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "PatternBook");
 /** 
 This class parses all the files in the preset folder.
@@ -39,9 +36,12 @@ This class parses all the files in the preset folder.
     public RecipeLoader() {
         System.out.println("\nCurrent Path: " + CURRENTPATH);
         if (!CUSTOMRECIPEFOLDER.exists()) {
-            CUSTOMRECIPEFOLDER.mkdir();
+            try {
+                CUSTOMRECIPEFOLDER.mkdir();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        //System.out.println("\nDefauld Book Folder: " + DEFAULTRECIPEFOLDER);
         System.out.println("\nCustom Book Folder: " + CUSTOMRECIPEFOLDER);
         this.defaultbook = new RecipeBookImpl();
         this.custombook = new RecipeBookImpl();
@@ -54,7 +54,6 @@ This class parses all the files in the preset folder.
      * This methods returns the recipebook when loaded.
      * @return the recipebook
      */
-    @SuppressWarnings("PMD.AvoidCatchingNPE")
     public RecipeBookImpl getRecipeBook() {
         return this.defaultbook;
     }
@@ -66,7 +65,7 @@ This class parses all the files in the preset folder.
         return this.custombook;
     }
     /**
-     * 
+     * This method loads recipebook from inside the jarfile.
      */
     private void jarLoader() {
         String testLine = "testLine: NOT_INITIALIZED";
@@ -93,22 +92,25 @@ This class parses all the files in the preset folder.
             }
             String name = e.getName();
             if (name.contains(".rle")) {
-                //TROVATO FILE
-                System.out.println("NAME FOUND: " + name);
+                //DEBUG
+                System.out.println("DEBUG | NAME FOUND: " + name);
                         flagName = false;
                         //DEBUG
                         System.out.println("DEBUG | RLE found in folder: " + name);
                         try {
-                            InputStream is = getClass().getResourceAsStream(FS + name); 
+                            InputStream is = getClass().getResourceAsStream(FS + name);
+                            //DEBUG
                             System.out.println("DEBUG | INPUTSTREAM: " + is);
                             InputStreamReader isr = new InputStreamReader(is, "UTF-8");
                             in = new BufferedReader(isr);
-                            String content = IOUtils.toString(in);
+                            String content = in.lines().collect(Collectors.joining("\n"));
                             is = new ByteArrayInputStream(content.getBytes());
                             isr = new InputStreamReader(is, "UTF-8");
                             in = new BufferedReader(isr);
+                            //DEBUG
                             System.out.println("DEBUG | CONTENT: " + content);
                             testLine = in.readLine();
+                            //DEBUG
                             System.out.println("DEBUG | TestLine: " + testLine);
                             try {
                                 if (testLine.startsWith("#N")) {
@@ -118,6 +120,7 @@ This class parses all the files in the preset folder.
                             } catch (NullPointerException ex) {
                                 ex.printStackTrace();
                             }
+                        //DEBUG
                         System.out.println("DEBUG | Name: " + testLine);
                             defaultbook.addRecipe(content, flagName ? testLine : name);
                         } catch (IOException ex) {
