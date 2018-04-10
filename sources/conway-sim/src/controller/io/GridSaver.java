@@ -12,7 +12,8 @@ import core.utils.Matrix;
  *
  */
 public class GridSaver {
-    private static final String PATH = "./src/test/saves";
+    private static final String FS = System.getProperty("file.separator");
+    private static final String PATH = "." + FS + "src" + FS + "test" + FS + "saves";
     /**
      * 
      * @param matrix d
@@ -23,7 +24,7 @@ public class GridSaver {
         now = now.replace(":", "");
         BufferedWriter writer = null;
         try {
-            writer = new BufferedWriter(new FileWriter(PATH + "/" + now + ".save"));
+            writer = new BufferedWriter(new FileWriter(PATH + FS + now + ".save"));
             writer.write(matStatusToString(matrix));
 
         } catch (IOException e) {

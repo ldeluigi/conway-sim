@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,42 +49,12 @@ public class BookFrame extends JInternalFrame {
     private String selectedList = DEFAULT;
 
     /**
-     * 
-     * @return selectedItem
-     */
-    public final String getSelectedItem() {
-        return selectedItem;
-    }
-    /**
-     * 
-     * @param selectedItem the item to select
-     */
-    public void setSelectedItem(final String selectedItem) {
-        this.selectedItem = selectedItem;
-    }
-    /**
-     * 
-     * @return selectedList
-     */
-    public String getSelectedList() {
-        return selectedList;
-    }
-    /**
-     * 
-     * @param selectedList the list to select
-     */
-    public void setSelectedList(final String selectedList) {
-        this.selectedList = selectedList;
-    }
-    /**
      * @param patternE the PatternManager
      * 
      */
     public BookFrame(final PatternEditor patternE) {
         super("Book", false, true);
-
         final RecipeLoader rl = new RecipeLoader();
-
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         //PATTERN PREVIEW GRID
@@ -192,6 +163,35 @@ public class BookFrame extends JInternalFrame {
 
         placeBtn.addActionListener(place);
         ioPanel.add(placeBtn);
+    }
+
+    /**
+     * 
+     * @return selectedItem
+     */
+    public final String getSelectedItem() {
+        return selectedItem;
+    }
+    /**
+     * 
+     * @param selectedItem the item to select
+     */
+    public void setSelectedItem(final String selectedItem) {
+        this.selectedItem = selectedItem;
+    }
+    /**
+     * 
+     * @return selectedList
+     */
+    public String getSelectedList() {
+        return selectedList;
+    }
+    /**
+     * 
+     * @param selectedList the list to select
+     */
+    public void setSelectedList(final String selectedList) {
+        this.selectedList = selectedList;
     }
 }
 

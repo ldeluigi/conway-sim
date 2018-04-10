@@ -19,7 +19,7 @@ import core.utils.Matrix;
  */
 public class RLEConvert {
 
-    private BufferedReader buffer;
+    private final BufferedReader buffer;
 
     //CHARSET PATTERNS FOR THE RLE READING IN THE BUFFER
     static final String XCOORDPATTERN = "x ?= ?([1-9]\\d*)",
@@ -143,16 +143,16 @@ public class RLEConvert {
      * @return matrix The matrix converted in Matrix<Status> format.
      */
     public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row, final int col) {
-        Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
-        //DEBUG TBR
+        final Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
+        //TODO DEBUG TBR
         //System.out.println("Converting a matrix of COL (X): " + col + " ROW (Y): " + row);
         for (int i = 0; i < row; i++) {
             for (int k = 0; k < col; k++) {
-                //DEBUG TBR
+                //TODO DEBUG TBR
                 //System.out.println("Trying to access: \nCOL: " + k + " ROW: " + i);
                 if (grid[i][k]) {
                     matrix.set(k, i, Status.ALIVE);
-                    //DEBUG TBR
+                    //TODO DEBUG TBR
                     //System.out.println("\nACCESSED AND SETTED\n");
                 }
             }
@@ -194,7 +194,7 @@ public class RLEConvert {
                 int runLength;
 
                 String tag;
-                //RULE WILL BE SOON USED
+                //TODO REMOVE: RULE NOT IMPLEMENTED
                 @SuppressWarnings("unused")
                 String rule;
 

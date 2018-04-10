@@ -47,7 +47,13 @@ This class parses all the files in the preset folder.
         this.custombook = new RecipeBookImpl();
         recipeParser(custombook, CUSTOMRECIPEFOLDER);
         System.out.println("USER DIR " + System.getProperty("user.dir"));
-        jarLoader();
+        try {
+            jarLoader();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
     }
     /**
@@ -66,8 +72,9 @@ This class parses all the files in the preset folder.
     }
     /**
      * This method loads and saves the recipebook from inside the jarfile.
+     * @throws IOException 
      */
-    private void jarLoader() throws NullPointerException {
+    private void jarLoader() throws NullPointerException, IOException {
         String testLine = "testLine: NOT_INITIALIZED";
         BufferedReader in;
         Boolean flagName;
@@ -116,6 +123,7 @@ This class parses all the files in the preset folder.
                                 flagName = true;
                                 testLine = testLine.split("#N ")[1];
                             }
+                            in.close();
                         //TODO DEBUG
                         System.out.println("DEBUG | Name: " + testLine);
                             defaultbook.addRecipe(content, flagName ? testLine : name);
@@ -125,6 +133,7 @@ This class parses all the files in the preset folder.
 
             }
           }
+          zip.close();
         } else {
             System.out.println("FAILED");
           /* THIS COULD THROW AN EXCEPTIONs */
@@ -159,6 +168,7 @@ This class parses all the files in the preset folder.
                         flagName = true;
                         testLine = testLine.split("#N ")[1];
                     }
+                    in.close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
