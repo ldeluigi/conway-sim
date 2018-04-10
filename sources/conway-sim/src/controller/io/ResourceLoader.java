@@ -32,6 +32,7 @@ public final class ResourceLoader {
         RESOURCE_MAP.put("sandbox.button.on", "buttonOn.jpg");
         RESOURCE_MAP.put("sandbox.button.off", "buttonOff.jpg");
         RESOURCE_MAP.put("sandbox.button.pressed", "buttonPressed.jpg");
+        RESOURCE_MAP.put("sandbox.button.selected", "selectedButton.jpg");
     }
 
     private ResourceLoader() {

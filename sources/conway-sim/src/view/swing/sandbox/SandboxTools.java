@@ -7,11 +7,14 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.Image;
+
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -176,10 +179,31 @@ public final class SandboxTools {
 
     /**
      * 
+     * @param name button name
+     * @return a new JButton
+     */
+    public static JButton newJButton(final String name) {
+        return newJButton(name, " ");
+    }
+
+    /**
+     * @param name radio button name
+     * @param dimension the button default dimension
+     * @return the button
+     */
+    public static JRadioButton newJRadioButton(final String name, final Dimension dimension) {
+        final JRadioButton rButton = new JRadioButton(name);
+        rButton.setFocusPainted(false);
+        rButton.setPreferredSize(dimension);
+        return rButton;
+    }
+
+    /**
+     * 
      * @param button the button
      * @param dim the button dimension
      */
-    public static void setIcon(final JButton button, final Dimension dim) {
+    public static void setIcon(final AbstractButton button, final Dimension dim) {
         button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(
                 dim.width, dim.height, Image.SCALE_SMOOTH)));
         button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(
