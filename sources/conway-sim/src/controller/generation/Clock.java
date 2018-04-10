@@ -12,10 +12,10 @@ import controller.io.ResourceLoader;
  */
 public class Clock {
 
-    private static final int MIN_CLOCK_TIME = ResourceLoader.loadConstant("clock.MIN_CLOCK_TIME");
-    private static final int MAX_CLOCK_TIME = ResourceLoader.loadConstant("clock.MAX_CLOCK_TIME");
-    private static final int MIN_SPEED = ResourceLoader.loadConstant("generation.MIN_SPEED");
-    private static final int MAX_SPEED = ResourceLoader.loadConstant("generation.MAX_SPEED");
+    private static final int MIN_CLOCK_TIME = ResourceLoader.loadConstantInt("clock.MIN_CLOCK_TIME");
+    private static final int MAX_CLOCK_TIME = ResourceLoader.loadConstantInt("clock.MAX_CLOCK_TIME");
+    private static final int MIN_SPEED = ResourceLoader.loadConstantInt("generation.MIN_SPEED");
+    private static final int MAX_SPEED = ResourceLoader.loadConstantInt("generation.MAX_SPEED");
     private int speed = MIN_SPEED;
     private Optional<AgentClock> clockAgent = Optional.empty();
     private final Runnable runnable;

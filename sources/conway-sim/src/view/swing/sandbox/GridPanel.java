@@ -37,11 +37,12 @@ public class GridPanel extends JScrollPane {
     private final int borderWidth = INITIAL_BORDER_WIDTH;
     private final Color borderColor = INITIAL_BORDER_COLOR;
     private final JPanel grid;
-    private Matrix<JLabel> labelMatrix;
     private final boolean shouldGridStayVisible;
     private final int maxCellSize;
     private final int minCellSize;
     private final GridBagConstraints c = new GridBagConstraints();
+
+    private Matrix<JLabel> labelMatrix;
 
     /**
      * Is the constructor method for a new GridPanel.
@@ -95,8 +96,7 @@ public class GridPanel extends JScrollPane {
     /**
      * Alters Cell size value. Non-thread safe.
      * 
-     * @param byPixels
-     *            to add
+     * @param byPixels to add
      */
     public void alterCellSize(final int byPixels) {
         if (this.cellSize.getWidth() + byPixels <= 0 || this.cellSize.getHeight() + byPixels <= 0) {
@@ -180,7 +180,7 @@ public class GridPanel extends JScrollPane {
     public void addListenerToGrid(final BiFunction<Integer, Integer, MouseListener> listenerDispencer) {
         for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                if (this.labelMatrix.get(i, j).getMouseListeners() == null) {
+                if (this.labelMatrix.get(i, j).getMouseListeners().length == 0) {
                     this.labelMatrix.get(i, j).addMouseListener(listenerDispencer.apply(i, j));
                 }
             }
