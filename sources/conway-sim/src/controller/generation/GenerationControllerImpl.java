@@ -19,7 +19,7 @@ public class GenerationControllerImpl implements GenerationController {
     /**
      * Every SAVE_GAP generation the controller save a generation.
      */
-    private static final int SAVE_GAP = ResourceLoader.loadConstant("generation.SAVE_GAP");
+    private static final int SAVE_GAP = ResourceLoader.loadConstantInt("generation.SAVE_GAP");
 
     private final Clock clock = new Clock(() -> this.computeNextGeneration());
     private final List<Long> savedState = new LinkedList<>();
