@@ -102,7 +102,6 @@ public class Sandbox extends JPanel {
         //Button clear keylistener
         KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> bClear.doClick());
         KeyListenerFactory.addKeyListener(this, "book", KeyEvent.VK_B, () -> bBook.doClick());
-        this.generationPanel.refreshView();
         SwingUtilities.invokeLater(() -> {
             this.setFocusable(true);
             this.requestFocusInWindow();
@@ -189,7 +188,7 @@ public class Sandbox extends JPanel {
         final int result = JOptionPane.showOptionDialog(this, ResourceLoader.loadString("option.exit"), ResourceLoader.loadString("option.exit.title"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
         if (result == JOptionPane.YES_OPTION) {
             if (!Objects.isNull(book) && this.book.isVisible()) {
-                this.book.setVisible(false);
+                this.book.doDefaultCloseAction();
             }
             this.mainGUI.backToMainMenu();
         }

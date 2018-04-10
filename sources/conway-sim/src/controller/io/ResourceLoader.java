@@ -108,6 +108,6 @@ public final class ResourceLoader {
      */
     public static int loadConstant(final String constant) {
         final ResourceBundle value = ResourceBundle.getBundle("ConstantBundle", Control.getControl(Control.FORMAT_PROPERTIES));
-        return Integer.parseInt(value.getString(constant));
+        return Integer.parseInt(value.getString(constant).replaceAll("[^0-9]", ""));
     }
 }
