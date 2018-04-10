@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.TitledBorder;
 
-import controller.book.RecipeImpl;
+import controller.book.Recipe;
 import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
 import controller.io.RecipeLoader;
@@ -26,6 +26,7 @@ import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
+import view.swing.sandbox.SandboxTools;
 /**
  * 
  *
@@ -38,13 +39,12 @@ public class BookFrame extends JInternalFrame {
     private static final long serialVersionUID = -1045414565623185058L;
 
     private static final int FRAME_WIDTH = 800;
-    //private static final int HEIGHT = 280;
-    private static final int HEIGHTOFCELL = 50;
+    private static final int FRAME_HEIGHT = 400;
     private static final int INITIAL_GRID_SIZE = 50;
     private static final int GRID_TO_CELL_RATIO = 8;
     private static final String DEFAULT = "DEFAULT";
     private static final String CUSTOM = "CUSTOM";
-    private String selectedItem = null;
+    private String selectedItem;
     private String selectedList = DEFAULT;
 
     /**
@@ -85,31 +85,29 @@ public class BookFrame extends JInternalFrame {
         final RecipeLoader rl = new RecipeLoader();
 
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
-        // SIZE BY DIMENSION
-        this.setSize(FRAME_WIDTH, HEIGHTOFCELL * rl.getRecipeBook().getRecipeBookSize());
-        //this.setSize(WIDTH, HEIGHT);
-
+        this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         //PATTERN PREVIEW GRID
         //The final GridPanel constructor will have as 3rd argument int SIZE_OF_CELL
         final GridPanel pg = new GridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         // FILL THE JList WITH A TEMP ARRAY
         final List<String> arrList = new ArrayList<String>();
 
-        for (final RecipeImpl recipe : rl.getRecipeBook().getBookList()) {
+        for (final Recipe recipe : rl.getRecipeBook().getBookList()) {
             arrList.add(recipe.getName());
         }
         final List<String> custArrList = new ArrayList<String>();
 
-        for (final RecipeImpl recipe : rl.getCustomBook().getBookList()) {
+        for (final Recipe recipe : rl.getCustomBook().getBookList()) {
             custArrList.add(recipe.getName());
         }
 
-        final JList<String> defaultList = new JList<String>(arrList.toArray(new String[arrList.size()]));
+        final String[] stringDefaultArr = new String[arrList.size()];
+        final JList<String> defaultList = new JList<String>(arrList.toArray(stringDefaultArr));
         defaultList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         defaultList.setLayoutOrientation(JList.VERTICAL);
         defaultList.setVisibleRowCount(-1);
-        JScrollPane defaultListPane = new JScrollPane(defaultList);
-        TitledBorder defaultBookBord = new TitledBorder(ResourceLoader.loadString("book.defaultbtitle"));
+        final JScrollPane defaultListPane = new JScrollPane(defaultList);
+        final TitledBorder defaultBookBord = new TitledBorder(ResourceLoader.loadString("book.defaultbtitle"));
         defaultListPane.setBorder(defaultBookBord);
 
         defaultList.addMouseListener(new MouseListener() {
@@ -125,28 +123,25 @@ public class BookFrame extends JInternalFrame {
             }
             @Override
             public void mouseClicked(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
             @Override
             public void mouseEntered(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
             @Override
             public void mouseExited(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
             @Override
             public void mouseReleased(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
         });
 
-        final JList<String> customList = new JList<String>(custArrList.toArray(new String[custArrList.size()]));
+        final String[] stringCustomArr = new String[arrList.size()];
+        final JList<String> customList = new JList<String>(arrList.toArray(stringCustomArr));
         customList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         customList.setLayoutOrientation(JList.VERTICAL);
         customList.setVisibleRowCount(-1);
-        JScrollPane customListPane = new JScrollPane(customList);
-        TitledBorder customBookBord = new TitledBorder(ResourceLoader.loadString("book.custombtitle"));
+        final JScrollPane customListPane = new JScrollPane(customList);
+        final TitledBorder customBookBord = new TitledBorder(ResourceLoader.loadString("book.custombtitle"));
         customListPane.setBorder(customBookBord);
         customList.addMouseListener(new MouseListener() {
             public void mousePressed(final MouseEvent e) {
@@ -161,19 +156,15 @@ public class BookFrame extends JInternalFrame {
             }
             @Override
             public void mouseClicked(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
             @Override
             public void mouseEntered(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
             @Override
             public void mouseExited(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
             @Override
             public void mouseReleased(final MouseEvent arg0) {
-                // TODO Auto-generated method stub
             }
         });
 
@@ -185,10 +176,9 @@ public class BookFrame extends JInternalFrame {
         final JPanel ioPanel = new JPanel();
         ioPanel.setLayout(new BoxLayout(ioPanel, BoxLayout.Y_AXIS));
         this.add(ioPanel);
-        final JButton placeBtn = new JButton(ResourceLoader.loadString("book.place"));
-
+        final JButton placeBtn = SandboxTools.newJButton(ResourceLoader.loadString("book.place"), ResourceLoader.loadString("book.placett"));
         //ACTION LISTENER PLACE BUTTON
-        ActionListener place = e -> {
+        final ActionListener place = e -> {
             System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
             final Matrix<Status> mat;
             if (getSelectedList() == DEFAULT) {
