@@ -5,10 +5,16 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import controller.io.ResourceLoader;
+
 import core.model.SimpleCell;
+import core.model.Cell;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
@@ -33,11 +39,15 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private boolean mouseBeingPressed;
     private int lastPreviewRow;
     private int lastPreviewColumn;
+    private static final BiFunction<Status, Color, Color> STATUSTOCOLOR = (s, c) -> s.equals(Status.ALIVE) ? c : Color.WHITE;
+    private static final Function<Status, Color> ALIVETOBLACK = s -> STATUSTOCOLOR.apply(s, Color.BLACK);
+    private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
+    private static final Function<Cell, Color> CELLTOCOLOR = c -> ALIVETOBLACK.apply(c.getStatus());
     private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
     /**
      * Constructor method for a new Editor.
-     * @param grid is the panel containing the grid to manage.
+     * @param grid is the panel containing the grid to manage
      */
     public GridEditorImpl(final GridPanel grid) {
         this.gameGrid = grid;
@@ -50,22 +60,25 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which draws the generation on the grid.
+     * @param gen is the {@link Generation} which should be displayed
      */
     @Override
     public void draw(final Generation gen) {
-        this.gameGrid.paintGrid(0, 0, gen.getCellMatrix().map(c -> c.getStatus().equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+        this.gameGrid.paintGrid(0, 0, gen.getCellMatrix().map(CELLTOCOLOR));
     }
 
     /**
      * Is the method which places the current chosen pattern in the selected place.
+     * @param row is the vertical index of the cell where the user has clicked
+     * @param col is the horizontal index of the cell where the user has clicked
      */
     @Override
-    public void hit(final int row, final int column) {
+    public void hit(final int row, final int col) {
         if (!this.placingState) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
-        } 
-        this.currentStatus.set(row, column, this.currentStatus.get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
-        this.gameGrid.displaySingleCell(row, column, this.currentStatus.get(row, column).equals(Status.DEAD) ? Color.WHITE : Color.BLACK);
+        }
+        this.currentStatus.set(row, col, this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
+        this.gameGrid.displaySingleCell(row, col, ALIVETOBLACK.apply(this.currentStatus.get(row, col)));
     }
 
     /**
@@ -79,52 +92,61 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which displays the future pattern together with the matrix already existing.
+     * @param row is the vertical index of the cell where the user is pointing
+     * @param col is the horizontal index of the cell where the user is pointing
      */
     @Override
-    public void showPreview(final int row, final int column) { //TODO centrare il mouse
+    public void showPreview(final int row, final int col) { //TODO centrare il mouse
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
+        if ((this.gameGrid.getGridWidth() - col) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
-            this.quellAltro(row, column, this.pattern.get());
+            this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(
+                    this.currentStatus.map(ALIVETOBLACK), row, col,
+                    this.pattern.get().map(ALIVETOGRAY)));
             this.lastPreviewRow = row;
-            this.lastPreviewColumn = column;
+            this.lastPreviewColumn = col;
         }
     }
 
     /**
      * Is the method which sets the given pattern as the one to be placed.
-     * @param statusMatrix is the matrix containing the pattern.
+     * @param statusMatrix is the matrix containing the pattern
      */
     @Override
     public void addPatternToPlace(final Matrix<Status> statusMatrix) {
-        this.pattern = Optional.of(Objects.requireNonNull(statusMatrix));
+        if (statusMatrix.getHeight() <= this.gameGrid.getGridHeight() && statusMatrix.getWidth() <= this.gameGrid.getGridWidth()) {
+            this.pattern = Optional.of(Objects.requireNonNull(statusMatrix));
+        } else {
+            JOptionPane.showMessageDialog(this.gameGrid, ResourceLoader.loadString("grideditor.pattern.error"), "Error choosing pattern", JOptionPane.WARNING_MESSAGE);
+            this.removePatternToPlace();
+        }
     }
 
     /**
      * Is the method which merges together the existing matrix and the pattern.
-     * @param row is the index describing the lastPreviewRow where to add the first pattern label.
-     * @param column is the index of the column where to add the first pattern label.
+     * @param row is the index describing the lastPreviewRow where to add the first pattern label
+     * @param col is the index of the column where to add the first pattern label
      */
     @Override
-    public void placeCurrentPattern(final int row, final  int column) { //TODO centrare il mouse
+    public void placeCurrentPattern(final int row, final  int col) { //TODO centrare il mouse
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        if ((this.gameGrid.getGridWidth() - column) >= this.pattern.get().getWidth()
+        if ((this.gameGrid.getGridWidth() - col) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
-        this.currentStatus = Matrices.mergeXY(this.currentStatus, row, column, this.pattern.get());
-        this.quellAltro(row, column, this.pattern.get());
+        this.currentStatus = Matrices.mergeXY(this.currentStatus, row, col, this.pattern.get());
+        this.applyChanges();
         this.removePatternToPlace();
-        } else if (!(row == this.lastPreviewRow && column == this.lastPreviewColumn)) {
+        } else if (!(row == this.lastPreviewRow && col == this.lastPreviewColumn)) {
             this.placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
         }
     }
 
     /**
      * Is the method to invoke to know if a pattern is set and can be placed.
-     * @return a boolean describing the presence (or absence) of the pattern. 
+     * @return a boolean describing the presence (or absence) of the pattern
      */
     @Override
     public boolean isPlacingModeOn() {
@@ -133,7 +155,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method to invoke in order to rotate the pattern.
-     * @param hits is the number of click from mouse.
+     * @param hits is the number of click from mouse
      */
     @Override
     public void rotateCurrentPattern(final int hits) {
@@ -154,7 +176,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method showing if the placing mode is available.
-     * @return the boolean describing the current setting.
+     * @return the boolean describing the current setting
      */
     @Override
     public boolean isEnabled() {
@@ -162,8 +184,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     }
 
     /**
-     * Is the method to set enable (or disable) the placing mode; it brings the grid to the initial state when the game ends.
-     * @param enabled is the boolean describing the next setting.
+     * Is the method to set enable (or disable) the placing mode.
+     * @param enabled is the boolean describing the next setting
      */
     @Override
     public void setEnabled(final Boolean enabled) {
@@ -183,7 +205,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     }
 
     /**
-     * 
+     * Is the method which changes both dimensions of the grid currently used and shown.
+     * @param horizontal is the length of the future grid in number of cells
+     * @param vertical is the height of the future grid in number of cells
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
@@ -209,12 +233,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
     }
 
-    private void quellAltro(final int startRow, final int startCol, final Matrix<Status> matt) {
-        this.gameGrid.paintGrid(startRow, startCol, matt.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
-    }
-
     private void applyChanges() {
-        this.gameGrid.paintGrid(0, 0, this.currentStatus.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+        this.gameGrid.paintGrid(0, 0, this.currentStatus.map(ALIVETOBLACK));
     }
 
 
@@ -233,10 +253,17 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             this.column = j;
         }
 
+        /**
+         * This method is not supported.
+         */
         @Override
         public void mouseClicked(final MouseEvent e) {
         }
 
+        /**
+         * Is the method which notifies where and how the user interacted with the grid.
+         * @param e the event generated as result of the interaction
+         */
         @Override
         public void mousePressed(final MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && GridEditorImpl.this.isEnabled()) {
@@ -249,13 +276,16 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             } else if (SwingUtilities.isRightMouseButton(e) && GridEditorImpl.this.isEnabled() && GridEditorImpl.this.isPlacingModeOn()) {
                 if (e.isControlDown()) {
                     GridEditorImpl.this.removePatternToPlace();
-                    GridEditorImpl.this.applyChanges();
                 } else {
                     GridEditorImpl.this.rotateCurrentPattern(1);
                 }
             }
         }
 
+        /**
+         * Is the method which notifies when mouse's left button is released.
+         * @param e the event generated as result of the interaction with the grid
+         */
         @Override
         public void mouseReleased(final MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e)) {
@@ -263,6 +293,10 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             }
         }
 
+        /**
+         * Is the method which notifies when the user's cursor enters a cell of the grid. 
+         * @param e the event generated as result of the interaction
+         */
         @Override
         public void mouseEntered(final MouseEvent e) {
             if (GridEditorImpl.this.isEnabled()) {
@@ -274,9 +308,11 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
             }
         }
 
+        /**
+         * This method is not supported.
+         */
         @Override
         public void mouseExited(final MouseEvent e) {
         }
-
     }
 }

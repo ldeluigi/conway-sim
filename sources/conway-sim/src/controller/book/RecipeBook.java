@@ -9,13 +9,13 @@ public interface RecipeBook {
      * @param pos of the elem to extract
      * @return recipe
      */
-    RecipeImpl getRecipeByPos(int pos);
+    Recipe getRecipeByPos(int pos);
     /**
      * 
      * @param name of elem to get
      * @return elem
      */
-    RecipeImpl getRecipeByName(String name);
+    Recipe getRecipeByName(String name);
     /**
      * Method for adding a new Recipe in the book given the content, the name of the recipe and the author.
      * @param content of the Recipe.
