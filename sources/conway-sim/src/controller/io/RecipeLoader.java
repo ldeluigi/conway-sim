@@ -12,6 +12,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.CodeSource;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -46,7 +47,6 @@ This class parses all the files in the preset folder.
         this.defaultbook = new RecipeBookImpl();
         this.custombook = new RecipeBookImpl();
         recipeParser(custombook, CUSTOMRECIPEFOLDER);
-        System.out.println("USER DIR " + System.getProperty("user.dir"));
         try {
             jarLoader();
         } catch (IOException e) {
@@ -113,13 +113,14 @@ This class parses all the files in the preset folder.
                             final String content = in.lines().collect(Collectors.joining("\n"));
                             is = new ByteArrayInputStream(content.getBytes());
                             isr = new InputStreamReader(is, "UTF-8");
+                            in.close();
                             in = new BufferedReader(isr);
                             //TODO DEBUG
                             System.out.println("DEBUG | CONTENT: " + content);
                             testLine = in.readLine();
                             //TODO DEBUG
                             System.out.println("DEBUG | TestLine: " + testLine);
-                            if (testLine.startsWith("#N")) {
+                            if (testLine != null && !testLine.equals("") && testLine.startsWith("#N")) {
                                 flagName = true;
                                 testLine = testLine.split("#N ")[1];
                             }
@@ -133,7 +134,12 @@ This class parses all the files in the preset folder.
 
             }
           }
-          zip.close();
+          try {
+              zip.close();
+          } catch (NullPointerException ex) {
+              ex.printStackTrace();
+          }
+
         } else {
             System.out.println("FAILED");
           /* THIS COULD THROW AN EXCEPTIONs */
@@ -148,40 +154,42 @@ This class parses all the files in the preset folder.
         final File[] list = folder.listFiles(new FilenameFilter() {
             public boolean accept(final File folder, final String name) {
                 System.out.println("NAMEEEEE: " + name);
-                return name.toLowerCase().endsWith(".rle");
+                return name.toLowerCase(Locale.getDefault()).endsWith(".rle");
             }
         });
         String testLine = "testLine: NOT_INITIALIZED";
         FileReader namereader;
         BufferedReader in;
         Boolean flagName;
-        for (final File file : list) {
-            if (file.isFile()) {
-                flagName = false;
-                //TODO DEBUG
-                System.out.println("DEBUG | RLE found in folder: " + file.getPath());
-                try {
-                    namereader = new FileReader(file);
-                    in = new BufferedReader(namereader);
-                    testLine = in.readLine();
-                    if (testLine.startsWith("#N")) {
-                        flagName = true;
-                        testLine = testLine.split("#N ")[1];
+        if (list.length > 0) {
+            for (final File file : list) {
+                if (file.isFile()) {
+                    flagName = false;
+                    //TODO DEBUG
+                    System.out.println("DEBUG | RLE found in folder: " + file.getPath());
+                    try {
+                        namereader = new FileReader(file);
+                        in = new BufferedReader(namereader);
+                        testLine = in.readLine();
+                        if (testLine != null && !testLine.equals("") && testLine.startsWith("#N")) {
+                            flagName = true;
+                            testLine = testLine.split("#N ")[1];
+                        }
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                //TODO DEBUG
-                System.out.println("DEBUG | Name: " + testLine);
-                final Path filepath = Paths.get(file.getAbsolutePath());
-                try {
-                    final String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
-                    book.addRecipe(content, flagName ? testLine : file.getName());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                    //TODO DEBUG
+                    System.out.println("DEBUG | Name: " + testLine);
+                    final Path filepath = Paths.get(file.getAbsolutePath());
+                    try {
+                        final String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
+                        book.addRecipe(content, flagName ? testLine : file.getName());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
+                }
             }
         }
     }
