@@ -1,4 +1,4 @@
-package view.swing;
+package view.swing.menu;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -18,15 +18,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import controller.io.ResourceLoader;
-import view.swing.menu.LoadingScreen;
-import view.swing.menu.MenuSettings;
+import view.swing.DesktopGUI;
 import view.swing.sandbox.Sandbox;
 import view.swing.sandbox.SandboxTools;
 
 /**
  * 
  */
-public class LivelSelectorGUI extends JPanel {
+public class LevelMenu extends JPanel {
 
     private static final int BUTTON_PERCENT_DISTANT = 30;
     private static final int BUTTON_PERCENT_SIZE = 10;
@@ -44,7 +43,7 @@ public class LivelSelectorGUI extends JPanel {
      * 
      * @param mainGUI the main gui
      */
-    public LivelSelectorGUI(final DesktopGUI mainGUI) {
+    public LevelMenu(final DesktopGUI mainGUI) {
         this.mainGUI = mainGUI;
         final int h = mainGUI.getCurrentHeight();
         final int w = mainGUI.getCurrentWidth();

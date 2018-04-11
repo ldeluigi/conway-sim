@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
-import view.swing.LivelSelectorGUI;
+import view.swing.sandbox.Sandbox;
 
 /**
  * This class displays the main menu. Pattern: Singleton.
@@ -60,11 +60,24 @@ public final class MainMenu extends JPanel {
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
             SwingUtilities.invokeLater(() -> {
-                mainGUI.setView(new LivelSelectorGUI(mainGUI));
+                mainGUI.setView(new Sandbox(mainGUI));
             });
         });
         sandbox.setToolTipText(ResourceLoader.loadString("main.tooltip.sandbox"));
         sandbox.setFocusPainted(false);
+        final JButton levels = new JButton(ResourceLoader.loadString("main.levels"));
+        setBackgroundAndBorder(levels);
+        levels.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
+        levels.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        levels.addActionListener(e -> {
+            mainGUI.setView(new LoadingScreen());
+            SwingUtilities.invokeLater(() -> {
+                mainGUI.setView(new LevelMenu(mainGUI));
+            });
+        });
+        levels.setToolTipText(ResourceLoader.loadString("main.tooltip.levels"));
+        levels.setFocusPainted(false);
         final JButton exit = new JButton(ResourceLoader.loadString("main.exit"));
         setBackgroundAndBorder(exit);
         final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X,
@@ -92,17 +105,23 @@ public final class MainMenu extends JPanel {
         c.gridwidth = 2;
         c.weightx = 0.5;
         c.weighty = 0.5;
+        centralButtons.add(levels, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 2;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
         centralButtons.add(sandbox, c);
         c.anchor = GridBagConstraints.EAST;
         c.insets.set(c.insets.top, 0, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y));
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         c.gridwidth = 1;
         centralButtons.add(settings, c);
         c.anchor = GridBagConstraints.WEST;
         c.insets.set(c.insets.top, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y), 0, 0);
         c.gridx = 1;
-        c.gridy = 1;
+        c.gridy = 2;
         centralButtons.add(exit, c);
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
