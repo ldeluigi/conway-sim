@@ -1,7 +1,5 @@
 package controller.io;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -15,6 +13,7 @@ import core.utils.Matrix;
  */
 public final class RLETranslator {
     private static final char EL = '$';
+    private static final char SP = 'a';
 
     private RLETranslator() {
     }
@@ -46,24 +45,15 @@ public final class RLETranslator {
         }
         //TODO DEBUG
         System.out.println("DEBUG | MAT WIDTH: " + matWidth);
-        List<List<X>> listM = new ArrayList<List<X>>();
-        List<X> listInt = new ArrayList<X>();
-        for (int i = 0; i < matHeight; i++) {
-            for (int k = 0; k < matWidth; k++) {
-                listInt.add(en.getEnumConstants()[0]);
-            }
-            listM.add(listInt);
-            listInt.clear();
-        }
-        final Matrix<X> mat = new ListMatrix<X>(listM);
+        final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
         br = new BufferedReader(new StringReader(rle));
         for (int i = 0; i < matHeight; i++) {
             for (int k = 0; k < matWidth; k++) {
                 try {
-                        final int readValue = (int) (char) br.read() - 'a';
+                        final int readValue = (int) (char) br.read() - SP;
                         if (readValue >= en.getEnumConstants().length) {
                             //TODO RemoveMe - Check char bounds in status
-                            throw new IllegalArgumentException("Status out of bounds");
+                            throw new IllegalArgumentException("Status out of bounds.");
                         }
                         mat.set(i, k, en.getEnumConstants()[readValue]);
                 } catch (IOException e) {
@@ -72,7 +62,9 @@ public final class RLETranslator {
             }
             //TODO RemoveMe - END OF LINE
             try {
-                br.read();
+                if (br.read() != EL) {
+                    throw new IllegalArgumentException("Reading out of bounds, maybe the rle got manipulated.");
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -83,6 +75,27 @@ public final class RLETranslator {
             e.printStackTrace();
         }
         return mat;
+    }
+    /**
+     * 
+     * @param matrix to be translated
+     * @return string to be converted into String .conwaysrle type.
+     */
+    public static String rleMatrixToString(final Matrix<? extends Enum<?>> matrix) {
+        String mtoStr = "";
+
+        for (int i = 0; i < matrix.getHeight(); i++) {
+            for (int k = 0; k < matrix.getWidth(); k++) {
+                final Enum<?> en = matrix.get(k, i);
+                    mtoStr = mtoStr.concat(Character.toString((char) (SP + en.ordinal())));
+            }
+
+            //TODO RemoveMe - END OF LINE
+            mtoStr = mtoStr.concat(Character.toString(EL));
+        }
+        //TODO RemoveMe - DEBUG
+        System.out.println("DEBUG | " + mtoStr);
+        return mtoStr;
     }
 
 }
