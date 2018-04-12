@@ -1,6 +1,7 @@
 package test;
 
-import controller.io.GridSaver;
+import controller.io.RLESaver;
+import controller.io.RLETranslator;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
@@ -9,21 +10,20 @@ import core.utils.Matrix;
  *
  */
 public class TestSaveToFile {
-    static final int SIZE = 20;
+    static RLESaver rs;
     /**
      * Builder.
      */
-    public TestSaveToFile() {
-        //EMPTY
-    }
     /**
      * Test Method.
-     * @param dd
+     * @param args dasda
+     * @throws IllegalArgumentException ds
      */
-    public static void main(String[] args) {
-        Matrix<Status> matrix = new ListMatrix<>(SIZE, SIZE, () -> Status.DEAD);
-        GridSaver gs = new GridSaver(matrix);
-        System.out.println("Saved to file");
+    public static void main(final String[] args) throws IllegalArgumentException {
+        final Matrix<? extends Enum<?>> matrix = new ListMatrix<Status>(6, 6, () -> Status.ALIVE);
+        rs = new RLESaver(matrix);
+
+        rs = new RLESaver(RLETranslator.rleStringToMatrix("bbbbbb$bbbaab$bbbbbb$bbabbb$bbbbbb$bbbaab$", null));
     }
 
 }
