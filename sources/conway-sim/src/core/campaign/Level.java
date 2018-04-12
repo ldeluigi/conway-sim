@@ -1,10 +1,10 @@
 package core.campaign;
 
-import core.model.StandardCellEnvironments;
+import core.model.Environment;
 import core.model.Status;
 import core.utils.Matrix;
 /**
- * Represents a single level of the campaign.
+ * Represents a single level of the campaign. If the matrices returned have different dimension the Level is in Illegal State.
  */
 public interface Level {
 	
@@ -26,7 +26,8 @@ public interface Level {
 	Matrix<Status> getInitialStateMatrix();
 
 	/**
+	 * This method is also suggested to be used for level overall dimensions.
 	 * @return The environment of the generations in this level
 	 */
-	Matrix<StandardCellEnvironments> getEnvironmentMatrix();
+	Environment getEnvironmentMatrix();
 }
