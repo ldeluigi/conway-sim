@@ -116,7 +116,7 @@ public final class MainGUI implements DesktopGUI {
      *            the frame that pops up
      */
     @Override
-    public void popUpFrame(final JInternalFrame iFrame) {
+    public void popUpFrame(final JInternalFrame iFrame, final boolean maximum) {
         final Dimension minDim = new Dimension(
                 Math.max(iFrame.getMinimumSize().width, this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
                 Math.max(iFrame.getMinimumSize().height, this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
@@ -127,6 +127,13 @@ public final class MainGUI implements DesktopGUI {
         iFrame.setVisible(true);
         this.desktop.add(iFrame);
         iFrame.setLayer(JDesktopPane.PALETTE_LAYER);
+        if (maximum) {
+        	try {
+				iFrame.setMaximum(true);
+			} catch (PropertyVetoException e) {
+				Log.logMessage("Frame not maximizable.");
+			}
+        }
     }
 
     @Override

@@ -14,8 +14,10 @@ public interface DesktopGUI extends GUI {
      * 
      * @param iFrame
      *            to be displayed
+     * @param maximum
+     *            true if the frame should be maximized
      */
-    void popUpFrame(JInternalFrame iFrame);
+    void popUpFrame(JInternalFrame iFrame, boolean maximum);
 
     /**
      * Returns all {@link JInternalFrame} attached.

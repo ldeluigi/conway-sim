@@ -1,6 +1,7 @@
 package test;
 
 import view.swing.MainGUI;
+import view.swing.level.LevelComplete;
 
 public class TestView {
 
@@ -11,6 +12,7 @@ public class TestView {
 //        updates.add(new javax.swing.JLabel("CLICK BUTTONS YAY"));
 //        updates.setSize(m.getCurrentWidth() / 2, m.getCurrentHeight() / 2);
 //        m.popUpFrame(updates);
+        m.popUpFrame(new LevelComplete(), true);
     }
 
 }
