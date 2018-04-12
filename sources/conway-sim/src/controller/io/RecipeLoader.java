@@ -8,6 +8,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,6 +31,7 @@ public class RecipeLoader {
     private static final File PATH = new File("");
     private static final String CURRENTPATH = PATH.getAbsolutePath();
     private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "PatternBook");
+    private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + FS + "res" + FS + "recipebook");
 /** 
 This class parses all the files in the preset folder.
      *  than it loads it in the recipebook.
@@ -48,10 +51,16 @@ This class parses all the files in the preset folder.
         this.custombook = new RecipeBookImpl();
         recipeParser(custombook, CUSTOMRECIPEFOLDER);
         try {
-            jarLoader();
+            final URI uri = RecipeLoader.class.getResource(FS + "recipebook").toURI();
+            if (uri.getScheme().equals("jar")) {
+                jarLoader();
+            } else {
+                recipeParser(defaultbook, DEFAULTRECIPEFOLDER);
+            }
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (NullPointerException e) {
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
@@ -82,18 +91,9 @@ This class parses all the files in the preset folder.
         if (src != null) {
           final URL jar = src.getLocation();
           ZipInputStream zip = null;
-        try {
-            zip = new ZipInputStream(jar.openStream());
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
+          zip = new ZipInputStream(jar.openStream());
           while (true) {
-            ZipEntry e = null;
-            try {
-                e = zip.getNextEntry();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            final ZipEntry e = zip.getNextEntry();
             if (e == null) {
                 break;
             }
@@ -134,14 +134,10 @@ This class parses all the files in the preset folder.
 
             }
           }
-          try {
               zip.close();
-          } catch (NullPointerException ex) {
-              ex.printStackTrace();
-          }
-
         } else {
             System.out.println("FAILED");
+            //TODO
           /* THIS COULD THROW AN EXCEPTIONs */
         }
     }
