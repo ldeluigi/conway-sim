@@ -45,63 +45,68 @@ public class Sandbox extends JPanel {
      * 
      * @param mainGUI the mainGui that call this SandBox
      */
-    public Sandbox(final DesktopGUI mainGUI) {
-        Objects.requireNonNull(mainGUI);
-        this.mainGUI = mainGUI;
-        this.bClear = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.clear"), ResourceLoader.loadString("sandbox.clear.tooltip"));
-        this.grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE, Math.max(
-                mainGUI.getScreenHeight(),
-                mainGUI.getScreenWidth())
-                / CELL_SIZE_RATIO);
-        this.setLayout(new BorderLayout());
-        this.add(grid, BorderLayout.CENTER);
-        this.gridEditor = new GridEditorImpl(grid);
-        this.gridEditor.setEnabled(true);
-        this.generationPanel = new GenerationPanel(this);
+	public Sandbox(final DesktopGUI mainGUI) {
+		Objects.requireNonNull(mainGUI);
+		this.mainGUI = mainGUI;
+		this.bClear = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.clear"),
+				ResourceLoader.loadString("sandbox.clear.tooltip"));
+		this.grid = new GridPanel(DEFAULT_SIZE, DEFAULT_SIZE,
+				Math.max(mainGUI.getScreenHeight(), mainGUI.getScreenWidth()) / CELL_SIZE_RATIO);
+		this.setLayout(new BorderLayout());
+		this.add(grid, BorderLayout.CENTER);
+		this.gridEditor = new GridEditorImpl(grid);
+		this.gridEditor.setEnabled(true);
+		this.generationPanel = new GenerationPanel(this);
 
-        final JPanel north = new JPanel(new BorderLayout());
-        north.setOpaque(false);
-        this.bApply = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.apply"), ResourceLoader.loadString("sandbox.apply.tooltip"));
-        final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply, new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
-        gridOption.setOpaque(false);
-        north.add(this.generationPanel, BorderLayout.EAST);
-        final JLabel mode = new JLabel(ResourceLoader.loadString("sandbox.mode"));
-        mode.setFont(getFont());
-        north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
-        north.add(gridOption, BorderLayout.WEST);
-        this.add(north, BorderLayout.NORTH);
+		final JPanel north = new JPanel(new BorderLayout());
+		north.setOpaque(false);
+		this.bApply = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.apply"),
+				ResourceLoader.loadString("sandbox.apply.tooltip"));
+		final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply,
+				new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
+		gridOption.setOpaque(false);
+		north.add(this.generationPanel, BorderLayout.EAST);
+		final JLabel mode = new JLabel(ResourceLoader.loadString("sandbox.mode"));
+		mode.setFont(getFont());
+		north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
+		north.add(gridOption, BorderLayout.WEST);
+		this.add(north, BorderLayout.NORTH);
 
-        this.bBook = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.book"), ResourceLoader.loadString("sandbox.book.tooltip"));
-        final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"), ResourceLoader.loadString("sandbox.exit.tooltip"));
+		this.bBook = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.book"),
+				ResourceLoader.loadString("sandbox.book.tooltip"));
+		final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
+				ResourceLoader.loadString("sandbox.exit.tooltip"));
 
-        final JPanel south = new JPanel(new BorderLayout());
-        south.setOpaque(false);
-        final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        southRight.setOpaque(false);
-        southRight.add(bClear);
-        southRight.add(this.bBook);
-        southRight.add(bExit);
-        south.add(SandboxTools.newJPanelStatistics(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())), BorderLayout.WEST);
-        south.add(southRight, BorderLayout.EAST);
-        this.add(south, BorderLayout.SOUTH);
+		final JPanel south = new JPanel(new BorderLayout());
+		south.setOpaque(false);
+		final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		southRight.setOpaque(false);
+		southRight.add(bClear);
+		southRight.add(this.bBook);
+		southRight.add(bExit);
+		south.add(SandboxTools.newJPanelStatistics(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())),
+				BorderLayout.WEST);
+		south.add(southRight, BorderLayout.EAST);
+		this.add(south, BorderLayout.SOUTH);
 
-        this.bBook.addActionListener(e -> callBook());
-        bExit.addActionListener(e -> exit());
+		this.bBook.addActionListener(e -> callBook());
+		bExit.addActionListener(e -> exit());
 
-        //To ignore the space keyStroke
-        final InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
-        im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
-        im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
-        this.bClear.addActionListener(e -> this.generationPanel.clear());
+		// To ignore the space keyStroke
+		final InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
+		im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
+		im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
+		this.bClear.addActionListener(e -> this.generationPanel.clear());
 
-        //Button clear keylistener
-        KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK, () -> bClear.doClick());
-        KeyListenerFactory.addKeyListener(this, "book", KeyEvent.VK_B, () -> bBook.doClick());
-        SwingUtilities.invokeLater(() -> {
-            this.setFocusable(true);
-            this.requestFocusInWindow();
-        });
-    }
+		// Button clear keylistener
+		KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK,
+				() -> bClear.doClick());
+		KeyListenerFactory.addKeyListener(this, "book", KeyEvent.VK_B, () -> bBook.doClick());
+		SwingUtilities.invokeLater(() -> {
+			this.setFocusable(true);
+			this.requestFocusInWindow();
+		});
+	}
 
     /**
      * 
@@ -179,13 +184,17 @@ public class Sandbox extends JPanel {
         }
     }
 
-    private void exit() {
-        final int result = JOptionPane.showOptionDialog(this, ResourceLoader.loadString("option.exit"), ResourceLoader.loadString("option.exit.title"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, null);
-        if (result == JOptionPane.YES_OPTION) {
-            if (!Objects.isNull(book) && this.book.isVisible()) {
-                this.book.doDefaultCloseAction();
-            }
-            this.mainGUI.backToMainMenu();
-        }
-    }
+	private void exit() {
+		final int result = JOptionPane.showOptionDialog(
+				this, ResourceLoader.loadString("option.exit"), ResourceLoader.loadString("option.exit.title"),
+				JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] {
+						ResourceLoader.loadString("option.exit.yes"), ResourceLoader.loadString("option.exit.no") },
+				null);
+		if (result == JOptionPane.YES_OPTION) {
+			if (!Objects.isNull(book) && this.book.isVisible()) {
+				this.book.doDefaultCloseAction();
+			}
+			this.mainGUI.backToMainMenu();
+		}
+	}
 }
