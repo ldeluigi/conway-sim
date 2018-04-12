@@ -34,6 +34,7 @@ public final class ResourceLoader {
         RESOURCE_MAP.put("sandbox.button.pressed", "buttonPressed.jpg");
         RESOURCE_MAP.put("sandbox.button.selected", "selectedButton.jpg");
         RESOURCE_MAP.put("level.complete.background", "bg_level_complete.jpg");
+        RESOURCE_MAP.put("level.complete.egg", "bg_level_complete_egg.jpg");
     }
 
     private ResourceLoader() {
