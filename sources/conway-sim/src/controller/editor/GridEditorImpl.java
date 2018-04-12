@@ -96,14 +96,24 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * @param col is the horizontal index of the cell where the user is pointing
      */
     @Override
-    public void showPreview(final int row, final int col) { //TODO centrare il mouse
+    public void showPreview(int row, int col) {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
+        }
+        if (col - this.pattern.get().getWidth() / 2 < 0) {
+            col = col + (col - this.pattern.get().getWidth());
+        } else if (col + (this.pattern.get().getWidth() / 2) > this.gameGrid.getGridWidth()) {
+            col = col - (col + this.pattern.get().getWidth() / 2 - this.gameGrid.getGridWidth());
+        }
+        if (row - this.pattern.get().getHeight() / 2 < 0) {
+            row = row + (row - this.pattern.get().getHeight());
+        } else if (row + this.pattern.get().getHeight() / 2 > this.gameGrid.getGridHeight()) {
+            row = row - (row + this.pattern.get().getHeight() / 2 - this.gameGrid.getGridHeight());
         }
         if ((this.gameGrid.getGridWidth() - col) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
             this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(
-                    this.currentStatus.map(ALIVETOBLACK), row, col,
+                    this.currentStatus.map(ALIVETOBLACK), row - this.pattern.get().getHeight() / 2, col - this.pattern.get().getWidth() / 2,
                     this.pattern.get().map(ALIVETOGRAY)));
             this.lastPreviewRow = row;
             this.lastPreviewColumn = col;
@@ -130,15 +140,14 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * @param col is the index of the column where to add the first pattern label
      */
     @Override
-    public void placeCurrentPattern(final int row, final  int col) { //TODO centrare il mouse
+    public void placeCurrentPattern(final int row, final int col) {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        if ((this.gameGrid.getGridWidth() - col) >= this.pattern.get().getWidth()
-                && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
-        this.currentStatus = Matrices.mergeXY(this.currentStatus, row, col, this.pattern.get());
-        this.applyChanges();
-        this.removePatternToPlace();
+        if ((this.gameGrid.getGridWidth() - col) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
+            this.currentStatus = Matrices.mergeXY(this.currentStatus, row - this.pattern.get().getHeight() / 2, col - this.pattern.get().getWidth() / 2, this.pattern.get());
+            this.applyChanges();
+            this.removePatternToPlace();
         } else if (!(row == this.lastPreviewRow && col == this.lastPreviewColumn)) {
             this.placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
         }

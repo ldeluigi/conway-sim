@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,8 +105,8 @@ public class BookFrame extends JInternalFrame {
             }
         });
 
-        final String[] stringCustomArr = new String[arrList.size()];
-        final JList<String> customList = new JList<String>(arrList.toArray(stringCustomArr));
+        final String[] stringCustomArr = new String[custArrList.size()];
+        final JList<String> customList = new JList<String>(custArrList.toArray(stringCustomArr));
         customList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         customList.setLayoutOrientation(JList.VERTICAL);
         customList.setVisibleRowCount(-1);
