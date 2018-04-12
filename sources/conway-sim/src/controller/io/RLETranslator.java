@@ -1,10 +1,11 @@
 package controller.io;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
 
@@ -12,8 +13,11 @@ import core.utils.Matrix;
  * 
  *
  */
-public class RLETranslator {
+public final class RLETranslator {
     private static final char EL = '$';
+
+    private RLETranslator() {
+    }
     /**
      * @param <X> a
      * @param rle a
@@ -25,7 +29,7 @@ public class RLETranslator {
         //TODO DEBUG
         System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
         BufferedReader br = new BufferedReader(new StringReader(rle));
-        final int matWidth;
+        int matWidth = matHeight;
         try {
             int cont = 0;
             while ((char) br.read() != EL) {
@@ -42,7 +46,16 @@ public class RLETranslator {
         }
         //TODO DEBUG
         System.out.println("DEBUG | MAT WIDTH: " + matWidth);
-        final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> Status.DEAD);
+        List<List<X>> listM = new ArrayList<List<X>>();
+        List<X> listInt = new ArrayList<X>();
+        for (int i = 0; i < matHeight; i++) {
+            for (int k = 0; k < matWidth; k++) {
+                listInt.add(en.getEnumConstants()[0]);
+            }
+            listM.add(listInt);
+            listInt.clear();
+        }
+        final Matrix<X> mat = new ListMatrix<X>(listM);
         br = new BufferedReader(new StringReader(rle));
         for (int i = 0; i < matHeight; i++) {
             for (int k = 0; k < matWidth; k++) {
@@ -57,7 +70,7 @@ public class RLETranslator {
                     e.printStackTrace();
                 }
             }
-            //END OF LINE
+            //TODO RemoveMe - END OF LINE
             try {
                 br.read();
             } catch (IOException e) {
