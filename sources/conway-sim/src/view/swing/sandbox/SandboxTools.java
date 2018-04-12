@@ -14,7 +14,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
@@ -32,6 +31,7 @@ public final class SandboxTools {
     private static final int MIN_SIZE = 2;
     private static final int DEFAUL_SIZE = 100;
 
+    private static final String NO_TOOLTIP = "NO TOOLTIP";
     private static final Color BORDERD_COLOR = Color.BLACK;
     private static final Color DISABLE_TEXT_COLOR = Color.LIGHT_GRAY;
     private static final String FONT_NAME = Font.MONOSPACED;
@@ -147,6 +147,49 @@ public final class SandboxTools {
     }
 
     /**
+     * Create a new JButton with the specific font.
+     * @param name JButton name
+     * @param font the specific font
+     * @return the new JButton
+     */
+    public static JButton newJButton(final String name, final Font font) {
+        return newJButton(name, NO_TOOLTIP, font);
+    }
+
+    /**
+     * Create a new JButton with the specific font.
+     * @param name JButton name
+     * @param tooltipText the tooltip text
+     * @param font the specific font
+     * @return the new JButton
+     */
+    public static JButton newJButton(final String name, final String tooltipText, final Font font) {
+        final JButton button = new JButton(name);
+
+        final FontMetrics metrics = button.getFontMetrics(font); 
+        final int width = metrics.stringWidth(name + " ");
+        final int height = metrics.getHeight();
+        final Dimension newDimension =  new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
+        button.setPreferredSize(newDimension);
+
+        button.setFont(font);
+        if (!tooltipText.equals(NO_TOOLTIP)) {
+            button.setToolTipText(tooltipText);
+        }
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(BORDERD_COLOR, 2, false));
+        button.setUI(new MetalButtonUI() {
+            protected Color getDisabledTextColor() {
+                return DISABLE_TEXT_COLOR;
+            }
+        });
+        setIcon(button, newDimension);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        return button;
+    }
+
+    /**
      * 
      * @param name the name of the button
      * @param tooltipText the tool tip of the button
@@ -163,7 +206,9 @@ public final class SandboxTools {
         button.setPreferredSize(newDimension);
 
         button.setFont(font);
-        button.setToolTipText(tooltipText);
+        if (!tooltipText.equals(NO_TOOLTIP)) {
+            button.setToolTipText(tooltipText);
+        }
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(BORDERD_COLOR, 2, false));
         button.setUI(new MetalButtonUI() {
@@ -183,19 +228,7 @@ public final class SandboxTools {
      * @return a new JButton
      */
     public static JButton newJButton(final String name) {
-        return newJButton(name, " ");
-    }
-
-    /**
-     * @param name radio button name
-     * @param dimension the button default dimension
-     * @return the button
-     */
-    public static JRadioButton newJRadioButton(final String name, final Dimension dimension) {
-        final JRadioButton rButton = new JRadioButton(name);
-        rButton.setFocusPainted(false);
-        rButton.setPreferredSize(dimension);
-        return rButton;
+        return newJButton(name, NO_TOOLTIP);
     }
 
     /**
