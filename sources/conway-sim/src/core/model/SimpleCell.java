@@ -2,24 +2,31 @@ package core.model;
 
 /**
  * Implementation of the interface Cell.
- * 
  */
-
 public class SimpleCell implements Cell {
+    /**
+     * This is the code returned by {@link SimpleCell#code}.
+     */
+    public static final int STANDARD_CELL_CODE = 1;
 
     private Status current;
 
     /**
      * Constructor for a new Cell.
-     * @param firstStatus is the status to be assumed the first time
+     * 
+     * @param firstStatus
+     *            is the status to be assumed the first time
      */
     public SimpleCell(final Status firstStatus) {
         this.current = firstStatus;
     }
 
     /**
-     * setStatus is the method to invoke in order to change the current status of the cell.
-     * @param nextstatus is the new status to be assumed. 
+     * setStatus is the method to invoke in order to change the current status of
+     * the cell.
+     * 
+     * @param nextstatus
+     *            is the new status to be assumed.
      */
     @Override
     public void setStatus(final Status nextstatus) {
@@ -28,11 +35,12 @@ public class SimpleCell implements Cell {
 
     /**
      * getStatus is the method to get the current status of the cell.
+     * 
      * @return the current status
      */
     @Override
     public Status getStatus() {
-      return this.current;
+        return this.current;
     }
 
     /**
@@ -75,5 +83,13 @@ public class SimpleCell implements Cell {
         }
         final SimpleCell other = (SimpleCell) obj;
         return current.equals(other.current);
+    }
+
+    /**
+     * Returns {@link SimpleCell#STANDARD_CELL_CODE}.
+     */
+    @Override
+    public int code() {
+        return SimpleCell.STANDARD_CELL_CODE;
     }
 }
