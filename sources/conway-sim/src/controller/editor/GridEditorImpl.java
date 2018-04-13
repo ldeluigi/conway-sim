@@ -32,7 +32,7 @@ import view.swing.sandbox.GridPanelImpl;
  */
 public class GridEditorImpl implements GridEditor, PatternEditor {
 
-    private final GridPanelImpl gameGrid;
+    private final GridPanel gameGrid;
     private Optional<Matrix<Status>> pattern;
     private Matrix<Status> currentStatus;
     private boolean placingState;
@@ -50,7 +50,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * Constructor method for a new Editor.
      * @param grid is the panel containing the grid to manage
      */
-    public GridEditorImpl(final GridPanelImpl grid) {
+    public GridEditorImpl(final GridPanel grid) {
         this.gameGrid = grid;
         this.placingState = true;
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));

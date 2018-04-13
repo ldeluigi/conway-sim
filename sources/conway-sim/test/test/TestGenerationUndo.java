@@ -12,7 +12,7 @@ import controller.generation.GenerationControllerImpl;
 import core.model.Generations;
 import junit.framework.Assert;
 import view.swing.MainGUI;
-import view.swing.sandbox.Sandbox;
+import view.swing.sandbox.SandboxImpl;
 
 /**
  * JUnit test for GenerationHistory and GenerationController.
@@ -25,7 +25,7 @@ public class TestGenerationUndo {
 //    @Test
 //    public void testForGenInOneSec() {
 //        GenerationControllerImpl controller = new GenerationControllerImpl();
-//        controller.setView(new Sandbox(new MainGUI()));
+//        controller.setView(new SandboxImpl(new MainGUI()));
 //        boolean stop = true;
 //        FutureTask<Integer> f = new FutureTask<>(() -> {
 //            while (sm(true)) {
@@ -65,7 +65,7 @@ public class TestGenerationUndo {
 //    @Test
 //    public void testProcessor() {
 //        GenerationControllerImpl controller = new GenerationControllerImpl();
-//        controller.setView(new Sandbox(new MainGUI()));
+//        controller.setView(new SandboxImpl(new MainGUI()));
 //        long start = 0;
 //        long end = 0;
 //        long dif1 = 0, dif2 = 0, dif3 = 0;

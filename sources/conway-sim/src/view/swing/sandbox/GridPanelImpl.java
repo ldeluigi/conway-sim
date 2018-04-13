@@ -24,7 +24,7 @@ import view.swing.menu.MenuSettings;
  * GridPanel is the visual panel which displays a scrollable grid of mutating cells.
  * 
  */
-public class GridPanelImpl extends JScrollPane implements GridPanel {
+public class GridPanelImpl extends GridPanel {
 
     private static final long serialVersionUID = -1;
     private static final int INITIAL_BORDER_WIDTH = 1;

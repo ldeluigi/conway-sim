@@ -21,7 +21,7 @@ import controller.io.ResourceLoader;
 import view.swing.menu.MenuSettings;
 
 /**
- * An utility class for Sandbox.
+ * An utility class for SandboxImpl.
  */
 public final class SandboxTools {
 
@@ -85,12 +85,12 @@ public final class SandboxTools {
 
     /**
      * 
-     * @param sandbox a
+     * @param sandboxImpl a
      * @param bApply a
      * @param font the font
      * @return a JPanel
      */
-    public static JPanel newGridOptionDimension(final Sandbox sandbox, final JButton bApply, final Font font) {
+    public static JPanel newGridOptionDimension(final SandboxImpl sandboxImpl, final JButton bApply, final Font font) {
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
         gridOption.setOpaque(false);
         final JPanel topGrid = new JPanel(new FlowLayout());
@@ -121,7 +121,7 @@ public final class SandboxTools {
                     && Integer.valueOf(spinnerHeight.getValue().toString()) <= MAX_SIZE
                     && Integer.valueOf(spinnerWidth.getValue().toString()) >= MIN_SIZE
                     && Integer.valueOf(spinnerWidth.getValue().toString()) <= MAX_SIZE) {
-                sandbox.resetGrid();
+                sandboxImpl.resetGrid();
             }
         });
         return gridOption;

@@ -48,7 +48,7 @@ public class GenerationPanel extends JPanel {
     private final JProgressBar progresBar;
 
     private final GenerationController generationController;
-    private final Sandbox view;
+    private final SandboxImpl view;
 
     private final int fontSize = MenuSettings.getFontSize();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -57,7 +57,7 @@ public class GenerationPanel extends JPanel {
      * 
      * @param view the controller of the generation
      */
-    public GenerationPanel(final Sandbox view) {
+    public GenerationPanel(final SandboxImpl view) {
         this.view = view;
         this.setOpaque(false);
         this.generationController = new GenerationControllerImpl(view);

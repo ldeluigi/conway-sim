@@ -25,7 +25,7 @@ import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
-import view.swing.sandbox.GridPanel;
+import view.swing.sandbox.GridPanelImpl;
 import view.swing.sandbox.SandboxTools;
 /**
  * 
@@ -58,7 +58,7 @@ public class BookFrame extends JInternalFrame {
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         //PATTERN PREVIEW GRID
         //The final GridPanel constructor will have as 3rd argument int SIZE_OF_CELL
-        final GridPanel pg = new GridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
+        final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         // FILL THE JList WITH A TEMP ARRAY
         final List<String> arrList = new ArrayList<String>();
 

@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
 import controller.io.ResourceLoader;
 import core.model.Generation;
 import core.model.Generations;
-import view.swing.sandbox.Sandbox;
+import view.swing.sandbox.SandboxImpl;
 
 /**
  * 
@@ -23,7 +23,7 @@ public class GenerationControllerImpl implements GenerationController {
 
     private final Clock clock = new Clock(() -> this.computeNextGeneration());
     private final List<Long> savedState = new LinkedList<>();
-    private final Sandbox view;
+    private final SandboxImpl view;
     private Long currentGenerationNumber;
     private Generation currentGeneration;
     private Memento<Long, Generation> oldGeneration;
@@ -32,7 +32,7 @@ public class GenerationControllerImpl implements GenerationController {
      * New Generation controller empty.
      * @param view the view
      */
-    public GenerationControllerImpl(final Sandbox view) {
+    public GenerationControllerImpl(final SandboxImpl view) {
         this.view = view;
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
