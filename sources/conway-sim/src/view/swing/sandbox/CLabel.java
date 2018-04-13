@@ -39,7 +39,9 @@ public class CLabel extends JComponent {
     @Override
     public void paintComponent(final Graphics g) {
         g.setColor(this.getBackground());
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        if (this.isOpaque()) {
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        }
         this.getBorder().paintBorder(this, g, 0, 0, this.getWidth(), this.getHeight());
     }
 }
