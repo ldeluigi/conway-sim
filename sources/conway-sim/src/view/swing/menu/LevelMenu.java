@@ -37,7 +37,7 @@ public class LevelMenu extends JPanel {
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
     private static final int GRID_TO_CELL_RATIO = 10;
-    private static final int ELEMENT_FOR_PAGE = 9;
+    private static final int ELEMENT_FOR_PAGE = ResourceLoader.loadConstantInt("level.ELEMENT_FOR_PAGE");
     private static final String VALUE = "XXX";
     private final JTextArea textArea = new JTextArea(ResourceLoader.loadString("level.default.text"));
     private final List<JButton> bList = new LinkedList<>();
@@ -91,11 +91,11 @@ public class LevelMenu extends JPanel {
 
         final JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         southPanel.setOpaque(false);
-        final JButton bStart = SandboxTools.newJButton("START", this.getFont());
+        final JButton bStart = SandboxTools.newJButton(ResourceLoader.loadString("level.button.start"), this.getFont());
         bStart.setFocusable(false);
         southPanel.add(bStart);
 
-        final JButton bReturn = SandboxTools.newJButton("RETURN", this.getFont());
+        final JButton bReturn = SandboxTools.newJButton(ResourceLoader.loadString("level.button.return"), this.getFont());
         bReturn.setFocusable(false);
         southPanel.add(bReturn);
         this.add(southPanel);
@@ -114,9 +114,9 @@ public class LevelMenu extends JPanel {
         if (!rightLeftButton.isPresent()) {
             this.rightLeftButton = Optional.of(new JPanel(new FlowLayout()));
             this.rightLeftButton.get().setOpaque(false);
-            final JButton right = SandboxTools.newJButton("NEXT", this.getFont());
+            final JButton right = SandboxTools.newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
             right.setFocusPainted(false);
-            final JButton left = SandboxTools.newJButton("PREV", this.getFont());
+            final JButton left = SandboxTools.newJButton(ResourceLoader.loadString("level.button.left"), this.getFont());
             left.setFocusable(false);
             this.rightLeftButton.get().add(left);
             this.rightLeftButton.get().add(right);
