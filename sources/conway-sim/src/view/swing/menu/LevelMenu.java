@@ -122,9 +122,9 @@ public class LevelMenu extends JPanel {
             this.rightLeftButton.get().add(right);
 
             KeyListenerFactory.addKeyListener(this, "right", KeyEvent.VK_RIGHT, () -> nextPage());
-            left.addActionListener(e -> nextPage());
+            right.addActionListener(e -> this.nextPage());
             KeyListenerFactory.addKeyListener(this, "left", KeyEvent.VK_LEFT, () -> previousPage());
-            right.addActionListener(e -> this.previousPage());
+            left.addActionListener(e -> this.previousPage());
         }
         return this.rightLeftButton.get();
     }
