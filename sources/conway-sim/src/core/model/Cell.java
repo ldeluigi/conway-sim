@@ -29,6 +29,8 @@ public interface Cell {
 
     /**
      * This method returns an integer that represents the type of this cell.
+     * Implementing classes that are supposed to have a special representation
+     * should return a unique code that identifies its cells.
      * 
      * @return an integer based on this cell behavior, that can be, for example, its
      *         class or type
