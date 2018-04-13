@@ -18,7 +18,7 @@ import javax.swing.SwingConstants;
 import controller.io.ResourceLoader;
 import view.swing.MainGUI;
 import view.swing.menu.MenuSettings;
-import view.swing.sandbox.Sandbox;
+import view.swing.sandbox.SandboxImpl;
 
 /**
  * 

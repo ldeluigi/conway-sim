@@ -24,6 +24,7 @@ import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
+import view.swing.sandbox.GridPanelImpl;
 
 /**
  * GridEditorImpl is the editor for the grid and the pattern manager depending on which interface is used.
@@ -96,27 +97,19 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * @param col is the horizontal index of the cell where the user is pointing
      */
     @Override
-    public void showPreview(int row, int col) {
+    public void showPreview(final int row, final int col) {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        if (col - this.pattern.get().getWidth() / 2 < 0) {
-            col = col + (col - this.pattern.get().getWidth());
-        } else if (col + (this.pattern.get().getWidth() / 2) > this.gameGrid.getGridWidth()) {
-            col = col - (col + this.pattern.get().getWidth() / 2 - this.gameGrid.getGridWidth());
-        }
-        if (row - this.pattern.get().getHeight() / 2 < 0) {
-            row = row + (row - this.pattern.get().getHeight());
-        } else if (row + this.pattern.get().getHeight() / 2 > this.gameGrid.getGridHeight()) {
-            row = row - (row + this.pattern.get().getHeight() / 2 - this.gameGrid.getGridHeight());
-        }
-        if ((this.gameGrid.getGridWidth() - col) >= this.pattern.get().getWidth()
-                && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
+        int[] indexes = this.checkIndexes(row, col);
+        int newRow = indexes[0];
+        int newColumn = indexes[1];
+        if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
             this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(
-                    this.currentStatus.map(ALIVETOBLACK), row - this.pattern.get().getHeight() / 2, col - this.pattern.get().getWidth() / 2,
+                    this.currentStatus.map(ALIVETOBLACK), newRow - this.pattern.get().getHeight() / 2, newColumn - this.pattern.get().getWidth() / 2,
                     this.pattern.get().map(ALIVETOGRAY)));
-            this.lastPreviewRow = row;
-            this.lastPreviewColumn = col;
+            this.lastPreviewRow = newRow;
+            this.lastPreviewColumn = newColumn;
         }
     }
 
@@ -144,11 +137,27 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        if ((this.gameGrid.getGridWidth() - col) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - row) >= this.pattern.get().getHeight()) { //TODO rivedere i controlli con il mouse centrato
-            this.currentStatus = Matrices.mergeXY(this.currentStatus, row - this.pattern.get().getHeight() / 2, col - this.pattern.get().getWidth() / 2, this.pattern.get());
+        if (!this.placingState || !this.pattern.isPresent()) {
+            throw new IllegalStateException(GridEditorImpl.MESSAGE);
+        }
+        int[] indexes = this.checkIndexes(row, col);
+        int newRow = indexes[0];
+        int newColumn = indexes[1];
+        if (newColumn < this.pattern.get().getWidth() / 2) {
+            newColumn = this.pattern.get().getWidth() / 2;
+        } else if (newColumn + (this.pattern.get().getWidth() / 2) > this.gameGrid.getGridWidth()) {
+            newColumn = this.gameGrid.getGridWidth() - this.pattern.get().getWidth() / 2;
+        }
+        if (newRow < this.pattern.get().getHeight() / 2) {
+            newRow = this.pattern.get().getHeight() / 2;
+        } else if (newRow + (this.pattern.get().getHeight() / 2) > this.gameGrid.getGridHeight()) {
+            newRow = this.gameGrid.getGridHeight() - this.pattern.get().getHeight() / 2;
+        }
+        if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
+            this.currentStatus = Matrices.mergeXY(this.currentStatus, newRow - this.pattern.get().getHeight() / 2, newColumn - this.pattern.get().getWidth() / 2, this.pattern.get());
             this.applyChanges();
             this.removePatternToPlace();
-        } else if (!(row == this.lastPreviewRow && col == this.lastPreviewColumn)) {
+        } else if (!(newRow == this.lastPreviewRow && newColumn == this.lastPreviewColumn)) {
             this.placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
         }
     }
@@ -242,6 +251,21 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
     }
 
+    private int[] checkIndexes(final int row, final int column) {
+        int[] newIndex =  {row, column};
+        if (newIndex[1] < this.pattern.get().getWidth() / 2) {
+            newIndex[1] = this.pattern.get().getWidth() / 2;
+        } else if (newIndex[1] + (this.pattern.get().getWidth() / 2) > this.gameGrid.getGridWidth()) {
+            newIndex[1] = this.gameGrid.getGridWidth() - this.pattern.get().getWidth() / 2;
+        }
+        if (newIndex[0] < this.pattern.get().getHeight() / 2) {
+            newIndex[0] = this.pattern.get().getHeight() / 2;
+        } else if (newIndex[0] + (this.pattern.get().getHeight() / 2) > this.gameGrid.getGridHeight()) {
+            newIndex[0] = this.gameGrid.getGridHeight() - this.pattern.get().getHeight() / 2;
+        }
+        return newIndex;
+    }
+
     private void applyChanges() {
         this.gameGrid.paintGrid(0, 0, this.currentStatus.map(ALIVETOBLACK));
     }
@@ -310,7 +334,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         public void mouseEntered(final MouseEvent e) {
             if (GridEditorImpl.this.isEnabled()) {
                 if (GridEditorImpl.this.isPlacingModeOn()) {
-                    GridEditorImpl.this.showPreview(row, column);
+                    GridEditorImpl.this.showPreview(this.row, this.column);
                 } else if (GridEditorImpl.this.mouseBeingPressed && SwingUtilities.isLeftMouseButton(e)) {
                     GridEditorImpl.this.hit(this.row, this.column);
                 }

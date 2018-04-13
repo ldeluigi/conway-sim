@@ -23,6 +23,7 @@ import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
 import view.swing.Log;
 import view.swing.sandbox.GridPanel;
+import view.swing.sandbox.GridPanelImpl;
 import view.swing.sandbox.KeyListenerFactory;
 import view.swing.sandbox.SandboxTools;
 
@@ -85,7 +86,7 @@ public class LevelMenu extends JPanel {
         statusPanel.setOpaque(false);
         statusPanel.add(textArea);
 
-        final GridPanel pg = new GridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
+        final GridPanel pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         statusPanel.add(pg);
         this.add(statusPanel);
 
