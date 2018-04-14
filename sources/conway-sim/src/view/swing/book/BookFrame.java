@@ -53,7 +53,7 @@ public class BookFrame extends JInternalFrame {
      * 
      */
     public BookFrame(final PatternEditor patternE) {
-        super("Book", false, true);
+        super("Book", true, true);
         final RecipeLoader rl = new RecipeLoader();
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
