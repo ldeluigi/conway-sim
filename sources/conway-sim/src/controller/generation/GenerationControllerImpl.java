@@ -33,6 +33,7 @@ public class GenerationControllerImpl implements GenerationController {
     public GenerationControllerImpl(final Sandbox view) {
         this.view = view;
         this.currentGeneration = this.view.getGridEditor().getGeneration();
+        this.currentGenerationNumber = 0L;
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
     }
 

@@ -26,6 +26,8 @@ import view.swing.menu.MenuSettings;
 
 /**
  * This is the panel that contain all the Generation control for the application.
+ * Button start, play, pause, end and time management goto, next and previous and the speed option.
+ * 
  */
 public class GenerationPanel extends JPanel {
 
@@ -34,9 +36,16 @@ public class GenerationPanel extends JPanel {
      */
     private static final long serialVersionUID = 9060069868596999045L;
 
+    /**
+     * Speed option,
+     *      editable in ConstantBundle.properties.
+     */
     private static final int MIN_SPEED = ResourceLoader.loadConstantInt("generation.MIN_SPEED");
     private static final int MAX_SPEED = ResourceLoader.loadConstantInt("generation.MAX_SPEED");
 
+    /**
+     * JButton of the panel.
+     */
     private final JSlider speedSlider;
     private final JButton bStart;
     private final JButton bEnd;
@@ -54,7 +63,7 @@ public class GenerationPanel extends JPanel {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
-     * 
+     * A panel that contain all the button for the start and control of the game.
      * @param view the controller of the generation
      */
     public GenerationPanel(final SandboxImpl view) {
@@ -96,6 +105,7 @@ public class GenerationPanel extends JPanel {
         speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
         speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         northL.add(speedSlider);
+
         //add button to the layout
         southL.add(bPlay);
         southL.add(bPause);
@@ -129,13 +139,15 @@ public class GenerationPanel extends JPanel {
         bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (bStart.isEnabled()) {
-                start();
+                bStart.doClick();
             } else if (bPlay.isEnabled()) {
-                resume();
+                bPlay.doClick();
             } else if (bPause.isEnabled()) {
-                pause();
+                bPause.doClick();
             }
         });
+
+        //Key listener of the panel
         KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> bEnd.doClick());
         KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> bNext.doClick());
         KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> bPrev.doClick());
@@ -146,7 +158,7 @@ public class GenerationPanel extends JPanel {
     }
 
     /**
-     * 
+     * Call the clean on the grid.
      */
     public void clear() {
         this.view.getGridEditor().clean();
@@ -154,10 +166,34 @@ public class GenerationPanel extends JPanel {
 
     /**
      * 
-     * @return the current JSlider value
+     * @return the current speed value
      */
     public int getCurrentSpeed() {
         return this.speedSlider.getValue();
+    }
+
+    /**
+     * Reset the current game to the original status.
+     */
+    public void resetGrid() {
+        this.generationController.reset();
+    }
+
+    /**
+     * Refresh the view of this panel and reload the constant.
+     */
+    public void refreshView() {
+        if (!this.view.getGridEditor().isEnabled()) {
+            this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
+        }
+        final int aliveCell = (int) this.generationController.getCurrentGeneration().getCellMatrix().stream().filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
+        this.view.scheduleGUIUpdate(() -> {
+            SandboxTools.refreshStatistics(
+                    this.getCurrentSpeed(),
+                    this.generationController.getCurrentNumberGeneration().intValue(),
+                    aliveCell,
+                    this.view.getFont());
+        });
     }
 
     private void speedControl() {
@@ -246,27 +282,4 @@ public class GenerationPanel extends JPanel {
         this.bGoTo.setEnabled(flag);
     }
 
-    /**
-     * 
-     */
-    public void resetGrid() {
-        this.generationController.reset();
-    }
-
-    /**
-     * 
-     */
-    public void refreshView() {
-        if (!this.view.getGridEditor().isEnabled()) {
-            this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
-        }
-        final int aliveCell = (int) this.generationController.getCurrentGeneration().getCellMatrix().stream().filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
-        SwingUtilities.invokeLater(() -> {
-            SandboxTools.refreshStatistics(
-                this.getCurrentSpeed(),
-                this.generationController.getCurrentNumberGeneration().intValue(),
-                aliveCell,
-                this.view.getFont());
-        });
-    }
 }
