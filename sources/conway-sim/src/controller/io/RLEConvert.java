@@ -22,7 +22,7 @@ public class RLEConvert {
     private final BufferedReader buffer;
 
     //CHARSET PATTERNS FOR THE RLE READING IN THE BUFFER
-    static final String XCOORDPATTERN = "x ?= ?([1-9]\\d*)",
+    private static final String XCOORDPATTERN = "x ?= ?([1-9]\\d*)",
                         YCOORDPATTERN = "y ?= ?([1-9]\\d*)",
                         RULEPATTERN = "rule ?= ?((B[0-8]*/S[0-8]*)|([0-8]*/[0-8]*))",
                         CELLRUNPATTERN = "([1-9]\\d*)?([bo$])";
