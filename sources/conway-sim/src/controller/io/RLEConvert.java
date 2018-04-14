@@ -22,10 +22,10 @@ public class RLEConvert {
     private final BufferedReader buffer;
 
     //CHARSET PATTERNS FOR THE RLE READING IN THE BUFFER
-    private static final String XCOORDPATTERN = "x ?= ?([1-9]\\d*)",
-                        YCOORDPATTERN = "y ?= ?([1-9]\\d*)",
-                        RULEPATTERN = "rule ?= ?((B[0-8]*/S[0-8]*)|([0-8]*/[0-8]*))",
-                        CELLRUNPATTERN = "([1-9]\\d*)?([bo$])";
+    private static final String XCOORDPATTERN = "x ?= ?([1-9]\\d*)";
+    private static final String YCOORDPATTERN = "y ?= ?([1-9]\\d*)";
+    private static final String RULEPATTERN = "rule ?= ?((B[0-8]*/S[0-8]*)|([0-8]*/[0-8]*))";
+    private static final String CELLRUNPATTERN = "([1-9]\\d*)?([bo$])";
 
     //DEFAULT RULE TO BE SETTED. METHOD TO BE IMPLEMENTED AS CHALLENGE
     private static final String DEFAULTRULE = "B3/S23";
