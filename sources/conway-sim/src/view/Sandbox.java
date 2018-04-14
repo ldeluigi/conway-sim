@@ -1,9 +1,8 @@
-package view.swing.sandbox;
+package view;
 
 import javax.swing.JButton;
 
 import controller.editor.PatternEditor;
-import view.swing.UpdateScheduler;
 
 /**
  * 

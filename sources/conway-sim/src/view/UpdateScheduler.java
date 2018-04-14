@@ -1,4 +1,4 @@
-package view.swing;
+package view;
 
 /**
  * UpdateScheduler interface.
