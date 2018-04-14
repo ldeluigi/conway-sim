@@ -146,6 +146,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
 
     /**
      * Enables "clear" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -155,6 +156,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
 
     /**
      * Enables "apply" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -164,6 +166,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
 
     /**
      * Gets the button used to call the recipe book and returns it.
+     * 
      * @return the book button
      */
     public JButton getButtonBook() {
@@ -172,6 +175,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
 
     /**
      * Gets the editor used to handle the grid and returns it.
+     * 
      * @return the gridEtitor
      */
     public PatternEditor getGridEditor() {

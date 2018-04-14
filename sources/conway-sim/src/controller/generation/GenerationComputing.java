@@ -14,7 +14,8 @@ public interface GenerationComputing {
 
     /**
      * 
-     * @param generationNumber the number of the generation to load
+     * @param generationNumber
+     *            the number of the generation to load
      */
     void loadGeneration(Long generationNumber);
 

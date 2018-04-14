@@ -18,11 +18,14 @@ import core.utils.Matrix;
  */
 public final class Generations {
 
-    private  Generations() { }
+    private Generations() {
+    }
 
     /**
      * Computes a new {@link Generation} from the given one.
-     * @param start that is the previous {@link Generation}
+     * 
+     * @param start
+     *            that is the previous {@link Generation}
      * @return the new computed {@link Generation}
      */
     public static Generation compute(final Generation start) {
@@ -30,9 +33,12 @@ public final class Generations {
     }
 
     /**
-     * Computes number generations from start. 
-     * @param number is the number of generations to be computed sequentially
-     * @param start is the first {@link Generation}
+     * Computes number generations from start.
+     * 
+     * @param number
+     *            is the number of generations to be computed sequentially
+     * @param start
+     *            is the first {@link Generation}
      * @return the result of the computations
      */
     public static Generation compute(final int number, final Generation start) {
@@ -40,9 +46,13 @@ public final class Generations {
     }
 
     /**
-     * Computes a new {@link Generation} from the given one, with multithreading option.
-     * @param start that is the previous {@link Generation}
-     * @param threads to use (the caller will wait for the others to end)
+     * Computes a new {@link Generation} from the given one, with multithreading
+     * option.
+     * 
+     * @param start
+     *            that is the previous {@link Generation}
+     * @param threads
+     *            to use (the caller will wait for the others to end)
      * @return the new computed {@link Generation}
      */
     public static Generation compute(final Generation start, final int threads) {
@@ -51,9 +61,13 @@ public final class Generations {
 
     /**
      * Computes number generations from start, with multithreading option.
-     * @param number is the number of generations to be computed sequentially
-     * @param start is the first {@link Generation}
-     * @param threads to use (the caller will wait for the others to end)
+     * 
+     * @param number
+     *            is the number of generations to be computed sequentially
+     * @param start
+     *            is the first {@link Generation}
+     * @param threads
+     *            to use (the caller will wait for the others to end)
      * @return the result of the computations
      */
     public static Generation compute(final int number, final Generation start, final int threads) {

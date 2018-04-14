@@ -7,7 +7,8 @@ public interface UpdateScheduler {
 
     /**
      * 
-     * @param runnable the runnable that have to be added to the scheduler
+     * @param runnable
+     *            the runnable that have to be added to the scheduler
      */
     void scheduleGUIUpdate(Runnable runnable);
 }

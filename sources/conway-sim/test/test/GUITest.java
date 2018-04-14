@@ -11,12 +11,13 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 public class GUITest {
-    
+
     JDesktopPane d;
     JFrame f;
     JInternalFrame i;
-    
+
     JPanel a = new JPanel();
+
     GUITest() {
         f = new JFrame();
         d = new JDesktopPane();
@@ -24,13 +25,11 @@ public class GUITest {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         int inset = 50;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setBounds(inset, inset,
-                  screenSize.width  - inset*2,
-                  screenSize.height - inset*2);
+        f.setBounds(inset, inset, screenSize.width - inset * 2, screenSize.height - inset * 2);
         d.setDragMode(JDesktopPane.OUTLINE_DRAG_MODE);
         i = new JInternalFrame("hey");
         a.setBounds(0, 0, 200, 200);
-        //a.setVisible(true);
+        // a.setVisible(true);
         a.setLayout(new BorderLayout());
         a.add(new JButton("Hello world"));
         f.getContentPane().add(a);
@@ -42,7 +41,7 @@ public class GUITest {
     }
 
     public static void main(String[] args) {
-       GUITest g = new GUITest();
+        GUITest g = new GUITest();
     }
 
 }

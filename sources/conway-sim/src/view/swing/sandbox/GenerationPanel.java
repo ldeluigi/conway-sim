@@ -25,8 +25,9 @@ import core.model.Status;
 import view.swing.menu.MenuSettings;
 
 /**
- * This is the panel that contain all the Generation control for the application.
- * Button start, play, pause, end and time management goto, next and previous and the speed option.
+ * This is the panel that contain all the Generation control for the
+ * application. Button start, play, pause, end and time management goto, next
+ * and previous and the speed option.
  * 
  */
 public class GenerationPanel extends JPanel {
@@ -37,8 +38,7 @@ public class GenerationPanel extends JPanel {
     private static final long serialVersionUID = 9060069868596999045L;
 
     /**
-     * Speed option,
-     *      editable in ConstantBundle.properties.
+     * Speed option, editable in ConstantBundle.properties.
      */
     private static final int MIN_SPEED = ResourceLoader.loadConstantInt("generation.MIN_SPEED");
     private static final int MAX_SPEED = ResourceLoader.loadConstantInt("generation.MAX_SPEED");
@@ -64,20 +64,29 @@ public class GenerationPanel extends JPanel {
 
     /**
      * A panel that contain all the button for the start and control of the game.
-     * @param view the controller of the generation
+     * 
+     * @param view
+     *            the controller of the generation
      */
     public GenerationPanel(final SandboxImpl view) {
         this.view = view;
         this.setOpaque(false);
         this.generationController = new GenerationControllerImpl(view);
 
-        bStart = SandboxTools.newJButton(ResourceLoader.loadString("generation.start"), ResourceLoader.loadString("generation.start.tooltip"));
-        bEnd = SandboxTools.newJButton(ResourceLoader.loadString("generation.end"), ResourceLoader.loadString("generation.end.tooltip"));
-        bPause = SandboxTools.newJButton(ResourceLoader.loadString("generation.pause"), ResourceLoader.loadString("generation.pause.tooltip"));
-        bNext = SandboxTools.newJButton(ResourceLoader.loadString("generation.next"), ResourceLoader.loadString("generation.next.tooltip"));
-        bGoTo = SandboxTools.newJButton(ResourceLoader.loadString("generation.goto"), ResourceLoader.loadString("generation.goto.tooltip"));
-        bPrev = SandboxTools.newJButton(ResourceLoader.loadString("generation.previous"), ResourceLoader.loadString("generation.previous.tooltip"));
-        bPlay = SandboxTools.newJButton(ResourceLoader.loadString("generation.play"), ResourceLoader.loadString("generation.play.tooltip"));
+        bStart = SandboxTools.newJButton(ResourceLoader.loadString("generation.start"),
+                ResourceLoader.loadString("generation.start.tooltip"));
+        bEnd = SandboxTools.newJButton(ResourceLoader.loadString("generation.end"),
+                ResourceLoader.loadString("generation.end.tooltip"));
+        bPause = SandboxTools.newJButton(ResourceLoader.loadString("generation.pause"),
+                ResourceLoader.loadString("generation.pause.tooltip"));
+        bNext = SandboxTools.newJButton(ResourceLoader.loadString("generation.next"),
+                ResourceLoader.loadString("generation.next.tooltip"));
+        bGoTo = SandboxTools.newJButton(ResourceLoader.loadString("generation.goto"),
+                ResourceLoader.loadString("generation.goto.tooltip"));
+        bPrev = SandboxTools.newJButton(ResourceLoader.loadString("generation.previous"),
+                ResourceLoader.loadString("generation.previous.tooltip"));
+        bPlay = SandboxTools.newJButton(ResourceLoader.loadString("generation.play"),
+                ResourceLoader.loadString("generation.play.tooltip"));
         progresBar = new JProgressBar();
         progresBar.setIndeterminate(true);
         progresBar.setVisible(false);
@@ -101,12 +110,12 @@ public class GenerationPanel extends JPanel {
 
         northL.add(bStart);
 
-        //speed control
+        // speed control
         speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
         speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         northL.add(speedSlider);
 
-        //add button to the layout
+        // add button to the layout
         southL.add(bPlay);
         southL.add(bPause);
         southL.add(bEnd);
@@ -115,11 +124,11 @@ public class GenerationPanel extends JPanel {
         northR.add(bGoTo);
         northR.add(progresBar);
 
-        northR.add(spinner); //to use the go to button
+        northR.add(spinner); // to use the go to button
 
         this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
-        //Start conditions.
+        // Start conditions.
         bStart.setEnabled(true);
         bPlay.setEnabled(false);
         bPause.setEnabled(false);
@@ -147,13 +156,15 @@ public class GenerationPanel extends JPanel {
             }
         });
 
-        //Key listener of the panel
+        // Key listener of the panel
         KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> bEnd.doClick());
         KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> bNext.doClick());
         KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> bPrev.doClick());
         KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER, () -> bGoTo.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP, () -> speedSlider.setValue(speedSlider.getValue() + 1));
-        KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN, () -> speedSlider.setValue(speedSlider.getValue() - 1));
+        KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP,
+                () -> speedSlider.setValue(speedSlider.getValue() + 1));
+        KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN,
+                () -> speedSlider.setValue(speedSlider.getValue() - 1));
         this.requestFocusInWindow();
     }
 
@@ -186,13 +197,11 @@ public class GenerationPanel extends JPanel {
         if (!this.view.getGridEditor().isEnabled()) {
             this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
         }
-        final int aliveCell = (int) this.generationController.getCurrentGeneration().getCellMatrix().stream().filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
+        final int aliveCell = (int) this.generationController.getCurrentGeneration().getCellMatrix().stream()
+                .filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
         this.view.scheduleGUIUpdate(() -> {
-            SandboxTools.refreshStatistics(
-                    this.getCurrentSpeed(),
-                    this.generationController.getCurrentNumberGeneration().intValue(),
-                    aliveCell,
-                    this.view.getFont());
+            SandboxTools.refreshStatistics(this.getCurrentSpeed(),
+                    this.generationController.getCurrentNumberGeneration().intValue(), aliveCell, this.view.getFont());
         });
     }
 
@@ -202,7 +211,9 @@ public class GenerationPanel extends JPanel {
 
     private void goTo(final Long value) {
         if (value < 0) {
-            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start", this.generationController.getCurrentNumberGeneration().toString()));
+            JOptionPane.showMessageDialog(this,
+                    ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
+                            this.generationController.getCurrentNumberGeneration().toString()));
         } else if (!value.equals(this.generationController.getCurrentNumberGeneration())) {
             this.bPlay.setEnabled(false);
             this.bEnd.setEnabled(false);

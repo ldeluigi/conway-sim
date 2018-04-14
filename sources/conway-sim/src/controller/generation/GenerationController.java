@@ -26,8 +26,8 @@ public interface GenerationController extends GenerationComputing {
 
     /**
      * 
-     * @param speed set a speed value
-     *          this value should be 
+     * @param speed
+     *            set a speed value this value should be
      */
     void setSpeed(int speed);
 

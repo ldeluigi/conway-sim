@@ -16,6 +16,7 @@ public interface Sandbox extends UpdateScheduler {
 
     /**
      * Enables "clear" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -23,6 +24,7 @@ public interface Sandbox extends UpdateScheduler {
 
     /**
      * Enables "apply" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -30,12 +32,14 @@ public interface Sandbox extends UpdateScheduler {
 
     /**
      * Enables clear button to be clicked by the user.
+     * 
      * @return the book button
      */
     JButton getButtonBook();
 
     /**
      * Gets the editor used to handle the grid and returns it.
+     * 
      * @return the gridEtitor
      */
     PatternEditor getGridEditor();

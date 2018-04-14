@@ -25,7 +25,8 @@ import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
 
 /**
- * GridEditorImpl is the editor for the grid and the pattern manager depending on which interface is used.
+ * GridEditorImpl is the editor for the grid and the pattern manager depending
+ * on which interface is used.
  *
  */
 public class GridEditorImpl implements GridEditor, PatternEditor {
@@ -38,7 +39,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private boolean mouseBeingPressed;
     private int lastPreviewRow;
     private int lastPreviewColumn;
-    private static final BiFunction<Status, Color, Color> STATUSTOCOLOR = (s, c) -> s.equals(Status.ALIVE) ? c : Color.WHITE;
+    private static final BiFunction<Status, Color, Color> STATUSTOCOLOR = (s, c) -> s.equals(Status.ALIVE) ? c
+            : Color.WHITE;
     private static final Function<Status, Color> ALIVETOBLACK = s -> STATUSTOCOLOR.apply(s, Color.BLACK);
     private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
     private static final Function<Cell, Color> CELLTOCOLOR = c -> ALIVETOBLACK.apply(c.getStatus());
@@ -46,7 +48,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Constructor method for a new Editor.
-     * @param grid is the panel containing the grid to manage
+     * 
+     * @param grid
+     *            is the panel containing the grid to manage
      */
     public GridEditorImpl(final GridPanel grid) {
         this.gameGrid = grid;
@@ -54,12 +58,15 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
         this.pattern = Optional.empty();
         this.env = EnvironmentFactory.standardRules(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight());
-        this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
+        this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(),
+                () -> Status.DEAD);
     }
 
     /**
      * Is the method which draws the generation on the grid.
-     * @param gen is the {@link Generation} which should be displayed
+     * 
+     * @param gen
+     *            is the {@link Generation} which should be displayed
      */
     @Override
     public void draw(final Generation gen) {
@@ -68,20 +75,25 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which places the current chosen pattern in the selected place.
-     * @param row is the vertical index of the cell where the user has clicked
-     * @param col is the horizontal index of the cell where the user has clicked
+     * 
+     * @param row
+     *            is the vertical index of the cell where the user has clicked
+     * @param col
+     *            is the horizontal index of the cell where the user has clicked
      */
     @Override
     public void hit(final int row, final int col) {
         if (!this.placingState) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        this.currentStatus.set(row, col, this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
+        this.currentStatus.set(row, col,
+                this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
         this.gameGrid.displaySingleCell(row, col, ALIVETOBLACK.apply(this.currentStatus.get(row, col)));
     }
 
     /**
      * Is the method which gives back the current generation displayed.
+     * 
      * @return the generation displayed.
      */
     @Override
@@ -90,9 +102,13 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     }
 
     /**
-     * Is the method which displays the future pattern together with the matrix already existing.
-     * @param row is the vertical index of the cell where the user is pointing
-     * @param col is the horizontal index of the cell where the user is pointing
+     * Is the method which displays the future pattern together with the matrix
+     * already existing.
+     * 
+     * @param row
+     *            is the vertical index of the cell where the user is pointing
+     * @param col
+     *            is the horizontal index of the cell where the user is pointing
      */
     @Override
     public void showPreview(final int row, final int col) {
@@ -102,10 +118,11 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         final int[] indexes = this.checkIndexes(row, col);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
-        if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(
-                    this.currentStatus.map(ALIVETOBLACK), newRow - this.pattern.get().getHeight() / 2, newColumn - this.pattern.get().getWidth() / 2,
-                    this.pattern.get().map(ALIVETOGRAY)));
+        if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
+                && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
+            this.gameGrid.paintGrid(0, 0,
+                    Matrices.mergeXY(this.currentStatus.map(ALIVETOBLACK), newRow - this.pattern.get().getHeight() / 2,
+                            newColumn - this.pattern.get().getWidth() / 2, this.pattern.get().map(ALIVETOGRAY)));
             this.lastPreviewRow = newRow;
             this.lastPreviewColumn = newColumn;
         }
@@ -113,11 +130,14 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which sets the given pattern as the one to be placed.
-     * @param statusMatrix is the matrix containing the pattern
+     * 
+     * @param statusMatrix
+     *            is the matrix containing the pattern
      */
     @Override
     public void addPatternToPlace(final Matrix<Status> statusMatrix) {
-        if (statusMatrix.getHeight() <= this.gameGrid.getGridHeight() && statusMatrix.getWidth() <= this.gameGrid.getGridWidth()) {
+        if (statusMatrix.getHeight() <= this.gameGrid.getGridHeight()
+                && statusMatrix.getWidth() <= this.gameGrid.getGridWidth()) {
             this.pattern = Optional.of(Objects.requireNonNull(statusMatrix));
         } else {
             this.gameGrid.notifyToUser(ResourceLoader.loadString("grideditor.pattern.error"));
@@ -127,8 +147,12 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which merges together the existing matrix and the pattern.
-     * @param row is the index describing the lastPreviewRow where to add the first pattern label
-     * @param col is the index of the column where to add the first pattern label
+     * 
+     * @param row
+     *            is the index describing the lastPreviewRow where to add the first
+     *            pattern label
+     * @param col
+     *            is the index of the column where to add the first pattern label
      */
     @Override
     public void placeCurrentPattern(final int row, final int col) {
@@ -141,8 +165,10 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         final int[] indexes = this.checkIndexes(row, col);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
-        if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.currentStatus = Matrices.mergeXY(this.currentStatus, newRow - this.pattern.get().getHeight() / 2, newColumn - this.pattern.get().getWidth() / 2, this.pattern.get());
+        if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
+                && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
+            this.currentStatus = Matrices.mergeXY(this.currentStatus, newRow - this.pattern.get().getHeight() / 2,
+                    newColumn - this.pattern.get().getWidth() / 2, this.pattern.get());
             this.applyChanges();
             this.removePatternToPlace();
         } else if (!(newRow == this.lastPreviewRow && newColumn == this.lastPreviewColumn)) {
@@ -152,6 +178,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method to invoke to know if a pattern is set and can be placed.
+     * 
      * @return a boolean describing the presence (or absence) of the pattern
      */
     @Override
@@ -161,7 +188,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method to invoke in order to rotate the pattern.
-     * @param hits is the number of click from mouse
+     * 
+     * @param hits
+     *            is the number of click from mouse
      */
     @Override
     public void rotateCurrentPattern(final int hits) {
@@ -182,6 +211,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method showing if the placing mode is available.
+     * 
      * @return the boolean describing the current setting
      */
     @Override
@@ -191,7 +221,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method to set enable (or disable) the placing mode.
-     * @param enabled is the boolean describing the next setting
+     * 
+     * @param enabled
+     *            is the boolean describing the next setting
      */
     @Override
     public void setEnabled(final Boolean enabled) {
@@ -202,33 +234,44 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     }
 
     /**
-     * Is the method which shows a full white grid as every cell was dead or a new grid was just created.
+     * Is the method which shows a full white grid as every cell was dead or a new
+     * grid was just created.
      */
     @Override
     public void clean() {
-        this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(), () -> Status.DEAD);
+        this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(),
+                () -> Status.DEAD);
         this.applyChanges();
     }
 
     /**
-     * Is the method which changes both dimensions of the grid currently used and shown.
-     * @param horizontal is the length of the future grid in number of cells
-     * @param vertical is the height of the future grid in number of cells
+     * Is the method which changes both dimensions of the grid currently used and
+     * shown.
+     * 
+     * @param horizontal
+     *            is the length of the future grid in number of cells
+     * @param vertical
+     *            is the height of the future grid in number of cells
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
         if (horizontal != this.currentStatus.getWidth() || vertical != this.currentStatus.getHeight()) {
             if (this.currentStatus.getWidth() < horizontal) {
                 if (this.currentStatus.getHeight() < vertical) {
-                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
+                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0,
+                            0, this.currentStatus);
                 } else {
-                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical - 1, 0, this.currentStatus.getWidth() - 1);
-                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical - 1, 0,
+                            this.currentStatus.getWidth() - 1);
+                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0,
+                            0, this.currentStatus);
                 }
             } else {
                 if (this.currentStatus.getHeight() < vertical) {
-                    this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight() - 1, 0, horizontal - 1);
-                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0, this.currentStatus);
+                    this.currentStatus = Matrices.cut(this.currentStatus, 0, this.currentStatus.getHeight() - 1, 0,
+                            horizontal - 1);
+                    this.currentStatus = Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0,
+                            0, this.currentStatus);
                 } else {
                     this.currentStatus = Matrices.cut(this.currentStatus, 0, vertical - 1, 0, horizontal - 1);
                 }
@@ -240,7 +283,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     }
 
     private int[] checkIndexes(final int row, final int column) {
-        int[] newIndex =  {row, column};
+        int[] newIndex = { row, column };
         if (newIndex[1] < this.pattern.get().getWidth() / 2) {
             newIndex[1] = this.pattern.get().getWidth() / 2;
         } else if (newIndex[1] + (this.pattern.get().getWidth() / 2) > this.gameGrid.getGridWidth()) {
@@ -258,7 +301,6 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         this.gameGrid.paintGrid(0, 0, this.currentStatus.map(ALIVETOBLACK));
     }
 
-
     class CellListener implements MouseListener {
 
         private final int row;
@@ -266,8 +308,11 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         /**
          * Is the constructor method which creates a new Listener.
-         * @param i is the vertical index of the cell.
-         * @param j is the horizontal index of the cell.
+         * 
+         * @param i
+         *            is the vertical index of the cell.
+         * @param j
+         *            is the horizontal index of the cell.
          */
         CellListener(final int i, final int j) {
             this.row = i;
@@ -283,7 +328,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         /**
          * Is the method which notifies where and how the user interacted with the grid.
-         * @param e the event generated as result of the interaction
+         * 
+         * @param e
+         *            the event generated as result of the interaction
          */
         @Override
         public void mousePressed(final MouseEvent e) {
@@ -294,7 +341,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
                 } else {
                     GridEditorImpl.this.hit(this.row, this.column);
                 }
-            } else if (SwingUtilities.isRightMouseButton(e) && GridEditorImpl.this.isEnabled() && GridEditorImpl.this.isPlacingModeOn()) {
+            } else if (SwingUtilities.isRightMouseButton(e) && GridEditorImpl.this.isEnabled()
+                    && GridEditorImpl.this.isPlacingModeOn()) {
                 if (e.isControlDown()) {
                     GridEditorImpl.this.removePatternToPlace();
                 } else {
@@ -305,7 +353,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
         /**
          * Is the method which notifies when mouse's left button is released.
-         * @param e the event generated as result of the interaction with the grid
+         * 
+         * @param e
+         *            the event generated as result of the interaction with the grid
          */
         @Override
         public void mouseReleased(final MouseEvent e) {
@@ -315,8 +365,11 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
 
         /**
-         * Is the method which notifies when the user's cursor enters a cell of the grid. 
-         * @param e the event generated as result of the interaction
+         * Is the method which notifies when the user's cursor enters a cell of the
+         * grid.
+         * 
+         * @param e
+         *            the event generated as result of the interaction
          */
         @Override
         public void mouseEntered(final MouseEvent e) {

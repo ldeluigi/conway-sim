@@ -15,8 +15,11 @@ public final class CellEnvironmentImpl implements CellEnvironment {
 
     /**
      * This constructors takes two strategies to implement {@link CellEnvironment}.
-     * @param checkBorn the strategy for cell birth
-     * @param checkDeath the strategy for cell death
+     * 
+     * @param checkBorn
+     *            the strategy for cell birth
+     * @param checkDeath
+     *            the strategy for cell death
      */
     CellEnvironmentImpl(final Function<Integer, Boolean> checkBorn, final Function<Integer, Boolean> checkDeath) {
         this.checkBorn = Objects.requireNonNull(checkBorn);

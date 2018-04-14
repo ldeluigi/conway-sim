@@ -6,11 +6,13 @@ package view.swing;
  */
 public final class Log {
 
-    private Log() { }
+    private Log() {
+    }
 
     /**
      * 
-     * @param text the text to be showed
+     * @param text
+     *            the text to be showed
      */
     public static void logMessage(final String text) {
         System.err.println("log: " + text);

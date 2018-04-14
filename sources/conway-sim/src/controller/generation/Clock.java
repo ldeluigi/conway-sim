@@ -6,9 +6,7 @@ import controller.io.ResourceLoader;
 
 /**
  * 
- * Max speed = 1000 -> 10 s.
- *             100  -> 1 s.
- *             1    -> 0.01 s.
+ * Max speed = 1000 -> 10 s. 100 -> 1 s. 1 -> 0.01 s.
  */
 public class Clock {
 
@@ -22,7 +20,8 @@ public class Clock {
 
     /**
      * 
-     * @param runnable the runnable of this clock.
+     * @param runnable
+     *            the runnable of this clock.
      */
     public Clock(final Runnable runnable) {
         this.runnable = runnable;
@@ -55,7 +54,9 @@ public class Clock {
 
     /**
      * 
-     * @param speed Set the speed of this clock. wait ( 1000 / speed ) ms between every computation.
+     * @param speed
+     *            Set the speed of this clock. wait ( 1000 / speed ) ms between
+     *            every computation.
      */
     public void setSpeed(final int speed) {
         if (speed < 0 || speed > MAX_SPEED) {
@@ -63,7 +64,8 @@ public class Clock {
         }
         this.speed = speed;
         if (this.clockAgent.isPresent()) {
-            final Long sleepTime = Long.valueOf(-(MAX_CLOCK_TIME - MIN_CLOCK_TIME) / (MAX_SPEED - MIN_SPEED) * speed + MAX_CLOCK_TIME + MIN_CLOCK_TIME);
+            final Long sleepTime = Long.valueOf(-(MAX_CLOCK_TIME - MIN_CLOCK_TIME) / (MAX_SPEED - MIN_SPEED) * speed
+                    + MAX_CLOCK_TIME + MIN_CLOCK_TIME);
             this.clockAgent.get().setStep(Long.valueOf(sleepTime));
         }
     }

@@ -43,10 +43,12 @@ public final class SandboxTools {
     private static JLabel numSpeedLabel;
     private static JLabel aliveCell;
 
-    private SandboxTools() { }
+    private SandboxTools() {
+    }
 
     /**
-     * @param font the font
+     * @param font
+     *            the font
      * @return a panel with all the statistics of the game
      */
     public static JPanel newJPanelStatistics(final Font font) {
@@ -69,13 +71,19 @@ public final class SandboxTools {
 
     /**
      * 
-     * @param speedSlider the current speed
-     * @param genNumber the current genNumber
-     * @param aliveCell the current number of alive cell
-     * @param font the new font
+     * @param speedSlider
+     *            the current speed
+     * @param genNumber
+     *            the current genNumber
+     * @param aliveCell
+     *            the current number of alive cell
+     * @param font
+     *            the new font
      */
-    public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell, final Font font) {
-        SandboxTools.numGenerationLabel.setText(ResourceLoader.loadString("sandbox.label.generation") + genNumber + "|");
+    public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell,
+            final Font font) {
+        SandboxTools.numGenerationLabel
+                .setText(ResourceLoader.loadString("sandbox.label.generation") + genNumber + "|");
         SandboxTools.numSpeedLabel.setText(ResourceLoader.loadString("sandbox.label.speed") + speedSlider + "|");
         SandboxTools.aliveCell.setText(ResourceLoader.loadString("sandbox.label.alivecell") + aliveCell + "|");
         SandboxTools.numGenerationLabel.setFont(font);
@@ -85,9 +93,12 @@ public final class SandboxTools {
 
     /**
      * 
-     * @param sandboxImpl a
-     * @param bApply a
-     * @param font the font
+     * @param sandboxImpl
+     *            a
+     * @param bApply
+     *            a
+     * @param font
+     *            the font
      * @return a JPanel
      */
     public static JPanel newGridOptionDimension(final SandboxImpl sandboxImpl, final JButton bApply, final Font font) {
@@ -145,18 +156,20 @@ public final class SandboxTools {
 
     /**
      * 
-     * @param name the name of the button
-     * @param tooltipText the tool tip of the button
+     * @param name
+     *            the name of the button
+     * @param tooltipText
+     *            the tool tip of the button
      * @return a new button
      */
     public static JButton newJButton(final String name, final String tooltipText) {
         final JButton button = new JButton(name);
         final Font font = new Font(FONT_NAME, FONT_STYLE, MenuSettings.getFontSize());
 
-        final FontMetrics metrics = button.getFontMetrics(font); 
+        final FontMetrics metrics = button.getFontMetrics(font);
         final int width = metrics.stringWidth(name + " ");
         final int height = metrics.getHeight();
-        final Dimension newDimension =  new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
+        final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
         button.setPreferredSize(newDimension);
 
         button.setFont(font);
@@ -176,16 +189,18 @@ public final class SandboxTools {
 
     /**
      * 
-     * @param button the button
-     * @param dim the button dimension
+     * @param button
+     *            the button
+     * @param dim
+     *            the button dimension
      */
     public static void setIcon(final JButton button, final Dimension dim) {
-        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(
-                dim.width, dim.height, Image.SCALE_SMOOTH)));
-        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(
-                dim.width, dim.height, Image.SCALE_SMOOTH)));
-        button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed").getScaledInstance(
-                dim.width, dim.height, Image.SCALE_SMOOTH)));
+        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(dim.width,
+                dim.height, Image.SCALE_SMOOTH)));
+        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(dim.width,
+                dim.height, Image.SCALE_SMOOTH)));
+        button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed")
+                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
     }
 
 }
