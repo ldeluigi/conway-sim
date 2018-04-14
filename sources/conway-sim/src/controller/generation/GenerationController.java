@@ -6,25 +6,30 @@ package controller.generation;
 public interface GenerationController extends GenerationComputing {
 
     /**
-     * Create a new Game, of the selected type.
+     * Create a new Game, ready to start.
      */
     void newGame();
 
     /**
+     * Start/resume the game.
      * 
+     * Start the clock.
      */
     void play();
 
     /**
+     * Set in pause the current game.
      * 
+     * Stop the clock.
      */
     void pause();
 
     /**
      * 
-     * @param timeSleep is the time that pass between a generation and the next one
+     * @param speed set a speed value
+     *          this value should be 
      */
-    void setSpeed(int timeSleep);
+    void setSpeed(int speed);
 
     /**
      * Totally reset the controller.

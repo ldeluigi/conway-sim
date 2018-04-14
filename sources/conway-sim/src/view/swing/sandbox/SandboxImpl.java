@@ -132,7 +132,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
      * 
      */
     @Override
-    public Font getFont() {
+    public final Font getFont() {
         return new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
     }
 
