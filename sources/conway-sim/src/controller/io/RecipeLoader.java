@@ -61,31 +61,21 @@ public class RecipeLoader {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream("/recipebook/recipebook.txt"), "UTF-8"))) {
             final List<String> pthLst = in.lines().collect(Collectors.toList());
-            String testLine = "testLine: NOT_INITIALIZED";
+            String testLine = "Name_Placeholder";
             Boolean flagName;
             for (final String line : pthLst) {
                 final String name = line;
                 if (name != null && name.contains(RLE_EXT)) {
-                    // TODO DEBUG
-                    System.out.println("DEBUG | NAME FOUND: " + name);
                     flagName = false;
-                    // TODO DEBUG
-                    System.out.println("DEBUG | RLE found in folder: " + name);
                     try (BufferedReader br = new BufferedReader(
                             new InputStreamReader(getClass().getResourceAsStream("/recipebook/" + name), "UTF-8"))) {
                         final List<String> strLst = br.lines().collect(Collectors.toList());
                         final String content = String.join("\n", strLst);
-                        // TODO DEBUG
-                        System.out.println("DEBUG | CONTENT: " + content);
                         testLine = strLst.get(0);
-                        // TODO DEBUG
-                        System.out.println("DEBUG | TestLine: " + testLine);
                         if (testLine != null && !testLine.equals("") && testLine.startsWith("#N")) {
                             flagName = true;
                             testLine = testLine.split("#N ")[1];
                         }
-                        // TODO DEBUG
-                        System.out.println("DEBUG | Name: " + testLine);
                         if (content != null && testLine != null && name != null) {
                             this.defaultbook.addRecipe(content, flagName ? testLine : name.replace(RLE_EXT, ""));
                         }
@@ -111,6 +101,7 @@ public class RecipeLoader {
                 folder.mkdir();
             } catch (Exception e) {
                 e.printStackTrace();
+                return;
             }
         }
     }
@@ -129,14 +120,12 @@ public class RecipeLoader {
                 return name.toLowerCase(Locale.getDefault()).endsWith(RLE_EXT);
             }
         });
-        String testLine = "testLine: NOT_INITIALIZED";
+        String testLine = "Name_Placeholder";
         Boolean flagName;
         if (list != null) {
             for (final File file : list) {
                 if (file.isFile()) {
                     flagName = false;
-                    // TODO DEBUG
-                    System.out.println("DEBUG | RLE found in folder: " + file.getPath());
                     try (BufferedReader in = new BufferedReader(new FileReader(file))) {
                         testLine = in.readLine();
                         if (testLine != null && !testLine.equals("") && testLine.startsWith("#N")) {
@@ -146,8 +135,6 @@ public class RecipeLoader {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    // TODO DEBUG
-                    System.out.println("DEBUG | Name: " + testLine);
                     final Path filepath = Paths.get(file.getPath());
                     try {
                         final String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));

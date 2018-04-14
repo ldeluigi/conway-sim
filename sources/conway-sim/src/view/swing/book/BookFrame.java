@@ -60,19 +60,20 @@ public class BookFrame extends JInternalFrame {
         final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
 
-        final List<String> arrList = new ArrayList<String>();
+        //Populate the arrList
+        final List<String> defRecList = new ArrayList<String>();
 
         for (final Recipe recipe : rl.getDefaultBook().getBookList()) {
-            arrList.add(recipe.getName());
+            defRecList.add(recipe.getName());
         }
-        final List<String> custArrList = new ArrayList<String>();
+        final List<String> custRecList = new ArrayList<String>();
 
         for (final Recipe recipe : rl.getCustomBook().getBookList()) {
-            custArrList.add(recipe.getName());
+            custRecList.add(recipe.getName());
         }
 
-        final String[] stringDefaultArr = new String[arrList.size()];
-        final JList<String> defaultList = new JList<String>(arrList.toArray(stringDefaultArr));
+        final String[] stringDefaultArr = new String[defRecList.size()];
+        final JList<String> defaultList = new JList<String>(defRecList.toArray(stringDefaultArr));
         defaultList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         defaultList.setLayoutOrientation(JList.VERTICAL);
         defaultList.setVisibleRowCount(-1);
@@ -111,8 +112,8 @@ public class BookFrame extends JInternalFrame {
             }
         });
 
-        final String[] stringCustomArr = new String[custArrList.size()];
-        final JList<String> customList = new JList<String>(custArrList.toArray(stringCustomArr));
+        final String[] stringCustomArr = new String[custRecList.size()];
+        final JList<String> customList = new JList<String>(custRecList.toArray(stringCustomArr));
         customList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         customList.setLayoutOrientation(JList.VERTICAL);
         customList.setVisibleRowCount(-1);
