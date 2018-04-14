@@ -1,8 +1,0 @@
-Glider
-Blinker (period 2)
-Toad (period 2)
-Beacon (period 2)
-Pulsar (period 3)
-Pentadecathlon (period 15)
-Lightweight spaceship (LWSS)
-Gosper glider gun

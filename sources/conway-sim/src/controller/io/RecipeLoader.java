@@ -23,9 +23,8 @@ public class RecipeLoader {
     private final RecipeBookImpl defaultbook;
     private final RecipeBookImpl custombook;
     private static final String FS = File.separator;
-    private static final File PATH = new File(".");
-    private static final String RLE = ".rle";
-    private static final String CURRENTPATH = PATH.toString();
+    private static final String RLE_EXT = ".rle";
+    private static final String CURRENTPATH = new File(".").toString();
     private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "PatternBook");
     private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + FS + "res" + FS + "recipebook");
 /** 
@@ -34,9 +33,7 @@ This class parses all the files in the preset folder.
      * @throws IOException .
      */
     public RecipeLoader() {
-        System.out.println("\nCurrent Path: " + CURRENTPATH);
         folderInit(CUSTOMRECIPEFOLDER);
-        System.out.println("\nCustom Book Folder: " + CUSTOMRECIPEFOLDER);
         this.defaultbook = new RecipeBookImpl();
         this.custombook = new RecipeBookImpl();
         recipeParser(custombook, CUSTOMRECIPEFOLDER);
@@ -48,28 +45,12 @@ This class parses all the files in the preset folder.
                 recipeParser(defaultbook, DEFAULTRECIPEFOLDER);
             }
         } catch (URISyntaxException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
     }
     /**
-     * This methods returns the recipebook when loaded.
-     * @return the recipebook
-     */
-    public RecipeBookImpl getRecipeBook() {
-        return this.defaultbook;
-    }
-    /**
-     * This methods returns the custombook when loaded.
-     * @return the custombook
-     */
-    public RecipeBookImpl getCustomBook() {
-        return this.custombook;
-    }
-    /**
-     * This method loads and saves the recipebook from inside the jarfile.
-     * @throws IOException 
+     * This method loads and saves the default recipebook.
      */
     private void defRecipeLoader() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/recipebook/recipebook.txt"), "UTF-8"))) {
@@ -78,7 +59,7 @@ This class parses all the files in the preset folder.
             Boolean flagName;
             for (final String line : pthLst) {
                 final String name = line;
-                if (name != null && name.contains(RLE)) {
+                if (name != null && name.contains(RLE_EXT)) {
                     //TODO DEBUG
                     System.out.println("DEBUG | NAME FOUND: " + name);
                             flagName = false;
@@ -99,7 +80,7 @@ This class parses all the files in the preset folder.
                             //TODO DEBUG
                             System.out.println("DEBUG | Name: " + testLine);
                             if (content != null && testLine != null && name != null) {
-                                this.defaultbook.addRecipe(content, flagName ? testLine : name.replace(RLE, ""));
+                                this.defaultbook.addRecipe(content, flagName ? testLine : name.replace(RLE_EXT, ""));
                                 }
                             } catch (IOException ex) {
                                 ex.printStackTrace();
@@ -135,7 +116,7 @@ This class parses all the files in the preset folder.
         final File[] list = folder.listFiles(new FilenameFilter() {
             public boolean accept(final File folder, final String name) {
                 System.out.println("NAME FOUND: " + name);
-                return name.toLowerCase(Locale.getDefault()).endsWith(RLE);
+                return name.toLowerCase(Locale.getDefault()).endsWith(RLE_EXT);
             }
         });
         String testLine = "testLine: NOT_INITIALIZED";
@@ -160,7 +141,7 @@ This class parses all the files in the preset folder.
                     final Path filepath = Paths.get(file.getPath());
                     try {
                         final String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
-                        book.addRecipe(content, flagName ? testLine : file.getName().replace(RLE, ""));
+                        book.addRecipe(content, flagName ? testLine : file.getName().replace(RLE_EXT, ""));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -170,5 +151,19 @@ This class parses all the files in the preset folder.
         } else {
             return;
         }
+    }
+    /**
+     * This methods returns the recipebook when loaded.
+     * @return the recipebook
+     */
+    public RecipeBookImpl getDefaultBook() {
+        return this.defaultbook;
+    }
+    /**
+     * This methods returns the custombook when loaded.
+     * @return the custombook
+     */
+    public RecipeBookImpl getCustomBook() {
+        return this.custombook;
     }
 }

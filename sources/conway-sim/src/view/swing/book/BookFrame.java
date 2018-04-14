@@ -62,7 +62,7 @@ public class BookFrame extends JInternalFrame {
         // FILL THE JList WITH A TEMP ARRAY
         final List<String> arrList = new ArrayList<String>();
 
-        for (final Recipe recipe : rl.getRecipeBook().getBookList()) {
+        for (final Recipe recipe : rl.getDefaultBook().getBookList()) {
             arrList.add(recipe.getName());
         }
         final List<String> custArrList = new ArrayList<String>();
@@ -85,7 +85,7 @@ public class BookFrame extends JInternalFrame {
                 setSelectedItem(defaultList.getSelectedValue());
                 setSelectedList(DEFAULT);
                 System.out.println("DEBUG | Selected Item: " + defaultList.getSelectedValue());
-                final Matrix<Status> mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                final Matrix<Status> mat = new RLEConvert(rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
                 final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
@@ -152,7 +152,7 @@ public class BookFrame extends JInternalFrame {
             System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
             final Matrix<Status> mat;
             if (getSelectedList() == DEFAULT) {
-                mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                mat = new RLEConvert(rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             } else {
                 mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             }
