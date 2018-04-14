@@ -22,7 +22,7 @@ public final class ResourceLoader {
     private static final Locale[] LOCALE_LIST;
 
     static {
-        Locale.setDefault(Locale.ROOT);
+        Locale.setDefault(Locale.ENGLISH);
         LOCALE_LIST = new Locale[] { Locale.ITALIAN, Locale.ENGLISH };
 
         RESOURCE_MAP.put("main.background", "bg_main.jpg");
