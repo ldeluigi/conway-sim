@@ -8,15 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.CodeSource;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 import controller.book.RecipeBookImpl;
 /**
@@ -46,12 +42,10 @@ This class parses all the files in the preset folder.
         try {
             final URI uri = RecipeLoader.class.getResource("/recipebook").toURI();
             if (uri.getScheme().equals("jar")) {
-                jarLoader();
+                defRecipeLoader();
             } else {
                 recipeParser(defaultbook, DEFAULTRECIPEFOLDER);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (URISyntaxException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -76,52 +70,44 @@ This class parses all the files in the preset folder.
      * This method loads and saves the recipebook from inside the jarfile.
      * @throws IOException 
      */
-    private void jarLoader() throws NullPointerException, IOException {
+    private void defRecipeLoader() {
         String testLine = "testLine: NOT_INITIALIZED";
         Boolean flagName;
-        final CodeSource src = RecipeLoader.class.getProtectionDomain().getCodeSource();
-        if (src != null) {
-          final URL jar = src.getLocation();
-          ZipInputStream zip = null;
-          zip = new ZipInputStream(jar.openStream());
-          while (true) {
-            final ZipEntry e = zip.getNextEntry();
-            if (e == null) {
-                break;
-            }
-            final String name = e.getName();
-            if (name.contains(".rle")) {
-                //TODO DEBUG
-                System.out.println("DEBUG | NAME FOUND: " + name);
-                        flagName = false;
-                        //TODO DEBUG
-                        System.out.println("DEBUG | RLE found in folder: " + name);
-                        try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + name), "UTF-8"))) {
-                            List<String> strLst = in.lines().collect(Collectors.toList());
-                            String content = String.join("\n", strLst);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/recipebook/recipebook.txt"), "UTF-8"))) {
+            List<String> pthLst = in.lines().collect(Collectors.toList());
+            for (String line : pthLst) {
+                final String name = line;
+                if (name != null && name.contains(".rle")) {
+                    //TODO DEBUG
+                    System.out.println("DEBUG | NAME FOUND: " + name);
+                            flagName = false;
                             //TODO DEBUG
-                            System.out.println("DEBUG | CONTENT: " + content);
-                            testLine = strLst.get(0);
+                            System.out.println("DEBUG | RLE found in folder: " + name);
+                            try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/recipebook/" + name), "UTF-8"))) {
+                                List<String> strLst = br.lines().collect(Collectors.toList());
+                                String content = String.join("\n", strLst);
+                                //TODO DEBUG
+                                System.out.println("DEBUG | CONTENT: " + content);
+                                testLine = strLst.get(0);
+                                //TODO DEBUG
+                                System.out.println("DEBUG | TestLine: " + testLine);
+                                if (testLine != null && !testLine.equals("") && testLine.startsWith("#N")) {
+                                    flagName = true;
+                                    testLine = testLine.split("#N ")[1];
+                                }
                             //TODO DEBUG
-                            System.out.println("DEBUG | TestLine: " + testLine);
-                            if (testLine != null && !testLine.equals("") && testLine.startsWith("#N")) {
-                                flagName = true;
-                                testLine = testLine.split("#N ")[1];
+                            System.out.println("DEBUG | Name: " + testLine);
+                            if (content != null && testLine != null && name != null) {
+                                this.defaultbook.addRecipe(content, flagName ? testLine : name.replace(".rle", ""));
+                                }
+                            } catch (IOException ex) {
+                                ex.printStackTrace();
                             }
-                        //TODO DEBUG
-                        System.out.println("DEBUG | Name: " + testLine);
-                            defaultbook.addRecipe(content, flagName ? testLine : name.replace(".rle", ""));
-                        } catch (IOException ex) {
-                            ex.printStackTrace();
-                        }
 
-            }
+                }
           }
-              zip.close();
-        } else {
-            System.out.println("FAILED");
-            //TODO
-          /* THIS COULD THROW AN EXCEPTIONs */
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -144,7 +130,7 @@ This class parses all the files in the preset folder.
      * @param book to be filled
      * @param folder to be parsed
      */
-    private void recipeParser(final RecipeBookImpl book, final File folder) throws NullPointerException {
+    private void recipeParser(final RecipeBookImpl book, final File folder) {
         final File[] list = folder.listFiles(new FilenameFilter() {
             public boolean accept(final File folder, final String name) {
                 System.out.println("NAME FOUND: " + name);
@@ -153,6 +139,7 @@ This class parses all the files in the preset folder.
         });
         String testLine = "testLine: NOT_INITIALIZED";
         Boolean flagName;
+        if (list != null) {
             for (final File file : list) {
                 if (file.isFile()) {
                     flagName = false;
@@ -179,5 +166,8 @@ This class parses all the files in the preset folder.
 
                 }
             }
+        } else {
+            return;
+        }
     }
 }
