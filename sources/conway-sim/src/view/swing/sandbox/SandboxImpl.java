@@ -38,7 +38,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
     private final JButton bClear;
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
-    private final GridPanel grid;
+    private final GridPanelImpl grid;
     private BookFrame book;
 
     /**
@@ -54,7 +54,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
         this.grid = new GridPanelImpl(DEFAULT_SIZE, DEFAULT_SIZE,
                 Math.max(mainGUI.getScreenHeight(), mainGUI.getScreenWidth()) / CELL_SIZE_RATIO);
         this.setLayout(new BorderLayout());
-        this.add(grid, BorderLayout.CENTER);
+        this.add(this.grid, BorderLayout.CENTER);
         this.gridEditor = new GridEditorImpl(grid);
         this.gridEditor.setEnabled(true);
         this.generationPanel = new GenerationPanel(this);
