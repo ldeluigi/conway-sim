@@ -18,10 +18,13 @@ public final class ResourceLoader {
     private static final String RES_DIR = "/";
     private static final String IMG_DIR = "img/";
     private static final Map<String, String> RESOURCE_MAP = new HashMap<>();
-    private static final Map<String, Boolean> IS_BUFFERED = new HashMap<>();
     private static final Map<String, Image> IMG_BUFFER = new HashMap<>();
+    private static final Locale[] LOCALE_LIST;
 
     static {
+        Locale.setDefault(Locale.ROOT);
+        LOCALE_LIST = new Locale[] { Locale.ITALIAN, Locale.ENGLISH };
+
         RESOURCE_MAP.put("main.background", "bg_main.jpg");
         RESOURCE_MAP.put("main.title", "logo_main.png");
         RESOURCE_MAP.put("main.icon", "main_icon.png");
@@ -61,7 +64,6 @@ public final class ResourceLoader {
     }
 
     private static void addBufferedImage(final String resource, final Image result) {
-        IS_BUFFERED.put(resource, true);
         IMG_BUFFER.put(resource, result);
     }
 
@@ -70,7 +72,7 @@ public final class ResourceLoader {
     }
 
     private static boolean isBuffered(final String resource) {
-        return IS_BUFFERED.containsKey(resource) ? IS_BUFFERED.get(resource) : false;
+        return IMG_BUFFER.containsKey(resource);
     }
 
     private static String getImagePath(final String resource) {
@@ -98,7 +100,7 @@ public final class ResourceLoader {
      * @return the string loaded or null
      */
     public static String loadString(final String resource) {
-        return loadString(resource, Locale.ROOT);
+        return loadString(resource, Locale.getDefault());
     }
 
     /**
@@ -112,5 +114,12 @@ public final class ResourceLoader {
         final ResourceBundle value = ResourceBundle.getBundle("ConstantBundle", Locale.ROOT,
                 Control.getControl(Control.FORMAT_PROPERTIES));
         return Integer.parseInt(value.getString(constant).replaceAll("[^0-9]", ""));
+    }
+
+    /**
+     * @return an array of available {@link Locale}
+     */
+    public static Locale[] getLocales() {
+        return ResourceLoader.LOCALE_LIST;
     }
 }

@@ -9,13 +9,17 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -117,6 +121,18 @@ public final class MenuSettings extends JPanel {
         });
         final JLabel checkInstantAnimationsLabel = new JLabel(ResourceLoader.loadString("settings.instantTransitions"));
         checkInstantAnimationsLabel.setFont(MenuSettings.generateFont());
+        final JLabel languageLabel = new JLabel(ResourceLoader.loadString("settings.language.label"));
+        languageLabel.setFont(MenuSettings.generateFont());
+        final Locale[] listLocales = ResourceLoader.getLocales();
+        final JComboBox<Locale> languageComboBox = new JComboBox<>(listLocales);
+        languageComboBox.setSelectedItem(Locale.getDefault());
+        languageComboBox.addActionListener(new ActionListener() {
+            @SuppressWarnings("unchecked")
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Locale.setDefault((Locale) ((JComboBox<Locale>) e.getSource()).getSelectedItem());
+            }
+        });
         c.insets = new Insets(mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0,
                 mainGUI.getCurrentHeight() / (MINI_BUTTON_RATIO_Y * 2), 0);
         c.fill = GridBagConstraints.NONE;
@@ -129,6 +145,8 @@ public final class MenuSettings extends JPanel {
         addToCenter(GridBagConstraints.EAST, 4, 1, 1, checkInstantAnimations, c, centralButtons);
         addToCenter(GridBagConstraints.WEST, 0, 2, 3, fontLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 2, 1, fontSizeSelector, c, centralButtons);
+        addToCenter(GridBagConstraints.WEST, 0, 3, 3, languageLabel, c, centralButtons);
+        addToCenter(GridBagConstraints.EAST, 4, 3, 1, languageComboBox, c, centralButtons);
         final JButton ret = new JButton(ResourceLoader.loadString("settings.return"));
         ret.setBackground(Color.WHITE);
         ret.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));

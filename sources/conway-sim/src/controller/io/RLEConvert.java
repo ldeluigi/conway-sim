@@ -178,7 +178,8 @@ public class RLEConvert {
             if (!headerMatcher.matches()) {
                 throw new IllegalArgumentException("Invalid header.");
             }
-            // Get the pattern dimension by parsing the header and extracting the x and y values
+            // Get the pattern dimension by parsing the header and extracting the x and y
+            // values
             final int x = Integer.parseInt(headerMatcher.group(1));
             final int y = Integer.parseInt(headerMatcher.group(2));
             // Handle dimension <= 0

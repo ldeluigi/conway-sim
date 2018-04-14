@@ -60,7 +60,7 @@ public class BookFrame extends JInternalFrame {
         final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
 
-        //Populate the arrList
+        // Populate the arrList
         final List<String> defRecList = new ArrayList<String>();
 
         for (final Recipe recipe : rl.getDefaultBook().getBookList()) {
