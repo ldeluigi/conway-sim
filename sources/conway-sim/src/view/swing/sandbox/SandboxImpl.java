@@ -30,7 +30,7 @@ import view.swing.menu.MenuSettings;
 public class SandboxImpl extends JPanel implements Sandbox {
 
     private static final long serialVersionUID = -9015811419136279771L;
-    private static final int DEFAULT_SIZE = 100;
+    private static final int DEFAULT_SIZE = ResourceLoader.loadConstantInt("sandbox.grid.size");
     private static final int CELL_SIZE_RATIO = 100;
 
     private final GenerationPanel generationPanel;
