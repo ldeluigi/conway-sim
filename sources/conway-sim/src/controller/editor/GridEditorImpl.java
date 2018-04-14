@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import controller.io.ResourceLoader;
@@ -24,7 +23,6 @@ import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
-import view.swing.sandbox.GridPanelImpl;
 
 /**
  * GridEditorImpl is the editor for the grid and the pattern manager depending on which interface is used.
@@ -101,9 +99,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        int[] indexes = this.checkIndexes(row, col);
-        int newRow = indexes[0];
-        int newColumn = indexes[1];
+        final int[] indexes = this.checkIndexes(row, col);
+        final int newRow = indexes[0];
+        final int newColumn = indexes[1];
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
             this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(
                     this.currentStatus.map(ALIVETOBLACK), newRow - this.pattern.get().getHeight() / 2, newColumn - this.pattern.get().getWidth() / 2,
@@ -122,7 +120,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (statusMatrix.getHeight() <= this.gameGrid.getGridHeight() && statusMatrix.getWidth() <= this.gameGrid.getGridWidth()) {
             this.pattern = Optional.of(Objects.requireNonNull(statusMatrix));
         } else {
-            JOptionPane.showMessageDialog(this.gameGrid, ResourceLoader.loadString("grideditor.pattern.error"), "Error choosing pattern", JOptionPane.WARNING_MESSAGE);
+            this.gameGrid.notifyToUser(ResourceLoader.loadString("grideditor.pattern.error"));
             this.removePatternToPlace();
         }
     }
@@ -140,19 +138,9 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        int[] indexes = this.checkIndexes(row, col);
-        int newRow = indexes[0];
-        int newColumn = indexes[1];
-        if (newColumn < this.pattern.get().getWidth() / 2) {
-            newColumn = this.pattern.get().getWidth() / 2;
-        } else if (newColumn + (this.pattern.get().getWidth() / 2) > this.gameGrid.getGridWidth()) {
-            newColumn = this.gameGrid.getGridWidth() - this.pattern.get().getWidth() / 2;
-        }
-        if (newRow < this.pattern.get().getHeight() / 2) {
-            newRow = this.pattern.get().getHeight() / 2;
-        } else if (newRow + (this.pattern.get().getHeight() / 2) > this.gameGrid.getGridHeight()) {
-            newRow = this.gameGrid.getGridHeight() - this.pattern.get().getHeight() / 2;
-        }
+        final int[] indexes = this.checkIndexes(row, col);
+        final int newRow = indexes[0];
+        final int newColumn = indexes[1];
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth() && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
             this.currentStatus = Matrices.mergeXY(this.currentStatus, newRow - this.pattern.get().getHeight() / 2, newColumn - this.pattern.get().getWidth() / 2, this.pattern.get());
             this.applyChanges();
