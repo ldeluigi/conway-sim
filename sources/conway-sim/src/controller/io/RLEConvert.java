@@ -89,20 +89,14 @@ public class RLEConvert {
      */
     private String getHeaderLine() throws IOException, IllegalArgumentException {
         String line;
-        try {
             while (true) {
                 line = readLine();
-                //DEBUG TBR
-                //System.out.println("Read line: " + line);
-                if (!line.startsWith(HASH)) {
-
+                if (line != null && !line.startsWith(HASH)) {
                     return line;
+                } else if (line == null) {
+                    throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
                 }
             }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
-        }
 
     }
     /**

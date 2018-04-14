@@ -24,6 +24,7 @@ public class RecipeLoader {
     private final RecipeBookImpl custombook;
     private static final String FS = File.separator;
     private static final File PATH = new File(".");
+    private static final String RLE = ".rle";
     private static final String CURRENTPATH = PATH.toString();
     private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "PatternBook");
     private static final File DEFAULTRECIPEFOLDER = new File(CURRENTPATH + FS + "res" + FS + "recipebook");
@@ -71,21 +72,21 @@ This class parses all the files in the preset folder.
      * @throws IOException 
      */
     private void defRecipeLoader() {
-        String testLine = "testLine: NOT_INITIALIZED";
-        Boolean flagName;
         try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/recipebook/recipebook.txt"), "UTF-8"))) {
-            List<String> pthLst = in.lines().collect(Collectors.toList());
-            for (String line : pthLst) {
+            final List<String> pthLst = in.lines().collect(Collectors.toList());
+            String testLine = "testLine: NOT_INITIALIZED";
+            Boolean flagName;
+            for (final String line : pthLst) {
                 final String name = line;
-                if (name != null && name.contains(".rle")) {
+                if (name != null && name.contains(RLE)) {
                     //TODO DEBUG
                     System.out.println("DEBUG | NAME FOUND: " + name);
                             flagName = false;
                             //TODO DEBUG
                             System.out.println("DEBUG | RLE found in folder: " + name);
                             try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/recipebook/" + name), "UTF-8"))) {
-                                List<String> strLst = br.lines().collect(Collectors.toList());
-                                String content = String.join("\n", strLst);
+                                final List<String> strLst = br.lines().collect(Collectors.toList());
+                                final String content = String.join("\n", strLst);
                                 //TODO DEBUG
                                 System.out.println("DEBUG | CONTENT: " + content);
                                 testLine = strLst.get(0);
@@ -98,16 +99,16 @@ This class parses all the files in the preset folder.
                             //TODO DEBUG
                             System.out.println("DEBUG | Name: " + testLine);
                             if (content != null && testLine != null && name != null) {
-                                this.defaultbook.addRecipe(content, flagName ? testLine : name.replace(".rle", ""));
+                                this.defaultbook.addRecipe(content, flagName ? testLine : name.replace(RLE, ""));
                                 }
                             } catch (IOException ex) {
                                 ex.printStackTrace();
                             }
-
                 }
           }
         } catch (IOException ex) {
             ex.printStackTrace();
+            return;
         }
     }
 
@@ -134,7 +135,7 @@ This class parses all the files in the preset folder.
         final File[] list = folder.listFiles(new FilenameFilter() {
             public boolean accept(final File folder, final String name) {
                 System.out.println("NAME FOUND: " + name);
-                return name.toLowerCase(Locale.getDefault()).endsWith(".rle");
+                return name.toLowerCase(Locale.getDefault()).endsWith(RLE);
             }
         });
         String testLine = "testLine: NOT_INITIALIZED";
@@ -159,7 +160,7 @@ This class parses all the files in the preset folder.
                     final Path filepath = Paths.get(file.getPath());
                     try {
                         final String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
-                        book.addRecipe(content, flagName ? testLine : file.getName().replace(".rle", ""));
+                        book.addRecipe(content, flagName ? testLine : file.getName().replace(RLE, ""));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
