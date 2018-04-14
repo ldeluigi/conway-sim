@@ -202,4 +202,12 @@ public class SandboxImpl extends JPanel implements Sandbox {
             this.mainGUI.backToMainMenu();
         }
     }
+
+    /**
+     * Add the runnable to the sandbox scheduler.
+     */
+    @Override
+    public void scheduleGUIUpdate(final Runnable runnable) {
+        SwingUtilities.invokeLater(runnable);
+    }
 }

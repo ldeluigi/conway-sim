@@ -3,12 +3,13 @@ package view.swing.sandbox;
 import javax.swing.JButton;
 
 import controller.editor.PatternEditor;
+import view.swing.UpdateScheduler;
 
 /**
  * 
  *
  */
-public interface Sandbox {
+public interface Sandbox extends UpdateScheduler {
     /**
      * Applies size changes to the grid.
      */

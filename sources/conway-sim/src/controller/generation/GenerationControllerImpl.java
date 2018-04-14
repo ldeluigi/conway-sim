@@ -4,8 +4,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.SwingUtilities;
-
 import controller.io.ResourceLoader;
 import core.model.Generation;
 import core.model.Generations;
@@ -43,7 +41,7 @@ public class GenerationControllerImpl implements GenerationController {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
     @Override
@@ -62,13 +60,13 @@ public class GenerationControllerImpl implements GenerationController {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
     @Override
     public final void setSpeed(final int speed) {
         this.clock.setSpeed(speed);
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
     @Override
@@ -109,7 +107,7 @@ public class GenerationControllerImpl implements GenerationController {
         this.savedState.removeAll(savedState.stream()
                                             .filter(l -> l > 1 && l > this.getCurrentNumberGeneration())
                                             .collect(Collectors.toList()));
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
     @Override
