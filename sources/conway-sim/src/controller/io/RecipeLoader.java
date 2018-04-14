@@ -116,7 +116,6 @@ public class RecipeLoader {
     private void recipeParser(final RecipeBookImpl book, final File folder) {
         final File[] list = folder.listFiles(new FilenameFilter() {
             public boolean accept(final File folder, final String name) {
-                System.out.println("NAME FOUND: " + name);
                 return name.toLowerCase(Locale.getDefault()).endsWith(RLE_EXT);
             }
         });
