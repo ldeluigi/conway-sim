@@ -24,12 +24,11 @@ import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 
 import controller.io.ResourceLoader;
+import view.GUI;
 
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
-
-import view.swing.GUI;
 
 /**
  * Settings view.

@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import controller.io.ResourceLoader;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
@@ -117,7 +116,7 @@ public class GridPanelImpl extends JScrollPane  implements GridPanel {
      * 
      */
     @Override
-    public void notifyToUser(String s) { //TODO stringa?
+    public void notifyToUser(final String s) { //TODO stringa?
         JOptionPane.showMessageDialog(this, s, "Error choosing pattern", JOptionPane.WARNING_MESSAGE);
     }
 

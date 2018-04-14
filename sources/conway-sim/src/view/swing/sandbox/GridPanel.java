@@ -4,15 +4,12 @@ import java.awt.Color;
 import java.awt.event.MouseListener;
 import java.util.function.BiFunction;
 
-import javax.swing.JScrollPane;
-
 import core.utils.Matrix;
 
 /**
  * Abstract class that can represent matrices as grids.
  */
 public interface GridPanel {
-
 
     /**
      * Alters Cell size value. Non-thread safe.
@@ -84,8 +81,10 @@ public interface GridPanel {
     void changeGrid(int horizontal, int vertical);
 
     /**
+     * This method notifies a message to the user, in some way.
      * 
      * @param s
+     *            the string of the message
      */
     void notifyToUser(String s);
 }

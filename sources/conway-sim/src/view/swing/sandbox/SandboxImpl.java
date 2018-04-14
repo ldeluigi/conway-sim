@@ -18,7 +18,8 @@ import javax.swing.UIManager;
 import controller.editor.GridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
-import view.swing.DesktopGUI;
+import view.DesktopGUI;
+import view.Sandbox;
 import view.swing.book.BookFrame;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
@@ -127,13 +128,19 @@ public class SandboxImpl extends JPanel implements Sandbox {
         });
     }
 
+    /**
+     * 
+     */
     @Override
-    public final Font getFont() {
+    public Font getFont() {
         return new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final void paintComponent(final Graphics g) {
+    public void paintComponent(final Graphics g) {
         g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
@@ -201,5 +208,13 @@ public class SandboxImpl extends JPanel implements Sandbox {
             }
             this.mainGUI.backToMainMenu();
         }
+    }
+
+    /**
+     * Add the runnable to the sandbox scheduler.
+     */
+    @Override
+    public void scheduleGUIUpdate(final Runnable runnable) {
+        SwingUtilities.invokeLater(runnable);
     }
 }
