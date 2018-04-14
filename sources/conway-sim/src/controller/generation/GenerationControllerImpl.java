@@ -36,41 +36,59 @@ public class GenerationControllerImpl implements GenerationController {
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
     }
 
+    /**
+     * Load a new game.
+     */
     @Override
-    public final void newGame() {
+    public void newGame() {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
         this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * Stop the game.
+     */
     @Override
-    public final void pause() {
+    public void pause() {
         this.clock.stopClock();
         this.view.refreshView();
     }
 
+    /**
+     * Start the game.
+     */
     @Override
-    public final void play() {
+    public void play() {
         this.clock.start();
     }
 
+    /**
+     * Reset the game.
+     */
     @Override
-    public final void reset() {
+    public void reset() {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
         this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final void setSpeed(final int speed) {
+    public void setSpeed(final int speed) {
         this.clock.setSpeed(speed);
         this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final void loadGeneration(final Long generationNumber) {
+    public void loadGeneration(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);
@@ -110,8 +128,11 @@ public class GenerationControllerImpl implements GenerationController {
         this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final Generation getCurrentGeneration() {
+    public Generation getCurrentGeneration() {
         return this.currentGeneration;
     }
 
@@ -119,8 +140,11 @@ public class GenerationControllerImpl implements GenerationController {
         this.currentGeneration = generation;
     }
 
+    /**
+     * 
+     */
     @Override
-    public final synchronized Long getCurrentNumberGeneration() {
+    public synchronized Long getCurrentNumberGeneration() {
         return this.currentGenerationNumber;
     }
 
@@ -128,8 +152,11 @@ public class GenerationControllerImpl implements GenerationController {
         this.currentGenerationNumber = number;
     }
 
+    /**
+     * 
+     */
     @Override
-    public final synchronized void computeNextGeneration() {
+    public synchronized void computeNextGeneration() {
         this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
         this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
         this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());

@@ -127,13 +127,19 @@ public class SandboxImpl extends JPanel implements Sandbox {
         });
     }
 
+    /**
+     * 
+     */
     @Override
-    public final Font getFont() {
+    public Font getFont() {
         return new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final void paintComponent(final Graphics g) {
+    public void paintComponent(final Graphics g) {
         g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
