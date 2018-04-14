@@ -21,45 +21,48 @@ public class RLEConvert {
 
     private final BufferedReader buffer;
 
-    //CHARSET PATTERNS FOR THE RLE READING IN THE BUFFER
+    // CHARSET PATTERNS FOR THE RLE READING IN THE BUFFER
     private static final String XCOORDPATTERN = "x ?= ?([1-9]\\d*)";
     private static final String YCOORDPATTERN = "y ?= ?([1-9]\\d*)";
     private static final String RULEPATTERN = "rule ?= ?((B[0-8]*/S[0-8]*)|([0-8]*/[0-8]*))";
     private static final String CELLRUNPATTERN = "([1-9]\\d*)?([bo$])";
 
-    //DEFAULT RULE TO BE SETTED. METHOD TO BE IMPLEMENTED AS CHALLENGE
+    // DEFAULT RULE TO BE SETTED. METHOD TO BE IMPLEMENTED AS CHALLENGE
     private static final String DEFAULTRULE = "B3/S23";
 
-    //WILDCHARS
+    // WILDCHARS
     private static final char ALT = '!';
     private static final String DOLLAR = "$";
     private static final String HASH = "#";
     private static final String DCSLASH = "\\";
 
-    //ALIVE CELL
+    // ALIVE CELL
     private static final String AC = "o";
 
+    // This will contain methods to convert a given matrix into a RLE Format
+    // http://www.conwaylife.com/w/index.php?title=Run_Length_Encoded
+    // NB: This will be used also as I/O method and SaveToFile
 
-    //This will contain methods to convert a given matrix into a RLE Format
-    //http://www.conwaylife.com/w/index.php?title=Run_Length_Encoded
-    //NB: This will be used also as I/O method and SaveToFile
-
-    //UNUSED FOR NOW
+    // UNUSED FOR NOW
     /**
-     *  This is the builder from file, it takes a fileName of File type
-     *  and builds the buffer with the given text found.
-     * @param fileName name of the file to be loaded
-     * @throws FileNotFoundException when file is null or not found in filesystem
+     * This is the builder from file, it takes a fileName of File type and builds
+     * the buffer with the given text found.
+     * 
+     * @param fileName
+     *            name of the file to be loaded
+     * @throws FileNotFoundException
+     *             when file is null or not found in filesystem
      */
     public RLEConvert(final File fileName) throws FileNotFoundException {
         this.buffer = new BufferedReader(new FileReader(fileName));
     }
 
-
     /**
-     *  This is the builder from String, it takes a rle of String type
-     *  and builds the buffer with the given text found in the String.
-     * @param rle String in RLE Format.
+     * This is the builder from String, it takes a rle of String type and builds the
+     * buffer with the given text found in the String.
+     * 
+     * @param rle
+     *            String in RLE Format.
      */
     public RLEConvert(final String rle) {
         this.buffer = new BufferedReader(new StringReader(rle));
@@ -67,14 +70,17 @@ public class RLEConvert {
 
     /**
      * This is a wrapper of the readLine() method of buffer.
+     * 
      * @return
      * @throws IOException
      */
     private String readLine() throws IOException {
         return buffer.readLine();
     }
+
     /**
      * This is a wrapper of the close() method of buffer.
+     * 
      * @throws IOException
      */
     private void close() throws IOException {
@@ -83,22 +89,25 @@ public class RLEConvert {
 
     /**
      * This method finds and returns the header line of the RLE.
+     * 
      * @return the header line in String format
      * @throws IOException
-     * @throws IllegalArgumentException if no non-commented strings are found in buffer
+     * @throws IllegalArgumentException
+     *             if no non-commented strings are found in buffer
      */
     private String getHeaderLine() throws IOException, IllegalArgumentException {
         String line;
-            while (true) {
-                line = readLine();
-                if (line != null && !line.startsWith(HASH)) {
-                    return line;
-                } else if (line == null) {
-                    throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
-                }
+        while (true) {
+            line = readLine();
+            if (line != null && !line.startsWith(HASH)) {
+                return line;
+            } else if (line == null) {
+                throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
             }
+        }
 
     }
+
     /**
      * 
      * @return
@@ -108,12 +117,12 @@ public class RLEConvert {
     private String getCellString() throws IOException, IllegalArgumentException {
         final StringBuilder cellString = new StringBuilder();
         String line;
-        //Index
+        // Index
         int i;
 
         line = readLine();
         while (line != null) {
-            //Extracting the end of CellString (ALT = !)
+            // Extracting the end of CellString (ALT = !)
             i = line.indexOf(ALT);
             if (i > -1) {
                 cellString.append(line.substring(0, i));
@@ -129,54 +138,66 @@ public class RLEConvert {
         }
         return cellString.toString();
     }
+
     /**
-     * This method converts the Matrix from the format Boolean[][] into a Matrix<Status>.
-     * @param grid Grid of boolean to be converted.
-     * @param row Size of the row of the grid.
-     * @param col Size of the column of the grid.
+     * This method converts the Matrix from the format Boolean[][] into a
+     * Matrix<Status>.
+     * 
+     * @param grid
+     *            Grid of boolean to be converted.
+     * @param row
+     *            Size of the row of the grid.
+     * @param col
+     *            Size of the column of the grid.
      * @return matrix The matrix converted in Matrix<Status> format.
      */
     public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row, final int col) {
         final Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
-        //TODO DEBUG TBR
-        //System.out.println("Converting a matrix of COL (X): " + col + " ROW (Y): " + row);
+        // TODO DEBUG TBR
+        // System.out.println("Converting a matrix of COL (X): " + col + " ROW (Y): " +
+        // row);
         for (int i = 0; i < row; i++) {
             for (int k = 0; k < col; k++) {
-                //TODO DEBUG TBR
-                //System.out.println("Trying to access: \nCOL: " + k + " ROW: " + i);
+                // TODO DEBUG TBR
+                // System.out.println("Trying to access: \nCOL: " + k + " ROW: " + i);
                 if (grid[i][k]) {
                     matrix.set(k, i, Status.ALIVE);
-                    //TODO DEBUG TBR
-                    //System.out.println("\nACCESSED AND SETTED\n");
+                    // TODO DEBUG TBR
+                    // System.out.println("\nACCESSED AND SETTED\n");
                 }
             }
         }
         return matrix;
     }
+
     /**
-     * This is the main method, it returns the matrix (Matrix<Status>) converted from the 
-     * RLE format.
+     * This is the main method, it returns the matrix (Matrix<Status>) converted
+     * from the RLE format.
+     * 
      * @return The converted pattern in Matrix<Status> format.
      */
     public Matrix<Status> convert() {
         try {
             final String header = getHeaderLine();
-            final Matcher headerMatcher = Pattern.compile(String.format("^%s, ?%s(, ?%s)?$",
-                    XCOORDPATTERN, YCOORDPATTERN, RULEPATTERN), Pattern.CASE_INSENSITIVE).matcher(header);
+            final Matcher headerMatcher = Pattern
+                    .compile(String.format("^%s, ?%s(, ?%s)?$", XCOORDPATTERN, YCOORDPATTERN, RULEPATTERN),
+                            Pattern.CASE_INSENSITIVE)
+                    .matcher(header);
             if (!headerMatcher.matches()) {
                 throw new IllegalArgumentException("Invalid header.");
             }
-            //Get the pattern dimension by parsing the header and extracting the x and y values
+            // Get the pattern dimension by parsing the header and extracting the x and y
+            // values
             final int x = Integer.parseInt(headerMatcher.group(1));
             final int y = Integer.parseInt(headerMatcher.group(2));
-            //Handle dimension <= 0
+            // Handle dimension <= 0
             if (x < 1 || y < 1) {
                 throw new IllegalArgumentException("Grid size must be at least 1x1.");
             }
-            //Create a new boolean matrix
+            // Create a new boolean matrix
             boolean[][] grid = new boolean[y][x];
 
-            //Split cellString by wildchars
+            // Split cellString by wildchars
             final String[] cellStrings = getCellString().split(DCSLASH + DOLLAR);
             final Pattern p = Pattern.compile(CELLRUNPATTERN);
             Matcher cellRunMatcher;
@@ -188,7 +209,7 @@ public class RLEConvert {
                 int runLength;
 
                 String tag;
-                //TODO REMOVE: RULE NOT IMPLEMENTED
+                // TODO REMOVE: RULE NOT IMPLEMENTED
                 @SuppressWarnings("unused")
                 String rule;
 
@@ -211,7 +232,8 @@ public class RLEConvert {
                                 grid[row][col++] = tag.equals(AC);
                             }
                         } catch (ArrayIndexOutOfBoundsException e) {
-                            throw new IllegalArgumentException("The number of cells in this row is higher than the row size.");
+                            throw new IllegalArgumentException(
+                                    "The number of cells in this row is higher than the row size.");
                         }
                     } else {
                         row += runLength;
@@ -230,6 +252,5 @@ public class RLEConvert {
         }
         return null;
     }
-
 
 }

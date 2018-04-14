@@ -27,17 +27,14 @@ import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanelImpl;
 import view.swing.sandbox.SandboxTools;
+
 /**
- * 
+ * This Frame displays the lists of pattern to be placed into the grid.
  *
  */
 
 public class BookFrame extends JInternalFrame {
-/**
-     * 
-     */
     private static final long serialVersionUID = -1045414565623185058L;
-
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 400;
     private static final int INITIAL_GRID_SIZE = 50;
@@ -48,7 +45,11 @@ public class BookFrame extends JInternalFrame {
     private String selectedList = DEFAULT;
 
     /**
-     * @param patternE the PatternManager
+     * The constructor shows and fills the JList(s) with the default patterns and
+     * the user added ones.
+     * 
+     * @param patternE
+     *            the {@link PatternEditor}
      * 
      */
     public BookFrame(final PatternEditor patternE) {
@@ -56,10 +57,9 @@ public class BookFrame extends JInternalFrame {
         final RecipeLoader rl = new RecipeLoader();
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        //PATTERN PREVIEW GRID
-        //The final GridPanel constructor will have as 3rd argument int SIZE_OF_CELL
-        final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        // FILL THE JList WITH A TEMP ARRAY
+        final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
+                INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
+
         final List<String> arrList = new ArrayList<String>();
 
         for (final Recipe recipe : rl.getDefaultBook().getBookList()) {
@@ -85,21 +85,27 @@ public class BookFrame extends JInternalFrame {
                 setSelectedItem(defaultList.getSelectedValue());
                 setSelectedList(DEFAULT);
                 System.out.println("DEBUG | Selected Item: " + defaultList.getSelectedValue());
-                final Matrix<Status> mat = new RLEConvert(rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                final Matrix<Status> mat = new RLEConvert(
+                        rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
+                        () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
                 pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
+
             @Override
             public void mouseClicked(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseEntered(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseExited(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseReleased(final MouseEvent arg0) {
             }
@@ -117,37 +123,37 @@ public class BookFrame extends JInternalFrame {
             public void mousePressed(final MouseEvent e) {
                 setSelectedItem(customList.getSelectedValue());
                 setSelectedList(CUSTOM);
-                System.out.println("DEBUG | Selected Item: " + customList.getSelectedValue());
-                final Matrix<Status> mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                final Matrix<Status> mat = new RLEConvert(
+                        rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
+                        () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
                 pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
+
             @Override
             public void mouseClicked(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseEntered(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseExited(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseReleased(final MouseEvent arg0) {
             }
         });
-
-        this.add(pg);
-        this.add(defaultListPane);
-        this.add(customListPane);
-
-        //BUTTON PANEL
+        // IO BUTTON PANEL
         final JPanel ioPanel = new JPanel();
         ioPanel.setLayout(new BoxLayout(ioPanel, BoxLayout.Y_AXIS));
-        this.add(ioPanel);
-        final JButton placeBtn = SandboxTools.newJButton(ResourceLoader.loadString("book.place"), ResourceLoader.loadString("book.placett"));
-        //ACTION LISTENER PLACE BUTTON
+        final JButton placeBtn = SandboxTools.newJButton(ResourceLoader.loadString("book.place"),
+                ResourceLoader.loadString("book.placett"));
+        // ACTION LISTENER PLACE BUTTON
         final ActionListener place = e -> {
             System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
             final Matrix<Status> mat;
@@ -162,6 +168,11 @@ public class BookFrame extends JInternalFrame {
 
         placeBtn.addActionListener(place);
         ioPanel.add(placeBtn);
+
+        this.add(pg);
+        this.add(defaultListPane);
+        this.add(customListPane);
+        this.add(ioPanel);
     }
 
     /**
@@ -171,13 +182,16 @@ public class BookFrame extends JInternalFrame {
     public final String getSelectedItem() {
         return selectedItem;
     }
+
     /**
      * 
-     * @param selectedItem the item to select
+     * @param selectedItem
+     *            the item to select
      */
     public void setSelectedItem(final String selectedItem) {
         this.selectedItem = selectedItem;
     }
+
     /**
      * 
      * @return selectedList
@@ -185,12 +199,13 @@ public class BookFrame extends JInternalFrame {
     public String getSelectedList() {
         return selectedList;
     }
+
     /**
      * 
-     * @param selectedList the list to select
+     * @param selectedList
+     *            the list to select
      */
     public void setSelectedList(final String selectedList) {
         this.selectedList = selectedList;
     }
 }
-
