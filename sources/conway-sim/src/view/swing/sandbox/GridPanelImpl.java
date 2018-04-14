@@ -10,10 +10,12 @@ import java.util.stream.IntStream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import controller.io.ResourceLoader;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
@@ -24,7 +26,7 @@ import view.swing.menu.MenuSettings;
  * GridPanel is the visual panel which displays a scrollable grid of mutating cells.
  * 
  */
-public class GridPanelImpl extends GridPanel {
+public class GridPanelImpl extends JScrollPane  implements GridPanel {
 
     private static final long serialVersionUID = -1;
     private static final int INITIAL_BORDER_WIDTH = 1;
@@ -109,6 +111,14 @@ public class GridPanelImpl extends GridPanel {
             });
             this.getVerticalScrollBar().setUnitIncrement(this.cellSize.height);
             this.grid.setVisible(true);
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void notifyToUser(String s) { //TODO stringa?
+        JOptionPane.showMessageDialog(this, s, "Error choosing pattern", JOptionPane.WARNING_MESSAGE);
     }
 
     private void setBorder(final JComponent jComponent, final int row, final int col, final Color c, final int borderWidth)  {

@@ -1,0 +1,8 @@
+101.rle
+Blinker.rle
+Champagne_Glass.rle
+Glider.rle
+Gosper_Glider_Gun.rle
+Gray_Counter.rle
+Rabbits.rle
+Spacefiller.rle

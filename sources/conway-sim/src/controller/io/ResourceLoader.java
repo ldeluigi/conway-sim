@@ -105,12 +105,15 @@ public final class ResourceLoader {
     }
 
     /**
-     * Returns an integer constant corresponding to the resource requested. 
-     * @param constant the constant
+     * Returns an integer constant corresponding to the resource requested.
+     * 
+     * @param constant
+     *            the constant
      * @return the constant value
      */
     public static int loadConstantInt(final String constant) {
-        final ResourceBundle value = ResourceBundle.getBundle("ConstantBundle", Locale.ROOT, Control.getControl(Control.FORMAT_PROPERTIES));
+        final ResourceBundle value = ResourceBundle.getBundle("ConstantBundle", Locale.ROOT,
+                Control.getControl(Control.FORMAT_PROPERTIES));
         return Integer.parseInt(value.getString(constant).replaceAll("[^0-9]", ""));
     }
 }
