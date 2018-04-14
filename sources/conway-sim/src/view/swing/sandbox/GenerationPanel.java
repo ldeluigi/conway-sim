@@ -202,7 +202,7 @@ public class GenerationPanel extends JPanel {
 
     private void goTo(final Long value) {
         if (value < 0) {
-            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo").replaceAll("start", value.toString()).replaceAll("end", this.generationController.getCurrentNumberGeneration().toString()));
+            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start", this.generationController.getCurrentNumberGeneration().toString()));
         } else if (!value.equals(this.generationController.getCurrentNumberGeneration())) {
             this.bPlay.setEnabled(false);
             this.bEnd.setEnabled(false);
