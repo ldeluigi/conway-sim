@@ -118,7 +118,6 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         final int[] indexes = this.checkIndexes(row, column);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
-        System.out.println("calling Merge(" + newRow + ", " + newColumn + ")");
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
             this.gameGrid.paintGrid(0, 0,
@@ -166,7 +165,6 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         final int[] indexes = this.checkIndexes(row, column);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
-        System.out.println("calling Merge(" + newRow + ", " + newColumn + ")");
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
             this.currentStatus = Matrices.mergeXY(this.currentStatus, newRow,
