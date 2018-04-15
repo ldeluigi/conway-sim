@@ -11,7 +11,8 @@ import java.util.ResourceBundle.Control;
 import javax.imageio.ImageIO;
 
 /**
- * Resource loader.
+ * Resource loader. Set the default {@link Locale} to use it as default language
+ * of string properties loading.
  */
 public final class ResourceLoader {
 
