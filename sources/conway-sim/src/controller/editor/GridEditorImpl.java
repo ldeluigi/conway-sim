@@ -78,17 +78,17 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * 
      * @param row
      *            is the vertical index of the cell where the user has clicked
-     * @param col
+     * @param column
      *            is the horizontal index of the cell where the user has clicked
      */
     @Override
-    public void hit(final int row, final int col) {
+    public void hit(final int row, final int column) {
         if (!this.placingState) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        this.currentStatus.set(row, col,
-                this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
-        this.gameGrid.displaySingleCell(row, col, ALIVETOBLACK.apply(this.currentStatus.get(row, col)));
+        this.currentStatus.set(row, column,
+                this.currentStatus.get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
+        this.gameGrid.displaySingleCell(row, column, ALIVETOBLACK.apply(this.currentStatus.get(row, column)));
     }
 
     /**
@@ -107,15 +107,15 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * 
      * @param row
      *            is the vertical index of the cell where the user is pointing
-     * @param col
+     * @param column
      *            is the horizontal index of the cell where the user is pointing
      */
     @Override
-    public void showPreview(final int row, final int col) {
+    public void showPreview(final int row, final int column) {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        final int[] indexes = this.checkIndexes(row, col);
+        final int[] indexes = this.checkIndexes(row, column);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
         System.out.println("calling Merge(" + newRow + ", " + newColumn + ")");
@@ -152,18 +152,18 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * @param row
      *            is the index describing the lastPreviewRow where to add the first
      *            pattern label
-     * @param col
+     * @param column
      *            is the index of the column where to add the first pattern label
      */
     @Override
-    public void placeCurrentPattern(final int row, final int col) {
+    public void placeCurrentPattern(final int row, final int column) {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        final int[] indexes = this.checkIndexes(row, col);
+        final int[] indexes = this.checkIndexes(row, column);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
         System.out.println("calling Merge(" + newRow + ", " + newColumn + ")");
