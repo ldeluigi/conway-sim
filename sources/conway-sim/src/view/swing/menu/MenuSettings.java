@@ -168,6 +168,8 @@ public final class MenuSettings extends JPanel {
         this.toResize.add(fontLabel);
         this.toResize.add(((DefaultEditor) fontSizeSelector.getEditor()).getTextField());
         this.toResize.add(checkInstantAnimationsLabel);
+        this.toResize.add(languageLabel);
+        this.toResize.add(languageComboBox);
         this.toResize.add(ret);
     }
 
