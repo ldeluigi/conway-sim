@@ -147,6 +147,14 @@ public class GenerationPanel extends JPanel {
 
     /**
      * 
+     * @param flag the flag
+     */
+    public void setButtonStartEnable(final boolean flag) {
+        this.bStart.setEnabled(flag);
+    }
+
+    /**
+     * 
      */
     public void clear() {
         this.view.getGridEditor().clean();
@@ -207,6 +215,7 @@ public class GenerationPanel extends JPanel {
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
+        this.view.setButtonSaveEnable(true);
         this.view.setButtonApplyEnabled(true);
         this.view.setButtonClearEnabled(true);
     }
@@ -221,6 +230,7 @@ public class GenerationPanel extends JPanel {
         this.bPlay.setEnabled(true);
         this.bEnd.setEnabled(true);
         this.setTimeButtonEnable(true);
+        this.view.setButtonSaveEnable(false);
         this.view.setButtonClearEnabled(false);
     }
 

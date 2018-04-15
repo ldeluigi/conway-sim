@@ -3,6 +3,9 @@ package controller.editor;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -30,10 +33,16 @@ import view.swing.sandbox.GridPanel;
  */
 public class GridEditorImpl implements GridEditor, PatternEditor {
 
-    private final GridPanel gameGrid;
+    /**
+     * the game grid.
+     */
+    protected final GridPanel gameGrid;
+    /**
+     * 
+     */
+    protected Matrix<Status> currentStatus;
     private Optional<Matrix<Status>> pattern;
-    private Matrix<Status> currentStatus;
-    private boolean placingState;
+    protected boolean placingState;
     private Environment env;
     private boolean mouseBeingPressed;
     private int lastPreviewRow;
@@ -254,10 +263,12 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         return newIndex;
     }
 
-    private void applyChanges() {
+    /**
+     * Reset all the grid with the standard color.
+     */
+    protected void applyChanges() {
         this.gameGrid.paintGrid(0, 0, this.currentStatus.map(ALIVETOBLACK));
     }
-
 
     class CellListener implements MouseListener {
 

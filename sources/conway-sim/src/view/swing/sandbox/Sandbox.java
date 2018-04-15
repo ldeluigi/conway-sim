@@ -41,4 +41,10 @@ public interface Sandbox {
      * Refreshes generation panel.
      */
     void refreshView();
+
+    /**
+     * 
+     * @param flag enable the save button
+     */
+    void setButtonSaveEnable(boolean flag);
 }

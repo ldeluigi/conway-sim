@@ -1,6 +1,8 @@
 package controller.editor;
 
 import core.model.Generation;
+import core.model.Status;
+import core.utils.Matrix;
 
 /**
  * This interface represents a simple editor for a grid of Conway's Game of
@@ -64,4 +66,5 @@ public interface GridEditor {
      *            the number of rows
      */
     void changeSizes(int horizontal, int vertical);
+
 }

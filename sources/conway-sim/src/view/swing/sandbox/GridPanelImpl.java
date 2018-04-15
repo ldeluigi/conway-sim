@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
-import controller.io.ResourceLoader;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
@@ -173,7 +172,9 @@ public class GridPanelImpl extends JScrollPane  implements GridPanel {
     public void addListenerToGrid(final BiFunction<Integer, Integer, MouseListener> listenerDispencer) {
         for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
-                if (this.labelMatrix.get(i, j).getMouseListeners().length == 0) {
+                if (this.labelMatrix.get(i, j).getMouseListeners().length == 0
+                        || (!this.labelMatrix.get(i, j).getMouseListeners()[0].equals(listenerDispencer.apply(i, j)) 
+                                && this.labelMatrix.get(i, j).getMouseListeners().length == 1)) {
                     this.labelMatrix.get(i, j).addMouseListener(listenerDispencer.apply(i, j));
                 }
             }

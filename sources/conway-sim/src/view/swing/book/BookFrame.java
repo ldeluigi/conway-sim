@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 import controller.book.Recipe;
 import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
+import controller.io.RLETranslator;
 import controller.io.RecipeLoader;
 import controller.io.ResourceLoader;
 import core.model.Status;
@@ -118,7 +119,12 @@ public class BookFrame extends JInternalFrame {
                 setSelectedItem(customList.getSelectedValue());
                 setSelectedList(CUSTOM);
                 System.out.println("DEBUG | Selected Item: " + customList.getSelectedValue());
-                final Matrix<Status> mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                Matrix<Status> mat;
+                try {
+                    mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                } catch (IllegalArgumentException ex) {
+                    mat = RLETranslator.rleStringToMatrix(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent(), Status.class);
+                }
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
                 final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
@@ -150,11 +156,15 @@ public class BookFrame extends JInternalFrame {
         //ACTION LISTENER PLACE BUTTON
         final ActionListener place = e -> {
             System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
-            final Matrix<Status> mat;
+            Matrix<Status> mat;
             if (getSelectedList() == DEFAULT) {
                 mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             } else {
-                mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                try {
+                    mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                } catch (IllegalArgumentException ex) {
+                    mat = RLETranslator.rleStringToMatrix(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent(), Status.class);
+                }
             }
             patternE.addPatternToPlace(mat);
             this.doDefaultCloseAction();
