@@ -231,5 +231,67 @@ public class RLEConvert {
         return null;
     }
 
+    static public String write(Matrix<Status> tab) {
+            String header = "x = " + tab.getHeight() + ", y = " + tab.getWidth() + ", rule = B3/S23";
+            header = header.concat(System.lineSeparator());
+            int lines = 0;
+            for (int i = 0; i < tab.getHeight(); i++) {
+                int buffer = 0;
+                int last = -1;
+                for (int j = 0; j < tab.getWidth(); j++) {
+                    if (tab.get(i, j) == Status.ALIVE) {
+
+                        if (lines > 0) {
+                            if (lines > 1) {
+                                header = header.concat(Integer.toString(lines));
+                            }
+                            header = header.concat("$");
+                            lines = 0;
+                        }
+
+                        if (last == 0) {
+                            if (buffer > 1) {
+                                header = header.concat(Integer.toString(buffer));
+                            }
+                            header = header.concat("b");
+                            buffer = 0;
+                        }
+
+                        last = 1;
+                        buffer++;
+                    } else {
+                        if (last == 1) {
+                            if (buffer > 1) {
+                                header = header.concat(Integer.toString(buffer));
+                            }
+                            header = header.concat("o");
+                            buffer = 0;
+                        }
+                        last = 0;
+                        buffer++;
+                    }
+                }
+                if (last == 1) {
+                    if (buffer > 1) {
+                        header = header.concat(Integer.toString(buffer));
+                    }
+                    header = header.concat("o");
+                    buffer = 0;
+                }
+                lines++;
+            }
+
+            if (lines > 0) {
+                if (lines > 1) {
+                    header = header.concat(Integer.toString(lines));
+                }
+                header = header.concat("$");
+                lines = 0;
+            }
+
+            header = header.concat("!");
+            System.out.println(header);
+            return header;
+    }
 
 }

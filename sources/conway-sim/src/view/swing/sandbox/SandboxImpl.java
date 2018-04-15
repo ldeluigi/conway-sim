@@ -24,8 +24,11 @@ import javax.swing.UIManager;
 
 import controller.editor.ExtensionGridEditorImpl;
 import controller.editor.PatternEditor;
+import controller.io.RLEConvert;
 import controller.io.RLETranslator;
 import controller.io.ResourceLoader;
+import core.utils.ListMatrix;
+import core.utils.Matrices;
 import view.swing.DesktopGUI;
 import view.swing.book.BookFrame;
 import view.swing.menu.LoadingScreen;
@@ -164,7 +167,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
         jif.pack();
         jif.setVisible(true);
         bSave.addActionListener(e -> {
-            String stringMatrix = RLETranslator.rleMatrixToString(this.gridEditor.cutMatrix());
+            String stringMatrix = RLEConvert.write(this.gridEditor.cutMatrix());
             try (BufferedWriter b = new BufferedWriter(new FileWriter(new File("PatternBook" + "/" + text.getText() + ".rle")));) {
                 b.write(stringMatrix);
                 System.out.println(stringMatrix);
