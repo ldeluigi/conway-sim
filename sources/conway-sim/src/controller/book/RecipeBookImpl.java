@@ -1,40 +1,37 @@
 package controller.book;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
- * TODO scrivere cose.
+ * 
  *
  */
 public class RecipeBookImpl implements RecipeBook {
     private List<Recipe> rb;
 
     /**
-     * Constructor method for a new recipe book object.
+     * 
      */
     public RecipeBookImpl() {
         this.setRb(new ArrayList<Recipe>());
     }
 
     /**
-     * Method which gives the selected recipe at the specified position.
      * 
      * @param pos
-     *            of the element to extract
-     * @return the chosen recipe
+     *            of the elem to extract
+     * @return recipe
      */
     public Recipe getRecipeByPos(final int pos) {
         return this.getRb().get(pos);
     }
 
     /**
-     * Method which gives the selected recipe matching the specified name.
      * 
      * @param name
-     *            of element to get
-     * @return element
+     *            of elem to get
+     * @return elem
      * @throws NullPointerException
      *             if recipe not found
      */
@@ -96,30 +93,30 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Method returning the recipebook List.
+     * SEVERE TO REFACTOR This method returns the recipebook List.
      * 
      * @return the Arraylist of recipebook
      */
     public List<Recipe> getBookList() {
-        return Collections.unmodifiableList(this.getRb());
+        return this.getRb();
     }
 
     /**
-     * Method returning the list of recipes collected.
      * 
      * @return recipebook
      */
     public final List<Recipe> getRb() {
-        return this.rb;
+        return rb;
     }
 
     /**
-     * Method for adding a list of recipes already existing.
      * 
      * @param rb
      *            the recipebook to set
      */
+
     public final void setRb(final List<Recipe> rb) {
         this.rb = (ArrayList<Recipe>) rb;
     }
 }
+

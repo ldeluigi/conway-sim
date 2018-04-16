@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -136,7 +138,7 @@ public class RecipeLoader {
                     }
                     final Path filepath = Paths.get(file.getPath());
                     try {
-                        final String content = java.nio.file.Files.lines(filepath).collect(Collectors.joining("\n"));
+                        final String content = String.join("\n", Files.readAllLines(filepath, Charset.forName("UTF-8")));
                         book.addRecipe(content, flagName ? testLine : file.getName().replace(RLE_EXT, ""));
                     } catch (IOException e) {
                         e.printStackTrace();
