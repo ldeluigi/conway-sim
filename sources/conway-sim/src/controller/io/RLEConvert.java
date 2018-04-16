@@ -231,15 +231,21 @@ public class RLEConvert {
         return null;
     }
 
-    static public String write(Matrix<Status> tab) {
-            String header = "x = " + tab.getHeight() + ", y = " + tab.getWidth() + ", rule = B3/S23";
+    /**
+     * 
+     * @param matrix the matrix to be converted
+     * @return a string of the matrix that represent the .rle of the matrix
+     */
+    public static String write(final Matrix<Status> matrix) {
+            String header = "x = " + matrix.getHeight() + ", y = " + matrix.getWidth() + ", rule = B3/S23";
             header = header.concat(System.lineSeparator());
             int lines = 0;
-            for (int i = 0; i < tab.getHeight(); i++) {
+            for (int i = 0; i < matrix.getWidth(); i++) {
                 int buffer = 0;
                 int last = -1;
-                for (int j = 0; j < tab.getWidth(); j++) {
-                    if (tab.get(i, j) == Status.ALIVE) {
+                for (int j = 0; j < matrix.getHeight(); j++) {
+                    //I read all the column i, from j = 0 to j = tab.getHeight()
+                    if (matrix.get(j, i) == Status.ALIVE) {
 
                         if (lines > 0) {
                             if (lines > 1) {
