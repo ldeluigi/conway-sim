@@ -1,9 +1,11 @@
 package controller.generation;
 
+import core.model.Generation;
+
 /**
  *
  */
-public interface GenerationController extends GenerationComputing {
+public interface GenerationController extends Computing<Generation, Long> {
 
     /**
      * Create a new Game, ready to start.

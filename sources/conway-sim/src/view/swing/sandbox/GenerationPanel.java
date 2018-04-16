@@ -144,8 +144,8 @@ public class GenerationPanel extends JPanel {
         bPlay.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
-        bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
-        bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
+        bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
+        bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (bStart.isEnabled()) {
                 bStart.doClick();
@@ -201,7 +201,7 @@ public class GenerationPanel extends JPanel {
                 .filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
         this.view.scheduleGUIUpdate(() -> {
             SandboxTools.refreshStatistics(this.getCurrentSpeed(),
-                    this.generationController.getCurrentNumberGeneration().intValue(), aliveCell, this.view.getFont());
+                    this.generationController.getCurrentNumberElement().intValue(), aliveCell, this.view.getFont());
         });
     }
 
@@ -213,8 +213,8 @@ public class GenerationPanel extends JPanel {
         if (value < 0) {
             JOptionPane.showMessageDialog(this,
                     ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
-                            this.generationController.getCurrentNumberGeneration().toString()));
-        } else if (!value.equals(this.generationController.getCurrentNumberGeneration())) {
+                            this.generationController.getCurrentNumberElement().toString()));
+        } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
             this.bPlay.setEnabled(false);
             this.bEnd.setEnabled(false);
             this.setTimeButtonEnable(false);
@@ -224,7 +224,7 @@ public class GenerationPanel extends JPanel {
 
             final FutureTask<Generation> fTask = new FutureTask<>(() -> {
 
-                this.generationController.loadGeneration(value);
+                this.generationController.loadOldElement(value);
 
                 try {
                     SwingUtilities.invokeAndWait(() -> {
