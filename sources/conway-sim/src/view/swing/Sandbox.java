@@ -1,4 +1,4 @@
-package view.swing.sandbox;
+package view.swing;
 import javax.swing.JButton;
 import controller.editor.PatternEditor;
 /**

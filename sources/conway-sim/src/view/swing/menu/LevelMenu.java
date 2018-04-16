@@ -20,7 +20,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
 
 import controller.io.ResourceLoader;
-import view.swing.DesktopGUI;
+import view.DesktopGUI;
 import view.swing.Log;
 import view.swing.sandbox.GridPanelImpl;
 import view.swing.sandbox.KeyListenerFactory;
