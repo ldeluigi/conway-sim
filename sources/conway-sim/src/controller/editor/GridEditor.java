@@ -11,16 +11,20 @@ public interface GridEditor {
     /**
      * Displays the given generation on the grid.
      * 
-     * @param gen the {@link Generation}
+     * @param gen
+     *            the {@link Generation}
      */
     void draw(Generation gen);
 
     /**
      * Applies a {@link Status} change in the given position.
      * 
-     * @param row the row
-     * @param column the column
-     * @throws IllegalSateException if not in placing mode
+     * @param row
+     *            the row
+     * @param column
+     *            the column
+     * @throws IllegalSateException
+     *             if not in placing mode
      */
     void hit(int row, int column);
 
@@ -34,7 +38,8 @@ public interface GridEditor {
     /**
      * Set true if the editor is able to operate modifications on the grid.
      * 
-     * @param enabled true if the editor allows editing operations
+     * @param enabled
+     *            true if the editor allows editing operations
      */
     void setEnabled(Boolean enabled);
 
@@ -53,8 +58,10 @@ public interface GridEditor {
     /**
      * Resizes the status grid to the given dimensions.
      * 
-     * @param horizontal the number of columns
-     * @param vertical the number of rows
+     * @param horizontal
+     *            the number of columns
+     * @param vertical
+     *            the number of rows
      */
     void changeSizes(int horizontal, int vertical);
 }

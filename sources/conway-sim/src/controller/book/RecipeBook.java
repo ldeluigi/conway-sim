@@ -1,23 +1,28 @@
 package controller.book;
 
 /**
- * 
+ * TODO scrivere cose.
  *
  */
 public interface RecipeBook {
+
     /**
+     * Method which gives the selected recipe at the specified position.
      * 
      * @param pos
-     *            of the elem to extract
-     * @return recipe
+     *            of the element to extract
+     * @return the chosen recipe
      */
     Recipe getRecipeByPos(int pos);
 
     /**
+     * Method which gives the selected recipe matching the specified name.
      * 
      * @param name
-     *            of elem to get
-     * @return elem
+     *            of element to get
+     * @return element
+     * @throws NullPointerException
+     *             if recipe not found
      */
     Recipe getRecipeByName(String name);
 

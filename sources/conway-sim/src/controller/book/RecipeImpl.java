@@ -14,6 +14,7 @@ public class RecipeImpl implements Recipe {
     private final Random rand = new Random();
 
     /**
+     * First constructor method for a recipe object. Three strings needed.
      * 
      * @param name
      *            of recipe
@@ -29,6 +30,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
+     * Second constructor method for a recipe object. Two stings needed.
      * 
      * @param content
      *            of recipe
@@ -42,6 +44,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
+     * Third constructor method for a recipe object. Just one string needed.
      * 
      * @param content
      *            of recipe
@@ -53,14 +56,16 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
+     * The method which gives the name of the recipe.
+     * 
      * @return name of recipe
      */
     public String getName() {
-        // TODO Auto-generated method stub
         return this.name;
     }
 
     /**
+     * The method which sets the given string as the name of the recipe.
      * 
      * @param name
      *            of recipe
@@ -70,6 +75,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
+     * The method which gives the content of the recipe.
      * 
      * @return content of recipe
      */
@@ -78,6 +84,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
+     * The method which sets the specified string as the content of the recipe.
      * 
      * @param content
      *            of recipe
@@ -87,6 +94,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
+     * The method which gives the creator of the recipe.
      * 
      * @return author of recipe
      */
@@ -95,6 +103,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
+     * The method which sets the creator of the recipe.
      * 
      * @param author
      *            of recipe

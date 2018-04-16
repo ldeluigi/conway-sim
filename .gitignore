@@ -68,3 +68,6 @@ hs_err_pid*
 # Code Recommenders
 .recommenders/
 sources/conway-sim/src/test/saves/
+
+# Documentation
+sources/conway-sim/doc/
