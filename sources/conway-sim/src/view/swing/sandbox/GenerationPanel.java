@@ -195,9 +195,9 @@ public class GenerationPanel extends JPanel {
      */
     public void refreshView() {
         if (!this.view.getGridEditor().isEnabled()) {
-            this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
+            this.view.getGridEditor().draw(this.generationController.getCurrentElement());
         }
-        final int aliveCell = (int) this.generationController.getCurrentGeneration().getCellMatrix().stream()
+        final int aliveCell = (int) this.generationController.getCurrentElement().getCellMatrix().stream()
                 .filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
         this.view.scheduleGUIUpdate(() -> {
             SandboxTools.refreshStatistics(this.getCurrentSpeed(),
