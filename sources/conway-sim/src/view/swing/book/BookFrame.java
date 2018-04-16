@@ -120,11 +120,7 @@ public class BookFrame extends JInternalFrame {
                 setSelectedList(CUSTOM);
                 System.out.println("DEBUG | Selected Item: " + customList.getSelectedValue());
                 Matrix<Status> mat;
-                try {
-                    mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
-                } catch (IllegalArgumentException ex) {
-                    mat = RLETranslator.rleStringToMatrix(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent(), Status.class);
-                }
+                mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
                 final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
@@ -160,11 +156,7 @@ public class BookFrame extends JInternalFrame {
             if (getSelectedList() == DEFAULT) {
                 mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             } else {
-                try {
-                    mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
-                } catch (IllegalArgumentException ex) {
-                    mat = RLETranslator.rleStringToMatrix(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent(), Status.class);
-                }
+                mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             }
             patternE.addPatternToPlace(mat);
             this.doDefaultCloseAction();

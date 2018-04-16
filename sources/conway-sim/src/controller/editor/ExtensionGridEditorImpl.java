@@ -7,6 +7,7 @@ import java.util.function.Function;
 
 import core.model.Status;
 import core.utils.ListMatrix;
+import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
 
@@ -51,15 +52,7 @@ public class ExtensionGridEditorImpl extends GridEditorImpl implements Extension
     @Override
     public Matrix<Status> cutMatrix() {
         if (cutReady) {
-            Status[][] statusMatrix = new Status[hightX - lowX][hightY - lowY];
-            for (int x = lowX; x < hightX; x++) {
-                for (int y = lowY; y < hightY; y++) {
-                    statusMatrix[x - lowX][y - lowY] = super.currentStatus.get(x, y);
-                }
-            }
-            this.applyChanges();
-            this.cutReady = false;
-            return new ListMatrix<>(statusMatrix);
+            return Matrices.cut(this.currentStatus, lowX, hightX, lowY, hightY);
         }
         throw new IllegalStateException();
     }
