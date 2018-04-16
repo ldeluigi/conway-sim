@@ -244,7 +244,7 @@ public class RLEConvert {
                 int buffer = 0;
                 int last = -1;
                 for (int j = 0; j < matrix.getHeight(); j++) {
-                    //I read all the column i, from j = 0 to j = tab.getHeight()
+                    //Read all the column i, from j = 0 to j = tab.getHeight()
                     if (matrix.get(j, i) == Status.ALIVE) {
 
                         if (lines > 0) {

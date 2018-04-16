@@ -24,4 +24,9 @@ public interface ExtensionGridEditor extends GridEditor, PatternEditor {
      * @return return the cut condition
      */
     boolean isCutReady();
+
+    /**
+     * 
+     */
+    void cancelSelectMode();
 }

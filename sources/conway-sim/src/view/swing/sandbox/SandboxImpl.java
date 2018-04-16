@@ -146,7 +146,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
     }
 
     private void cancel() {
-        this.gridEditor.selectMode(false);
+        this.gridEditor.cancelSelectMode();
         this.bCancel.setVisible(false);
         this.bSave.setEnabled(true);
         this.generationPanel.setButtonStartEnable(true);

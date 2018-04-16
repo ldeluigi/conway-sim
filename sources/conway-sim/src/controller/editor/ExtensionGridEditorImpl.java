@@ -6,7 +6,6 @@ import java.awt.event.MouseListener;
 import java.util.function.Function;
 
 import core.model.Status;
-import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
@@ -69,11 +68,18 @@ public class ExtensionGridEditorImpl extends GridEditorImpl implements Extension
         } else if (selectMode && cutReady && flag) {
             placingState = oldPlacingState;
             selectMode = false;
-        } else if (!flag) {
-            cutReady = false;
-            placingState = oldPlacingState;
+        }
+    }
+
+    /**
+     * 
+     */
+    @Override
+    public void cancelSelectMode() {
+        if (selectMode) {
             selectMode = false;
-            applyChanges();
+            placingState = oldPlacingState;
+            cutReady = false;
         }
     }
 
@@ -100,81 +106,42 @@ public class ExtensionGridEditorImpl extends GridEditorImpl implements Extension
         }
     }
 
-    //TODO refactor!!! important!!!
     private void showSelect(final int newRow, final int newCol) {
         if (lastCol > 0 && lastRow > 0) {
             this.applyChanges();
             int size = Math.min(Math.abs(lastCol - newCol), Math.abs(lastRow - newRow));
             if (newRow < lastRow && newCol < lastCol) {
-                size = -size;
-                lowX = lastRow + size;
-                lowY = lastCol + size;
+                lowX = lastRow - size;
+                lowY = lastCol - size;
                 hightX = lastRow;
                 hightY = lastCol;
-                for (int x = lastCol + size; x <= lastCol; x++) {
-                    this.currentStatus.set(lastRow, x, this.currentStatus.get(lastRow, x));
-                    this.gameGrid.displaySingleCell(lastRow, x, SELECT.apply(this.currentStatus.get(lastRow, x)));
-                    this.currentStatus.set(lastRow + size, x, this.currentStatus.get(lastRow + size, x));
-                    this.gameGrid.displaySingleCell(lastRow + size, x, SELECT.apply(this.currentStatus.get(lastRow + size, x)));
-                }
-                for (int x = lastRow + size; x <= lastRow; x++) {
-                    this.currentStatus.set(x, lastCol, this.currentStatus.get(x, lastCol));
-                    this.gameGrid.displaySingleCell(x, lastCol, SELECT.apply(this.currentStatus.get(x, lastCol)));
-                    this.currentStatus.set(x, lastCol + size, this.currentStatus.get(x, lastCol + size));
-                    this.gameGrid.displaySingleCell(x, lastCol + size, SELECT.apply(this.currentStatus.get(x, lastCol + size)));
-                }
-                size = -size;
             } else if (newRow < lastRow && newCol > lastCol) {
                 lowY = lastCol;
                 lowX = lastRow - size;
                 hightY = lastCol + size;
                 hightX = lastRow;
-                for (int x = lastCol; x <= lastCol + size; x++) {
-                    this.currentStatus.set(lastRow, x, this.currentStatus.get(lastRow, x));
-                    this.gameGrid.displaySingleCell(lastRow, x, SELECT.apply(this.currentStatus.get(lastRow, x)));
-                    this.currentStatus.set(lastRow - size, x, this.currentStatus.get(lastRow - size, x));
-                    this.gameGrid.displaySingleCell(lastRow - size, x, SELECT.apply(this.currentStatus.get(lastRow - size, x)));
-                }
-                for (int x = lastRow - size; x <= lastRow; x++) {
-                    this.currentStatus.set(x, lastCol, this.currentStatus.get(x, lastCol));
-                    this.gameGrid.displaySingleCell(x, lastCol, SELECT.apply(this.currentStatus.get(x, lastCol)));
-                    this.currentStatus.set(x, lastCol + size, this.currentStatus.get(x, lastCol + size));
-                    this.gameGrid.displaySingleCell(x, lastCol + size, SELECT.apply(this.currentStatus.get(x, lastCol + size)));
-                }
             } else if (newRow > lastRow && newCol < lastCol) {
                 lowY = lastCol - size;
                 lowX = lastRow;
                 hightY = lastCol;
                 hightX = lastRow + size;
-                for (int x = lastCol - size; x <= lastCol; x++) {
-                    this.currentStatus.set(lastRow, x, this.currentStatus.get(lastRow, x));
-                    this.gameGrid.displaySingleCell(lastRow, x, SELECT.apply(this.currentStatus.get(lastRow, x)));
-                    this.currentStatus.set(lastRow + size, x, this.currentStatus.get(lastRow + size, x));
-                    this.gameGrid.displaySingleCell(lastRow + size, x, SELECT.apply(this.currentStatus.get(lastRow + size, x)));
-                }
-                for (int x = lastRow; x <= lastRow + size; x++) {
-                    this.currentStatus.set(x, lastCol, this.currentStatus.get(x, lastCol));
-                    this.gameGrid.displaySingleCell(x, lastCol, SELECT.apply(this.currentStatus.get(x, lastCol)));
-                    this.currentStatus.set(x, lastCol - size, this.currentStatus.get(x, lastCol - size));
-                    this.gameGrid.displaySingleCell(x, lastCol - size, SELECT.apply(this.currentStatus.get(x, lastCol - size)));
-                }
             } else {
                 lowY = lastCol;
                 lowX = lastRow;
                 hightY = lastCol + size;
                 hightX = lastRow + size;
-                for (int x = lastCol; x <= lastCol + size; x++) {
-                    this.currentStatus.set(lastRow, x, this.currentStatus.get(lastRow, x));
-                    this.gameGrid.displaySingleCell(lastRow, x, SELECT.apply(this.currentStatus.get(lastRow, x)));
-                    this.currentStatus.set(lastRow + size, x, this.currentStatus.get(lastRow + size, x));
-                    this.gameGrid.displaySingleCell(lastRow + size, x, SELECT.apply(this.currentStatus.get(lastRow + size, x)));
-                }
-                for (int x = lastRow; x <= lastRow + size; x++) {
-                    this.currentStatus.set(x, lastCol, this.currentStatus.get(x, lastCol));
-                    this.gameGrid.displaySingleCell(x, lastCol, SELECT.apply(this.currentStatus.get(x, lastCol)));
-                    this.currentStatus.set(x, lastCol + size, this.currentStatus.get(x, lastCol + size));
-                    this.gameGrid.displaySingleCell(x, lastCol + size, SELECT.apply(this.currentStatus.get(x, lastCol + size)));
-                }
+            }
+            for (int x = lowY; x <= hightY; x++) {
+                this.currentStatus.set(lowX, x, this.currentStatus.get(lowX, x));
+                this.gameGrid.displaySingleCell(lowX, x, SELECT.apply(this.currentStatus.get(lowX, x)));
+                this.currentStatus.set(hightX, x, this.currentStatus.get(hightX, x));
+                this.gameGrid.displaySingleCell(hightX, x, SELECT.apply(this.currentStatus.get(hightX, x)));
+            }
+            for (int x = lowX; x <= hightX; x++) {
+                this.currentStatus.set(x, lowY, this.currentStatus.get(x, lowY));
+                this.gameGrid.displaySingleCell(x, lowY, SELECT.apply(this.currentStatus.get(x, lowY)));
+                this.currentStatus.set(x, hightY, this.currentStatus.get(x, hightY));
+                this.gameGrid.displaySingleCell(x, hightY, SELECT.apply(this.currentStatus.get(x, hightY)));
             }
             cutReady = size > 2 ? true : false;
         }
