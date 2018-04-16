@@ -110,7 +110,7 @@ public class RecipeBookImpl implements RecipeBook {
      * @return recipebook
      */
     public final List<Recipe> getRb() {
-        return Collections.unmodifiableList(this.rb);
+        return this.rb;
     }
 
     /**
