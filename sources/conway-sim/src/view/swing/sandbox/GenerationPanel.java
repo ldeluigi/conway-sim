@@ -32,265 +32,265 @@ import view.swing.menu.MenuSettings;
  */
 public class GenerationPanel extends JPanel {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 9060069868596999045L;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 9060069868596999045L;
 
-    /**
-     * Speed option, editable in ConstantBundle.properties.
-     */
-    private static final int MIN_SPEED = ResourceLoader.loadConstantInt("generation.MIN_SPEED");
-    private static final int MAX_SPEED = ResourceLoader.loadConstantInt("generation.MAX_SPEED");
+	/**
+	 * Speed option, editable in ConstantBundle.properties.
+	 */
+	private static final int MIN_SPEED = ResourceLoader.loadConstantInt("generation.MIN_SPEED");
+	private static final int MAX_SPEED = ResourceLoader.loadConstantInt("generation.MAX_SPEED");
 
-    /**
-     * JButton of the panel.
-     */
-    private final JSlider speedSlider;
-    private final JButton bStart;
-    private final JButton bEnd;
-    private final JButton bPause;
-    private final JButton bNext;
-    private final JButton bGoTo;
-    private final JButton bPrev;
-    private final JButton bPlay;
-    private final JProgressBar progresBar;
+	/**
+	 * JButton of the panel.
+	 */
+	private final JSlider speedSlider;
+	private final JButton bStart;
+	private final JButton bEnd;
+	private final JButton bPause;
+	private final JButton bNext;
+	private final JButton bGoTo;
+	private final JButton bPrev;
+	private final JButton bPlay;
+	private final JProgressBar progresBar;
 
-    private final GenerationController generationController;
-    private final SandboxImpl view;
+	private final GenerationController generationController;
+	private final SandboxImpl view;
 
-    private final int fontSize = MenuSettings.getFontSize();
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final int fontSize = MenuSettings.getFontSize();
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-    /**
-     * A panel that contain all the button for the start and control of the game.
-     * 
-     * @param view
-     *            the controller of the generation
-     */
-    public GenerationPanel(final SandboxImpl view) {
-        this.view = view;
-        this.setOpaque(false);
-        this.generationController = new GenerationControllerImpl(view);
+	/**
+	 * A panel that contain all the button for the start and control of the game.
+	 * 
+	 * @param view
+	 *            the controller of the generation
+	 */
+	public GenerationPanel(final SandboxImpl view) {
+		this.view = view;
+		this.setOpaque(false);
+		this.generationController = new GenerationControllerImpl(view);
 
-        bStart = SandboxTools.newJButton(ResourceLoader.loadString("generation.start"),
-                ResourceLoader.loadString("generation.start.tooltip"));
-        bEnd = SandboxTools.newJButton(ResourceLoader.loadString("generation.end"),
-                ResourceLoader.loadString("generation.end.tooltip"));
-        bPause = SandboxTools.newJButton(ResourceLoader.loadString("generation.pause"),
-                ResourceLoader.loadString("generation.pause.tooltip"));
-        bNext = SandboxTools.newJButton(ResourceLoader.loadString("generation.next"),
-                ResourceLoader.loadString("generation.next.tooltip"));
-        bGoTo = SandboxTools.newJButton(ResourceLoader.loadString("generation.goto"),
-                ResourceLoader.loadString("generation.goto.tooltip"));
-        bPrev = SandboxTools.newJButton(ResourceLoader.loadString("generation.previous"),
-                ResourceLoader.loadString("generation.previous.tooltip"));
-        bPlay = SandboxTools.newJButton(ResourceLoader.loadString("generation.play"),
-                ResourceLoader.loadString("generation.play.tooltip"));
-        progresBar = new JProgressBar();
-        progresBar.setIndeterminate(true);
-        progresBar.setVisible(false);
+		bStart = SandboxTools.newJButton(ResourceLoader.loadString("generation.start"),
+				ResourceLoader.loadString("generation.start.tooltip"));
+		bEnd = SandboxTools.newJButton(ResourceLoader.loadString("generation.end"),
+				ResourceLoader.loadString("generation.end.tooltip"));
+		bPause = SandboxTools.newJButton(ResourceLoader.loadString("generation.pause"),
+				ResourceLoader.loadString("generation.pause.tooltip"));
+		bNext = SandboxTools.newJButton(ResourceLoader.loadString("generation.next"),
+				ResourceLoader.loadString("generation.next.tooltip"));
+		bGoTo = SandboxTools.newJButton(ResourceLoader.loadString("generation.goto"),
+				ResourceLoader.loadString("generation.goto.tooltip"));
+		bPrev = SandboxTools.newJButton(ResourceLoader.loadString("generation.previous"),
+				ResourceLoader.loadString("generation.previous.tooltip"));
+		bPlay = SandboxTools.newJButton(ResourceLoader.loadString("generation.play"),
+				ResourceLoader.loadString("generation.play.tooltip"));
+		progresBar = new JProgressBar();
+		progresBar.setIndeterminate(true);
+		progresBar.setVisible(false);
 
-        this.setLayout(new GridLayout(2, 2));
-        final JPanel northL = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        northL.setOpaque(false);
-        final JPanel northR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        northR.setOpaque(false);
-        final JPanel southL = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        southL.setOpaque(false);
-        final JPanel southR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        southR.setOpaque(false);
-        this.add(northL);
-        this.add(northR);
-        this.add(southL);
-        this.add(southR);
+		this.setLayout(new GridLayout(2, 2));
+		final JPanel northL = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		northL.setOpaque(false);
+		final JPanel northR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		northR.setOpaque(false);
+		final JPanel southL = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		southL.setOpaque(false);
+		final JPanel southR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+		southR.setOpaque(false);
+		this.add(northL);
+		this.add(northR);
+		this.add(southL);
+		this.add(southR);
 
-        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000000, 10);
-        final JSpinner spinner = new JSpinner(spin);
+		final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000000, 10);
+		final JSpinner spinner = new JSpinner(spin);
 
-        northL.add(bStart);
+		northL.add(bStart);
 
-        // speed control
-        speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
-        speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
-        northL.add(speedSlider);
+		// speed control
+		speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
+		speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+		northL.add(speedSlider);
 
-        // add button to the layout
-        southL.add(bPlay);
-        southL.add(bPause);
-        southL.add(bEnd);
-        southR.add(bPrev);
-        southR.add(bNext);
-        northR.add(bGoTo);
-        northR.add(progresBar);
+		// add button to the layout
+		southL.add(bPlay);
+		southL.add(bPause);
+		southL.add(bEnd);
+		southR.add(bPrev);
+		southR.add(bNext);
+		northR.add(bGoTo);
+		northR.add(progresBar);
 
-        northR.add(spinner); // to use the go to button
+		northR.add(spinner); // to use the go to button
 
-        this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
+		this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
-        // Start conditions.
-        bStart.setEnabled(true);
-        bPlay.setEnabled(false);
-        bPause.setEnabled(false);
-        bEnd.setEnabled(false);
-        this.view.setButtonClearEnabled(true);
-        bNext.setEnabled(false);
-        bPrev.setEnabled(false);
-        bGoTo.setEnabled(false);
+		// Start conditions.
+		bStart.setEnabled(true);
+		bPlay.setEnabled(false);
+		bPause.setEnabled(false);
+		bEnd.setEnabled(false);
+		this.view.setButtonClearEnabled(true);
+		bNext.setEnabled(false);
+		bPrev.setEnabled(false);
+		bGoTo.setEnabled(false);
 
-        speedSlider.addChangeListener(e -> this.speedControl());
-        bStart.addActionListener(e -> this.start());
-        bEnd.addActionListener(e -> this.end());
-        bPlay.addActionListener(e -> this.resume());
-        bPause.addActionListener(e -> this.pause());
-        bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
-        bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
-        bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
-        KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
-            if (bStart.isEnabled()) {
-                bStart.doClick();
-            } else if (bPlay.isEnabled()) {
-                bPlay.doClick();
-            } else if (bPause.isEnabled()) {
-                bPause.doClick();
-            }
-        });
+		speedSlider.addChangeListener(e -> this.speedControl());
+		bStart.addActionListener(e -> this.start());
+		bEnd.addActionListener(e -> this.end());
+		bPlay.addActionListener(e -> this.resume());
+		bPause.addActionListener(e -> this.pause());
+		bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
+		bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
+		bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
+		KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
+			if (bStart.isEnabled()) {
+				bStart.doClick();
+			} else if (bPlay.isEnabled()) {
+				bPlay.doClick();
+			} else if (bPause.isEnabled()) {
+				bPause.doClick();
+			}
+		});
 
-        // Key listener of the panel
-        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> bEnd.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> bNext.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> bPrev.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER, () -> bGoTo.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP,
-                () -> speedSlider.setValue(speedSlider.getValue() + 1));
-        KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN,
-                () -> speedSlider.setValue(speedSlider.getValue() - 1));
-        this.requestFocusInWindow();
-    }
+		// Key listener of the panel
+		KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> bEnd.doClick());
+		KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> bNext.doClick());
+		KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> bPrev.doClick());
+		KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER, () -> bGoTo.doClick());
+		KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP,
+				() -> speedSlider.setValue(speedSlider.getValue() + 1));
+		KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN,
+				() -> speedSlider.setValue(speedSlider.getValue() - 1));
+		this.requestFocusInWindow();
+	}
 
-    /**
-     * Call the clean on the grid.
-     */
-    public void clear() {
-        this.view.getGridEditor().clean();
-    }
+	/**
+	 * Call the clean on the grid.
+	 */
+	public void clear() {
+		this.view.getGridEditor().clean();
+	}
 
-    /**
-     * 
-     * @return the current speed value
-     */
-    public int getCurrentSpeed() {
-        return this.speedSlider.getValue();
-    }
+	/**
+	 * 
+	 * @return the current speed value
+	 */
+	public int getCurrentSpeed() {
+		return this.speedSlider.getValue();
+	}
 
-    /**
-     * Reset the current game to the original status.
-     */
-    public void resetGrid() {
-        this.generationController.reset();
-    }
+	/**
+	 * Reset the current game to the original status.
+	 */
+	public void resetGrid() {
+		this.generationController.reset();
+	}
 
-    /**
-     * Refresh the view of this panel and reload the constant.
-     */
-    public void refreshView() {
-        if (!this.view.getGridEditor().isEnabled()) {
-            this.view.getGridEditor().draw(this.generationController.getCurrentElement());
-        }
-        final int aliveCell = (int) this.generationController.getCurrentElement().getCellMatrix().stream()
-                .filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
-        this.view.scheduleGUIUpdate(() -> {
-            SandboxTools.refreshStatistics(this.getCurrentSpeed(),
-                    this.generationController.getCurrentNumberElement().intValue(), aliveCell, this.view.getFont());
-        });
-    }
+	/**
+	 * Refresh the view of this panel and reload the constant.
+	 */
+	public void refreshView() {
+		if (!this.view.getGridEditor().isEnabled()) {
+			this.view.getGridEditor().draw(this.generationController.getCurrentElement());
+		}
+		final int aliveCell = (int) this.generationController.getCurrentElement().getCellMatrix().stream()
+				.filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
+		this.view.scheduleGUIUpdate(() -> {
+			SandboxTools.refreshStatistics(this.getCurrentSpeed(),
+					this.generationController.getCurrentNumberElement().intValue(), aliveCell, this.view.getFont());
+		});
+	}
 
-    private void speedControl() {
-        this.generationController.setSpeed(this.speedSlider.getValue());
-    }
+	private void speedControl() {
+		this.generationController.setSpeed(this.speedSlider.getValue());
+	}
 
-    private void goTo(final Long value) {
-        if (value < 0) {
-            JOptionPane.showMessageDialog(this,
-                    ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
-                            this.generationController.getCurrentNumberElement().toString()));
-        } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
-            this.bPlay.setEnabled(false);
-            this.bEnd.setEnabled(false);
-            this.setTimeButtonEnable(false);
+	private void goTo(final Long value) {
+		if (value < 0) {
+			JOptionPane.showMessageDialog(this,
+					ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
+							this.generationController.getCurrentNumberElement().toString()));
+		} else if (!value.equals(this.generationController.getCurrentNumberElement())) {
+			this.bPlay.setEnabled(false);
+			this.bEnd.setEnabled(false);
+			this.setTimeButtonEnable(false);
 
-            this.bGoTo.setVisible(false);
-            this.progresBar.setVisible(true);
+			this.bGoTo.setVisible(false);
+			this.progresBar.setVisible(true);
 
-            final FutureTask<Generation> fTask = new FutureTask<>(() -> {
+			final FutureTask<Generation> fTask = new FutureTask<>(() -> {
 
-                this.generationController.loadOldElement(value);
+				this.generationController.loadOldElement(value);
 
-                try {
-                    SwingUtilities.invokeAndWait(() -> {
-                        this.progresBar.setVisible(false);
-                        this.bGoTo.setVisible(true);
-                        this.bPlay.setEnabled(true);
-                        this.bEnd.setEnabled(true);
-                        this.setTimeButtonEnable(true);
-                        this.refreshView();
-                    });
-                } catch (InvocationTargetException e) {
-                    throw new IllegalStateException();
-                } catch (InterruptedException e) {
-                }
-            }, null);
-            executor.execute(fTask);
-        }
-    }
+				try {
+					SwingUtilities.invokeAndWait(() -> {
+						this.progresBar.setVisible(false);
+						this.bGoTo.setVisible(true);
+						this.bPlay.setEnabled(true);
+						this.bEnd.setEnabled(true);
+						this.setTimeButtonEnable(true);
+						this.refreshView();
+					});
+				} catch (InvocationTargetException e) {
+					throw new IllegalStateException();
+				} catch (InterruptedException e) {
+				}
+			}, null);
+			executor.execute(fTask);
+		}
+	}
 
-    private void end() {
-        this.view.getGridEditor().setEnabled(true);
-        this.view.getButtonBook().setEnabled(true);
-        bStart.setEnabled(true);
-        bPlay.setEnabled(false);
-        bPause.setEnabled(false);
-        bEnd.setEnabled(false);
-        bNext.setEnabled(false);
-        bPrev.setEnabled(false);
-        bGoTo.setEnabled(false);
-        this.view.setButtonApplyEnabled(true);
-        this.view.setButtonClearEnabled(true);
-    }
+	private void end() {
+		this.view.getGridEditor().setEnabled(true);
+		this.view.getButtonBook().setEnabled(true);
+		bStart.setEnabled(true);
+		bPlay.setEnabled(false);
+		bPause.setEnabled(false);
+		bEnd.setEnabled(false);
+		bNext.setEnabled(false);
+		bPrev.setEnabled(false);
+		bGoTo.setEnabled(false);
+		this.view.setButtonApplyEnabled(true);
+		this.view.setButtonClearEnabled(true);
+	}
 
-    private void start() {
-        this.view.getGridEditor().setEnabled(false);
-        this.generationController.newGame();
-        this.view.setButtonApplyEnabled(false);
-        this.view.getButtonBook().setEnabled(false);
-        this.bStart.setEnabled(false);
-        this.bPause.setEnabled(false);
-        this.bPlay.setEnabled(true);
-        this.bEnd.setEnabled(true);
-        this.setTimeButtonEnable(true);
-        this.view.setButtonClearEnabled(false);
-    }
+	private void start() {
+		this.view.getGridEditor().setEnabled(false);
+		this.generationController.newGame();
+		this.view.setButtonApplyEnabled(false);
+		this.view.getButtonBook().setEnabled(false);
+		this.bStart.setEnabled(false);
+		this.bPause.setEnabled(false);
+		this.bPlay.setEnabled(true);
+		this.bEnd.setEnabled(true);
+		this.setTimeButtonEnable(true);
+		this.view.setButtonClearEnabled(false);
+	}
 
-    private void resume() {
-        this.generationController.play();
-        this.bPause.setEnabled(true);
-        this.bPlay.setEnabled(false);
-        this.bEnd.setEnabled(false);
-        this.setTimeButtonEnable(false);
-    }
+	private void resume() {
+		this.generationController.play();
+		this.bPause.setEnabled(true);
+		this.bPlay.setEnabled(false);
+		this.bEnd.setEnabled(false);
+		this.setTimeButtonEnable(false);
+	}
 
-    private void pause() {
-        this.generationController.pause();
-        this.bPause.setEnabled(false);
-        this.bPlay.setEnabled(true);
-        this.bEnd.setEnabled(true);
-        this.setTimeButtonEnable(true);
-    }
+	private void pause() {
+		this.generationController.pause();
+		this.bPause.setEnabled(false);
+		this.bPlay.setEnabled(true);
+		this.bEnd.setEnabled(true);
+		this.setTimeButtonEnable(true);
+	}
 
-    private void setTimeButtonEnable(final boolean flag) {
-        this.bNext.setEnabled(flag);
-        this.bPrev.setEnabled(flag);
-        this.bGoTo.setEnabled(flag);
-    }
+	private void setTimeButtonEnable(final boolean flag) {
+		this.bNext.setEnabled(flag);
+		this.bPrev.setEnabled(flag);
+		this.bGoTo.setEnabled(flag);
+	}
 
 }
