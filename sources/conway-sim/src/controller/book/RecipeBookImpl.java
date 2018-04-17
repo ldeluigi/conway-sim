@@ -95,6 +95,10 @@ public class RecipeBookImpl implements RecipeBook {
         return this.rb.size();
     }
 
+    /**
+     * Returns an unmodifiable list of {@link Recipe}.
+     */
+    @Override
     public List<Recipe> getRecipeList() {
         return Collections.unmodifiableList(rb);
     }
