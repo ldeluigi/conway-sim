@@ -3,9 +3,6 @@ package controller.editor;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -55,16 +52,6 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
     private static final Function<Cell, Color> CELLTOCOLOR = c -> ALIVETOBLACK.apply(c.getStatus());
     protected static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
-
-    private final GridPanel gameGrid;
-
-    private boolean placingState;
-    private boolean mouseBeingPressed;
-    private int lastPreviewRow;
-    private int lastPreviewColumn;
-    private Environment env;
-    private Optional<Matrix<Status>> pattern;
-    private Matrix<Status> currentStatus;
 
     /**
      * Constructor method for a new Editor.
