@@ -43,7 +43,6 @@ public class RLEConvert {
 	// http://www.conwaylife.com/w/index.php?title=Run_Length_Encoded
 	// NB: This will be used also as I/O method and SaveToFile
 
-	// UNUSED FOR NOW
 	/**
 	 * This is the builder from file, it takes a fileName of File type and builds
 	 * the buffer with the given text found.
