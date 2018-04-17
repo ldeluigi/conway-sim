@@ -58,7 +58,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 	public GridEditorImpl(final GridPanel grid) {
 		this.gameGrid = grid;
 		this.placingState = true;
-		this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j));
+		this.gameGrid.addListenerToGrid((i, j) -> new CellListener(i, j)); //TODO protected
 		this.pattern = Optional.empty();
 		this.env = EnvironmentFactory.standardRules(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight());
 		this.currentStatus = new ListMatrix<>(this.gameGrid.getGridWidth(), this.gameGrid.getGridHeight(),
