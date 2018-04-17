@@ -27,7 +27,7 @@ import view.swing.menu.MenuSettings;
 /**
  * Implementation of {@link Sandbox} using Swing {@link JPanel}.
  */
-public class SandboxImpl extends JPanel implements Sandbox {
+public class SimpleSandbox extends JPanel implements Sandbox {
 
     private static final long serialVersionUID = -9015811419136279771L;
     private static final int DEFAULT_SIZE = ResourceLoader.loadConstantInt("sandbox.grid.size");
@@ -46,7 +46,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
      * @param mainGUI
      *            the mainGui that call this SandBox
      */
-    public SandboxImpl(final DesktopGUI mainGUI) {
+    public SimpleSandbox(final DesktopGUI mainGUI) {
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
         this.bClear = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.clear"),

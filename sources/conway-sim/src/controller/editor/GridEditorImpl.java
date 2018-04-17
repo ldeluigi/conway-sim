@@ -29,7 +29,7 @@ import view.swing.sandbox.GridPanel;
  * used; it allows to perform changes to the view of the grid.
  *
  */
-public class GridEditorImpl implements GridEditor, PatternEditor {
+public class GridEditorImpl implements SimpleGridEditor, PatternEditor {
 
 	private static final BiFunction<Status, Color, Color> STATUSTOCOLOR = (s, c) -> s.equals(Status.ALIVE) ? c
 			: Color.WHITE;

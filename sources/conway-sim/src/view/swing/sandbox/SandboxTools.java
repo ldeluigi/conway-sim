@@ -102,7 +102,7 @@ public final class SandboxTools {
      *            the font
      * @return a JPanel
      */
-    public static JPanel newGridOptionDimension(final SandboxImpl sandboxImpl, final JButton bApply,
+    public static JPanel newGridOptionDimension(final SimpleSandbox sandboxImpl, final JButton bApply,
             final Font font) {
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
         gridOption.setOpaque(false);

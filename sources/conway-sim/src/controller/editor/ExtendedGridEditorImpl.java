@@ -13,11 +13,12 @@ import view.swing.sandbox.GridPanel;
 /**
  * 
  */
-public class ExtensionGridEditorImpl extends GridEditorImpl implements ExtensionGridEditor {
+public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGridEditor {
 
     private static final Function<Status, Color> SELECT = s -> s.equals(Status.DEAD) ? Color.ORANGE : Color.RED;
     private boolean cutMode = false;
     private boolean selectMode = false;
+    private GridPanel gameGrid;
     private int lowX = 0;
     private int lowY = 0;
     private int hightX = 0;
@@ -31,9 +32,9 @@ public class ExtensionGridEditorImpl extends GridEditorImpl implements Extension
      * 
      * @param grid the initial grid.
      */
-    public ExtensionGridEditorImpl(final GridPanel grid) {
+    public ExtendedGridEditorImpl(final GridPanel grid) {
         super(grid); //TODO rifare campo privato per riferimento a grid
-        gameGrid.addListenerToGrid((i, j) -> new ExtensionGridEditorImpl.CellListener(i, j));
+        gameGrid.addListenerToGrid((i, j) -> new ExtendedGridEditorImpl.CellListener(i, j));
     }
 
     /**
@@ -42,7 +43,7 @@ public class ExtensionGridEditorImpl extends GridEditorImpl implements Extension
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
         super.changeSizes(horizontal, vertical);
-        gameGrid.addListenerToGrid((i, j) -> new ExtensionGridEditorImpl.CellListener(i, j));
+        gameGrid.addListenerToGrid((i, j) -> new ExtendedGridEditorImpl.CellListener(i, j));
     }
 
     /**
@@ -206,7 +207,7 @@ public class ExtensionGridEditorImpl extends GridEditorImpl implements Extension
         @Override
         public void mouseEntered(final MouseEvent e) {
             if (selectMode) {
-                ExtensionGridEditorImpl.this.showSelect(row, column);
+                ExtendedGridEditorImpl.this.showSelect(row, column);
             }
         }
 

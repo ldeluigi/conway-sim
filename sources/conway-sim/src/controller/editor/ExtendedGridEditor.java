@@ -6,7 +6,7 @@ import core.utils.Matrix;
 /**
  * 
  */
-public interface ExtensionGridEditor extends GridEditor, PatternEditor {
+public interface ExtendedGridEditor extends SimpleGridEditor, PatternEditor {
 
     /**
      * 

@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.io.ResourceLoader;
 import view.DesktopGUI;
-import view.swing.sandbox.SandboxImpl;
+import view.swing.sandbox.SimpleSandbox;
 
 /**
  * This class displays the main menu. Pattern: Singleton.
@@ -62,7 +62,7 @@ public final class MainMenu extends JPanel {
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
             SwingUtilities.invokeLater(() -> {
-                mainGUI.setView(new SandboxImpl(mainGUI));
+                mainGUI.setView(new SimpleSandbox(mainGUI));
             });
         });
         sandbox.setToolTipText(ResourceLoader.loadString("main.tooltip.sandbox"));

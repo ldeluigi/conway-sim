@@ -5,7 +5,7 @@ import core.model.Generation;
 /**
  * This interface represents a simple editor for a grid of Conway's Game of Life.
  */
-public interface GridEditor {
+public interface SimpleGridEditor {
 
     /**
      * Displays the given generation on the grid.
