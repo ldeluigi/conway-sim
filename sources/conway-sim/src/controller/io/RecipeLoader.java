@@ -6,8 +6,6 @@ import java.io.FileReader;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -30,8 +28,7 @@ public class RecipeLoader {
     private static final String RLE_EXT = ".rle";
     private static final String CURRENTPATH = new File(".").toString();
     private static final File CUSTOMRECIPEFOLDER = new File(CURRENTPATH + FS + "PatternBook");
-    private static final File DEFAULTRECIPEFOLDER = new File(
-            CURRENTPATH + FS + "res" + FS + "recipebook");
+    private static final String DEFAULTRECIPEFOLDER = "/recipebook/";
 
     /**
      * This class parses all the files in the preset folder. than it loads it in the recipebook.
@@ -53,7 +50,7 @@ public class RecipeLoader {
      */
     private void defRecipeLoader() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(
-                getClass().getResourceAsStream("/recipebook/recipebook.txt"), "UTF-8"))) {
+                getClass().getResourceAsStream(DEFAULTRECIPEFOLDER + "recipebook.txt"), "UTF-8"))) {
             final List<String> pthLst = in.lines().collect(Collectors.toList());
             String testLine = "Name_Placeholder";
             Boolean flagName;
@@ -62,7 +59,7 @@ public class RecipeLoader {
                 if (name != null && name.contains(RLE_EXT)) {
                     flagName = false;
                     try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                            getClass().getResourceAsStream("/recipebook/" + name), "UTF-8"))) {
+                            getClass().getResourceAsStream(DEFAULTRECIPEFOLDER + name), "UTF-8"))) {
                         final List<String> strLst = br.lines().collect(Collectors.toList());
                         final String content = String.join("\n", strLst);
                         testLine = strLst.get(0);
