@@ -12,10 +12,8 @@ import java.util.Objects;
 
 import core.model.Generation;
 
-
 /**
- *  The implementation of GenerationMemento.
- *  With this class you can save 
+ * The implementation of GenerationMemento. With this class you can save
  */
 public class GenerationHistory implements Memento<Long, Generation> {
 
@@ -27,7 +25,8 @@ public class GenerationHistory implements Memento<Long, Generation> {
 
     /**
      * 
-     * @param firstGeneration the first generation that have to be saved. The starting status.
+     * @param firstGeneration
+     *            the first generation that have to be saved. The starting status.
      */
     public GenerationHistory(final Generation firstGeneration) {
         this.firstGeneration = firstGeneration;
@@ -52,10 +51,8 @@ public class GenerationHistory implements Memento<Long, Generation> {
     @Override
     public final void addElem(final Long numberGeneration, final Generation generation) {
         if (this.historyGeneration.keySet().size() >= numberOfGenerationStored) {
-            this.historyGeneration.remove(
-                    this.historyGeneration.keySet().stream()
-                                                   .min((x, y) -> Long.compare(x, y))
-                                                   .get());
+            this.historyGeneration
+                    .remove(this.historyGeneration.keySet().stream().min((x, y) -> Long.compare(x, y)).get());
         }
         if (!this.historyGeneration.keySet().stream().allMatch(e -> e < numberGeneration)) {
             throw new IllegalArgumentException();
@@ -73,9 +70,8 @@ public class GenerationHistory implements Memento<Long, Generation> {
         Objects.requireNonNull(this.historyGeneration);
         final List<Long> longToRemove = new LinkedList<>();
         if (!this.historyGeneration.isEmpty()) {
-            this.historyGeneration.keySet().stream()
-                                           .filter(l -> l > numberGeneration)
-                                           .forEach(l -> longToRemove.add(l));
+            this.historyGeneration.keySet().stream().filter(l -> l > numberGeneration)
+                    .forEach(l -> longToRemove.add(l));
         }
         longToRemove.forEach(l -> this.historyGeneration.remove(l));
     }

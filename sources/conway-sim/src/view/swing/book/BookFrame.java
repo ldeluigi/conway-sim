@@ -19,7 +19,6 @@ import javax.swing.border.TitledBorder;
 import controller.book.Recipe;
 import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
-import controller.io.RLETranslator;
 import controller.io.RecipeLoader;
 import controller.io.ResourceLoader;
 import core.model.Status;
@@ -28,17 +27,14 @@ import core.utils.Matrices;
 import core.utils.Matrix;
 import view.swing.sandbox.GridPanelImpl;
 import view.swing.sandbox.SandboxTools;
+
 /**
- * 
+ * This Frame displays the lists of pattern to be placed into the grid.
  *
  */
 
 public class BookFrame extends JInternalFrame {
-/**
-     * 
-     */
     private static final long serialVersionUID = -1045414565623185058L;
-
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 400;
     private static final int INITIAL_GRID_SIZE = 50;
@@ -49,31 +45,35 @@ public class BookFrame extends JInternalFrame {
     private String selectedList = DEFAULT;
 
     /**
-     * @param patternE the PatternManager
+     * The constructor shows and fills the JList(s) with the default patterns and
+     * the user added ones.
+     * 
+     * @param patternE
+     *            the {@link PatternEditor}
      * 
      */
     public BookFrame(final PatternEditor patternE) {
-        super("Book", false, true);
+        super("Book", true, true);
         final RecipeLoader rl = new RecipeLoader();
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        //PATTERN PREVIEW GRID
-        //The final GridPanel constructor will have as 3rd argument int SIZE_OF_CELL
-        final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        // FILL THE JList WITH A TEMP ARRAY
-        final List<String> arrList = new ArrayList<String>();
+        final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
+                INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
 
-        for (final Recipe recipe : rl.getRecipeBook().getBookList()) {
-            arrList.add(recipe.getName());
+        // Populate the arrList
+        final List<String> defRecList = new ArrayList<String>();
+
+        for (final Recipe recipe : rl.getDefaultBook().getBookList()) {
+            defRecList.add(recipe.getName());
         }
-        final List<String> custArrList = new ArrayList<String>();
+        final List<String> custRecList = new ArrayList<String>();
 
         for (final Recipe recipe : rl.getCustomBook().getBookList()) {
-            custArrList.add(recipe.getName());
+            custRecList.add(recipe.getName());
         }
 
-        final String[] stringDefaultArr = new String[arrList.size()];
-        final JList<String> defaultList = new JList<String>(arrList.toArray(stringDefaultArr));
+        final String[] stringDefaultArr = new String[defRecList.size()];
+        final JList<String> defaultList = new JList<String>(defRecList.toArray(stringDefaultArr));
         defaultList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         defaultList.setLayoutOrientation(JList.VERTICAL);
         defaultList.setVisibleRowCount(-1);
@@ -86,28 +86,34 @@ public class BookFrame extends JInternalFrame {
                 setSelectedItem(defaultList.getSelectedValue());
                 setSelectedList(DEFAULT);
                 System.out.println("DEBUG | Selected Item: " + defaultList.getSelectedValue());
-                final Matrix<Status> mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                final Matrix<Status> mat = new RLEConvert(
+                        rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
+                        () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
                 pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
+
             @Override
             public void mouseClicked(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseEntered(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseExited(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseReleased(final MouseEvent arg0) {
             }
         });
 
-        final String[] stringCustomArr = new String[custArrList.size()];
-        final JList<String> customList = new JList<String>(custArrList.toArray(stringCustomArr));
+        final String[] stringCustomArr = new String[custRecList.size()];
+        final JList<String> customList = new JList<String>(custRecList.toArray(stringCustomArr));
         customList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         customList.setLayoutOrientation(JList.VERTICAL);
         customList.setVisibleRowCount(-1);
@@ -118,43 +124,42 @@ public class BookFrame extends JInternalFrame {
             public void mousePressed(final MouseEvent e) {
                 setSelectedItem(customList.getSelectedValue());
                 setSelectedList(CUSTOM);
-                System.out.println("DEBUG | Selected Item: " + customList.getSelectedValue());
-                Matrix<Status> mat;
-                mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                final Matrix<Status> mat = new RLEConvert(
+                        rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
+                        () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
                 pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
+
             @Override
             public void mouseClicked(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseEntered(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseExited(final MouseEvent arg0) {
             }
+
             @Override
             public void mouseReleased(final MouseEvent arg0) {
             }
         });
-
-        this.add(pg);
-        this.add(defaultListPane);
-        this.add(customListPane);
-
-        //BUTTON PANEL
+        // IO BUTTON PANEL
         final JPanel ioPanel = new JPanel();
         ioPanel.setLayout(new BoxLayout(ioPanel, BoxLayout.Y_AXIS));
-        this.add(ioPanel);
-        final JButton placeBtn = SandboxTools.newJButton(ResourceLoader.loadString("book.place"), ResourceLoader.loadString("book.placett"));
-        //ACTION LISTENER PLACE BUTTON
+        final JButton placeBtn = SandboxTools.newJButton(ResourceLoader.loadString("book.place"),
+                ResourceLoader.loadString("book.placett"));
+        // ACTION LISTENER PLACE BUTTON
         final ActionListener place = e -> {
             System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
-            Matrix<Status> mat;
+            final Matrix<Status> mat;
             if (getSelectedList() == DEFAULT) {
-                mat = new RLEConvert(rl.getRecipeBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                mat = new RLEConvert(rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             } else {
                 mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             }
@@ -164,6 +169,11 @@ public class BookFrame extends JInternalFrame {
 
         placeBtn.addActionListener(place);
         ioPanel.add(placeBtn);
+
+        this.add(pg);
+        this.add(defaultListPane);
+        this.add(customListPane);
+        this.add(ioPanel);
     }
 
     /**
@@ -173,13 +183,16 @@ public class BookFrame extends JInternalFrame {
     public final String getSelectedItem() {
         return selectedItem;
     }
+
     /**
      * 
-     * @param selectedItem the item to select
+     * @param selectedItem
+     *            the item to select
      */
     public void setSelectedItem(final String selectedItem) {
         this.selectedItem = selectedItem;
     }
+
     /**
      * 
      * @return selectedList
@@ -187,12 +200,13 @@ public class BookFrame extends JInternalFrame {
     public String getSelectedList() {
         return selectedList;
     }
+
     /**
      * 
-     * @param selectedList the list to select
+     * @param selectedList
+     *            the list to select
      */
     public void setSelectedList(final String selectedList) {
         this.selectedList = selectedList;
     }
 }
-

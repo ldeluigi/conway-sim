@@ -6,31 +6,39 @@ import java.util.stream.Stream;
 /**
  * A generic matrix with useful utility methods.
  * 
- * @param <X> generic type
+ * @param <X>
+ *            generic type
  */
 public interface Matrix<X> {
 
     /**
      * Returns the item from the given position.
      * 
-     * @param row of the item
-     * @param column of the item
+     * @param row
+     *            of the item
+     * @param column
+     *            of the item
      * @return the item
      */
     X get(int row, int column);
 
     /**
      * Rotates the matrix by 90 degrees clockwise.
-     * @param times the number of rotations
+     * 
+     * @param times
+     *            the number of rotations
      */
     void rotateClockwise(int times);
 
     /**
      * Sets the given value at the given position.
      * 
-     * @param row of the item
-     * @param column of the item
-     * @param value of the item
+     * @param row
+     *            of the item
+     * @param column
+     *            of the item
+     * @param value
+     *            of the item
      */
     void set(int row, int column, X value);
 
@@ -50,14 +58,18 @@ public interface Matrix<X> {
 
     /**
      * A method to map this matrix to a new one of the same dimension.
-     * @param mapper to create elements of the new matrix.
-     * @param <Y> the type of the new matrix
+     * 
+     * @param mapper
+     *            to create elements of the new matrix.
+     * @param <Y>
+     *            the type of the new matrix
      * @return the new mapped matrix
      */
     <Y> Matrix<Y> map(Function<? super X, ? extends Y> mapper);
 
     /**
      * Generates a stream from the matrix.
+     * 
      * @return the stream
      */
     Stream<X> stream();

@@ -21,7 +21,6 @@ import javax.swing.border.TitledBorder;
 
 import controller.io.ResourceLoader;
 import view.DesktopGUI;
-import view.swing.Log;
 import view.swing.sandbox.GridPanelImpl;
 import view.swing.sandbox.KeyListenerFactory;
 import view.swing.sandbox.SandboxTools;
@@ -144,7 +143,6 @@ public class LevelMenu extends JPanel {
     }
 
     private void start() {
-        Log.logMessage(this.pressedButton.getText());
     }
 
     private void pressButton(final JButton button) {

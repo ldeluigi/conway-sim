@@ -13,7 +13,9 @@ import java.util.function.Supplier;
 
 /**
  * Matrix implementation with ArrayLists.
- * @param <X> generic type
+ * 
+ * @param <X>
+ *            generic type
  */
 public final class ListMatrix<X> implements Matrix<X> {
 
@@ -21,7 +23,9 @@ public final class ListMatrix<X> implements Matrix<X> {
 
     /**
      * Constructor that takes a two-dimensional array.
-     * @param matrix of {@link X}
+     * 
+     * @param matrix
+     *            of {@link X}
      */
     public ListMatrix(final X[][] matrix) {
         Objects.requireNonNull(matrix);
@@ -41,7 +45,9 @@ public final class ListMatrix<X> implements Matrix<X> {
 
     /**
      * Constructor that takes a list of list. Must be rectangular.
-     * @param matrix of {@link X}
+     * 
+     * @param matrix
+     *            of {@link X}
      */
     public ListMatrix(final List<List<X>> matrix) {
         Objects.requireNonNull(matrix);
@@ -58,10 +64,15 @@ public final class ListMatrix<X> implements Matrix<X> {
     }
 
     /**
-     * Constructor that takes the dimensions and fills the matrix with a {@link Supplier}.
-     * @param width that is the number of columns
-     * @param height that is the number of rows
-     * @param supplier that produces elements of type {@link X}
+     * Constructor that takes the dimensions and fills the matrix with a
+     * {@link Supplier}.
+     * 
+     * @param width
+     *            that is the number of columns
+     * @param height
+     *            that is the number of rows
+     * @param supplier
+     *            that produces elements of type {@link X}
      */
     public ListMatrix(final int width, final int height, final Supplier<X> supplier) {
         Objects.requireNonNull(supplier);

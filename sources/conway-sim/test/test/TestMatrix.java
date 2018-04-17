@@ -19,13 +19,15 @@ import core.utils.Matrix;
  */
 public class TestMatrix {
 
-    private static final Integer[][] INTMATRIX = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
-    private static final Integer[][] ROTATEDMATRIX = {{7, 4, 1}, {8, 5, 2}, {9, 6, 3}};
-    private static final Integer[][] INTMATRIXRET = {{1, 2, 3, 10}, {4, 5, 6, 11}, {7, 8, 9, 12}};
-    private static final Integer[][] ROTATEDMATRIXRET = {{7, 4, 1}, {8, 5, 2}, {9, 6, 3}, {12, 11, 10}};
-    private static final Integer[][] MODIFIEDMATRIX = {{999, 2, 3}, {4, 5, 6}, {7, 8, 999}};
-    private static final String[][] MAPPEDRETMATRIX = {{"2", "3", "4", "11"}, {"5", "6", "7", "12"}, {"8", "9", "10", "13"}};
-    private static final Integer[][] CUTMATRIX = {{2, 3}, {5, 6}};
+    private static final Integer[][] INTMATRIX = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } };
+    private static final Integer[][] ROTATEDMATRIX = { { 7, 4, 1 }, { 8, 5, 2 }, { 9, 6, 3 } };
+    private static final Integer[][] INTMATRIXRET = { { 1, 2, 3, 10 }, { 4, 5, 6, 11 }, { 7, 8, 9, 12 } };
+    private static final Integer[][] ROTATEDMATRIXRET = { { 7, 4, 1 }, { 8, 5, 2 }, { 9, 6, 3 }, { 12, 11, 10 } };
+    private static final Integer[][] MODIFIEDMATRIX = { { 999, 2, 3 }, { 4, 5, 6 }, { 7, 8, 999 } };
+    private static final String[][] MAPPEDRETMATRIX = { { "2", "3", "4", "11" }, { "5", "6", "7", "12" },
+            { "8", "9", "10", "13" } };
+    private static final Integer[][] CUTMATRIX = { { 2, 3 }, { 5, 6 } };
+
     @Test
     void testGet() {
         final Matrix<Integer> m = new ListMatrix<>(INTMATRIX);
@@ -33,11 +35,13 @@ public class TestMatrix {
         try {
             m.get(10, 0);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         try {
             m.get(0, 10);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         assertEquals(1, (int) m.get(0, 0));
     }
 
@@ -67,13 +71,15 @@ public class TestMatrix {
         try {
             m.set(10, 0, 999);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         try {
             m.set(0, 10, 999);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         m.set(0, 0, 999);
-        m.set(m.getHeight()-1, m.getWidth()-1, 999);
+        m.set(m.getHeight() - 1, m.getWidth() - 1, 999);
         assertEquals(new ListMatrix<>(MODIFIEDMATRIX), m);
     }
 
@@ -98,13 +104,17 @@ public class TestMatrix {
 
     @Test
     void testEquals() {
-        assertEquals(new ListMatrix<>(2, 2, () -> true), Matrices.unmodifiableMatrix(new ListMatrix<>(2, 2, () -> true)));
+        assertEquals(new ListMatrix<>(2, 2, () -> true),
+                Matrices.unmodifiableMatrix(new ListMatrix<>(2, 2, () -> true)));
     }
 
     @Test
     void testForEach() {
         Matrix<List<Boolean>> m = new ListMatrix<>(10, 10, () -> new LinkedList<Boolean>());
-        m.stream().forEach(x -> { x.add(true); x.add(true); });
+        m.stream().forEach(x -> {
+            x.add(true);
+            x.add(true);
+        });
         assertEquals(new ListMatrix<>(10, 10, () -> new LinkedList<>(Arrays.asList(true, true))), m);
     }
 

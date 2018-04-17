@@ -38,8 +38,8 @@ public class TestButtonBackground {
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         button.setDisabledSelectedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed")));
         button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off")));
-//        Dimension dim = new Dimension(200, 200);
-//        button.setPreferredSize(dim);
+        // Dimension dim = new Dimension(200, 200);
+        // button.setPreferredSize(dim);
         button.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         final JButton b2 = new JButton("b2");
         b2.addActionListener(e -> button.setEnabled(true));
@@ -68,8 +68,10 @@ public class TestButtonBackground {
 
         /**
          * 
-         * @param string a
-         * @param imageIcon a
+         * @param string
+         *            a
+         * @param imageIcon
+         *            a
          */
         public MyButton(final String string, final ImageIcon imageIcon) {
             super(string, imageIcon);
@@ -78,23 +80,23 @@ public class TestButtonBackground {
         @Override
         public void setText(final String arg0) {
             super.setText(arg0);
-            final FontMetrics metrics = getFontMetrics(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())); 
+            final FontMetrics metrics = getFontMetrics(
+                    new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
             final int width = metrics.stringWidth(getText());
             final int height = metrics.getHeight();
-            final Dimension newDimension =  new Dimension(width * 2, height * 2);
+            final Dimension newDimension = new Dimension(width * 2, height * 2);
             setPreferredSize(newDimension);
-//            setBounds(new Rectangle(getLocation(), getPreferredSize()));
+            // setBounds(new Rectangle(getLocation(), getPreferredSize()));
         }
-//
-//        public void ResizeToTextButton(String txt){
-////            super(txt);
-//            addActionListener(new ActionListener() {
-//                @Override
-//                public void actionPerformed(ActionEvent arg0) {
-//                    setText(JOptionPane.showInputDialog("Text"));
-//                }
-//            });
-//        }
+        //
+        // public void ResizeToTextButton(String txt){
+        //// super(txt);
+        // addActionListener(new ActionListener() {
+        // @Override
+        // public void actionPerformed(ActionEvent arg0) {
+        // setText(JOptionPane.showInputDialog("Text"));
+        // }
+        // });
+        // }
     }
 }
-

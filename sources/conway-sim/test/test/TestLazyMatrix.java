@@ -23,11 +23,13 @@ public class TestLazyMatrix {
         try {
             m.get(10, 0);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         try {
             m.get(0, 10);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         assertEquals(4, (int) m.get(0, 0));
     }
 
@@ -57,15 +59,17 @@ public class TestLazyMatrix {
         try {
             m.set(10, 0, 999);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         try {
             m.set(0, 10, 999);
             fail("Should throw exception");
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         m.set(0, 0, 999);
-        m.set(m.getHeight()-1, m.getWidth()-1, 999);
+        m.set(m.getHeight() - 1, m.getWidth() - 1, 999);
         assertEquals((Integer) 999, m.get(0, 0));
-        assertEquals((Integer)  999, m.get(9, 9));
+        assertEquals((Integer) 999, m.get(9, 9));
     }
 
     @Test
@@ -95,7 +99,9 @@ public class TestLazyMatrix {
     @Test
     void testForEach() {
         Matrix<List<Boolean>> m = new LazyMatrix<>(2, 1, new LinkedList<Boolean>());
-        m.stream().forEach(x -> { x.add(true); });
+        m.stream().forEach(x -> {
+            x.add(true);
+        });
         assertEquals(new ListMatrix<>(2, 1, () -> new LinkedList<>(Arrays.asList(true, true))), m);
     }
 

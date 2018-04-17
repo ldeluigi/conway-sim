@@ -191,8 +191,10 @@ public final class SandboxTools {
 
     /**
      * 
-     * @param name the name of the button
-     * @param tooltipText the tool tip of the button
+     * @param name
+     *            the name of the button
+     * @param tooltipText
+     *            the tool tip of the button
      * @return a new button
      */
     public static JButton newJButton(final String name, final String tooltipText) {
@@ -233,8 +235,10 @@ public final class SandboxTools {
 
     /**
      * 
-     * @param button the button
-     * @param dim the button dimension
+     * @param button
+     *            the button
+     * @param dim
+     *            the button dimension
      */
     public static void setIcon(final AbstractButton button, final Dimension dim) {
         button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(

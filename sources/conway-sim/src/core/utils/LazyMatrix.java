@@ -193,8 +193,6 @@ public class LazyMatrix<X> implements Matrix<X> {
         return "LazyMatrix [edits=" + edits + ", base=" + base + ", width=" + width + ", height=" + height + "]";
     }
 
-
-
     private class Position {
         private final int x;
         private final int y;

@@ -27,10 +27,13 @@ import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
 import controller.io.RLETranslator;
 import controller.io.ResourceLoader;
+
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import view.DesktopGUI;
-import view.swing.Sandbox;
+
+import view.Sandbox;
+
 import view.swing.book.BookFrame;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
@@ -41,7 +44,7 @@ import view.swing.menu.MenuSettings;
 public class SandboxImpl extends JPanel implements Sandbox {
 
     private static final long serialVersionUID = -9015811419136279771L;
-    private static final int DEFAULT_SIZE = 100;
+    private static final int DEFAULT_SIZE = ResourceLoader.loadConstantInt("sandbox.grid.size");
     private static final int CELL_SIZE_RATIO = 100;
 
     private final GenerationPanel generationPanel;
@@ -183,6 +186,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
             this.bBook.setEnabled(true);
             this.bClear.setEnabled(true);
             this.bApply.setEnabled(true);
+            this.gridEditor.cancelSelectMode();
             try {
                 jif.setClosed(true);
             } catch (PropertyVetoException e1) {
@@ -226,18 +230,25 @@ public class SandboxImpl extends JPanel implements Sandbox {
         });
     }
 
+    /**
+     * 
+     */
     @Override
     public final Font getFont() {
         return new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final void paintComponent(final Graphics g) {
+    public void paintComponent(final Graphics g) {
         g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     /**
      * Enables "clear" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -247,6 +258,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
 
     /**
      * Enables "apply" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -256,6 +268,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
 
     /**
      * Gets the button used to call the recipe book and returns it.
+     * 
      * @return the book button
      */
     public JButton getButtonBook() {
@@ -264,6 +277,7 @@ public class SandboxImpl extends JPanel implements Sandbox {
 
     /**
      * Gets the editor used to handle the grid and returns it.
+     * 
      * @return the gridEtitor
      */
     public PatternEditor getGridEditor() {
@@ -300,5 +314,13 @@ public class SandboxImpl extends JPanel implements Sandbox {
             }
             this.mainGUI.backToMainMenu();
         }
+    }
+
+    /**
+     * Add the runnable to the sandbox scheduler.
+     */
+    @Override
+    public void scheduleGUIUpdate(final Runnable runnable) {
+        SwingUtilities.invokeLater(runnable);
     }
 }

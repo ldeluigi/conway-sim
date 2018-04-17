@@ -4,12 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.SwingUtilities;
-
 import controller.io.ResourceLoader;
 import core.model.Generation;
 import core.model.Generations;
-import view.swing.Sandbox;
+
+import view.Sandbox;
 
 /**
  * 
@@ -21,7 +20,7 @@ public class GenerationControllerImpl implements GenerationController {
      */
     private static final int SAVE_GAP = ResourceLoader.loadConstantInt("generation.SAVE_GAP");
 
-    private final Clock clock = new Clock(() -> this.computeNextGeneration());
+    private final Clock clock = new Clock(() -> this.computeNext());
     private final List<Long> savedState = new LinkedList<>();
     private final Sandbox view;
     private Long currentGenerationNumber;
@@ -30,66 +29,86 @@ public class GenerationControllerImpl implements GenerationController {
 
     /**
      * New Generation controller empty.
-     * @param view the view
+     * 
+     * @param view
+     *            the view
      */
     public GenerationControllerImpl(final Sandbox view) {
         this.view = view;
         this.currentGeneration = this.view.getGridEditor().getGeneration();
+        this.currentGenerationNumber = 0L;
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
     }
 
+    /**
+     * Load a new game.
+     */
     @Override
-    public final void newGame() {
+    public void newGame() {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * Stop the game.
+     */
     @Override
-    public final void pause() {
+    public void pause() {
         this.clock.stopClock();
         this.view.refreshView();
     }
 
+    /**
+     * Start the game.
+     */
     @Override
-    public final void play() {
+    public void play() {
         this.clock.start();
     }
 
+    /**
+     * Reset the game.
+     */
     @Override
-    public final void reset() {
+    public void reset() {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final void setSpeed(final int speed) {
+    public void setSpeed(final int speed) {
         this.clock.setSpeed(speed);
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final void loadGeneration(final Long generationNumber) {
+    public void loadOldElement(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);
             this.oldGeneration.removeAllElemsAfter(0L);
         } else if (generationNumber.longValue() < 0L) {
             throw new IllegalArgumentException();
-        } else if (generationNumber > this.getCurrentNumberGeneration()) {
-            final Long difference = generationNumber - this.getCurrentNumberGeneration();
+        } else if (generationNumber > this.getCurrentNumberElement()) {
+            final Long difference = generationNumber - this.getCurrentNumberElement();
             final int threadNumber = Runtime.getRuntime().availableProcessors();
-            final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentGeneration(), threadNumber);
+            final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentElement(),
+                    threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
         } else {
-            final Long value = this.oldGeneration.getSavedState().keySet().stream()
-                            .filter(l -> l <= generationNumber)
-                            .max((x, y) -> Long.compare(x, y))
-                            .orElse(-1L);
+            final Long value = this.oldGeneration.getSavedState().keySet().stream().filter(l -> l <= generationNumber)
+                    .max((x, y) -> Long.compare(x, y)).orElse(-1L);
             Generation valueGeneration;
             Long difference;
             if (value.equals(-1L)) {
@@ -99,21 +118,23 @@ public class GenerationControllerImpl implements GenerationController {
             }
             difference = generationNumber - value;
             if (difference.longValue() != 0L) {
-                    final int threadNumber = Runtime.getRuntime().availableProcessors();
-                    valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
+                final int threadNumber = Runtime.getRuntime().availableProcessors();
+                valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
             }
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
-            this.oldGeneration.removeAllElemsAfter(this.getCurrentNumberGeneration());
+            this.oldGeneration.removeAllElemsAfter(this.getCurrentNumberElement());
         }
-        this.savedState.removeAll(savedState.stream()
-                                            .filter(l -> l > 1 && l > this.getCurrentNumberGeneration())
-                                            .collect(Collectors.toList()));
-        SwingUtilities.invokeLater(() -> this.view.refreshView());
+        this.savedState.removeAll(savedState.stream().filter(l -> l > 1 && l > this.getCurrentNumberElement())
+                .collect(Collectors.toList()));
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
+    /**
+     * 
+     */
     @Override
-    public final Generation getCurrentGeneration() {
+    public Generation getCurrentElement() {
         return this.currentGeneration;
     }
 
@@ -121,8 +142,11 @@ public class GenerationControllerImpl implements GenerationController {
         this.currentGeneration = generation;
     }
 
+    /**
+     * 
+     */
     @Override
-    public final synchronized Long getCurrentNumberGeneration() {
+    public synchronized Long getCurrentNumberElement() {
         return this.currentGenerationNumber;
     }
 
@@ -130,11 +154,14 @@ public class GenerationControllerImpl implements GenerationController {
         this.currentGenerationNumber = number;
     }
 
+    /**
+     * 
+     */
     @Override
-    public final synchronized void computeNextGeneration() {
-        this.setCurrentGeneration(Generations.compute(this.getCurrentGeneration()));
-        this.setCurrentNumberGeneration(this.getCurrentNumberGeneration() + 1L);
-        this.saveGeneration(this.getCurrentGeneration(), getCurrentNumberGeneration());
+    public synchronized void computeNext() {
+        this.setCurrentGeneration(Generations.compute(this.getCurrentElement()));
+        this.setCurrentNumberGeneration(this.getCurrentNumberElement() + 1L);
+        this.saveGeneration(this.getCurrentElement(), getCurrentNumberElement());
         this.view.refreshView();
     }
 

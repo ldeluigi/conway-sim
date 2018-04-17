@@ -125,8 +125,8 @@ public class GenerationPanel extends JPanel {
         bPlay.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
-        bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() - 1L));
-        bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberGeneration() + 1L));
+        bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
+        bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (bStart.isEnabled()) {
                 start();
@@ -174,8 +174,8 @@ public class GenerationPanel extends JPanel {
 
     private void goTo(final Long value) {
         if (value < 0) {
-            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo").replaceAll("start", value.toString()).replaceAll("end", this.generationController.getCurrentNumberGeneration().toString()));
-        } else if (!value.equals(this.generationController.getCurrentNumberGeneration())) {
+            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo").replaceAll("start", value.toString()).replaceAll("end", this.generationController.getCurrentNumberElement().toString()));
+        } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
             this.bPlay.setEnabled(false);
             this.bEnd.setEnabled(false);
             this.setTimeButtonEnable(false);
@@ -185,7 +185,7 @@ public class GenerationPanel extends JPanel {
 
             final FutureTask<Generation> fTask = new FutureTask<>(() -> {
 
-                this.generationController.loadGeneration(value);
+                this.generationController.loadOldElement(value);
 
                 try {
                     SwingUtilities.invokeAndWait(() -> {
@@ -268,13 +268,13 @@ public class GenerationPanel extends JPanel {
      */
     public void refreshView() {
         if (!this.view.getGridEditor().isEnabled()) {
-            this.view.getGridEditor().draw(this.generationController.getCurrentGeneration());
+            this.view.getGridEditor().draw(this.generationController.getCurrentElement());
         }
-        final int aliveCell = (int) this.generationController.getCurrentGeneration().getCellMatrix().stream().filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
+        final int aliveCell = (int) this.generationController.getCurrentElement().getCellMatrix().stream().filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
         SwingUtilities.invokeLater(() -> {
             SandboxTools.refreshStatistics(
                 this.getCurrentSpeed(),
-                this.generationController.getCurrentNumberGeneration().intValue(),
+                this.generationController.getCurrentNumberElement().intValue(),
                 aliveCell,
                 this.view.getFont());
         });

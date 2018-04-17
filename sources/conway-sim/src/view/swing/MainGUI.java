@@ -18,6 +18,7 @@ import javax.swing.plaf.basic.BasicInternalFrameUI;
 import controller.io.ResourceLoader;
 import view.DesktopGUI;
 import view.swing.menu.MainMenu;
+
 /**
  * Implementation of a {@link DesktopGUI} with java.swing.
  */
@@ -129,10 +130,10 @@ public final class MainGUI implements DesktopGUI {
         this.desktop.add(iFrame);
         iFrame.setLayer(JDesktopPane.PALETTE_LAYER);
         if (maximum) {
-        	try {
+            try {
 				iFrame.setMaximum(true);
 			} catch (PropertyVetoException e) {
-				Log.logMessage("Frame not maximizable.");
+				System.err.println("Frame not maximizable.");
 			}
         }
     }

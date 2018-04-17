@@ -1,11 +1,13 @@
-package view.swing;
+package view;
+
 import javax.swing.JButton;
+
 import controller.editor.PatternEditor;
 /**
  * 
  *
  */
-public interface Sandbox {
+public interface Sandbox extends UpdateScheduler {
     /**
      * Applies size changes to the grid.
      */
@@ -13,6 +15,7 @@ public interface Sandbox {
 
     /**
      * Enables "clear" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -20,6 +23,7 @@ public interface Sandbox {
 
     /**
      * Enables "apply" button to be clicked by the user.
+     * 
      * @param flag
      *            a boolean flag
      */
@@ -27,12 +31,14 @@ public interface Sandbox {
 
     /**
      * Enables clear button to be clicked by the user.
+     * 
      * @return the book button
      */
     JButton getButtonBook();
 
     /**
      * Gets the editor used to handle the grid and returns it.
+     * 
      * @return the gridEtitor
      */
     PatternEditor getGridEditor();
