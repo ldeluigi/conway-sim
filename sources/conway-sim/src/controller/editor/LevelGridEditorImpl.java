@@ -54,7 +54,7 @@ public class LevelGridEditorImpl extends GridEditorImpl {
         }
         if (this.currentLevel.getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
             this.currentStatus.set(row, col, this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
-            this.gameGrid.displaySingleCell(row, col, LEVELCOLOR.apply(this.currentStatus.get(row, col), this.currentLevel.getCellTypeMatrix().get(row, col)));
+            this.getGameGrid().displaySingleCell(row, col, LEVELCOLOR.apply(this.currentStatus.get(row, col), this.currentLevel.getCellTypeMatrix().get(row, col)));
         }
     }
 

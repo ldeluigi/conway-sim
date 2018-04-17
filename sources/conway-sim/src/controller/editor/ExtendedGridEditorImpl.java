@@ -3,7 +3,10 @@ package controller.editor;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Optional;
 import java.util.function.Function;
+
+import javax.swing.SwingUtilities;
 
 import core.model.Status;
 import core.utils.Matrices;
@@ -15,26 +18,31 @@ import view.swing.sandbox.GridPanel;
  */
 public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGridEditor {
 
-    private static final Function<Status, Color> SELECT = s -> s.equals(Status.DEAD) ? Color.ORANGE : Color.RED;
-    private boolean cutMode = false;
-    private boolean selectMode = false;
+    private static final Function<Status, Color> STANDARDCOLOR = s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
+    private static final Function<Status, Color> SELECTMODE = s -> s.equals(Status.DEAD) ? Color.ORANGE : Color.RED;
+    private Matrix<Status> currentStatus;
     private GridPanel gameGrid;
+    private boolean selectMode;
+    private boolean cutReady;
+    private Optional<Boolean> oldPlacingState;
+    private boolean mouseBeingPressed;
+
+    //Coordinates for the gridSave
     private int lowX = 0;
     private int lowY = 0;
     private int hightX = 0;
     private int hightY = 0;
     private int lastRow = -1;
     private int lastCol = -1;
-    private boolean cutReady;
-    private boolean oldPlacingState;
 
     /**
      * 
      * @param grid the initial grid.
      */
     public ExtendedGridEditorImpl(final GridPanel grid) {
-        super(grid); //TODO rifare campo privato per riferimento a grid
-        gameGrid.addListenerToGrid((i, j) -> new ExtendedGridEditorImpl.CellListener(i, j));
+        super(grid);
+        this.gameGrid = grid;
+        getGameGrid().addListenerToGrid((i, j) -> new ExtendedGridEditorImpl.CellListener(i, j));
     }
 
     /**
@@ -43,7 +51,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
         super.changeSizes(horizontal, vertical);
-        gameGrid.addListenerToGrid((i, j) -> new ExtendedGridEditorImpl.CellListener(i, j));
+        getGameGrid().addListenerToGrid((i, j) -> new ExtendedGridEditorImpl.CellListener(i, j));
     }
 
     /**
@@ -63,11 +71,11 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     @Override
     public void selectMode(final boolean flag) {
         if (!selectMode && flag) {
-            oldPlacingState = placingState;
-            placingState = false;
+            oldPlacingState = Optional.of(this.isEnabled());
+            this.setEnabled(false);
             selectMode = true;
         } else if (selectMode && cutReady && flag) {
-            placingState = oldPlacingState;
+            this.setEnabled(oldPlacingState.orElse(false));
             selectMode = false;
         }
     }
@@ -79,7 +87,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     public void cancelSelectMode() {
         if (selectMode) {
             selectMode = false;
-            placingState = oldPlacingState;
+            this.setEnabled(oldPlacingState.orElse(false));
             cutReady = false;
         }
     }
@@ -97,7 +105,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
             cutReady = false;
             this.applyChanges();
             this.currentStatus.set(row, col, this.currentStatus.get(row, col));
-            this.gameGrid.displaySingleCell(row, col, SELECT.apply(this.currentStatus.get(row, col)));
+            this.getGameGrid().displaySingleCell(row, col, SELECTMODE.apply(this.currentStatus.get(row, col)));
             if (lastRow > this.currentStatus.getWidth() || lastCol > this.currentStatus.getHeight()) {
                 lastRow = -1;
                 lastCol = -1;
@@ -134,18 +142,54 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
             }
             for (int x = lowY; x <= hightY; x++) {
                 this.currentStatus.set(lowX, x, this.currentStatus.get(lowX, x));
-                this.gameGrid.displaySingleCell(lowX, x, SELECT.apply(this.currentStatus.get(lowX, x)));
+                this.getGameGrid().displaySingleCell(lowX, x, SELECTMODE.apply(this.currentStatus.get(lowX, x)));
                 this.currentStatus.set(hightX, x, this.currentStatus.get(hightX, x));
-                this.gameGrid.displaySingleCell(hightX, x, SELECT.apply(this.currentStatus.get(hightX, x)));
+                this.getGameGrid().displaySingleCell(hightX, x, SELECTMODE.apply(this.currentStatus.get(hightX, x)));
             }
             for (int x = lowX; x <= hightX; x++) {
                 this.currentStatus.set(x, lowY, this.currentStatus.get(x, lowY));
-                this.gameGrid.displaySingleCell(x, lowY, SELECT.apply(this.currentStatus.get(x, lowY)));
+                this.getGameGrid().displaySingleCell(x, lowY, SELECTMODE.apply(this.currentStatus.get(x, lowY)));
                 this.currentStatus.set(x, hightY, this.currentStatus.get(x, hightY));
-                this.gameGrid.displaySingleCell(x, hightY, SELECT.apply(this.currentStatus.get(x, hightY)));
+                this.getGameGrid().displaySingleCell(x, hightY, SELECTMODE.apply(this.currentStatus.get(x, hightY)));
             }
             cutReady = size > 2 ? true : false;
         }
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected Matrix<Status> getCurrentStatus() {
+        return this.currentStatus;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void setCurrentStatus(final Matrix<Status> newStatus) {
+        this.currentStatus = newStatus;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected GridPanel getGameGrid() {
+        return this.gameGrid;
+    }
+
+    /**
+     * 
+     */
+    @Override
+    protected void addActionListenerToGridPanel() {
+        this.getGameGrid().addListenerToGrid((i, j) -> new CellListener(i, j));
+    }
+
+    private void applyChanges() {
+        this.getGameGrid().paintGrid(0, 0, this.getCurrentStatus().map(STANDARDCOLOR));
     }
 
     class CellListener implements MouseListener {
@@ -168,17 +212,6 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
          */
         @Override
         public void mouseClicked(final MouseEvent e) {
-            if (cutMode) {
-                if (lowX == lowY && lowX == 0) {
-                    lowY = row;
-                    lowX = column;
-                } else if (hightX == hightY && hightX == 0) {
-                    hightY = row;
-                    hightX = column;
-                } else {
-                    cutMode = false;
-                }
-            }
         }
 
         /**
@@ -189,6 +222,21 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
         public void mousePressed(final MouseEvent e) {
             if (selectMode) {
                 select(row, column);
+            } else if (SwingUtilities.isLeftMouseButton(e) && ExtendedGridEditorImpl.this.isEnabled()) {
+                ExtendedGridEditorImpl.this.mouseBeingPressed = true;
+                if (ExtendedGridEditorImpl.this.isPlacingModeOn()) {
+                    ExtendedGridEditorImpl.this.placeCurrentPattern(this.row, this.column);
+                } else {
+                    ExtendedGridEditorImpl.this.hit(this.row, this.column);
+                }
+            } else if (SwingUtilities.isRightMouseButton(e) && ExtendedGridEditorImpl.this.isEnabled()
+                    && ExtendedGridEditorImpl.this.isPlacingModeOn()) {
+                if (e.isControlDown()) {
+                    ExtendedGridEditorImpl.this.removePatternToPlace();
+                    ExtendedGridEditorImpl.this.applyChanges();
+                } else {
+                    ExtendedGridEditorImpl.this.rotateCurrentPattern(1);
+                }
             }
         }
 
@@ -198,6 +246,9 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
          */
         @Override
         public void mouseReleased(final MouseEvent e) {
+            if (SwingUtilities.isLeftMouseButton(e)) {
+                ExtendedGridEditorImpl.this.mouseBeingPressed = false;
+            }
         }
 
         /**
@@ -208,6 +259,12 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
         public void mouseEntered(final MouseEvent e) {
             if (selectMode) {
                 ExtendedGridEditorImpl.this.showSelect(row, column);
+            } else if (ExtendedGridEditorImpl.this.isEnabled()) {
+                if (ExtendedGridEditorImpl.this.isPlacingModeOn()) {
+                    ExtendedGridEditorImpl.this.showPreview(this.row, this.column);
+                } else if (ExtendedGridEditorImpl.this.mouseBeingPressed && SwingUtilities.isLeftMouseButton(e)) {
+                    ExtendedGridEditorImpl.this.hit(this.row, this.column);
+                }
             }
         }
 
