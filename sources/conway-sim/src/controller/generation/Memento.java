@@ -52,7 +52,8 @@ interface Memento<Y extends Comparable<?>, X> {
      * included.
      * 
      * @param keyElement
-     *            the last element key that must be keep, all the greatest will be remove
+     *            the last element key that must be keep, all the greatest will be
+     *            remove
      */
     void removeAllElemsAfter(Y keyElement);
 

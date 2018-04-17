@@ -7,7 +7,7 @@ import java.util.function.BiFunction;
 import core.utils.Matrix;
 
 /**
- * Abstract class that can represent matrices as grids.
+ * The tool that can represent matrices as grids.
  */
 public interface GridPanel {
 

@@ -53,7 +53,7 @@ public class BookFrame extends JInternalFrame {
      * 
      */
     public BookFrame(final PatternEditor patternE) {
-        super("Book", true, true);
+        super("Book", true, true, true, true);
         final RecipeLoader rl = new RecipeLoader();
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -85,7 +85,6 @@ public class BookFrame extends JInternalFrame {
             public void mousePressed(final MouseEvent e) {
                 setSelectedItem(defaultList.getSelectedValue());
                 setSelectedList(DEFAULT);
-                System.out.println("DEBUG | Selected Item: " + defaultList.getSelectedValue());
                 final Matrix<Status> mat = new RLEConvert(
                         rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
@@ -156,7 +155,6 @@ public class BookFrame extends JInternalFrame {
                 ResourceLoader.loadString("book.placett"));
         // ACTION LISTENER PLACE BUTTON
         final ActionListener place = e -> {
-            System.out.println("DEBUG | PLACE Button pressed, handling the pattern placement.");
             final Matrix<Status> mat;
             if (getSelectedList() == DEFAULT) {
                 mat = new RLEConvert(rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();

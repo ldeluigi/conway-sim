@@ -29,7 +29,8 @@ import view.swing.sandbox.GridPanel;
 
 /**
  * GridEditorImpl is the editor for the grid and the pattern manager depending
- * on which interface is used.
+ * on which interface is used; it allows to perform changes to the view of the
+ * grid.
  *
  */
 public class GridEditorImpl implements GridEditor, PatternEditor {
@@ -54,6 +55,16 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
     private static final Function<Cell, Color> CELLTOCOLOR = c -> ALIVETOBLACK.apply(c.getStatus());
     protected static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
+
+    private final GridPanel gameGrid;
+
+    private boolean placingState;
+    private boolean mouseBeingPressed;
+    private int lastPreviewRow;
+    private int lastPreviewColumn;
+    private Environment env;
+    private Optional<Matrix<Status>> pattern;
+    private Matrix<Status> currentStatus;
 
     /**
      * Constructor method for a new Editor.
@@ -112,7 +123,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
 
     /**
      * Is the method which displays the future pattern together with the matrix
-     * already existing.
+     * already existing. The cursor of the mouse will guide the center of the
+     * pattern all over the grid (if it can be fitted).
      * 
      * @param row
      *            is the vertical index of the cell where the user is pointing
@@ -129,9 +141,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         final int newColumn = indexes[1];
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.gameGrid.paintGrid(0, 0,
-                    Matrices.mergeXY(this.currentStatus.map(ALIVETOBLACK), newRow,
-                            newColumn, this.pattern.get().map(ALIVETOGRAY)));
+            this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(this.currentStatus.map(ALIVETOBLACK), newRow, newColumn,
+                    this.pattern.get().map(ALIVETOGRAY)));
             this.lastPreviewRow = newRow;
             this.lastPreviewColumn = newColumn;
         }
@@ -161,7 +172,8 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      *            is the index describing the lastPreviewRow where to add the first
      *            pattern label
      * @param column
-     *            is the index of the column where to add the first pattern label
+     *            is the index of the lastPreviewColumn where to add the first
+     *            pattern label
      */
     @Override
     public void placeCurrentPattern(final int row, final int column) {
@@ -176,8 +188,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         final int newColumn = indexes[1];
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.currentStatus = Matrices.mergeXY(this.currentStatus, newRow,
-                    newColumn, this.pattern.get());
+            this.currentStatus = Matrices.mergeXY(this.currentStatus, newRow, newColumn, this.pattern.get());
             this.applyChanges();
             this.removePatternToPlace();
         } else if (!(newRow == this.lastPreviewRow && newColumn == this.lastPreviewColumn)) {
@@ -199,7 +210,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
      * Is the method to invoke in order to rotate the pattern.
      * 
      * @param hits
-     *            is the number of click from mouse
+     *            is the number of click(s) from the mouse
      */
     @Override
     public void rotateCurrentPattern(final int hits) {
@@ -292,7 +303,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     }
 
     private int[] checkIndexes(final int row, final int column) {
-        int[] newIndex = { row - this.pattern.get().getHeight() / 2, column - this.pattern.get().getWidth() / 2};
+        int[] newIndex = { row - this.pattern.get().getHeight() / 2, column - this.pattern.get().getWidth() / 2 };
 
         if (newIndex[0] < 0) {
             newIndex[0] = 0;
