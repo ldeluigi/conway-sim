@@ -119,9 +119,16 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        final int[] indexes = this.checkIndexes(row, column);
-        final int newRow = indexes[0];
-        final int newColumn = indexes[1];
+        final int newRow;
+        final int newColumn;
+        if (this.lastPreviewColumn != column && this.lastPreviewRow != row) {
+            final int[] indexes = this.centerIndexes(row, column);
+            newRow = indexes[0];
+            newColumn = indexes[1];
+        } else {
+        	newRow = row;
+            newColumn = column;
+        }
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.gameGrid.getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
             this.gameGrid.paintGrid(0, 0, Matrices.mergeXY(this.currentStatus.map(ALIVETOBLACK), newRow, newColumn,
@@ -166,7 +173,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         if (!this.placingState || !this.pattern.isPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        final int[] indexes = this.checkIndexes(row, column);
+        final int[] indexes = this.centerIndexes(row, column);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
         if ((this.gameGrid.getGridWidth() - newColumn) >= this.pattern.get().getWidth()
@@ -285,7 +292,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
         }
     }
 
-    private int[] checkIndexes(final int row, final int column) {
+    private int[] centerIndexes(final int row, final int column) {
         int[] newIndex = { row - this.pattern.get().getHeight() / 2, column - this.pattern.get().getWidth() / 2 };
 
         if (newIndex[0] < 0) {
