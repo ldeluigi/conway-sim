@@ -7,26 +7,27 @@ import java.util.function.Function;
  * 
  */
 public enum StandardCellEnvironments implements CellEnvironment {
-	/**
-	 * This is the classic rule set of Conway's Game of Life.
-	 */
-	STANDARD(n -> n == 3, n -> n < 2 || n > 3);
+    /**
+     * This is the classic rule set of Conway's Game of Life.
+     */
+    STANDARD(n -> n == 3, n -> n < 2 || n > 3);
 
-	private final Function<Integer, Boolean> checkBorn;
-	private final Function<Integer, Boolean> checkDeath;
+    private final Function<Integer, Boolean> checkBorn;
+    private final Function<Integer, Boolean> checkDeath;
 
-	StandardCellEnvironments(final Function<Integer, Boolean> checkBorn, final Function<Integer, Boolean> checkDeath) {
-		this.checkBorn = checkBorn;
-		this.checkDeath = checkDeath;
-	}
+    StandardCellEnvironments(final Function<Integer, Boolean> checkBorn,
+            final Function<Integer, Boolean> checkDeath) {
+        this.checkBorn = checkBorn;
+        this.checkDeath = checkDeath;
+    }
 
-	@Override
-	public boolean checkCellBorn(final int neighbors) {
-		return this.checkBorn.apply(neighbors);
-	}
+    @Override
+    public boolean checkCellBorn(final int neighbors) {
+        return this.checkBorn.apply(neighbors);
+    }
 
-	@Override
-	public boolean checkCellDeath(final int neighbors) {
-		return this.checkDeath.apply(neighbors);
-	}
+    @Override
+    public boolean checkCellDeath(final int neighbors) {
+        return this.checkDeath.apply(neighbors);
+    }
 }
