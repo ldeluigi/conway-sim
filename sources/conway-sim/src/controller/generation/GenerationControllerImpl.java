@@ -9,7 +9,7 @@ import javax.swing.SwingUtilities;
 import controller.io.ResourceLoader;
 import core.model.Generation;
 import core.model.Generations;
-import view.swing.sandbox.Sandbox;
+import view.swing.Sandbox;
 
 /**
  * 

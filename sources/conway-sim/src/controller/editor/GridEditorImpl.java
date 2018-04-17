@@ -51,7 +51,7 @@ public class GridEditorImpl implements GridEditor, PatternEditor {
     private static final Function<Status, Color> ALIVETOBLACK = s -> STATUSTOCOLOR.apply(s, Color.BLACK);
     private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
     private static final Function<Cell, Color> CELLTOCOLOR = c -> ALIVETOBLACK.apply(c.getStatus());
-    private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
+    protected static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
     /**
      * Constructor method for a new Editor.
