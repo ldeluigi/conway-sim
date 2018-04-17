@@ -44,16 +44,7 @@ public class RecipeLoader {
         this.defaultbook = new RecipeBookImpl();
         this.custombook = new RecipeBookImpl();
         this.recipeParser(this.custombook, CUSTOMRECIPEFOLDER);
-        try {
-            final URI uri = RecipeLoader.class.getResource("/recipebook").toURI();
-            if (uri.getScheme().equals("jar")) {
-                this.defRecipeLoader();
-            } else {
-                this.recipeParser(defaultbook, DEFAULTRECIPEFOLDER);
-            }
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+        this.defRecipeLoader();
 
     }
 
