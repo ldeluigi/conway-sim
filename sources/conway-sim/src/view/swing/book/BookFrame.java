@@ -63,12 +63,12 @@ public class BookFrame extends JInternalFrame {
         // Populate the arrList
         final List<String> defRecList = new ArrayList<String>();
 
-        for (final Recipe recipe : rl.getDefaultBook().getBookList()) {
+        for (final Recipe recipe : rl.getDefaultBook().getRecipeList()) {
             defRecList.add(recipe.getName());
         }
         final List<String> custRecList = new ArrayList<String>();
 
-        for (final Recipe recipe : rl.getCustomBook().getBookList()) {
+        for (final Recipe recipe : rl.getCustomBook().getRecipeList()) {
             custRecList.add(recipe.getName());
         }
 
