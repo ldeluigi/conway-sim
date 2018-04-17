@@ -46,7 +46,8 @@ public final class Generations {
     }
 
     /**
-     * Computes a new {@link Generation} from the given one, with multithreading option.
+     * Computes a new {@link Generation} from the given one, with multithreading
+     * option.
      * 
      * @param start
      *            that is the previous {@link Generation}
@@ -85,8 +86,8 @@ public final class Generations {
         return temp;
     }
 
-    private static Generation computeGeneration(final Generation start,
-            final ExecutorService executor, final int nThread) {
+    private static Generation computeGeneration(final Generation start, final ExecutorService executor,
+            final int nThread) {
         final Environment env = start.getEnviroment();
         final Matrix<Cell> previous = start.getCellMatrix();
         final Matrix<Cell> result = GenerationFactory.copyOf(start).getCellMatrix();
@@ -110,8 +111,8 @@ public final class Generations {
         return GenerationFactory.from(result, env);
     }
 
-    private static void computeSlice(final int fromCell, final int toCell,
-            final Matrix<Cell> previous, final Matrix<Cell> result, final Environment env) {
+    private static void computeSlice(final int fromCell, final int toCell, final Matrix<Cell> previous,
+            final Matrix<Cell> result, final Environment env) {
         IntStream.range(fromCell, toCell).forEach(nCell -> {
             // alive neighbors count
             final int row = nCell / previous.getWidth();
@@ -121,8 +122,7 @@ public final class Generations {
                 for (int w = -1; w <= 1; w++) {
                     if (row + h >= 0 && row + h < previous.getHeight() && column + w >= 0
                             && column + w < previous.getWidth() && !(h == 0 && w == 0)) {
-                        neighbors += previous.get(row + h, column + w).getStatus().equals(ALIVE) ? 1
-                                : 0;
+                        neighbors += previous.get(row + h, column + w).getStatus().equals(ALIVE) ? 1 : 0;
                     }
                 }
             }
