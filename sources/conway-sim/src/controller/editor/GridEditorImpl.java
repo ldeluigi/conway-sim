@@ -25,9 +25,8 @@ import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
 
 /**
- * GridEditorImpl is the editor for the grid and the pattern manager depending
- * on which interface is used; it allows to perform changes to the view of the
- * grid.
+ * GridEditorImpl is the editor for the grid and the pattern manager depending on which interface is
+ * used; it allows to perform changes to the view of the grid.
  *
  */
 public class GridEditorImpl implements GridEditor, PatternEditor {

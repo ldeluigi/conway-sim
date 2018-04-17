@@ -7,17 +7,17 @@ import view.swing.MainGUI;
  */
 public final class ApplicationStart {
 
-	private ApplicationStart() {
-	}
+    private ApplicationStart() {
+    }
 
-	/**
-	 * Calls the constructor of {@link MainGUI} which starts the application.
-	 * 
-	 * @param args
-	 *            from command line, ignored
-	 */
-	public static void main(final String[] args) {
-		new MainGUI();
-	}
+    /**
+     * Calls the constructor of {@link MainGUI} which starts the application.
+     * 
+     * @param args
+     *            from command line, ignored
+     */
+    public static void main(final String[] args) {
+        new MainGUI();
+    }
 
 }
