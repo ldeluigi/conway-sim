@@ -36,11 +36,13 @@ public class SimpleSandbox extends JPanel implements Sandbox {
     private final GenerationPanel generationPanel;
     private final JButton bBook;
     private final JButton bClear;
+    private JButton bExit;
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private final GridPanelImpl grid;
     private JPanel north;
     private JPanel south;
+    private JPanel southRight;
 
     private BookFrame book;
 
@@ -64,11 +66,11 @@ public class SimpleSandbox extends JPanel implements Sandbox {
 
         this.initializeNorth();
 
-        this.initializeSouth();
-
         this.bBook = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.book"),
                 ResourceLoader.loadString("sandbox.book.tooltip"));
         this.bBook.addActionListener(e -> callBook());
+
+        this.initializeSouth();
 
         // To ignore the space keyStroke
         final InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
@@ -185,11 +187,11 @@ public class SimpleSandbox extends JPanel implements Sandbox {
 
     private void initializeSouth() {
         this.south  = new JPanel(new BorderLayout());
-        final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
+        this.bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
                 ResourceLoader.loadString("sandbox.exit.tooltip"));
         south.setOpaque(false);
         bExit.addActionListener(e -> exit());
-        final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        this.southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         southRight.setOpaque(false);
         southRight.add(bClear);
         southRight.add(this.bBook);
