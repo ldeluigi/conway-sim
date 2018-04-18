@@ -29,14 +29,12 @@ public class ExtendedSandbox extends SimpleSandbox {
      */
     public ExtendedSandbox(final DesktopGUI mainGUI) {
         super(mainGUI);
-        Objects.requireNonNull(mainGUI);
         this.bApply = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.apply"),
                 ResourceLoader.loadString("sandbox.apply.tooltip"));
         final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply,
                 new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         gridOption.setOpaque(false);
         super.getNorthPanel().add(gridOption, BorderLayout.WEST);
-
     }
 
     /**
