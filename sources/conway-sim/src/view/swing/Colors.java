@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class Colors {
 	
-	public static Color GOLD = new Color(255, 215, 0);
+	public static final Color GOLD = new Color(255, 215, 0);
 
 	public static Color blend(Color a, Color b) {
 		return new Color((a.getRed() * a.getAlpha() + b.getRed() * b.getAlpha()) / (a.getAlpha() + b.getAlpha()),
