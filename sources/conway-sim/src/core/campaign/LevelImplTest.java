@@ -63,8 +63,13 @@ public class LevelImplTest implements Level {
     }
 
     @Override
-    public List<String> availablePatterns() {
+    public final List<String> availablePatterns() {
         return this.aviablePatterns;
+    }
+    
+    @Override
+    public final List<Matrix<? extends Enum<?>>> getStages() {
+        return stages;
     }
 
 }

@@ -3,7 +3,6 @@ package controller.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +10,6 @@ import java.util.stream.Collectors;
 import controller.book.Recipe;
 import controller.book.RecipeBook;
 import controller.book.RecipeBookImpl;
-import core.campaign.Editable;
 import core.campaign.Level;
 import core.campaign.LevelImplTest;
 import core.utils.Matrix;
@@ -42,7 +40,7 @@ public class LevelLoader {
     }
 
     private List<Matrix<? extends Enum<?>>> stageLoader(final int stages, final String selLvl) {
-        List<Matrix<? extends Enum<?>>> stagesLst = new ArrayList<Matrix<? extends Enum<?>>>();
+        List<Matrix<? extends Enum<?>>> stagesLst = Collections.emptyList();
         for (int i = 0; i < stages; i++) {
             try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(selLvl + "stage" + Integer.toString(stages + 1) + CNW_EXT)))) {
                 stagesLst.add(RLETranslator.rleStringToMatrix(in.readLine(), null));

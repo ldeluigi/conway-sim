@@ -41,4 +41,10 @@ public interface Level {
      * @return a list containing the names of the .rle files that are available in this level
      */
     List<String> availablePatterns();
+
+    /**
+     * Lists the stages Matrixes.
+     * @return a list containing the Matrixes of each stage
+     */
+    List<Matrix<? extends Enum<?>>> getStages();
 }
