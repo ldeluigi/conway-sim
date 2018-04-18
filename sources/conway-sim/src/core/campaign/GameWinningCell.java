@@ -47,7 +47,7 @@ public class GameWinningCell extends SimpleCell {
     @Override
     public void setStatus(final Status nextStatus) {
         if (nextStatus != this.getStatus()) {
-        	super.setStatus(nextStatus);
+            super.setStatus(nextStatus);
             if (nextStatus == Status.DEAD) {
                 this.death.run();
             } else {

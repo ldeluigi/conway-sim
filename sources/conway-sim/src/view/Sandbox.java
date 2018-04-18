@@ -23,14 +23,6 @@ public interface Sandbox extends UpdateScheduler {
     void setButtonClearEnabled(boolean flag);
 
     /**
-     * Enables "apply" button to be clicked by the user.
-     * 
-     * @param flag
-     *            a boolean flag
-     */
-    void setButtonApplyEnabled(boolean flag);
-
-    /**
      * Enables clear button to be clicked by the user.
      * 
      * @return the book button

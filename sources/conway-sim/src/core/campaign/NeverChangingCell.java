@@ -5,21 +5,24 @@ import core.model.SimpleCell;
 import core.model.Status;
 
 /**
- * Implementation of {@link Cell} which is always alive and can't be murdered.
+ * Implementation of {@link Cell} which is always alive or dead and can't be
+ * changed.
  */
-public class AliveAlwaysCell extends SimpleCell {
+public class NeverChangingCell extends SimpleCell {
 
     /**
-     * This is the code returned by {@link SimpleCell#code}.
+     * This is the code returned by {@link NeverChangingCell#code}.
      */
-    public static final int ALIVE_ALWAYS_CODE = 3;
+    public static final int NEVER_CHANGING_CODE = 3;
 
     /**
-     * Constructor method for a new alive Cell. No parameters needed as it won't
-     * change.
+     * Constructor method for a new immutable Cell.
+     * 
+     * @param s
+     *            the status to be used
      */
-    public AliveAlwaysCell() {
-    	super(Status.ALIVE);
+    public NeverChangingCell(final Status s) {
+        super(s);
     }
 
     /**
@@ -37,7 +40,7 @@ public class AliveAlwaysCell extends SimpleCell {
      */
     @Override
     public Status getStatus() {
-    	return super.getStatus();
+        return super.getStatus();
     }
 
     /**
@@ -45,7 +48,7 @@ public class AliveAlwaysCell extends SimpleCell {
      */
     @Override
     public Cell copy() {
-        return new AliveAlwaysCell();
+        return new NeverChangingCell(this.getStatus());
     }
 
     /**
@@ -53,7 +56,7 @@ public class AliveAlwaysCell extends SimpleCell {
      */
     @Override
     public int code() {
-        return AliveAlwaysCell.ALIVE_ALWAYS_CODE;
+        return NeverChangingCell.NEVER_CHANGING_CODE;
     }
 
 }

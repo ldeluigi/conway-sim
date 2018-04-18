@@ -35,12 +35,15 @@ public class SimpleSandbox extends JPanel implements Sandbox {
 
     private final GenerationPanel generationPanel;
     private final JButton bBook;
-    private final JButton bApply;
     private final JButton bClear;
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private final GridPanelImpl grid;
+    private JPanel north;
+    private JPanel south;
+
     private BookFrame book;
+
 
     /**
      * @param mainGUI
@@ -59,41 +62,13 @@ public class SimpleSandbox extends JPanel implements Sandbox {
         this.gridEditor.setEnabled(true);
         this.generationPanel = new GenerationPanel(this);
 
-        final JPanel north = new JPanel(new BorderLayout());
-        north.setOpaque(false);
-        this.bApply = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.apply"),
-                ResourceLoader.loadString("sandbox.apply.tooltip"));
-        final JPanel gridOption = SandboxTools.newGridOptionDimension(this, bApply,
-                new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
-        gridOption.setOpaque(false);
-        north.add(this.generationPanel, BorderLayout.EAST);
-        final JLabel mode = new JLabel(ResourceLoader.loadString("sandbox.mode"));
-        mode.setFont(defaultFont());
-        north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
-        north.add(gridOption, BorderLayout.WEST);
-        this.add(north, BorderLayout.NORTH);
+        this.initializeNorth();
+
+        this.initializeSouth();
 
         this.bBook = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.book"),
                 ResourceLoader.loadString("sandbox.book.tooltip"));
-        final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
-                ResourceLoader.loadString("sandbox.exit.tooltip"));
-
-        final JPanel south = new JPanel(new BorderLayout());
-        south.setOpaque(false);
-        final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        southRight.setOpaque(false);
-        southRight.add(bClear);
-        southRight.add(this.bBook);
-        southRight.add(bExit);
-        south.add(
-                SandboxTools.newJPanelStatistics(
-                        new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())),
-                BorderLayout.WEST);
-        south.add(southRight, BorderLayout.EAST);
-        this.add(south, BorderLayout.SOUTH);
-
         this.bBook.addActionListener(e -> callBook());
-        bExit.addActionListener(e -> exit());
 
         // To ignore the space keyStroke
         final InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
@@ -151,17 +126,6 @@ public class SimpleSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Enables "apply" button to be clicked by the user.
-     * 
-     * @param flag
-     *            a boolean flag
-     */
-    @Override
-    public void setButtonApplyEnabled(final boolean flag) {
-        this.bApply.setEnabled(flag);
-    }
-
-    /**
      * Gets the button used to call the recipe book and returns it.
      * 
      * @return the book button
@@ -196,6 +160,47 @@ public class SimpleSandbox extends JPanel implements Sandbox {
     public void scheduleGUIUpdate(final Runnable runnable) {
         SwingUtilities.invokeLater(runnable);
     }
+
+    /**
+     * Before {@link BorderLayoit.BEFORE_FIRST_LINE first_line} and {@link BorderLayoout.EAST east} are already used for this north panel.
+     * 
+     * @return the panel which is going to be added northern
+     */
+    public final JPanel getNorthPanel() {
+        return this.north;
+    }
+
+    /**
+     * Before first_line and east are already used for this north panel.
+     */
+    private void initializeNorth() {
+        this.north = new JPanel(new BorderLayout());
+        this.north.setOpaque(false);
+        this.north.add(this.generationPanel, BorderLayout.EAST);
+        final JLabel mode = new JLabel(ResourceLoader.loadString("sandbox.mode"));
+        mode.setFont(defaultFont());
+        north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
+        this.add(north, BorderLayout.NORTH);
+    }
+
+    private void initializeSouth() {
+        this.south  = new JPanel(new BorderLayout());
+        final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
+                ResourceLoader.loadString("sandbox.exit.tooltip"));
+        south.setOpaque(false);
+        bExit.addActionListener(e -> exit());
+        final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        southRight.setOpaque(false);
+        southRight.add(bClear);
+        southRight.add(this.bBook);
+        southRight.add(bExit);
+        south.add(
+                SandboxTools.newJPanelStatistics(
+                        new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())),
+                BorderLayout.WEST);
+        south.add(southRight, BorderLayout.EAST);
+        this.add(south, BorderLayout.SOUTH);
+        }
 
     private void callBook() {
         if (Objects.isNull(this.book)) {
