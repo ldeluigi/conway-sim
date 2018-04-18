@@ -113,7 +113,7 @@ public final class Generations {
 
     private static void computeSlice(final int fromCell, final int toCell, final Matrix<Cell> previous,
             final Matrix<Cell> result, final Environment env) {
-        IntStream.range(fromCell, toCell).forEach(nCell -> {
+        for (int nCell = fromCell; nCell < toCell; nCell++) {
             // alive neighbors count
             final int row = nCell / previous.getWidth();
             final int column = nCell % previous.getWidth();
@@ -134,6 +134,6 @@ public final class Generations {
                     && env.getCellEnvironment(row, column).checkCellBorn(neighbors)) {
                 result.get(row, column).setStatus(ALIVE);
             }
-        });
+        };
     }
 }
