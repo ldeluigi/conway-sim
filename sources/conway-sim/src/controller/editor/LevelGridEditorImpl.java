@@ -9,12 +9,15 @@ import core.campaign.CellType;
 import core.campaign.Editable;
 
 import core.campaign.Level;
+import core.model.Cell;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
+import core.model.GoldCell;
 import core.model.SimpleCell;
 import core.model.Status;
+import core.model.WallCell;
 import core.utils.LazyMatrix;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
@@ -100,7 +103,21 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public Generation getGeneration() {
-        return GenerationFactory.from(this.getCurrentStatus().map(s -> new SimpleCell(s)),
+        final Matrix<Cell> cellMatrix = new ListMatrix<>(this.currentLevel.get().getEnvironmentMatrix().getWidth(),
+                this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
+        for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix().getWidth(); col++) {
+                cellMatrix.set(row, col, 
+                        this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)
+                        ? new SimpleCell(this.currentStatus.get(row, col))
+                        : this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)
+                        ? new GoldCell(this.currentStatus.get(row, col))
+                        : this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.WALL)
+                        ? new WallCell(this.currentStatus.get(row, col))
+                        : new SimpleCell(this.currentStatus.get(row, col)));
+            }
+        }
+        return GenerationFactory.from(cellMatrix,
                 this.currentLevel.get().getEnvironmentMatrix());
     }
 
