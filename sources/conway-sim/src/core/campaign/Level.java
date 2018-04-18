@@ -2,6 +2,7 @@ package core.campaign;
 
 import java.util.List;
 
+import controller.book.Recipe;
 import core.model.Environment;
 import core.model.Status;
 import core.utils.Matrix;
@@ -40,5 +41,5 @@ public interface Level {
      * 
      * @return a list containing the names of the .rle files that are available in this level
      */
-    List<String> availablePatterns();
+    List<Recipe> availablePatterns();
 }

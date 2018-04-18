@@ -1,15 +1,31 @@
 package core.campaign;
 
-import java.util.Collections;
 import java.util.List;
+
+import controller.book.Recipe;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Status;
 import core.utils.LazyMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
-
+/**
+ * 
+ *
+ */
 public class LevelImplTest implements Level {
+
+    private final List<Recipe> aviablePatterns;
+    private final List<Matrix<? extends Enum<?>>> stages;
+    /**
+     * 
+     * @param patterns aviable patterns
+     * @param stages selected stages
+     */
+    public LevelImplTest(final List<Recipe> patterns, final List<Matrix<? extends Enum<?>>> stages) {
+        this.stages = stages;
+        this.aviablePatterns = patterns;
+    }
 
     @Override
     public Matrix<Editable> getEditableMatrix() {
@@ -48,8 +64,8 @@ public class LevelImplTest implements Level {
     }
 
     @Override
-    public List<String> availablePatterns() {
-        return Collections.emptyList();
+    public List<Recipe> availablePatterns() {
+        return this.aviablePatterns;
     }
 
 }
