@@ -12,7 +12,7 @@ import controller.generation.GenerationControllerImpl;
 import core.model.Generations;
 import junit.framework.Assert;
 import view.swing.MainGUI;
-import view.swing.sandbox.SimpleSandbox;
+import view.swing.sandbox.AbstractSandbox;
 
 /**
  * JUnit test for GenerationHistory and GenerationController.

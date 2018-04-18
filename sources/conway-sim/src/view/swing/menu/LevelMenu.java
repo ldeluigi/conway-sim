@@ -23,6 +23,7 @@ import controller.io.ResourceLoader;
 import view.DesktopGUI;
 import view.swing.sandbox.GridPanelImpl;
 import view.swing.sandbox.KeyListenerFactory;
+import view.swing.sandbox.SandboxBuilder;
 import view.swing.sandbox.SandboxTools;
 
 /**
@@ -40,9 +41,11 @@ public class LevelMenu extends JPanel {
     private static final String VALUE = "XXX";
     private final JTextArea textArea = new JTextArea(ResourceLoader.loadString("level.default.text"));
     private final List<JButton> bList = new LinkedList<>();
+    private final DesktopGUI mainGUI;
     private Optional<JPanel> rightLeftButton = Optional.empty();
     private Optional<JPanel> gridLevel = Optional.empty();
     private int currentPage;
+    private int currentLevel;
 
     /**
      * 
@@ -50,17 +53,18 @@ public class LevelMenu extends JPanel {
      */
     public LevelMenu(final DesktopGUI mainGUI) {
         this.setOpaque(false);
+        this.mainGUI = mainGUI;
         this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() * 2));
         textArea.setBorder(new TitledBorder(ResourceLoader.loadString("level.description")));
         textArea.setEditable(false);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        IntStream.range(0, ResourceLoader.loadConstantInt("level.number"))
-        .mapToObj(n -> SandboxTools.newJButton(
+        IntStream.range(1, ResourceLoader.loadConstantInt("level.number"))
+        .forEach(n -> {
+            JButton b = SandboxTools.newJButton(
                 String.valueOf(ResourceLoader.loadString("level.button").replaceAll(VALUE, String.valueOf(n))),
-                this.getFont()))
-        .forEach(b -> {
+                this.getFont());
             b.setFont(this.getFont());
             bList.add(b);
             b.setFocusable(false);
@@ -73,6 +77,7 @@ public class LevelMenu extends JPanel {
                     textArea.setText(b.getText() + System.lineSeparator()
                             + (ResourceLoader.loadString("level.button.text")));
                 }
+                currentLevel = n;
             });
         });
 
@@ -142,6 +147,9 @@ public class LevelMenu extends JPanel {
     }
 
     private void start() {
+        if (this.currentLevel != 0) {
+            this.mainGUI.setView(SandboxBuilder.build(mainGUI, currentLevel));
+        }
     }
 
     private void pressButton(final JButton button) {

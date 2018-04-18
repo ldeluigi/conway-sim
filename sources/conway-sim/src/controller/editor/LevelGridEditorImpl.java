@@ -1,15 +1,21 @@
 package controller.editor;
 
 import java.awt.Color;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import core.campaign.CellType;
 import core.campaign.Editable;
 
 import core.campaign.Level;
-import core.campaign.LevelImplTest;
 import core.model.Environment;
+import core.model.EnvironmentFactory;
 import core.model.Generation;
+import core.model.GenerationFactory;
+import core.model.SimpleCell;
 import core.model.Status;
+import core.utils.LazyMatrix;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
@@ -21,10 +27,7 @@ import view.swing.sandbox.GridPanel;
  */
 public class LevelGridEditorImpl extends GridEditorImpl {
 
-    private final Level currentLevel;
-    private final Matrix<Editable> editableMatrix;
-    private final Matrix<CellType> cellTypeMatrix;
-    private final Environment environment;
+    private Optional<Level> currentLevel;
     private Matrix<Status> currentStatus;
 
     /**
@@ -34,11 +37,63 @@ public class LevelGridEditorImpl extends GridEditorImpl {
      */
     public LevelGridEditorImpl(final GridPanel grid, final Level level) {
         super(grid);
-        this.currentLevel = new LevelImplTest();
-        this.currentStatus = this.currentLevel.getInitialStateMatrix().map(e -> e);
-        this.environment = this.currentLevel.getEnvironmentMatrix();
-        this.editableMatrix = this.currentLevel.getEditableMatrix();
-        this.cellTypeMatrix = this.currentLevel.getCellTypeMatrix();
+        setLevel(level);
+    }
+
+    /**
+     * 
+     * @param gridp a
+     */
+    public LevelGridEditorImpl(final GridPanel gridp) {
+        super(gridp);
+        setLevel(new Level() {
+            
+            @Override
+            public Matrix<Status> getInitialStateMatrix() {
+                return new LazyMatrix<>(1, 1, Status.DEAD);
+            }
+            
+            @Override
+            public Environment getEnvironmentMatrix() {
+                return EnvironmentFactory.standardRules(1, 1);
+            }
+            
+            @Override
+            public Matrix<Editable> getEditableMatrix() {
+                return new LazyMatrix<>(1, 1, Editable.EDITABLE);
+            }
+            
+            @Override
+            public Matrix<CellType> getCellTypeMatrix() {
+                return new LazyMatrix<>(1, 1, CellType.NORMAL);
+            }
+            
+            @Override
+            public List<String> availablePatterns() {
+                return Collections.emptyList();
+            }
+        });
+    }
+
+    /**
+     * //TODO controllo che il livello sia stato settato prima di usare tutti i metodi della classe tranne questo.
+     * @param level to set as current
+     */
+    public void setLevel(final Level level) {
+        this.currentLevel = Optional.of(level);
+        this.getGameGrid().changeGrid(this.currentLevel.get().getEnvironmentMatrix().getWidth(), this.currentLevel.get().getEnvironmentMatrix().getHeight());
+        this.currentStatus = this.currentLevel.get().getInitialStateMatrix().map(e -> e);
+        this.clean();
+    }
+
+    /**
+     * Is the method which gives back the current generation displayed.
+     * 
+     * @return the generation displayed.
+     */
+    @Override
+    public Generation getGeneration() {
+        return GenerationFactory.from(this.getCurrentStatus().map(s -> new SimpleCell(s)), this.currentLevel.get().getEnvironmentMatrix());
     }
 
     /**
@@ -49,7 +104,7 @@ public class LevelGridEditorImpl extends GridEditorImpl {
         if (!this.isEnabled()) {
             throw new IllegalStateException();
         }
-        if (this.currentLevel.getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
+        if (this.currentLevel.get().getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
             this.currentStatus.set(row, col, this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
             this.getGameGrid().displaySingleCell(row, col, calculateColor(row, col));
         }
@@ -61,17 +116,18 @@ public class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void clean() {
-        this.currentStatus = Matrices.copyOf(currentLevel.getInitialStateMatrix());
+        this.currentStatus = Matrices.copyOf(currentLevel.get().getInitialStateMatrix());
         this.applyChanges();
     }
 
     /**
      * 
      */
+    @Override
     protected void applyChanges() {
-        Matrix<Color> matrixColor = new ListMatrix<>(this.environment.getWidth(), this.environment.getHeight(), () -> null);
-        for (int row = 0; row < this.environment.getHeight(); row++) {
-            for (int col = 0; col < this.environment.getWidth(); col++) {
+        Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.get().getEnvironmentMatrix().getWidth(), this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
+        for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix().getWidth(); col++) {
                 matrixColor.set(row, col, calculateColor(row, col));
             }
         }
@@ -86,9 +142,9 @@ public class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void draw(final Generation gen) {
-        Matrix<Color> matrixColor = new ListMatrix<>(this.environment.getWidth(), this.environment.getHeight(), () -> null);
-        for (int row = 0; row < this.environment.getHeight(); row++) {
-            for (int col = 0; col < this.environment.getWidth(); col++) {
+        Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.get().getEnvironmentMatrix().getWidth(), this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
+        for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix().getWidth(); col++) {
                 matrixColor.set(row, col, calculateColorEditable(row, col));
             }
         }
@@ -96,14 +152,14 @@ public class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     private Color calculateColor(final int row, final int col) {
-        if (this.editableMatrix.get(row, col).equals(Editable.EDITABLE)) {
+        if (this.currentLevel.get().getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
             return calculateColorEditable(row, col);
         } else {
-            if (this.cellTypeMatrix.get(row, col).equals(CellType.NORMAL)) {
+            if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
                 return Colors.blend(Color.RED, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
-            } else if (this.cellTypeMatrix.get(row, col).equals(CellType.GOLDEN)) {
+            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)) {
                 return Colors.blend(Colors.GOLD, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
-            } else if (this.cellTypeMatrix.get(row, col).equals(CellType.WALL)) {
+            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.WALL)) {
                 return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
             } else {
                 return Colors.blend(Color.RED, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
@@ -112,11 +168,11 @@ public class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     private Color calculateColorEditable(final int row, final int col) {
-        if (this.cellTypeMatrix.get(row, col).equals(CellType.NORMAL)) {
+        if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
             return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
-        } else if (this.cellTypeMatrix.get(row, col).equals(CellType.GOLDEN)) {
+        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)) {
             return Colors.blend(Colors.GOLD, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
-        } else if (this.cellTypeMatrix.get(row, col).equals(CellType.WALL)) {
+        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.WALL)) {
             return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
         } else {
             return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
@@ -169,7 +225,7 @@ public class LevelGridEditorImpl extends GridEditorImpl {
         final int newCol = vet[1];
         for (int x = newRow; x < newRow + this.getPattern().getWidth(); x++) {
             for (int y = newCol; y < newCol + this.getPattern().getHeight(); y++) {
-                if (this.editableMatrix.get(x, y).equals(Editable.UNEDITABLE)) {
+                if (this.currentLevel.get().getEditableMatrix().get(x, y).equals(Editable.UNEDITABLE)) {
                     return false;
                 }
             }

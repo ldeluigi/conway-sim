@@ -98,16 +98,6 @@ public class GridPanelImpl extends JScrollPane implements GridPanel {
         this.setOpaque(false);
     }
 
-    /**
-     * Is the constructor method for a new GridPanel which has dimension (1 * 1). 
-     * 
-     * @param startingCellSize
-     *            the initial dimension for the square cell
-     */
-    public GridPanelImpl(final int startingCellSize) {
-        this(1, 1, startingCellSize);
-    }
-
 
     /**
      * Alters Cell size value. Non-thread safe.

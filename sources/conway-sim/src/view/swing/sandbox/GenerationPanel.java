@@ -56,7 +56,7 @@ public class GenerationPanel extends JPanel {
     private final JProgressBar progresBar;
 
     private final GenerationController generationController;
-    private final SimpleSandbox view;
+    private final AbstractSandbox view;
 
     private final int fontSize = MenuSettings.getFontSize();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -67,7 +67,7 @@ public class GenerationPanel extends JPanel {
      * @param view
      *            the controller of the generation
      */
-    public GenerationPanel(final SimpleSandbox view) {
+    public GenerationPanel(final AbstractSandbox view) { //TODO interfaccia ResizableSandbox
         this.view = view;
         this.setOpaque(false);
         this.generationController = new GenerationControllerImpl(view);
@@ -261,14 +261,12 @@ public class GenerationPanel extends JPanel {
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
-        this.view.setButtonApplyEnabled(true);
         this.view.setButtonClearEnabled(true);
     }
 
     private void start() {
         this.view.getGridEditor().setEnabled(false);
         this.generationController.newGame();
-        this.view.setButtonApplyEnabled(false);
         this.view.getButtonBook().setEnabled(false);
         this.bStart.setEnabled(false);
         this.bPause.setEnabled(false);
