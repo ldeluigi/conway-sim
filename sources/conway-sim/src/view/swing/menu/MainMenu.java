@@ -19,7 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.io.ResourceLoader;
 import view.DesktopGUI;
-import view.swing.sandbox.SimpleSandbox;
+import view.swing.sandbox.ExtendedSandbox;
 
 /**
  * This class displays the main menu. Pattern: Singleton.
@@ -48,37 +48,46 @@ public final class MainMenu extends JPanel {
         center.setOpaque(false);
         this.add(center, BorderLayout.CENTER);
         final JLabel spaceForTitle = new JLabel();
-        spaceForTitle.setBorder(
-                new EmptyBorder((mainGUI.getCurrentHeight() * 2) / BUTTON_RATIO_Y, 0, 0, 0));
+        spaceForTitle.setBorder(new EmptyBorder((mainGUI.getCurrentHeight() * 2) / BUTTON_RATIO_Y, 0, 0, 0));
         this.add(spaceForTitle, BorderLayout.NORTH);
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         centralButtons.setOpaque(false);
         final JButton sandbox = new JButton(ResourceLoader.loadString("main.sandbox"));
         setBackgroundAndBorder(sandbox);
-        sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-                MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
-        sandbox.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X,
-                mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        sandbox.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
+        sandbox.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         sandbox.addActionListener(e -> {
             mainGUI.setView(new LoadingScreen());
             SwingUtilities.invokeLater(() -> {
-                mainGUI.setView(new SimpleSandbox(mainGUI));
+                mainGUI.setView(new ExtendedSandbox(mainGUI));
             });
         });
         sandbox.setToolTipText(ResourceLoader.loadString("main.tooltip.sandbox"));
         sandbox.setFocusPainted(false);
+        final JButton levels = new JButton(ResourceLoader.loadString("main.levels"));
+        setBackgroundAndBorder(levels);
+        levels.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_TEXT_PLUS));
+        levels.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        levels.addActionListener(e -> {
+            mainGUI.setView(new LoadingScreen());
+            SwingUtilities.invokeLater(() -> {
+                mainGUI.setView(new LevelMenu(mainGUI));
+            });
+        });
+        levels.setToolTipText(ResourceLoader.loadString("main.tooltip.levels"));
+        levels.setFocusPainted(false);
         final JButton exit = new JButton(ResourceLoader.loadString("main.exit"));
         setBackgroundAndBorder(exit);
-        final Dimension bottomCoupleDimension = new Dimension(
-                mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X,
+        final Dimension bottomCoupleDimension = new Dimension(mainGUI.getCurrentWidth() / MINOR_BUTTON_RATIO_X,
                 mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * 2));
         exit.setPreferredSize(bottomCoupleDimension);
         exit.addActionListener(e -> {
             mainGUI.close();
         });
         exit.setFocusPainted(false);
-        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-                MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
+        exit.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
         final JButton settings = new JButton(ResourceLoader.loadString("main.settings"));
         setBackgroundAndBorder(settings);
         settings.setPreferredSize(bottomCoupleDimension);
@@ -86,31 +95,33 @@ public final class MainMenu extends JPanel {
             mainGUI.setView(new MenuSettings(mainGUI));
         });
         settings.setFocusPainted(false);
-        settings.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-                MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
+        settings.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + MINOR_BUTTON_TEXT_PLUS));
         final GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y), 0, 0,
-                0);
+        c.insets = new Insets(mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y), 0, 0, 0);
         c.anchor = GridBagConstraints.CENTER;
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 2;
         c.weightx = 0.5;
         c.weighty = 0.5;
-        centralButtons.add(sandbox, c);
-        c.anchor = GridBagConstraints.EAST;
-        c.insets.set(c.insets.top, 0, 0,
-                mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y));
+        centralButtons.add(levels, c);
         c.gridx = 0;
         c.gridy = 1;
+        c.gridwidth = 2;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        centralButtons.add(sandbox, c);
+        c.anchor = GridBagConstraints.EAST;
+        c.insets.set(c.insets.top, 0, 0, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y));
+        c.gridx = 0;
+        c.gridy = 2;
         c.gridwidth = 1;
         centralButtons.add(settings, c);
         c.anchor = GridBagConstraints.WEST;
-        c.insets.set(c.insets.top, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y),
-                0, 0);
+        c.insets.set(c.insets.top, mainGUI.getCurrentHeight() / (BUTTON_RATIO_Y * BUTTON_RATIO_Y), 0, 0);
         c.gridx = 1;
-        c.gridy = 1;
+        c.gridy = 2;
         centralButtons.add(exit, c);
         center.add(centralButtons);
         final JPanel lowerPanel = new JPanel();
@@ -118,10 +129,10 @@ public final class MainMenu extends JPanel {
         lowerPanel.setLayout(new BorderLayout());
         final JLabel version = new JLabel(ResourceLoader.loadString("main.version"));
         final JLabel author = new JLabel(ResourceLoader.loadString("main.author"));
-        version.setFont(new Font(version.getFont().getFontName(), version.getFont().getStyle(),
-                MenuSettings.getFontSize()));
-        author.setFont(new Font(author.getFont().getFontName(), author.getFont().getStyle(),
-                MenuSettings.getFontSize()));
+        version.setFont(
+                new Font(version.getFont().getFontName(), version.getFont().getStyle(), MenuSettings.getFontSize()));
+        author.setFont(
+                new Font(author.getFont().getFontName(), author.getFont().getStyle(), MenuSettings.getFontSize()));
         lowerPanel.add(version, BorderLayout.EAST);
         lowerPanel.add(author, BorderLayout.WEST);
         this.add(lowerPanel, BorderLayout.SOUTH);
