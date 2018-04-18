@@ -86,21 +86,29 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * This method is called by {@link AbstractSandbox} constructor to create the JGridPanel used inside the editor.
-     * @param cellSize the call of the method gives a suggested cellSize to start with
+     * This method is called by {@link AbstractSandbox} constructor to create the JGridPanel used
+     * inside the editor.
+     * 
+     * @param cellSize
+     *            the call of the method gives a suggested cellSize to start with
      * @return the custom created {@link JGridPanel} or one subclass
      */
     protected abstract JGridPanel buildGrid(int cellSize);
 
     /**
-     * This method is called by {@link AbstractSandbox} constructor to create the GenerationPanel used to manage generations.
+     * This method is called by {@link AbstractSandbox} constructor to create the GenerationPanel
+     * used to manage generations.
+     * 
      * @return the custom created {@link GenerationPanel} or one subclass.
      */
     protected abstract GenerationPanel buildGenerationPanel();
 
     /**
-     * This method is called by {@link AbstractSandbox} constructor to create the PatternEditor used as the editor.
-     * @param gridp the call of the method gives a reference to the current {@link GridPanel} in use
+     * This method is called by {@link AbstractSandbox} constructor to create the PatternEditor used
+     * as the editor.
+     * 
+     * @param gridp
+     *            the call of the method gives a reference to the current {@link GridPanel} in use
      * @return the custom created {@link PatternEditor}
      */
     protected abstract PatternEditor buildEditor(GridPanel gridp);

@@ -22,7 +22,9 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
     /**
      * Calls super and the adds the grid option panel.
-     * @param mainGUI the main gui that displays this panel
+     * 
+     * @param mainGUI
+     *            the main gui that displays this panel
      */
     public SimpleSandbox(final DesktopGUI mainGUI) {
         super(mainGUI);
@@ -48,7 +50,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
      */
     @Override
     protected PatternEditor buildEditor(final GridPanel grid) {
-       return new GridEditorImpl(grid);
+        return new GridEditorImpl(grid);
     }
 
     /**

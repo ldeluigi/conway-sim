@@ -1,6 +1,7 @@
 package view.swing;
 
 import java.awt.Color;
+
 /**
  * Utility class for colors.
  */
@@ -16,8 +17,11 @@ public final class Colors {
 
     /**
      * Blends two colors into a single one.
-     * @param a the first color
-     * @param b the second color
+     * 
+     * @param a
+     *            the first color
+     * @param b
+     *            the second color
      * @return the result
      */
     public static Color blend(final Color a, final Color b) {

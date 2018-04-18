@@ -18,12 +18,15 @@ public final class SandboxBuilder {
 
     /**
      * Creates the sandbox for level mode.
-     * @param gui the gui that hosts the sandbox
-     * @param level the integer corresponding to the level to load
+     * 
+     * @param gui
+     *            the gui that hosts the sandbox
+     * @param level
+     *            the integer corresponding to the level to load
      * @return the builded sandbox as JPanel on success
      */
     public static JPanel buildLevelSandbox(final DesktopGUI gui, final int level) {
-        final Level l = new LevelImplTest(); //TODO LEVEL LOADER
+        final Level l = new LevelImplTest(); // TODO LEVEL LOADER
         final int h = l.getEnvironmentMatrix().getHeight();
         final int w = l.getEnvironmentMatrix().getWidth();
         return new AbstractSandbox(gui) {
@@ -48,7 +51,9 @@ public final class SandboxBuilder {
 
     /**
      * Creates the sandbox for free mode.
-     * @param gui the gui that hosts the sandbox
+     * 
+     * @param gui
+     *            the gui that hosts the sandbox
      * @return the builded sandbox as JPanel on success
      */
     public static JPanel buildSandbox(final DesktopGUI gui) {

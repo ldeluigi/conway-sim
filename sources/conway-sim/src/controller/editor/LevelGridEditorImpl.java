@@ -79,7 +79,8 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     /**
-     * //TODO controllo che il livello sia stato settato prima di usare tutti i metodi della classe tranne questo.
+     * //TODO controllo che il livello sia stato settato prima di usare tutti i metodi della classe
+     * tranne questo.
      * 
      * @param level
      *            to set as current
