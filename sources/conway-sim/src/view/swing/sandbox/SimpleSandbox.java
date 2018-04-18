@@ -54,13 +54,12 @@ public class SimpleSandbox extends JPanel implements Sandbox {
     public SimpleSandbox(final DesktopGUI mainGUI) {
         Objects.requireNonNull(mainGUI);
         this.mainGUI = mainGUI;
+        this.setLayout(new BorderLayout());
         this.bClear = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.clear"),
                 ResourceLoader.loadString("sandbox.clear.tooltip"));
-        this.grid = new GridPanelImpl(DEFAULT_SIZE, DEFAULT_SIZE,
-                Math.max(mainGUI.getScreenHeight(), mainGUI.getScreenWidth()) / CELL_SIZE_RATIO);
-        this.setLayout(new BorderLayout());
+        this.grid = new GridPanelImpl(SimpleSandbox.DEFAULT_SIZE);
         this.add(this.grid, BorderLayout.CENTER);
-        this.gridEditor = new GridEditorImpl(grid);
+        this.gridEditor = buildEditor(this.grid);
         this.gridEditor.setEnabled(true);
         this.generationPanel = new GenerationPanel(this);
 
@@ -86,6 +85,16 @@ public class SimpleSandbox extends JPanel implements Sandbox {
             this.setFocusable(true);
             this.requestFocusInWindow();
         });
+    }
+
+    /**
+     * Method which creates the manager to handle the grid for this mode, in this case is a GridEditorImpl.
+     * 
+     * @param gridp is the GridPanel used at the moment to show the grid
+     * @return a new manager for this grid
+     */
+    protected PatternEditor buildEditor(final GridPanel gridp) {
+        return new GridEditorImpl(gridp);
     }
 
     /**
@@ -172,9 +181,6 @@ public class SimpleSandbox extends JPanel implements Sandbox {
         return this.north;
     }
 
-    /**
-     * Before first_line and east are already used for this north panel.
-     */
     private void initializeNorth() {
         this.north = new JPanel(new BorderLayout());
         this.north.setOpaque(false);
