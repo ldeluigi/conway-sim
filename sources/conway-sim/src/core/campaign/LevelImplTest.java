@@ -1,45 +1,55 @@
 package core.campaign;
 
-import java.util.Random;
-
-import core.model.CellEnvironment;
+import java.util.Collections;
+import java.util.List;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Status;
-import core.utils.ListMatrix;
+import core.utils.LazyMatrix;
+import core.utils.Matrices;
 import core.utils.Matrix;
 
 public class LevelImplTest implements Level {
 
-    private Environment env = EnvironmentFactory.standardRules(10, 10);
-    private final Matrix<Editable> mEditable = new ListMatrix<>(10, 10, () -> {
-        return Editable.EDITABLE;
-    });
-    private final Matrix<CellType> mCellType = new ListMatrix<>(10, 10, () -> {
-       return CellType.NORMAL; 
-    });
-    private final Matrix<Status> mStatus = new ListMatrix<>(10, 10, () -> {
-       return Math.random() <= 0.5 ? Status.ALIVE : Status.DEAD; 
-    });
+	@Override
+	public Matrix<Editable> getEditableMatrix() {
+		Matrix<Editable> m = new LazyMatrix<>(10, 10, Editable.UNEDITABLE);
+		for (int i = 6; i < 10; i++) {
+			for (int j = 6; j < 10; j++) {
+				m.set(i, j, Editable.EDITABLE);
+			}
+		}
+		return Matrices.unmodifiableMatrix(m);
+	}
 
-    @Override
-    public Matrix<Editable> getEditableMatrix() {
-        return this.mEditable;
-    }
+	@Override
+	public Matrix<CellType> getCellTypeMatrix() {
+		Matrix<CellType> m = new LazyMatrix<>(10, 10, CellType.NORMAL);
+		m.set(0, 0, CellType.GOLDEN);
+		m.set(0, 1, CellType.GOLDEN);
+		m.set(1, 0, CellType.GOLDEN);
+		m.set(1, 1, CellType.GOLDEN);
+		return Matrices.unmodifiableMatrix(m);
+	}
 
-    @Override
-    public Matrix<CellType> getCellTypeMatrix() {
-        return this.mCellType;
-    }
+	@Override
+	public Matrix<Status> getInitialStateMatrix() {
+		Matrix<Status> m = new LazyMatrix<>(10, 10, Status.DEAD);
+		m.set(0, 0, Status.ALIVE);
+		m.set(1, 0, Status.ALIVE);
+		m.set(0, 1, Status.ALIVE);
+		m.set(1, 1, Status.ALIVE);
+		return Matrices.unmodifiableMatrix(m);
+	}
 
-    @Override
-    public Matrix<Status> getInitialStateMatrix() {
-        return this.mStatus;
-    }
+	@Override
+	public Environment getEnvironmentMatrix() {
+		return EnvironmentFactory.standardRules(10, 10);
+	}
 
-    @Override
-    public Environment getEnvironmentMatrix() {
-        return EnvironmentFactory.standardRules(10, 10);
-    }
+	@Override
+	public List<String> availablePatterns() {
+		return Collections.emptyList();
+	}
 
 }
