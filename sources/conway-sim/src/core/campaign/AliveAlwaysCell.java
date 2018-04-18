@@ -7,20 +7,19 @@ import core.model.Status;
 /**
  * Implementation of {@link Cell} which is always alive and can't be murdered.
  */
-public class AliveAlwaysCell implements Cell {
+public class AliveAlwaysCell extends SimpleCell {
 
     /**
      * This is the code returned by {@link SimpleCell#code}.
      */
     public static final int ALIVE_ALWAYS_CODE = 3;
 
-    private Status currentStatus = Status.ALIVE;
-
     /**
      * Constructor method for a new alive Cell. No parameters needed as it won't
      * change.
      */
     public AliveAlwaysCell() {
+    	super(Status.ALIVE);
     }
 
     /**
@@ -38,7 +37,7 @@ public class AliveAlwaysCell implements Cell {
      */
     @Override
     public Status getStatus() {
-        return this.currentStatus;
+    	return super.getStatus();
     }
 
     /**

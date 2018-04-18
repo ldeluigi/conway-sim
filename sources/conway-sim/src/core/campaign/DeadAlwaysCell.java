@@ -8,20 +8,19 @@ import core.model.Status;
  * Implementation of {@link Cell} which is always dead and can't be brought to
  * life.
  */
-public class DeadAlwaysCell implements Cell {
+public class DeadAlwaysCell extends SimpleCell {
 
     /**
      * This is the code returned by {@link SimpleCell#code}.
      */
     public static final int DEAD_ALWAYS_CODE = 2;
 
-    private Status currentStatus = Status.DEAD;
-
     /**
      * Constructor method for a new dead Cell. No parameters needed as it won't
      * change.
      */
     public DeadAlwaysCell() {
+    	super(Status.DEAD);
     }
 
     /**
@@ -39,7 +38,7 @@ public class DeadAlwaysCell implements Cell {
      */
     @Override
     public Status getStatus() {
-        return this.currentStatus;
+    	return super.getStatus();
     }
 
     /**

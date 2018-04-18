@@ -9,16 +9,15 @@ import core.model.Status;
  * involved in the development of the level.
  *
  */
-public class GameWinningCell implements Cell {
+public class GameWinningCell extends SimpleCell {
 
     /**
      * This is the code returned by {@link SimpleCell#code}.
      */
     public static final int GAME_WINNING_CODE = 4;
 
-    private Status currentStatus;
-    private Runnable born;
-    private Runnable death;
+    private final Runnable born;
+    private final Runnable death;
 
     /**
      * Constructor method for a game winning cell.
@@ -33,7 +32,7 @@ public class GameWinningCell implements Cell {
      *            to dead
      */
     public GameWinningCell(final Status state, final Runnable born, final Runnable death) {
-        this.currentStatus = state;
+        super(state);
         this.born = born;
         this.death = death;
     }
@@ -47,8 +46,8 @@ public class GameWinningCell implements Cell {
      */
     @Override
     public void setStatus(final Status nextStatus) {
-        this.currentStatus = nextStatus;
-        if (nextStatus != this.currentStatus) {
+        if (nextStatus != this.getStatus()) {
+        	super.setStatus(nextStatus);
             if (nextStatus == Status.DEAD) {
                 this.death.run();
             } else {
@@ -62,7 +61,7 @@ public class GameWinningCell implements Cell {
      */
     @Override
     public Status getStatus() {
-        return this.currentStatus;
+        return super.getStatus();
     }
 
     /**
@@ -70,7 +69,7 @@ public class GameWinningCell implements Cell {
      */
     @Override
     public Cell copy() {
-        return new GameWinningCell(this.currentStatus, born, death);
+        return new GameWinningCell(this.getStatus(), born, death);
     }
 
     /**

@@ -121,7 +121,7 @@ public class GridEditorImpl implements SimpleGridEditor, PatternEditor {
 		}
 		final int newRow;
 		final int newColumn;
-		if (this.lastPreviewColumn != column && this.lastPreviewRow != row) {
+		if (this.lastPreviewColumn != column || this.lastPreviewRow != row) {
 			final int[] indexes = this.centerIndexes(row, column);
 			newRow = indexes[0];
 			newColumn = indexes[1];
