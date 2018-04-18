@@ -1,24 +1,20 @@
 package view.swing.menu;
 
+import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.IntStream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-import javax.swing.border.TitledBorder;
-
 import controller.io.ResourceLoader;
 import view.DesktopGUI;
 import view.swing.sandbox.JGridPanel;
@@ -34,16 +30,11 @@ public class LevelMenu extends JPanel {
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
     private static final int GRID_TO_CELL_RATIO = 10;
-    private static final int ELEMENT_FOR_PAGE = ResourceLoader
-            .loadConstantInt("level.ELEMENT_FOR_PAGE");
     private static final String VALUE = "XXX";
-    private final JTextArea textArea = new JTextArea(
-            ResourceLoader.loadString("level.default.text"));
+    private static final int LEVEL_FOR_PAGE = 4;
     private final List<JButton> bList = new LinkedList<>();
     private final DesktopGUI mainGUI;
-    private Optional<JPanel> rightLeftButton = Optional.empty();
-    private Optional<JPanel> gridLevel = Optional.empty();
-    private int currentPage;
+    private JTabbedPane cardPanel;
     private int currentLevel;
 
     /**
@@ -55,12 +46,8 @@ public class LevelMenu extends JPanel {
         this.setOpaque(false);
         this.mainGUI = mainGUI;
         this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() * 2));
-        textArea.setBorder(new TitledBorder(ResourceLoader.loadString("level.description")));
-        textArea.setEditable(false);
 
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-        IntStream.range(1, ResourceLoader.loadConstantInt("level.number")).forEach(n -> {
+        IntStream.rangeClosed(1, ResourceLoader.loadConstantInt("level.number")).forEach(n -> {
             final JButton b = SandboxTools.newJButton(String.valueOf(
                     ResourceLoader.loadString("level.button").replaceAll(VALUE, String.valueOf(n))),
                     this.getFont());
@@ -69,41 +56,49 @@ public class LevelMenu extends JPanel {
             b.setFocusable(false);
             b.addActionListener(e -> {
                 pressButton(b);
-                try {
-                    textArea.setText(b.getText() + System.lineSeparator()
-                            + (ResourceLoader.loadString(b.getText())));
-                } catch (java.util.MissingResourceException ex) {
-                    textArea.setText(b.getText() + System.lineSeparator()
-                            + (ResourceLoader.loadString("level.button.text")));
-                }
                 currentLevel = n;
             });
         });
 
-        this.add(this.panelLevel(currentPage));
-        this.add(getRightLeftButtonPanel());
+        cardPanel = new JTabbedPane();
+        cardPanel.setOpaque(false);
+        final String page = "PAGE_X";
+        for (int i = 0; i < ResourceLoader.loadConstantInt("level.number") / LEVEL_FOR_PAGE
+                + (ResourceLoader.loadConstantInt("level.number") % LEVEL_FOR_PAGE == 0 ? 0 : 1); i++) {
+            cardPanel.addTab(page.replace("X", i + ""), panelLevel(i));
+        }
+
+        this.setLayout(new BorderLayout());
+        final JPanel central = new JPanel(new FlowLayout());
+        central.setOpaque(false);
+        final JPanel rightPanel = new JPanel();
+        rightPanel.setOpaque(false);
+        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
+        rightPanel.add(cardPanel);
+        rightPanel.add(getRightLeftButtonPanel());
 
         final JPanel statusPanel = new JPanel(new FlowLayout());
         statusPanel.setOpaque(false);
-        statusPanel.add(textArea);
 
         final JGridPanel pg = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         statusPanel.add(pg);
-        this.add(statusPanel);
+        central.add(statusPanel);
+        central.add(rightPanel);
+        this.add(central, BorderLayout.CENTER);
 
-        final JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        southPanel.setOpaque(false);
+        final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        exitPanel.setOpaque(false);
         final JButton bStart = SandboxTools
                 .newJButton(ResourceLoader.loadString("level.button.start"), this.getFont());
         bStart.setFocusable(false);
-        southPanel.add(bStart);
+        exitPanel.add(bStart);
 
         final JButton bReturn = SandboxTools
                 .newJButton(ResourceLoader.loadString("level.button.return"), this.getFont());
         bReturn.setFocusable(false);
-        southPanel.add(bReturn);
-        this.add(southPanel);
+        exitPanel.add(bReturn);
+        this.add(exitPanel, BorderLayout.AFTER_LAST_LINE);
 
         bStart.addActionListener(e -> start());
         bReturn.addActionListener(e -> mainGUI.setView(new MainMenu(mainGUI)));
@@ -117,39 +112,30 @@ public class LevelMenu extends JPanel {
     }
 
     private JPanel getRightLeftButtonPanel() {
-        if (!rightLeftButton.isPresent()) {
-            this.rightLeftButton = Optional.of(new JPanel(new FlowLayout()));
-            this.rightLeftButton.get().setOpaque(false);
-            final JButton right = SandboxTools
-                    .newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
-            right.setFocusPainted(false);
-            final JButton left = SandboxTools
-                    .newJButton(ResourceLoader.loadString("level.button.left"), this.getFont());
-            left.setFocusable(false);
-            this.rightLeftButton.get().add(left);
-            this.rightLeftButton.get().add(right);
+        JPanel rightLeftButton = new JPanel(new FlowLayout());
+        rightLeftButton.setOpaque(false);
+        final JButton right = SandboxTools.newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
+        right.setFocusPainted(false);
+        final JButton left = SandboxTools.newJButton(ResourceLoader.loadString("level.button.left"), this.getFont());
+        left.setFocusable(false);
+        rightLeftButton.add(left);
+        rightLeftButton.add(right);
 
-            KeyListenerFactory.addKeyListener(this, "right", KeyEvent.VK_RIGHT, () -> nextPage());
-            right.addActionListener(e -> this.nextPage());
-            KeyListenerFactory.addKeyListener(this, "left", KeyEvent.VK_LEFT, () -> previousPage());
-            left.addActionListener(e -> this.previousPage());
-        }
-        return this.rightLeftButton.get();
+        KeyListenerFactory.addKeyListener(this, "right", KeyEvent.VK_RIGHT, () -> nextPage());
+        right.addActionListener(e -> this.nextPage());
+        KeyListenerFactory.addKeyListener(this, "left", KeyEvent.VK_LEFT, () -> previousPage());
+        left.addActionListener(e -> this.previousPage());
+        return rightLeftButton;
     }
 
     private void previousPage() {
-        if (this.currentPage > 0) {
-            this.currentPage--;
-            panelLevel(this.currentPage);
-        }
+        cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() - 1 < 0
+                ? 0 : cardPanel.getSelectedIndex() - 1);
     }
 
     private void nextPage() {
-        if (this.currentPage < ResourceLoader.loadConstantInt("level.number")
-                / (ELEMENT_FOR_PAGE)) {
-            this.currentPage++;
-            panelLevel(this.currentPage);
-        }
+        cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() + 1 >= cardPanel.getComponentCount()
+                ? cardPanel.getSelectedIndex() : cardPanel.getSelectedIndex() + 1);
     }
 
     private void start() {
@@ -164,38 +150,21 @@ public class LevelMenu extends JPanel {
     }
 
     private JPanel panelLevel(final int pageNumber) {
-        if (!gridLevel.isPresent()) {
-            this.gridLevel = Optional.of(new JPanel());
-            this.gridLevel.get().setLayout(new GridBagLayout());
-            this.gridLevel.get().setOpaque(false);
-        }
-        this.gridLevel.get().setVisible(false);
-        this.gridLevel.get().removeAll();
-        final GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.VERTICAL;
-        c.gridy = 0;
-        c.gridx = -1;
-        c.insets = new Insets(10, 10, 10, 10);
-        for (int i = ELEMENT_FOR_PAGE * pageNumber; i < ELEMENT_FOR_PAGE * pageNumber
-                + ELEMENT_FOR_PAGE; i++) {
+        JPanel gridLevel = new JPanel();
+        gridLevel.setLayout(new GridLayout(2, 2, 1, 1));
+        gridLevel.setOpaque(false);
+        for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber
+                + LEVEL_FOR_PAGE; i++) {
             JButton b;
-            if (i >= ResourceLoader.loadConstantInt("level.number")) {
-                this.gridLevel.get().setVisible(true);
-                return gridLevel.get();
+            if (i > ResourceLoader.loadConstantInt("level.number") - 1) {
+                return gridLevel;
             } else {
-                b = bList.get(i);
-            }
-            c.gridx++;
-            if (c.gridx >= 3) {
-                c.gridx = 0;
-                c.gridy++;
-                if (c.gridy > 3) {
-                    throw new IllegalStateException("Too much element!");
+                if (bList.size() > i) {
+                    b = bList.get(i);
+                    gridLevel.add(b);
                 }
             }
-            this.gridLevel.get().add(b, c);
         }
-        this.gridLevel.get().setVisible(true);
-        return gridLevel.get();
+        return gridLevel;
     }
 }

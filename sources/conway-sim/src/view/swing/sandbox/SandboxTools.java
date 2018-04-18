@@ -236,6 +236,7 @@ public final class SandboxTools {
         final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR,
                 height * BUTTON_TEXT_SIZE_RAPPOR);
         button.setPreferredSize(newDimension);
+        button.setMaximumSize(newDimension);
 
         button.setFont(font);
         if (!tooltipText.equals(NO_TOOLTIP)) {
