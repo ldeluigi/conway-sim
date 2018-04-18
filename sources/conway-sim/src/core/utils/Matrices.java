@@ -163,4 +163,15 @@ public final class Matrices {
         }
         return true;
     }
+    
+    /**
+     * Calls {@link Matrix#map(Function)} with (x -> x) on the source and returns the result.
+     * 
+     * @param a
+     *            a matrix
+     * @return the Matrix created with {@link Matrix#map} method
+     */
+    public static <X> Matrix<X> copyOf(final Matrix<X> source) {
+        return source.map(x -> x);
+    }
 }
