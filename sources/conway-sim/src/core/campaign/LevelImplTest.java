@@ -2,7 +2,6 @@ package core.campaign;
 
 import java.util.List;
 
-import controller.book.Recipe;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Status;
@@ -15,14 +14,14 @@ import core.utils.Matrix;
  */
 public class LevelImplTest implements Level {
 
-    private final List<Recipe> aviablePatterns;
+    private final List<String> aviablePatterns;
     private final List<Matrix<? extends Enum<?>>> stages;
     /**
      * 
      * @param patterns aviable patterns
      * @param stages selected stages
      */
-    public LevelImplTest(final List<Recipe> patterns, final List<Matrix<? extends Enum<?>>> stages) {
+    public LevelImplTest(final List<String> patterns, final List<Matrix<? extends Enum<?>>> stages) {
         this.stages = stages;
         this.aviablePatterns = patterns;
     }
@@ -64,7 +63,7 @@ public class LevelImplTest implements Level {
     }
 
     @Override
-    public List<Recipe> availablePatterns() {
+    public List<String> availablePatterns() {
         return this.aviablePatterns;
     }
 

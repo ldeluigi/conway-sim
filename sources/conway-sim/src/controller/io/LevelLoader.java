@@ -4,9 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import controller.book.Recipe;
 import controller.book.RecipeBook;
 import controller.book.RecipeBookImpl;
 import core.campaign.Editable;
@@ -25,6 +27,7 @@ public class LevelLoader {
     private static final String RLE_EXT = ".rle";
     private static final String CNW_EXT = ".conway";
     private static final int N_STAGES = 5;
+    private final String selLvl;
     private final RecipeBook defaultBook;
     private final Level level;
     /**
@@ -33,9 +36,9 @@ public class LevelLoader {
      */
     public LevelLoader(final int lvl) {
         this.defaultBook = new RecipeBookImpl();
-        final String selLvl = LVLPACK + Integer.toString(lvl) + "/";
+        this.selLvl = LVLPACK + Integer.toString(lvl) + "/";
         bookLoader(this.defaultBook, selLvl);
-        this.level = new LevelImplTest(this.defaultBook.getRecipeList(), stageLoader(N_STAGES, selLvl));
+        this.level = new LevelImplTest(recipeExtr(this.defaultBook), stageLoader(N_STAGES, selLvl));
     }
 
     private List<Matrix<? extends Enum<?>>> stageLoader(final int stages, final String selLvl) {
@@ -97,6 +100,14 @@ public class LevelLoader {
             e.printStackTrace();
             return false;
         }
+    }
+
+    private List<String> recipeExtr(final RecipeBook rb) {
+        List<String> recStrList = Collections.emptyList();
+        for (Recipe recipe : rb.getRecipeList()) {
+            recStrList.add(recipe.getContent());
+        }
+        return recStrList;
     }
 
     /**
