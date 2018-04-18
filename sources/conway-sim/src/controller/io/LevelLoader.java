@@ -20,7 +20,7 @@ import core.utils.Matrix;
  *
  */
 public class LevelLoader {
-    private static final String LVLPACK = "levels/lvl";
+    private static final String LVLPACK = "/levels/lvl";
     private static final String DEFLIST = "default.txt";
     private static final String EDTLIST = "editable.txt";
     private static final String DEFBOOK = "/recipebook/";
