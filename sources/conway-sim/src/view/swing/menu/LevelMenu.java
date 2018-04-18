@@ -43,7 +43,6 @@ public class LevelMenu extends JPanel {
     private Optional<JPanel> rightLeftButton = Optional.empty();
     private Optional<JPanel> gridLevel = Optional.empty();
     private int currentPage;
-    private JButton pressedButton;
 
     /**
      * 
@@ -148,7 +147,6 @@ public class LevelMenu extends JPanel {
     private void pressButton(final JButton button) {
         this.bList.stream().filter(b -> !b.isEnabled()).forEach(b -> b.setEnabled(true));
         button.setEnabled(false);
-        this.pressedButton = button;
     }
 
     private JPanel panelLevel(final int pageNumber) {

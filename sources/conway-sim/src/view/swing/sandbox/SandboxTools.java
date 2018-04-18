@@ -35,6 +35,7 @@ public final class SandboxTools {
     private static final int FONT_STYLE = Font.PLAIN;
 
     private static final int BUTTON_TEXT_SIZE_RAPPOR = 12 / 10;
+    private static final String NO_TOOLTIP = "none";
 
     private static JSpinner spinnerWidth;
     private static JSpinner spinnerHeight;
@@ -202,4 +203,46 @@ public final class SandboxTools {
                 .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
     }
 
+    /**
+     * Create a new JButton with the specific font.
+     * @param name JButton name
+     * @param font the specific font
+     * @return the new JButton
+     */
+    public static JButton newJButton(final String name, final Font font) {
+        return newJButton(name, NO_TOOLTIP, font);
+    }
+
+    /**
+     * Create a new JButton with the specific font.
+     * @param name JButton name
+     * @param tooltipText the tooltip text
+     * @param font the specific font
+     * @return the new JButton
+     */
+    public static JButton newJButton(final String name, final String tooltipText, final Font font) {
+        final JButton button = new JButton(name);
+
+        final FontMetrics metrics = button.getFontMetrics(font); 
+        final int width = metrics.stringWidth(name + " ");
+        final int height = metrics.getHeight();
+        final Dimension newDimension =  new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
+        button.setPreferredSize(newDimension);
+
+        button.setFont(font);
+        if (!tooltipText.equals(NO_TOOLTIP)) {
+            button.setToolTipText(tooltipText);
+        }
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(BORDERD_COLOR, 2, false));
+        button.setUI(new MetalButtonUI() {
+            protected Color getDisabledTextColor() {
+                return DISABLE_TEXT_COLOR;
+            }
+        });
+        setIcon(button, newDimension);
+        button.setHorizontalAlignment(SwingConstants.CENTER);
+        button.setHorizontalTextPosition(SwingConstants.CENTER);
+        return button;
+    }
 }
