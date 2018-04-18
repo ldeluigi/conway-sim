@@ -117,7 +117,7 @@ public class GridEditorImpl implements SimpleGridEditor, PatternEditor {
      */
     @Override
     public void showPreview(final int row, final int column) {
-        if (!this.placingState || !this.pattern.isPresent()) {
+        if (!this.placingState || !this.patternIsPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         final int newRow;
@@ -157,6 +157,22 @@ public class GridEditorImpl implements SimpleGridEditor, PatternEditor {
     }
 
     /**
+     * 
+     * @return if the pattern is present
+     */
+    public boolean patternIsPresent() {
+        return this.pattern.isPresent();
+    }
+
+    /**
+     * @return current pattern if present
+     *                  else null
+     */
+    public Matrix<Status> getPattern() {
+        return this.pattern.get();
+    }
+
+    /**
      * Is the method which merges together the existing matrix and the pattern.
      * 
      * @param row
@@ -168,18 +184,15 @@ public class GridEditorImpl implements SimpleGridEditor, PatternEditor {
      */
     @Override
     public void placeCurrentPattern(final int row, final int column) {
-        if (!this.placingState || !this.pattern.isPresent()) {
-            throw new IllegalStateException(GridEditorImpl.MESSAGE);
-        }
-        if (!this.placingState || !this.pattern.isPresent()) {
+        if (!this.placingState || !this.patternIsPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         final int[] indexes = this.centerIndexes(row, column);
         final int newRow = indexes[0];
         final int newColumn = indexes[1];
-        if ((this.getGameGrid().getGridWidth() - newColumn) >= this.pattern.get().getWidth()
-                && (this.getGameGrid().getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.setCurrentStatus(Matrices.mergeXY(this.getCurrentStatus(), newRow, newColumn, this.pattern.get()));
+        if ((this.getGameGrid().getGridWidth() - newColumn) >= this.getPattern().getWidth()
+                && (this.getGameGrid().getGridHeight() - newRow) >= this.getPattern().getHeight()) {
+            this.setCurrentStatus(Matrices.mergeXY(this.getCurrentStatus(), newRow, newColumn, this.getPattern()));
             this.applyChanges();
             this.removePatternToPlace();
         } else if (!(newRow == this.lastPreviewRow && newColumn == this.lastPreviewColumn)) {
@@ -205,10 +218,10 @@ public class GridEditorImpl implements SimpleGridEditor, PatternEditor {
      */
     @Override
     public void rotateCurrentPattern(final int hits) {
-        if (!this.placingState || !this.pattern.isPresent()) {
+        if (!this.placingState || !this.patternIsPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
-        this.pattern.get().rotateClockwise(hits);
+        this.getPattern().rotateClockwise(hits);
         this.showPreview(this.lastPreviewRow, this.lastPreviewColumn);
     }
 
@@ -293,7 +306,13 @@ public class GridEditorImpl implements SimpleGridEditor, PatternEditor {
         }
     }
 
-    private int[] centerIndexes(final int row, final int column) {
+    /**
+     * 
+     * @param row start row
+     * @param column start column
+     * @return return an array with new row in first position and new column in second position 
+     */
+    protected int[] centerIndexes(final int row, final int column) {
         int[] newIndex = { row - this.pattern.get().getHeight() / 2, column - this.pattern.get().getWidth() / 2 };
 
         if (newIndex[0] < 0) {

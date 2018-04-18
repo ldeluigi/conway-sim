@@ -1,6 +1,7 @@
 package controller.editor;
 
 import java.awt.Color;
+
 import core.campaign.CellType;
 import core.campaign.Editable;
 
@@ -120,5 +121,73 @@ public class LevelGridEditorImpl extends GridEditorImpl {
         } else {
             return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
         }
+    }
+
+    /**
+     * Is the method which displays the future pattern together with the matrix
+     * already existing. The cursor of the mouse will guide the center of the
+     * pattern all over the grid (if it can be fitted).
+     * 
+     * @param row
+     *            is the vertical index of the cell where the user is pointing
+     * @param column
+     *            is the horizontal index of the cell where the user is pointing
+     */
+    @Override
+    public void showPreview(final int row, final int column) {
+        if (!this.isEnabled() || !this.patternIsPresent()) {
+            throw new IllegalStateException();
+        }
+        if (patternIsPlacable(row, column)) {
+            super.showPreview(row, column);
+        }
+    }
+
+    /**
+     * Is the method which merges together the existing matrix and the pattern.
+     * 
+     * @param row
+     *            is the index describing the lastPreviewRow where to add the first
+     *            pattern label
+     * @param column
+     *            is the index of the lastPreviewColumn where to add the first
+     *            pattern label
+     */
+    @Override
+    public void placeCurrentPattern(final int row, final int column) {
+        if (!this.isEnabled() || !this.patternIsPresent()) {
+            throw new IllegalStateException();
+        }
+        if (patternIsPlacable(row, column)) {
+            super.placeCurrentPattern(row, column);
+        }
+    }
+
+    private boolean patternIsPlacable(final int row, final int column) {
+        final int[] vet = this.centerIndexes(row, column);
+        final int newRow = vet[0];
+        final int newCol = vet[1];
+        for (int x = newRow; x < newRow + this.getPattern().getWidth(); x++) {
+            for (int y = newCol; y < newCol + this.getPattern().getHeight(); y++) {
+                if (this.editableMatrix.get(x, y).equals(Editable.UNEDITABLE)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Is the method which changes both dimensions of the grid currently used and
+     * shown.
+     * 
+     * @param horizontal
+     *            is the length of the future grid in number of cells
+     * @param vertical
+     *            is the height of the future grid in number of cells
+     */
+    @Override
+    public void changeSizes(final int horizontal, final int vertical) {
+        throw new UnsupportedOperationException();
     }
 }
