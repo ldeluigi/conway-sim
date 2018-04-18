@@ -1,6 +1,5 @@
 package view.swing.sandbox;
 
-
 import java.awt.BorderLayout;
 import java.awt.Font;
 
@@ -14,17 +13,16 @@ import view.DesktopGUI;
 import view.swing.menu.MenuSettings;
 
 /**
- * 
- *
+ * This is a {@link AbstractSandbox sandbox} that allows grid resize and free play.
  */
-public class SimpleSandbox extends AbstractSandbox {
+public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
     private static final long serialVersionUID = -3566205153979731515L;
     private final JButton bApply;
 
     /**
-     * 
-     * @param mainGUI a
+     * Calls super and the adds the grid option panel.
+     * @param mainGUI the main gui that displays this panel
      */
     public SimpleSandbox(final DesktopGUI mainGUI) {
         super(mainGUI);
@@ -37,34 +35,38 @@ public class SimpleSandbox extends AbstractSandbox {
     }
 
     /**
-     * 
+     * Creates a {@link JGridPanel} as GridPanel.
      */
     @Override
-    protected PatternEditor buildEditor(final GridPanel grid) {
-        PatternEditor ge = new GridEditorImpl(super.getGrid());
-        return ge;
+    protected JGridPanel buildGrid(final int cellSize) {
+        return new JGridPanel(ResourceLoader.loadConstantInt("sandbox.grid.size"),
+                ResourceLoader.loadConstantInt("sandbox.grid.size"), cellSize);
     }
 
     /**
-     * Enables "apply" button to be clicked by the user.
+     * Creates a {@link GridEditorImpl} as editor.
+     */
+    @Override
+    protected PatternEditor buildEditor(final GridPanel grid) {
+       return new GridEditorImpl(grid);
+    }
+
+    /**
+     * Creates a {@link ExtendedGenerationPanel} as generation panel.
+     */
+    @Override
+    protected GenerationPanel buildGenerationPanel() {
+        return new ExtendedGenerationPanel(this);
+    }
+
+    /**
+     * Sets the enabled property of the button apply to the given flag.
      * 
      * @param flag
      *            a boolean flag
      */
+    @Override
     public void setButtonApplyEnabled(final boolean flag) {
         this.bApply.setEnabled(flag);
-    }
-
-    /**
-     * 
-     */
-    @Override
-    protected GenerationPanel buildGenerationPanel(final AbstractSandbox abstractSandbox) {
-        return new SandboxGenerationPanel(abstractSandbox);
-    }
-
-    @Override
-    protected GridPanelImpl buildGrid(int cellSize) {
-        return new GridPanelImpl(ResourceLoader.loadConstantInt("sandbox.grid.size"), ResourceLoader.loadConstantInt("sandbox.grid.size"), cellSize);
     }
 }

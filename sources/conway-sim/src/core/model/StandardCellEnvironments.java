@@ -15,7 +15,8 @@ public enum StandardCellEnvironments implements CellEnvironment {
     private final Function<Integer, Boolean> checkBorn;
     private final Function<Integer, Boolean> checkDeath;
 
-    StandardCellEnvironments(final Function<Integer, Boolean> checkBorn, final Function<Integer, Boolean> checkDeath) {
+    StandardCellEnvironments(final Function<Integer, Boolean> checkBorn,
+            final Function<Integer, Boolean> checkDeath) {
         this.checkBorn = checkBorn;
         this.checkDeath = checkDeath;
     }

@@ -11,8 +11,8 @@ public final class EnvironmentFactory {
     }
 
     /**
-     * A method that creates an {@link Environment} with the standard rules of
-     * Conway's Game of Life.
+     * A method that creates an {@link Environment} with the standard rules of Conway's Game of
+     * Life.
      * 
      * @param width
      *            of the Environment
@@ -25,8 +25,7 @@ public final class EnvironmentFactory {
     }
 
     /**
-     * A method that creates an {@link Environment} from the given
-     * {@link CellEnvironment} matrix.
+     * A method that creates an {@link Environment} from the given {@link CellEnvironment} matrix.
      * 
      * @param envMatrix
      *            a {@link Matrix<CellEnvironment>}
@@ -54,8 +53,7 @@ public final class EnvironmentFactory {
     }
 
     /**
-     * A method that creates an {@link Environment} filled with the given
-     * {@link CellEnvironment}.
+     * A method that creates an {@link Environment} filled with the given {@link CellEnvironment}.
      * 
      * @param width
      *            of the Environment
@@ -65,7 +63,8 @@ public final class EnvironmentFactory {
      *            the {@link CellEnvironment}
      * @return the Environment as specified
      */
-    public static Environment fill(final int width, final int height, final CellEnvironment cellEnv) {
+    public static Environment fill(final int width, final int height,
+            final CellEnvironment cellEnv) {
         return new Environment() {
 
             @Override

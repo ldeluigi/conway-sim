@@ -15,7 +15,8 @@ public interface ExtendedGridEditor extends SimpleGridEditor, PatternEditor {
     Matrix<Status> cutMatrix();
 
     /**
-     * @param flag a flag
+     * @param flag
+     *            a flag
      */
     void selectMode(boolean flag);
 

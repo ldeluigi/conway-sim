@@ -4,8 +4,8 @@ import core.model.Status;
 import core.utils.Matrix;
 
 /**
- * Represents a {@link SimpleGridEditor} able to place, show preview and rotate patterns of Conway's Game
- * of Life.
+ * Represents a {@link SimpleGridEditor} able to place, show preview and rotate patterns of Conway's
+ * Game of Life.
  */
 public interface PatternEditor extends SimpleGridEditor {
 

@@ -103,8 +103,8 @@ public final class SandboxTools {
      *            the font
      * @return a JPanel
      */
-    public static JPanel newGridOptionDimension(final AbstractSandbox sandboxImpl, final JButton bApply,
-            final Font font) {
+    public static JPanel newGridOptionDimension(final AbstractSandbox sandboxImpl,
+            final JButton bApply, final Font font) {
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
         gridOption.setOpaque(false);
         final JPanel topGrid = new JPanel(new FlowLayout());
@@ -205,8 +205,11 @@ public final class SandboxTools {
 
     /**
      * Create a new JButton with the specific font.
-     * @param name JButton name
-     * @param font the specific font
+     * 
+     * @param name
+     *            JButton name
+     * @param font
+     *            the specific font
      * @return the new JButton
      */
     public static JButton newJButton(final String name, final Font font) {
@@ -215,18 +218,23 @@ public final class SandboxTools {
 
     /**
      * Create a new JButton with the specific font.
-     * @param name JButton name
-     * @param tooltipText the tooltip text
-     * @param font the specific font
+     * 
+     * @param name
+     *            JButton name
+     * @param tooltipText
+     *            the tooltip text
+     * @param font
+     *            the specific font
      * @return the new JButton
      */
     public static JButton newJButton(final String name, final String tooltipText, final Font font) {
         final JButton button = new JButton(name);
 
-        final FontMetrics metrics = button.getFontMetrics(font); 
+        final FontMetrics metrics = button.getFontMetrics(font);
         final int width = metrics.stringWidth(name + " ");
         final int height = metrics.getHeight();
-        final Dimension newDimension =  new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
+        final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR,
+                height * BUTTON_TEXT_SIZE_RAPPOR);
         button.setPreferredSize(newDimension);
 
         button.setFont(font);

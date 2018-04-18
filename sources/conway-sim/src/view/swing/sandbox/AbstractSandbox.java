@@ -24,7 +24,7 @@ import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
 
 /**
- * Implementation of {@link Sandbox} using Swing {@link JPanel}.
+ * Abstract implementation of {@link Sandbox} using Swing {@link JPanel}.
  */
 public abstract class AbstractSandbox extends JPanel implements Sandbox {
 
@@ -37,17 +37,16 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     private JButton bExit;
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
-    private final GridPanelImpl grid;
+    private final JGridPanel grid;
     private JPanel north;
     private JPanel south;
     private JPanel southRight;
 
     private BookFrame book;
 
-
     /**
      * @param mainGUI
-     *            the mainGui that call this SandBox
+     *            the mainGui that call this Sandbox
      */
     public AbstractSandbox(final DesktopGUI mainGUI) {
         Objects.requireNonNull(mainGUI);
@@ -55,11 +54,12 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         this.setLayout(new BorderLayout());
         this.bClear = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.clear"),
                 ResourceLoader.loadString("sandbox.clear.tooltip"));
-        this.grid = buildGrid(Math.max(mainGUI.getScreenHeight(), mainGUI.getCurrentWidth()) / CELL_SIZE_RATIO);
+        this.grid = buildGrid(
+                Math.max(mainGUI.getScreenHeight(), mainGUI.getCurrentWidth()) / CELL_SIZE_RATIO);
         this.add(this.grid, BorderLayout.CENTER);
         this.gridEditor = buildEditor(this.grid);
         this.gridEditor.setEnabled(true);
-        this.generationPanel = buildGenerationPanel(this);
+        this.generationPanel = buildGenerationPanel();
 
         this.initializeNorth();
 
@@ -85,35 +85,30 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         });
     }
 
-    protected abstract GridPanelImpl buildGrid(int cellSize);
-
     /**
-     * 
-     * @param abstractSandbox 
-     * @return a
+     * This method is called by {@link AbstractSandbox} constructor to create the JGridPanel used inside the editor.
+     * @param cellSize the call of the method gives a suggested cellSize to start with
+     * @return the custom created {@link JGridPanel} or one subclass
      */
-    protected abstract GenerationPanel buildGenerationPanel(AbstractSandbox abstractSandbox);
+    protected abstract JGridPanel buildGrid(int cellSize);
 
     /**
-     * 
-     * @return a //TODO MIRKO
+     * This method is called by {@link AbstractSandbox} constructor to create the GenerationPanel used to manage generations.
+     * @return the custom created {@link GenerationPanel} or one subclass.
      */
-    protected final GridPanel getGrid() {
-        return grid;
-    }
+    protected abstract GenerationPanel buildGenerationPanel();
 
     /**
-     * Method which creates the manager to handle the grid for this mode, in this case is a GridEditorImpl
-     * The GridPanel starts as 1 * 1. Called only in constructor.
-     * 
-     * @param gridp is the GridPanel used at the moment to show the grid
-     * @return a new manager for this grid
+     * This method is called by {@link AbstractSandbox} constructor to create the PatternEditor used as the editor.
+     * @param gridp the call of the method gives a reference to the current {@link GridPanel} in use
+     * @return the custom created {@link PatternEditor}
      */
     protected abstract PatternEditor buildEditor(GridPanel gridp);
 
     /**
-     * Applies size changes to the grid.
+     * Applies size changes to the grid, showing a loading screen while waiting.
      */
+    @Override
     public void resetGrid() {
         this.setVisible(false);
         this.grid.setVisible(false);
@@ -187,7 +182,8 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Before {@link BorderLayoit.BEFORE_FIRST_LINE first_line} and {@link BorderLayoout.EAST east} are already used for this north panel.
+     * Before {@link BorderLayoit.BEFORE_FIRST_LINE first_line} and {@link BorderLayoout.EAST east}
+     * are already used for this north panel.
      * 
      * @return the panel which is going to be added northern
      */
@@ -206,7 +202,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     private void initializeSouth() {
-        this.south  = new JPanel(new BorderLayout());
+        this.south = new JPanel(new BorderLayout());
         this.bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
                 ResourceLoader.loadString("sandbox.exit.tooltip"));
         south.setOpaque(false);
@@ -222,7 +218,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
                 BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
-        }
+    }
 
     private void callBook() {
         if (Objects.isNull(this.book)) {

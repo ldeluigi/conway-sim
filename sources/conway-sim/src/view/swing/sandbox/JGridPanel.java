@@ -21,10 +21,10 @@ import core.utils.Matrix;
 import view.swing.menu.MenuSettings;
 
 /**
- * GridPanel is the visual panel which displays a scrollable grid of mutating cells.
+ * GridPanel is the visual panel which displays a scrollable grid of cells.
  * 
  */
-public class GridPanelImpl extends JScrollPane implements GridPanel {
+public class JGridPanel extends JScrollPane implements GridPanel {
 
     private static final long serialVersionUID = -1;
     private static final int INITIAL_BORDER_WIDTH = 1;
@@ -54,7 +54,7 @@ public class GridPanelImpl extends JScrollPane implements GridPanel {
      * @param startingCellSize
      *            the initial dimension for the square cell
      */
-    public GridPanelImpl(final int width, final int height, final int startingCellSize) {
+    public JGridPanel(final int width, final int height, final int startingCellSize) {
         if (width < 1 || height < 1 || startingCellSize < 1) {
             throw new IllegalArgumentException("Arguments must be greater than 1.");
         }
@@ -98,7 +98,6 @@ public class GridPanelImpl extends JScrollPane implements GridPanel {
         this.setOpaque(false);
     }
 
-
     /**
      * Alters Cell size value. Non-thread safe.
      * 
@@ -121,10 +120,10 @@ public class GridPanelImpl extends JScrollPane implements GridPanel {
     }
 
     /**
-     * 
+     * Sends a message with {@link JOptionPane#showMessageDialog} to the user.
      */
     @Override
-    public void notifyToUser(final String s) { // TODO stringa?
+    public void notifyToUser(final String s) {
         JOptionPane.showMessageDialog(this, s, "Error choosing pattern",
                 JOptionPane.WARNING_MESSAGE);
     }
@@ -297,7 +296,7 @@ public class GridPanelImpl extends JScrollPane implements GridPanel {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
                 c.gridx = j;
                 c.gridy = i;
-                GridPanelImpl.this.setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor,
+                JGridPanel.this.setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor,
                         this.borderWidth);
                 this.grid.add(this.labelMatrix.get(i, j), c);
             }

@@ -15,20 +15,21 @@ public final class GenerationFactory {
     }
 
     /**
-     * A method to clone a {@link Generation}. Note that cells are copied with
-     * {@link Cell#copy()}, whereas the {@link Environment} is the exact same.
+     * A method to clone a {@link Generation}. Note that cells are copied with {@link Cell#copy()},
+     * whereas the {@link Environment} is the exact same.
      * 
      * @param generation
      *            is the generation to clone
      * @return the cloned generation
      */
     public static Generation copyOf(final Generation generation) {
-        return GenerationFactory.from(generation.getCellMatrix().map(c -> c.copy()), generation.getEnviroment());
+        return GenerationFactory.from(generation.getCellMatrix().map(c -> c.copy()),
+                generation.getEnviroment());
     }
 
     /**
-     * Creates a new {@link Generation} from a given {@link Matrix<Cell>} and an
-     * {@link Environment} of the same dimensions, without making copies.
+     * Creates a new {@link Generation} from a given {@link Matrix<Cell>} and an {@link Environment}
+     * of the same dimensions, without making copies.
      * 
      * @param cellMatrix
      *            the {@link Matrix<Cell>}
@@ -41,8 +42,9 @@ public final class GenerationFactory {
         Objects.requireNonNull(e);
         if (cellMatrix.getHeight() != e.getHeight() || cellMatrix.getWidth() != e.getWidth()) {
             throw new IllegalArgumentException(
-                    "Cell Matrix and Environment must have the same dimensions. (" + cellMatrix.getWidth() + ","
-                            + cellMatrix.getHeight() + " - " + e.getWidth() + "," + e.getHeight() + ")");
+                    "Cell Matrix and Environment must have the same dimensions. ("
+                            + cellMatrix.getWidth() + "," + cellMatrix.getHeight() + " - "
+                            + e.getWidth() + "," + e.getHeight() + ")");
         }
         return new Generation() {
 

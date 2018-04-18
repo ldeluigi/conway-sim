@@ -163,7 +163,7 @@ public final class Matrices {
         }
         return true;
     }
-    
+
     /**
      * Calls {@link Matrix#map(Function)} with (x -> x) on the source and returns the result.
      * 

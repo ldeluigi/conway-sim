@@ -5,8 +5,8 @@ import core.model.SimpleCell;
 import core.model.Status;
 
 /**
- * Implementation of {@link Cell} which makes the user win the game when
- * involved in the development of the level.
+ * Implementation of {@link Cell} which makes the user win the game when involved in the development
+ * of the level.
  *
  */
 public class GameWinningCell extends SimpleCell {
@@ -25,11 +25,9 @@ public class GameWinningCell extends SimpleCell {
      * @param state
      *            is the Status of the new cell
      * @param born
-     *            is the Runnable to be used when the Status is changed from dead to
-     *            alive
+     *            is the Runnable to be used when the Status is changed from dead to alive
      * @param death
-     *            is the runnable to be used when the Status is changed from alive
-     *            to dead
+     *            is the runnable to be used when the Status is changed from alive to dead
      */
     public GameWinningCell(final Status state, final Runnable born, final Runnable death) {
         super(state);
@@ -38,8 +36,8 @@ public class GameWinningCell extends SimpleCell {
     }
 
     /**
-     * Is the method which changes the current status of the Cell, this event has
-     * some consequences depending on the level.
+     * Is the method which changes the current status of the Cell, this event has some consequences
+     * depending on the level.
      * 
      * @param nextStatus
      *            is the new status to be taken

@@ -31,9 +31,6 @@ import view.swing.menu.MenuSettings;
  */
 public class GenerationPanel extends JPanel {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 9060069868596999045L;
 
     /**
@@ -67,7 +64,7 @@ public class GenerationPanel extends JPanel {
      * @param view
      *            the controller of the generation
      */
-    public GenerationPanel(final AbstractSandbox view) { //TODO interfaccia ResizableSandbox
+    public GenerationPanel(final AbstractSandbox view) {
         this.view = view;
         this.setOpaque(false);
         this.generationController = new GenerationControllerImpl(view);

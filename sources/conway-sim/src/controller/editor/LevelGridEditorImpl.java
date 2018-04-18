@@ -23,17 +23,19 @@ import view.swing.Colors;
 import view.swing.sandbox.GridPanel;
 
 /**
- * 
+ * Editor extended for level mode.
  */
-public class LevelGridEditorImpl extends GridEditorImpl {
+public final class LevelGridEditorImpl extends GridEditorImpl {
 
     private Optional<Level> currentLevel;
     private Matrix<Status> currentStatus;
 
     /**
      * 
-     * @param grid the initial grid
-     * @param level the level to be loaded
+     * @param grid
+     *            the initial grid
+     * @param level
+     *            the level to be loaded
      */
     public LevelGridEditorImpl(final GridPanel grid, final Level level) {
         super(grid);
@@ -42,32 +44,33 @@ public class LevelGridEditorImpl extends GridEditorImpl {
 
     /**
      * 
-     * @param gridp a
+     * @param gridp
+     *            a
      */
     public LevelGridEditorImpl(final GridPanel gridp) {
         super(gridp);
         setLevel(new Level() {
-            
+
             @Override
             public Matrix<Status> getInitialStateMatrix() {
                 return new LazyMatrix<>(1, 1, Status.DEAD);
             }
-            
+
             @Override
             public Environment getEnvironmentMatrix() {
                 return EnvironmentFactory.standardRules(1, 1);
             }
-            
+
             @Override
             public Matrix<Editable> getEditableMatrix() {
                 return new LazyMatrix<>(1, 1, Editable.EDITABLE);
             }
-            
+
             @Override
             public Matrix<CellType> getCellTypeMatrix() {
                 return new LazyMatrix<>(1, 1, CellType.NORMAL);
             }
-            
+
             @Override
             public List<String> availablePatterns() {
                 return Collections.emptyList();
@@ -77,11 +80,14 @@ public class LevelGridEditorImpl extends GridEditorImpl {
 
     /**
      * //TODO controllo che il livello sia stato settato prima di usare tutti i metodi della classe tranne questo.
-     * @param level to set as current
+     * 
+     * @param level
+     *            to set as current
      */
     public void setLevel(final Level level) {
         this.currentLevel = Optional.of(level);
-        this.getGameGrid().changeGrid(this.currentLevel.get().getEnvironmentMatrix().getWidth(), this.currentLevel.get().getEnvironmentMatrix().getHeight());
+        this.getGameGrid().changeGrid(this.currentLevel.get().getEnvironmentMatrix().getWidth(),
+                this.currentLevel.get().getEnvironmentMatrix().getHeight());
         this.currentStatus = this.currentLevel.get().getInitialStateMatrix().map(e -> e);
         this.clean();
     }
@@ -93,7 +99,8 @@ public class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public Generation getGeneration() {
-        return GenerationFactory.from(this.getCurrentStatus().map(s -> new SimpleCell(s)), this.currentLevel.get().getEnvironmentMatrix());
+        return GenerationFactory.from(this.getCurrentStatus().map(s -> new SimpleCell(s)),
+                this.currentLevel.get().getEnvironmentMatrix());
     }
 
     /**
@@ -105,14 +112,16 @@ public class LevelGridEditorImpl extends GridEditorImpl {
             throw new IllegalStateException();
         }
         if (this.currentLevel.get().getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
-            this.currentStatus.set(row, col, this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
+            this.currentStatus.set(row, col,
+                    this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE
+                            : Status.DEAD);
             this.getGameGrid().displaySingleCell(row, col, calculateColor(row, col));
         }
     }
 
     /**
-     * Is the method which shows a full white grid as every cell was dead or a new
-     * grid was just created.
+     * Is the method which shows a full white grid as every cell was dead or a new grid was just
+     * created.
      */
     @Override
     public void clean() {
@@ -125,9 +134,12 @@ public class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     protected void applyChanges() {
-        Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.get().getEnvironmentMatrix().getWidth(), this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
+        final Matrix<Color> matrixColor = new ListMatrix<>(
+                this.currentLevel.get().getEnvironmentMatrix().getWidth(),
+                this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
         for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
-            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix().getWidth(); col++) {
+            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix()
+                    .getWidth(); col++) {
                 matrixColor.set(row, col, calculateColor(row, col));
             }
         }
@@ -142,9 +154,12 @@ public class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void draw(final Generation gen) {
-        Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.get().getEnvironmentMatrix().getWidth(), this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
+        final Matrix<Color> matrixColor = new ListMatrix<>(
+                this.currentLevel.get().getEnvironmentMatrix().getWidth(),
+                this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
         for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
-            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix().getWidth(); col++) {
+            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix()
+                    .getWidth(); col++) {
                 matrixColor.set(row, col, calculateColorEditable(row, col));
             }
         }
@@ -156,33 +171,49 @@ public class LevelGridEditorImpl extends GridEditorImpl {
             return calculateColorEditable(row, col);
         } else {
             if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
-                return Colors.blend(Color.RED, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
-            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)) {
-                return Colors.blend(Colors.GOLD, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
-            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.WALL)) {
-                return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
+                return Colors.blend(Color.RED,
+                        this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                                : Color.WHITE);
+            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+                    .equals(CellType.GOLDEN)) {
+                return Colors.blend(Colors.GOLD,
+                        this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                                : Color.WHITE);
+            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+                    .equals(CellType.WALL)) {
+                return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY
+                        : Color.LIGHT_GRAY;
             } else {
-                return Colors.blend(Color.RED, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
+                return Colors.blend(Color.RED,
+                        this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                                : Color.WHITE);
             }
         }
     }
 
     private Color calculateColorEditable(final int row, final int col) {
         if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
-            return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
-        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)) {
-            return Colors.blend(Colors.GOLD, this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
-        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.WALL)) {
-            return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
+            return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                    : Color.WHITE;
+        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+                .equals(CellType.GOLDEN)) {
+            return Colors.blend(Colors.GOLD,
+                    this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                            : Color.WHITE);
+        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+                .equals(CellType.WALL)) {
+            return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY
+                    : Color.LIGHT_GRAY;
         } else {
-            return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
+            return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                    : Color.WHITE;
         }
     }
 
     /**
-     * Is the method which displays the future pattern together with the matrix
-     * already existing. The cursor of the mouse will guide the center of the
-     * pattern all over the grid (if it can be fitted).
+     * Is the method which displays the future pattern together with the matrix already existing.
+     * The cursor of the mouse will guide the center of the pattern all over the grid (if it can be
+     * fitted).
      * 
      * @param row
      *            is the vertical index of the cell where the user is pointing
@@ -203,11 +234,9 @@ public class LevelGridEditorImpl extends GridEditorImpl {
      * Is the method which merges together the existing matrix and the pattern.
      * 
      * @param row
-     *            is the index describing the lastPreviewRow where to add the first
-     *            pattern label
+     *            is the index describing the lastPreviewRow where to add the first pattern label
      * @param column
-     *            is the index of the lastPreviewColumn where to add the first
-     *            pattern label
+     *            is the index of the lastPreviewColumn where to add the first pattern label
      */
     @Override
     public void placeCurrentPattern(final int row, final int column) {
@@ -225,7 +254,8 @@ public class LevelGridEditorImpl extends GridEditorImpl {
         final int newCol = vet[1];
         for (int x = newRow; x < newRow + this.getPattern().getWidth(); x++) {
             for (int y = newCol; y < newCol + this.getPattern().getHeight(); y++) {
-                if (this.currentLevel.get().getEditableMatrix().get(x, y).equals(Editable.UNEDITABLE)) {
+                if (this.currentLevel.get().getEditableMatrix().get(x, y)
+                        .equals(Editable.UNEDITABLE)) {
                     return false;
                 }
             }
@@ -234,8 +264,7 @@ public class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     /**
-     * Is the method which changes both dimensions of the grid currently used and
-     * shown.
+     * Is the method which changes both dimensions of the grid currently used and shown.
      * 
      * @param horizontal
      *            is the length of the future grid in number of cells

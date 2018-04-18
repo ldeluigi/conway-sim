@@ -17,15 +17,20 @@ public final class RLETranslator {
 
     private RLETranslator() {
     }
+
     /**
-     * @param <X> a
-     * @param rle a
-     * @param en a
+     * @param <X>
+     *            a
+     * @param rle
+     *            a
+     * @param en
+     *            a
      * @return a
      */
-    public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle, final Class<X> en) {
+    public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle,
+            final Class<X> en) {
         final int matHeight = Math.toIntExact(rle.chars().filter(ch -> ch == EL).count());
-        //TODO DEBUG
+        // TODO DEBUG
         System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
         BufferedReader br = new BufferedReader(new StringReader(rle));
         int matWidth = matHeight;
@@ -43,27 +48,28 @@ public final class RLETranslator {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO DEBUG
+        // TODO DEBUG
         System.out.println("DEBUG | MAT WIDTH: " + matWidth);
         final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
         br = new BufferedReader(new StringReader(rle));
         for (int i = 0; i < matHeight; i++) {
             for (int k = 0; k < matWidth; k++) {
                 try {
-                        final int readValue = (int) (char) br.read() - SP;
-                        if (readValue >= en.getEnumConstants().length) {
-                            //TODO RemoveMe - Check char bounds in status
-                            throw new IllegalArgumentException("Status out of bounds.");
-                        }
-                        mat.set(i, k, en.getEnumConstants()[readValue]);
+                    final int readValue = (int) (char) br.read() - SP;
+                    if (readValue >= en.getEnumConstants().length) {
+                        // TODO RemoveMe - Check char bounds in status
+                        throw new IllegalArgumentException("Status out of bounds.");
+                    }
+                    mat.set(i, k, en.getEnumConstants()[readValue]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            //TODO RemoveMe - END OF LINE
+            // TODO RemoveMe - END OF LINE
             try {
                 if (br.read() != EL) {
-                    throw new IllegalArgumentException("Reading out of bounds, maybe the rle got manipulated.");
+                    throw new IllegalArgumentException(
+                            "Reading out of bounds, maybe the rle got manipulated.");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -76,9 +82,11 @@ public final class RLETranslator {
         }
         return mat;
     }
+
     /**
      * 
-     * @param matrix to be translated
+     * @param matrix
+     *            to be translated
      * @return string to be converted into String .conwaysrle type.
      */
     public static String rleMatrixToString(final Matrix<? extends Enum<?>> matrix) {
@@ -87,13 +95,13 @@ public final class RLETranslator {
         for (int i = 0; i < matrix.getHeight(); i++) {
             for (int k = 0; k < matrix.getWidth(); k++) {
                 final Enum<?> en = matrix.get(k, i);
-                    mtoStr = mtoStr.concat(Character.toString((char) (SP + en.ordinal())));
+                mtoStr = mtoStr.concat(Character.toString((char) (SP + en.ordinal())));
             }
 
-            //TODO RemoveMe - END OF LINE
+            // TODO RemoveMe - END OF LINE
             mtoStr = mtoStr.concat(Character.toString(EL));
         }
-        //TODO RemoveMe - DEBUG
+        // TODO RemoveMe - DEBUG
         System.out.println("DEBUG | " + mtoStr);
         return mtoStr;
     }

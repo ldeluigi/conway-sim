@@ -22,8 +22,7 @@ public class SimpleCell implements Cell {
     }
 
     /**
-     * setStatus is the method to invoke in order to change the current status of
-     * the cell.
+     * setStatus is the method to invoke in order to change the current status of the cell.
      * 
      * @param nextstatus
      *            is the new status to be assumed.

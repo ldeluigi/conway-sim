@@ -25,7 +25,7 @@ import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
-import view.swing.sandbox.GridPanelImpl;
+import view.swing.sandbox.JGridPanel;
 import view.swing.sandbox.SandboxTools;
 
 /**
@@ -56,7 +56,7 @@ public class BookFrame extends JInternalFrame {
         final RecipeLoader rl = new RecipeLoader();
         this.setLayout(new BoxLayout(getContentPane(), BoxLayout.X_AXIS));
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        final GridPanelImpl pg = new GridPanelImpl(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
+        final JGridPanel pg = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
 
         // Populate the arrList
