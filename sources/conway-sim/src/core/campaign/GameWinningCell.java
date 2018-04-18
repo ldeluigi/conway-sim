@@ -1,4 +1,8 @@
-package core.model;
+package core.campaign;
+
+import core.model.Cell;
+import core.model.SimpleCell;
+import core.model.Status;
 
 /**
  * Implementation of {@link Cell} which makes the user win the game when

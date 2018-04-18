@@ -1,22 +1,27 @@
-package core.model;
+package core.campaign;
+
+import core.model.Cell;
+import core.model.SimpleCell;
+import core.model.Status;
 
 /**
- * Implementation of {@link Cell} which is always alive and can't be murdered.
+ * Implementation of {@link Cell} which is always dead and can't be brought to
+ * life.
  */
-public class AliveAlwaysCell implements Cell {
+public class DeadAlwaysCell implements Cell {
 
     /**
      * This is the code returned by {@link SimpleCell#code}.
      */
-    public static final int ALIVE_ALWAYS_CODE = 3;
+    public static final int DEAD_ALWAYS_CODE = 2;
 
-    private Status currentStatus = Status.ALIVE;
+    private Status currentStatus = Status.DEAD;
 
     /**
-     * Constructor method for a new alive Cell. No parameters needed as it won't
+     * Constructor method for a new dead Cell. No parameters needed as it won't
      * change.
      */
-    public AliveAlwaysCell() {
+    public DeadAlwaysCell() {
     }
 
     /**
@@ -42,7 +47,7 @@ public class AliveAlwaysCell implements Cell {
      */
     @Override
     public Cell copy() {
-        return new AliveAlwaysCell();
+        return new DeadAlwaysCell();
     }
 
     /**
@@ -50,7 +55,7 @@ public class AliveAlwaysCell implements Cell {
      */
     @Override
     public int code() {
-        return AliveAlwaysCell.ALIVE_ALWAYS_CODE;
+        return DeadAlwaysCell.DEAD_ALWAYS_CODE;
     }
 
 }
