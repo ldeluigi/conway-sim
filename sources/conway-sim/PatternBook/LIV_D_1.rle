@@ -1,0 +1,5 @@
+#N LIV_D_1
+#O Davide
+#C Livello 4 (teoricamente)
+x = 30, y = 30, rule = B3/S23
+$2bo$bobo$2b2o16$18b2o$18bobo$18bo2$21b2o$21bobo$21bo2$24b3o$24bo$25bo$!

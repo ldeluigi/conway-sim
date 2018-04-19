@@ -111,7 +111,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     private void showSelect(final int newRow, final int newCol, final int lastRow, final int lastCol) {
-        if (lastCol > 0 && lastRow > 0) {
+        if (firstCoordinatePresent) {
             this.applyChanges();
             int sizeCol = Math.abs(lastCol - newCol);
             int sizeRow =  Math.abs(lastRow - newRow);
