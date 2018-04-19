@@ -199,6 +199,16 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         return this.north;
     }
 
+    /**
+     * WEST {@link BorderLayoit.WEST west} and EAST {@link BorderLayoout.EAST east}
+     * are already used for this north panel.
+     * 
+     * @return the panel which is going to be added souther
+     */
+    public final JPanel getSouthPanel() {
+        return this.south;
+    }
+
     private void initializeNorth() {
         this.north = new JPanel(new BorderLayout());
         this.north.setOpaque(false);

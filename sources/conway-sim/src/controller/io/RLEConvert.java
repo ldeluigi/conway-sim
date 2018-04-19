@@ -245,4 +245,74 @@ public class RLEConvert {
         return null;
     }
 
+    /**
+     * 
+     * @param matrix the matrix to be converted
+     * @return a string of the matrix that represent the .rle of the matrix
+     */
+    public static String write(final Matrix<Status> matrix) {
+            String header = "x = " + matrix.getHeight() + ", y = " + matrix.getWidth() + ", rule = B3/S23";
+            header = header.concat(System.lineSeparator());
+            int lines = 0;
+            for (int i = 0; i < matrix.getWidth(); i++) {
+                int buffer = 0;
+                int last = -1;
+                for (int j = 0; j < matrix.getHeight(); j++) {
+                    //Read all the column i, from j = 0 to j = tab.getHeight()
+                    if (matrix.get(j, i) == Status.ALIVE) {
+
+                        if (lines > 0) {
+                            if (lines > 1) {
+                                header = header.concat(Integer.toString(lines));
+                            }
+                            header = header.concat("$");
+                            lines = 0;
+                        }
+
+                        if (last == 0) {
+                            if (buffer > 1) {
+                                header = header.concat(Integer.toString(buffer));
+                            }
+                            header = header.concat("b");
+                            buffer = 0;
+                        }
+
+                        last = 1;
+                        buffer++;
+                    } else {
+                        if (last == 1) {
+                            if (buffer > 1) {
+                                header = header.concat(Integer.toString(buffer));
+                            }
+                            header = header.concat("o");
+                            buffer = 0;
+                        }
+                        last = 0;
+                        buffer++;
+                    }
+                }
+                if (last == 1) {
+                    if (buffer > 1) {
+                        header = header.concat(Integer.toString(buffer));
+                    }
+                    header = header.concat("o");
+                    buffer = 0;
+                }
+                lines++;
+            }
+
+            if (lines > 0) {
+                if (lines > 1) {
+                    header = header.concat(Integer.toString(lines));
+                }
+                header = header.concat("$");
+                lines = 0;
+            }
+
+            header = header.concat("!");
+            System.out.println(header);
+            return header;
+    }
+
+
 }

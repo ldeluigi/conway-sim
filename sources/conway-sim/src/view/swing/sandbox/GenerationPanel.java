@@ -205,7 +205,7 @@ public class GenerationPanel extends JPanel {
         this.view.scheduleGUIUpdate(() -> {
             SandboxTools.refreshStatistics(this.getCurrentSpeed(),
                     this.generationController.getCurrentNumberElement().intValue(), aliveCell,
-                    this.view.getFont());
+                    new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         });
     }
 

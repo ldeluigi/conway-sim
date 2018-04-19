@@ -23,6 +23,7 @@ public class ExtendedGenerationPanel extends GenerationPanel {
     protected void end() {
         super.end();
         this.view.setButtonApplyEnabled(true);
+        this.view.setSaveEnable(true);
     }
 
     /**
@@ -32,5 +33,6 @@ public class ExtendedGenerationPanel extends GenerationPanel {
     protected void start() {
         super.start();
         this.view.setButtonApplyEnabled(false);
+        this.view.setSaveEnable(false);
     }
 }
