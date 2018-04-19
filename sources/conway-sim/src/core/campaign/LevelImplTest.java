@@ -1,9 +1,12 @@
 package core.campaign;
 
+import java.util.Collections;
 import java.util.List;
 
 import core.model.Environment;
+import core.model.EnvironmentFactory;
 import core.model.Status;
+import core.utils.LazyMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 
@@ -12,52 +15,47 @@ import core.utils.Matrix;
  *
  */
 public class LevelImplTest implements Level {
-    private final List<String> aviablePatterns;
-    private final Matrix<Editable> edM;
-    private final Matrix<CellType> ctM;
-    private final Matrix<Status> stM;
-    private final Environment env;
 
-    /**
-     * 
-     * @param edM Matrix of Editable
-     * @param ctM Matrix of CellType
-     * @param stM Matrix of Status
-     * @param env Environment
-     * @param patterns AviablePatterns list
-     */
-    public LevelImplTest(final Matrix<Editable> edM, final Matrix<CellType> ctM, final Matrix<Status> stM,
-            final Environment env, final List<String> patterns) {
-        this.edM = edM;
-        this.ctM = ctM;
-        this.stM = stM;
-        this.env = env;
-        this.aviablePatterns = patterns;
+    @Override
+    public Matrix<Editable> getEditableMatrix() {
+        Matrix<Editable> m = new LazyMatrix<>(10, 10, Editable.UNEDITABLE);
+        for (int i = 6; i < 10; i++) {
+            for (int j = 6; j < 10; j++) {
+                m.set(i, j, Editable.EDITABLE);
+            }
+        }
+        return Matrices.unmodifiableMatrix(m);
     }
 
     @Override
-    public final Matrix<Editable> getEditableMatrix() {
-        return Matrices.unmodifiableMatrix(this.edM);
+    public Matrix<CellType> getCellTypeMatrix() {
+        Matrix<CellType> m = new LazyMatrix<>(10, 10, CellType.NORMAL);
+        m.set(0, 0, CellType.GOLDEN);
+        m.set(0, 1, CellType.GOLDEN);
+        m.set(1, 0, CellType.GOLDEN);
+        m.set(1, 1, CellType.GOLDEN);
+        return Matrices.unmodifiableMatrix(m);
     }
 
     @Override
-    public final Matrix<CellType> getCellTypeMatrix() {
-        return Matrices.unmodifiableMatrix(this.ctM);
+    public Matrix<Status> getInitialStateMatrix() {
+        Matrix<Status> m = new LazyMatrix<>(10, 10, Status.DEAD);
+        m.set(0, 0, Status.ALIVE);
+        m.set(1, 0, Status.ALIVE);
+        m.set(0, 1, Status.ALIVE);
+        m.set(1, 1, Status.ALIVE);
+        return Matrices.unmodifiableMatrix(m);
     }
 
     @Override
-    public final Matrix<Status> getInitialStateMatrix() {
-        return Matrices.unmodifiableMatrix(this.stM);
-    }
-
-    @Override
-    public final Environment getEnvironmentMatrix() {
-        return this.env;
+    public Environment getEnvironmentMatrix() {
+        return EnvironmentFactory.standardRules(10, 10);
     }
 
     @Override
     public final List<String> availablePatterns() {
-        return this.aviablePatterns;
+        return Collections.emptyList();
     }
+
 
 }

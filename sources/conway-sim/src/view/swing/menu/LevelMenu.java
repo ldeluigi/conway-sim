@@ -1,10 +1,12 @@
 package view.swing.menu;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,8 +17,16 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
+
 import controller.io.ResourceLoader;
+import core.campaign.CellType;
+import core.campaign.Level;
+import core.campaign.LevelImplTest;
+import core.model.Status;
+import core.utils.ListMatrix;
+import core.utils.Matrix;
 import view.DesktopGUI;
+import view.swing.Colors;
 import view.swing.sandbox.JGridPanel;
 import view.swing.sandbox.KeyListenerFactory;
 import view.swing.sandbox.SandboxBuilder;
@@ -34,6 +44,7 @@ public class LevelMenu extends JPanel {
     private static final int LEVEL_FOR_PAGE = 4;
     private final List<JButton> bList = new LinkedList<>();
     private final DesktopGUI mainGUI;
+    private JGridPanel gridPanel;
     private JTabbedPane cardPanel;
     private int currentLevel;
 
@@ -68,24 +79,23 @@ public class LevelMenu extends JPanel {
             cardPanel.addTab(page.replace("X", i + ""), panelLevel(i));
         }
 
-        this.setLayout(new BorderLayout());
+        this.setLayout(new GridBagLayout());
         final JPanel central = new JPanel(new FlowLayout());
         central.setOpaque(false);
         final JPanel rightPanel = new JPanel();
         rightPanel.setOpaque(false);
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
         rightPanel.add(cardPanel);
-        rightPanel.add(getRightLeftButtonPanel());
+        rightPanel.add(buildRightLeftButtonPanel());
 
         final JPanel statusPanel = new JPanel(new FlowLayout());
         statusPanel.setOpaque(false);
 
-        final JGridPanel pg = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
+        gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        statusPanel.add(pg);
+        statusPanel.add(gridPanel);
         central.add(statusPanel);
         central.add(rightPanel);
-        this.add(central, BorderLayout.CENTER);
 
         final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         exitPanel.setOpaque(false);
@@ -98,7 +108,11 @@ public class LevelMenu extends JPanel {
                 .newJButton(ResourceLoader.loadString("level.button.return"), this.getFont());
         bReturn.setFocusable(false);
         exitPanel.add(bReturn);
-        this.add(exitPanel, BorderLayout.AFTER_LAST_LINE);
+        final GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.CENTER;
+        this.add(central, c);
+        c.anchor = GridBagConstraints.LAST_LINE_END;
+        this.add(exitPanel, c);
 
         bStart.addActionListener(e -> start());
         bReturn.addActionListener(e -> mainGUI.setView(new MainMenu(mainGUI)));
@@ -111,7 +125,7 @@ public class LevelMenu extends JPanel {
                 this.getHeight(), this);
     }
 
-    private JPanel getRightLeftButtonPanel() {
+    private JPanel buildRightLeftButtonPanel() {
         JPanel rightLeftButton = new JPanel(new FlowLayout());
         rightLeftButton.setOpaque(false);
         final JButton right = SandboxTools.newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
@@ -147,21 +161,56 @@ public class LevelMenu extends JPanel {
     private void pressButton(final JButton button) {
         this.bList.stream().filter(b -> !b.isEnabled()).forEach(b -> b.setEnabled(true));
         button.setEnabled(false);
+        gridPanel.setVisible(false);
+        final Level level = new LevelImplTest();
+        gridPanel.changeGrid(level.getEnvironmentMatrix().getWidth(), level.getEnvironmentMatrix().getHeight());
+        Matrix<Color> mc = new ListMatrix<>(level.getCellTypeMatrix().getWidth(),
+                level.getCellTypeMatrix().getHeight(), () -> null);
+        for (int row = 0; row < level.getCellTypeMatrix().getWidth(); row++) {
+            for (int col = 0; col < level.getCellTypeMatrix().getWidth(); col++) {
+                Color value;
+                if (level.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
+                    value = level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                            : Color.WHITE;
+                } else if (level.getCellTypeMatrix().get(row, col)
+                        .equals(CellType.GOLDEN)) {
+                    value = Colors.blend(Colors.GOLD,
+                            level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                                    : Color.WHITE);
+                } else if (level.getCellTypeMatrix().get(row, col)
+                        .equals(CellType.WALL)) {
+                    value = level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY
+                            : Color.LIGHT_GRAY;
+                } else {
+                    value = level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.BLACK
+                            : Color.WHITE;
+                }
+                mc.set(row, col, value);
+            }
+        }
+        SwingUtilities.invokeLater(() -> gridPanel.paintGrid(0, 0, mc));
+        gridPanel.setVisible(true);
     }
 
     private JPanel panelLevel(final int pageNumber) {
         JPanel gridLevel = new JPanel();
-        gridLevel.setLayout(new GridLayout(2, 2, 1, 1));
+        gridLevel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(2, 2, 2, 2);
+        c.ipadx = 1;
+        c.ipady = 1;
+        c.gridx = 0;
+        c.gridy = 0;
         gridLevel.setOpaque(false);
         for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber
                 + LEVEL_FOR_PAGE; i++) {
-            JButton b;
             if (i > ResourceLoader.loadConstantInt("level.number") - 1) {
                 return gridLevel;
             } else {
                 if (bList.size() > i) {
-                    b = bList.get(i);
-                    gridLevel.add(b);
+                    c.gridx = i % LEVEL_FOR_PAGE % 2 == 0 ? 0 : 1;
+                    c.gridy = i % LEVEL_FOR_PAGE / 2;
+                    gridLevel.add(bList.get(i), c);
                 }
             }
         }
