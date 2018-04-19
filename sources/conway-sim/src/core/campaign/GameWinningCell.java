@@ -55,14 +55,6 @@ public class GameWinningCell extends SimpleCell {
     }
 
     /**
-     * Is the method which gives the current status of the cell.
-     */
-    @Override
-    public Status getStatus() {
-        return super.getStatus();
-    }
-
-    /**
      * Is the method which gives a complete copy of the cell.
      */
     @Override

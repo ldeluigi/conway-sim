@@ -36,7 +36,7 @@ public class LevelLoader {
         this.defaultBook = new RecipeBookImpl();
         this.selLvl = LVLPACK + Integer.toString(lvl) + "/";
         bookLoader(this.defaultBook, selLvl);
-        this.level = new LevelImplTest(recipeExtr(this.defaultBook), stageLoader(N_STAGES, selLvl));
+        this.level = new LevelImplTest();
     }
 
     private List<Matrix<? extends Enum<?>>> stageLoader(final int stages, final String selLvl) {

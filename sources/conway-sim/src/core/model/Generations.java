@@ -135,6 +135,5 @@ public final class Generations {
                 result.get(row, column).setStatus(ALIVE);
             }
         }
-        ;
     }
 }

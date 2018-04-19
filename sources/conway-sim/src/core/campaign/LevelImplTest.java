@@ -1,5 +1,6 @@
 package core.campaign;
 
+import java.util.Collections;
 import java.util.List;
 
 import core.model.Environment;
@@ -13,17 +14,7 @@ import core.utils.Matrix;
  *
  */
 public class LevelImplTest implements Level {
-
-    private final List<String> aviablePatterns;
-    private final List<Matrix<? extends Enum<?>>> stages;
-    /**
-     * 
-     * @param patterns aviable patterns
-     * @param stages selected stages
-     */
-    public LevelImplTest(final List<String> patterns, final List<Matrix<? extends Enum<?>>> stages) {
-        this.stages = stages;
-        this.aviablePatterns = patterns;
+    public LevelImplTest() {
     }
 
     @Override
@@ -64,12 +55,7 @@ public class LevelImplTest implements Level {
 
     @Override
     public final List<String> availablePatterns() {
-        return this.aviablePatterns;
-    }
-    
-    @Override
-    public final List<Matrix<? extends Enum<?>>> getStages() {
-        return stages;
+        return Collections.emptyList();
     }
 
 }

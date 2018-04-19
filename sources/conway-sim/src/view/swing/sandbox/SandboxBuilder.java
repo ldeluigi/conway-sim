@@ -6,7 +6,6 @@ import controller.editor.LevelGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.LevelLoader;
 import core.campaign.Level;
-import core.campaign.LevelImplTest;
 import view.DesktopGUI;
 
 /**

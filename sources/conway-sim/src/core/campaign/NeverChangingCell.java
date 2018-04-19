@@ -34,14 +34,6 @@ public class NeverChangingCell extends SimpleCell {
     }
 
     /**
-     * Is the method which gives the current Status of this cell.
-     */
-    @Override
-    public Status getStatus() {
-        return super.getStatus();
-    }
-
-    /**
      * Is the method which gives an exact copy of this cell.
      */
     @Override
