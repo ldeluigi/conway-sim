@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import controller.editor.ExtendedGridEditor;
 import controller.editor.ExtendedGridEditorImpl;
@@ -24,6 +25,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     private final DesktopGUI mainGUI;
     private final JButton bSave;
     private final JButton bCancel;
+    private final JLabel instructionLabel;
     private ExtendedGridEditor extendedGridEditor;
 
     /**
@@ -43,9 +45,14 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
         super.getNorthPanel().add(gridOption, BorderLayout.WEST);
         this.bSave = SandboxTools.newJButton("SAVE", "Save a part of the grid like standard RLE");
         this.bCancel = SandboxTools.newJButton("Cancel", "Exit from save mode");
+        this.instructionLabel = new JLabel();
+        this.instructionLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
+        this.instructionLabel.setOpaque(false);
+        this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
         this.bCancel.setEnabled(false);
         final JPanel mySouth = new JPanel(new FlowLayout());
         mySouth.setOpaque(false);
+        mySouth.add(instructionLabel);
         mySouth.add(bSave);
         mySouth.add(bCancel);
         super.getSouthPanel().add(mySouth, BorderLayout.CENTER);
@@ -96,9 +103,11 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
      */
     public void setSaveEnable(final boolean flag) {
         if (flag) {
+            this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
             this.cancel();
             this.bSave.setEnabled(true);
         } else {
+            this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.disable"));
             this.bCancel.setEnabled(false);
             this.bSave.setEnabled(false);
         }
@@ -108,7 +117,9 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
         if (this.extendedGridEditor.isCutReady()) {
             this.mainGUI.popUpFrame(new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())));
             this.cancel();
+            this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
         } else {
+            this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.select"));
             this.extendedGridEditor.selectMode(true);
             this.bCancel.setEnabled(true);
         }
@@ -117,5 +128,6 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     private void cancel() {
         this.extendedGridEditor.cancelSelectMode();
         this.bCancel.setEnabled(false);
+        this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
     }
 }
