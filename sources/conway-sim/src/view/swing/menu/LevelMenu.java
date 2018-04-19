@@ -18,10 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
 import core.campaign.CellType;
 import core.campaign.Level;
-import core.campaign.LevelImplTest;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
@@ -162,7 +162,8 @@ public class LevelMenu extends JPanel {
         this.bList.stream().filter(b -> !b.isEnabled()).forEach(b -> b.setEnabled(true));
         button.setEnabled(false);
         gridPanel.setVisible(false);
-        final Level level = new LevelImplTest();
+        final LevelLoader lLoader = new LevelLoader(currentLevel);
+        final Level level = lLoader.getLevel();
         gridPanel.changeGrid(level.getEnvironmentMatrix().getWidth(), level.getEnvironmentMatrix().getHeight());
         Matrix<Color> mc = new ListMatrix<>(level.getCellTypeMatrix().getWidth(),
                 level.getCellTypeMatrix().getHeight(), () -> null);
