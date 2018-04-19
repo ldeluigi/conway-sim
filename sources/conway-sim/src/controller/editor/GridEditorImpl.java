@@ -3,7 +3,6 @@ package controller.editor;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -26,18 +25,17 @@ import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
 
 /**
- * GridEditorImpl is the editor for the grid and the pattern manager depending on which interface is
- * used; it allows to perform changes to the view of the grid.
+ * GridEditorImpl is the editor for the grid and the pattern manager depending
+ * on which interface is used; it allows to perform changes to the view of the
+ * grid.
  *
  */
 public class GridEditorImpl implements PatternEditor {
 
-    private static final BiFunction<Status, Color, Color> STATUSTOCOLOR = (s,
-            c) -> s.equals(Status.ALIVE) ? c : Color.WHITE;
-    private static final Function<Status, Color> ALIVETOBLACK = s -> STATUSTOCOLOR.apply(s,
-            Color.BLACK);
-    private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s,
-            Color.GRAY);
+    private static final BiFunction<Status, Color, Color> STATUSTOCOLOR = (s, c) -> s.equals(Status.ALIVE) ? c
+            : Color.WHITE;
+    private static final Function<Status, Color> ALIVETOBLACK = s -> STATUSTOCOLOR.apply(s, Color.BLACK);
+    private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
     private static final Function<Cell, Color> CELLTOCOLOR = c -> ALIVETOBLACK.apply(c.getStatus());
     private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
@@ -49,7 +47,7 @@ public class GridEditorImpl implements PatternEditor {
     private Environment env;
     private Optional<Matrix<Status>> pattern;
     private Matrix<Status> currentStatus;
-	private Boolean enabled;
+    private Boolean enabled;
 
     /**
      * Constructor method for a new Editor.
@@ -63,8 +61,8 @@ public class GridEditorImpl implements PatternEditor {
         this.pattern = Optional.empty();
         this.env = EnvironmentFactory.standardRules(this.getGameGrid().getGridWidth(),
                 this.getGameGrid().getGridHeight());
-        this.setCurrentStatus(new ListMatrix<>(this.getGameGrid().getGridWidth(),
-                this.getGameGrid().getGridHeight(), () -> Status.DEAD));
+        this.setCurrentStatus(new ListMatrix<>(this.getGameGrid().getGridWidth(), this.getGameGrid().getGridHeight(),
+                () -> Status.DEAD));
     }
 
     /**
@@ -75,7 +73,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * @return current pattern if present or else throws {@link NoSuchElementException}
+     * @return current pattern if present or else throws
+     *         {@link NoSuchElementException}
      */
     protected Matrix<Status> getPattern() {
         return this.pattern.get();
@@ -106,10 +105,8 @@ public class GridEditorImpl implements PatternEditor {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.getCurrentStatus().set(row, column,
-                this.getCurrentStatus().get(row, column).equals(Status.DEAD) ? Status.ALIVE
-                        : Status.DEAD);
-        this.getGameGrid().displaySingleCell(row, column,
-                ALIVETOBLACK.apply(this.getCurrentStatus().get(row, column)));
+                this.getCurrentStatus().get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
+        this.getGameGrid().displaySingleCell(row, column, ALIVETOBLACK.apply(this.getCurrentStatus().get(row, column)));
     }
 
     /**
@@ -119,14 +116,13 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public Generation getGeneration() {
-        return GenerationFactory.from(this.getCurrentStatus().map(s -> new SimpleCell(s)),
-                this.env);
+        return GenerationFactory.from(this.getCurrentStatus().map(s -> new SimpleCell(s)), this.env);
     }
 
     /**
-     * Is the method which displays the future pattern together with the matrix already existing.
-     * The cursor of the mouse will guide the center of the pattern all over the grid (if it can be
-     * fitted).
+     * Is the method which displays the future pattern together with the matrix
+     * already existing. The cursor of the mouse will guide the center of the
+     * pattern all over the grid (if it can be fitted).
      * 
      * @param row
      *            is the vertical index of the cell where the user is pointing
@@ -149,11 +145,9 @@ public class GridEditorImpl implements PatternEditor {
             newColumn = column;
         }
         if ((this.getGameGrid().getGridWidth() - newColumn) >= this.pattern.get().getWidth()
-                && (this.getGameGrid().getGridHeight() - newRow) >= this.pattern.get()
-                        .getHeight()) {
-            this.getGameGrid().paintGrid(0, 0,
-                    Matrices.mergeXY(this.getCurrentStatus().map(ALIVETOBLACK), newRow, newColumn,
-                            this.pattern.get().map(ALIVETOGRAY)));
+                && (this.getGameGrid().getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
+            this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(this.getCurrentStatus().map(ALIVETOBLACK), newRow,
+                    newColumn, this.pattern.get().map(ALIVETOGRAY)));
             this.lastPreviewRow = newRow;
             this.lastPreviewColumn = newColumn;
         }
@@ -180,9 +174,11 @@ public class GridEditorImpl implements PatternEditor {
      * Is the method which merges together the existing matrix and the pattern.
      * 
      * @param row
-     *            is the index describing the lastPreviewRow where to add the first pattern label
+     *            is the index describing the lastPreviewRow where to add the first
+     *            pattern label
      * @param column
-     *            is the index of the lastPreviewColumn where to add the first pattern label
+     *            is the index of the lastPreviewColumn where to add the first
+     *            pattern label
      */
     @Override
     public void placeCurrentPattern(final int row, final int column) {
@@ -194,8 +190,7 @@ public class GridEditorImpl implements PatternEditor {
         final int newColumn = indexes[1];
         if ((this.getGameGrid().getGridWidth() - newColumn) >= this.getPattern().getWidth()
                 && (this.getGameGrid().getGridHeight() - newRow) >= this.getPattern().getHeight()) {
-            this.setCurrentStatus(Matrices.mergeXY(this.getCurrentStatus(), newRow, newColumn,
-                    this.getPattern()));
+            this.setCurrentStatus(Matrices.mergeXY(this.getCurrentStatus(), newRow, newColumn, this.getPattern()));
             this.applyChanges();
             this.removePatternToPlace();
         } else if (!(newRow == this.lastPreviewRow && newColumn == this.lastPreviewColumn)) {
@@ -261,18 +256,19 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which shows a full white grid as every cell was dead or a new grid was just
-     * created.
+     * Is the method which shows a full white grid as every cell was dead or a new
+     * grid was just created.
      */
     @Override
     public void clean() {
-        this.currentStatus = new ListMatrix<>(this.getGameGrid().getGridWidth(),
-                this.getGameGrid().getGridHeight(), () -> Status.DEAD);
+        this.currentStatus = new ListMatrix<>(this.getGameGrid().getGridWidth(), this.getGameGrid().getGridHeight(),
+                () -> Status.DEAD);
         this.applyChanges();
     }
 
     /**
-     * Is the method which changes both dimensions of the grid currently used and shown.
+     * Is the method which changes both dimensions of the grid currently used and
+     * shown.
      * 
      * @param horizontal
      *            is the length of the future grid in number of cells
@@ -281,30 +277,25 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
-        if (horizontal != this.getCurrentStatus().getWidth()
-                || vertical != this.getCurrentStatus().getHeight()) {
+        if (horizontal != this.getCurrentStatus().getWidth() || vertical != this.getCurrentStatus().getHeight()) {
             if (this.getCurrentStatus().getWidth() < horizontal) {
                 if (this.getCurrentStatus().getHeight() < vertical) {
-                    this.setCurrentStatus(Matrices.mergeXY(
-                            new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0,
-                            this.getCurrentStatus()));
+                    this.setCurrentStatus(Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0,
+                            0, this.getCurrentStatus()));
                 } else {
                     this.setCurrentStatus(Matrices.cut(this.getCurrentStatus(), 0, vertical - 1, 0,
                             this.getCurrentStatus().getWidth() - 1));
-                    this.setCurrentStatus(Matrices.mergeXY(
-                            new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0,
-                            this.getCurrentStatus()));
+                    this.setCurrentStatus(Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0,
+                            0, this.getCurrentStatus()));
                 }
             } else {
                 if (this.getCurrentStatus().getHeight() < vertical) {
                     this.setCurrentStatus(Matrices.cut(this.getCurrentStatus(), 0,
                             this.getCurrentStatus().getHeight() - 1, 0, horizontal - 1));
-                    this.setCurrentStatus(Matrices.mergeXY(
-                            new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0, 0,
-                            this.getCurrentStatus()));
+                    this.setCurrentStatus(Matrices.mergeXY(new ListMatrix<>(horizontal, vertical, () -> Status.DEAD), 0,
+                            0, this.getCurrentStatus()));
                 } else {
-                    this.setCurrentStatus(Matrices.cut(this.getCurrentStatus(), 0, vertical - 1, 0,
-                            horizontal - 1));
+                    this.setCurrentStatus(Matrices.cut(this.getCurrentStatus(), 0, vertical - 1, 0, horizontal - 1));
                 }
             }
             this.getGameGrid().changeGrid(horizontal, vertical);
@@ -319,11 +310,11 @@ public class GridEditorImpl implements PatternEditor {
      *            start row
      * @param column
      *            start column
-     * @return return an array with new row in first position and new column in second position
+     * @return return an array with new row in first position and new column in
+     *         second position
      */
     protected int[] centerIndexes(final int row, final int column) {
-        int[] newIndex = { row - this.pattern.get().getHeight() / 2,
-                column - this.pattern.get().getWidth() / 2 };
+        int[] newIndex = { row - this.pattern.get().getHeight() / 2, column - this.pattern.get().getWidth() / 2 };
 
         if (newIndex[0] < 0) {
             newIndex[0] = 0;
@@ -373,7 +364,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Add the actionListener to the game grid. Override this method to change the listener
+     * Add the actionListener to the game grid. Override this method to change the
+     * listener
      * 
      * this.getGameGrid().addListenerToGrid((x, y) -> new Listener(x, y);
      *
@@ -448,7 +440,8 @@ public class GridEditorImpl implements PatternEditor {
         }
 
         /**
-         * Is the method which notifies when the user's cursor enters a cell of the grid.
+         * Is the method which notifies when the user's cursor enters a cell of the
+         * grid.
          * 
          * @param e
          *            the event generated as result of the interaction
@@ -458,8 +451,7 @@ public class GridEditorImpl implements PatternEditor {
             if (GridEditorImpl.this.isEnabled()) {
                 if (GridEditorImpl.this.isPlacingModeOn()) {
                     GridEditorImpl.this.showPreview(this.row, this.column);
-                } else if (GridEditorImpl.this.mouseBeingPressed
-                        && SwingUtilities.isLeftMouseButton(e)) {
+                } else if (GridEditorImpl.this.mouseBeingPressed && SwingUtilities.isLeftMouseButton(e)) {
                     GridEditorImpl.this.hit(this.row, this.column);
                 }
             }
