@@ -3,6 +3,7 @@ package controller.editor;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -42,13 +43,13 @@ public class GridEditorImpl implements PatternEditor {
 
     private final GridPanel gameGrid;
 
-    private boolean placingState;
     private boolean mouseBeingPressed;
     private int lastPreviewRow;
     private int lastPreviewColumn;
     private Environment env;
     private Optional<Matrix<Status>> pattern;
     private Matrix<Status> currentStatus;
+	private Boolean enabled;
 
     /**
      * Constructor method for a new Editor.
@@ -58,13 +59,26 @@ public class GridEditorImpl implements PatternEditor {
      */
     public GridEditorImpl(final GridPanel grid) {
         this.gameGrid = grid;
-        this.placingState = true;
         this.addActionListenerToGridPanel();
         this.pattern = Optional.empty();
         this.env = EnvironmentFactory.standardRules(this.getGameGrid().getGridWidth(),
                 this.getGameGrid().getGridHeight());
         this.setCurrentStatus(new ListMatrix<>(this.getGameGrid().getGridWidth(),
                 this.getGameGrid().getGridHeight(), () -> Status.DEAD));
+    }
+
+    /**
+     * @return true if a pattern is being placed
+     */
+    protected boolean patternIsPresent() {
+        return this.pattern.isPresent();
+    }
+
+    /**
+     * @return current pattern if present or else throws {@link NoSuchElementException}
+     */
+    protected Matrix<Status> getPattern() {
+        return this.pattern.get();
     }
 
     /**
@@ -88,7 +102,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void hit(final int row, final int column) {
-        if (!this.placingState) {
+        if (!this.isEnabled()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.getCurrentStatus().set(row, column,
@@ -121,7 +135,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void showPreview(final int row, final int column) {
-        if (!this.placingState || !this.patternIsPresent()) {
+        if (!this.isEnabled() || !this.patternIsPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         final int newRow;
@@ -163,21 +177,6 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * 
-     * @return if the pattern is present
-     */
-    public boolean patternIsPresent() {
-        return this.pattern.isPresent();
-    }
-
-    /**
-     * @return current pattern if present else null
-     */
-    public Matrix<Status> getPattern() {
-        return this.pattern.get();
-    }
-
-    /**
      * Is the method which merges together the existing matrix and the pattern.
      * 
      * @param row
@@ -187,7 +186,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void placeCurrentPattern(final int row, final int column) {
-        if (!this.placingState || !this.patternIsPresent()) {
+        if (!this.isEnabled() || !this.patternIsPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         final int[] indexes = this.centerIndexes(row, column);
@@ -222,7 +221,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void rotateCurrentPattern(final int hits) {
-        if (!this.placingState || !this.patternIsPresent()) {
+        if (!this.isEnabled() || !this.patternIsPresent()) {
             throw new IllegalStateException(GridEditorImpl.MESSAGE);
         }
         this.getPattern().rotateClockwise(hits);
@@ -244,7 +243,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public boolean isEnabled() {
-        return this.placingState;
+        return this.enabled;
     }
 
     /**
@@ -255,7 +254,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void setEnabled(final Boolean enabled) {
-        this.placingState = enabled;
+        this.enabled = enabled;
         if (enabled) {
             this.applyChanges();
         }
