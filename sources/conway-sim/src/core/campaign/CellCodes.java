@@ -8,7 +8,7 @@ import java.util.Set;
 import core.model.SimpleCell;
 
 public final class CellCodes {
-	
+
 	private static final Map<String, Integer> CODES = new HashMap<>();
 	
 	static {
