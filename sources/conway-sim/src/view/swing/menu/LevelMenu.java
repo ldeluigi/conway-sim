@@ -34,6 +34,7 @@ import view.swing.sandbox.SandboxTools;
 
 /**
  * JPanel with level list.
+ * TODO a lot of PMD
  */
 public class LevelMenu extends JPanel {
 

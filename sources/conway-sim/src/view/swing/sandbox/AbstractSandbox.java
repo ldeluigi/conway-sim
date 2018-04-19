@@ -34,13 +34,11 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     private final GenerationPanel generationPanel;
     private final JButton bBook;
     private final JButton bClear;
-    private JButton bExit;
     private final DesktopGUI mainGUI;
     private final PatternEditor gridEditor;
     private final JGridPanel grid;
     private JPanel north;
     private JPanel south;
-    private JPanel southRight;
 
     private BookFrame book;
 
@@ -205,7 +203,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
      * 
      * @return the panel which is going to be added souther
      */
-    public final JPanel getSouthPanel() {
+    protected final JPanel getSouthPanel() {
         return this.south;
     }
 
@@ -221,11 +219,11 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
 
     private void initializeSouth() {
         this.south = new JPanel(new BorderLayout());
-        this.bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
+        final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
                 ResourceLoader.loadString("sandbox.exit.tooltip"));
         south.setOpaque(false);
         bExit.addActionListener(e -> exit());
-        this.southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         southRight.setOpaque(false);
         southRight.add(bClear);
         southRight.add(this.bBook);

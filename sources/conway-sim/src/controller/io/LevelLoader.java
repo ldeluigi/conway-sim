@@ -43,8 +43,8 @@ public class LevelLoader {
     public LevelLoader(final int lvl) {
         this.defaultBook = new RecipeBookImpl();
         this.selLvl = LVLPACK + Integer.toString(lvl) + "/";
-        bookLoader(defaultBook);
-        this.level = new Level() {
+        //bookLoader(defaultBook);
+        /*this.level = new Level() {
             
             @Override
             public Matrix<Status> getInitialStateMatrix() {
@@ -75,7 +75,8 @@ public class LevelLoader {
                 // TODO Auto-generated method stub
                 return recipeExtr(defaultBook);
             }
-        };
+        };*/
+        this.level = new LevelImplTest(); //TODO remove as soon as the other works
     }
     /**
      * 

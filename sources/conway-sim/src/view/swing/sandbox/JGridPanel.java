@@ -22,7 +22,6 @@ import view.swing.menu.MenuSettings;
 
 /**
  * GridPanel is the visual panel which displays a scrollable grid of cells.
- * 
  */
 public class JGridPanel extends JScrollPane implements GridPanel {
 

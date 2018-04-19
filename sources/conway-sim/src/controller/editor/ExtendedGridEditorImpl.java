@@ -9,7 +9,7 @@ import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
 
 /**
- * 
+ * TODO PMD and javadoc
  */
 public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGridEditor {
 

@@ -5,8 +5,8 @@ import javax.swing.JButton;
 import controller.editor.PatternEditor;
 
 /**
- * 
- *
+ * These are the method that were necessary to the implementation of a panel that contained all the main functions in the swing package.
+ * More precisely this panel allowed to edit a grid, show generation computing and control of it, grid resize, clear and book integration.
  */
 public interface Sandbox extends UpdateScheduler {
     /**
