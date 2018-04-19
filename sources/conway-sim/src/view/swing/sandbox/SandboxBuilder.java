@@ -6,6 +6,7 @@ import controller.editor.LevelGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.LevelLoader;
 import core.campaign.Level;
+import core.campaign.LevelImplTest;
 import view.DesktopGUI;
 
 /**
@@ -27,7 +28,7 @@ public final class SandboxBuilder {
      */
     public static JPanel buildLevelSandbox(final DesktopGUI gui, final int level) {
         final LevelLoader levelLoader = new LevelLoader(level);
-        final Level l = levelLoader.getLevel();
+        final Level l = new LevelImplTest();
         final int h = l.getEnvironmentMatrix().getHeight();
         final int w = l.getEnvironmentMatrix().getWidth();
         return new AbstractSandbox(gui) {

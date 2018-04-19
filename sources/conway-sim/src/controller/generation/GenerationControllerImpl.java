@@ -157,7 +157,9 @@ public class GenerationControllerImpl implements GenerationController {
      */
     @Override
     public synchronized void computeNext() {
+        this.getCurrentElement();
         this.setCurrentGeneration(Generations.compute(this.getCurrentElement()));
+        this.getCurrentElement();
         this.setCurrentNumberGeneration(this.getCurrentNumberElement() + 1L);
         this.saveGeneration(this.getCurrentElement(), getCurrentNumberElement());
         this.view.refreshView();
