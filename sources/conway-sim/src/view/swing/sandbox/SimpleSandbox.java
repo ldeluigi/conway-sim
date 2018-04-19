@@ -45,6 +45,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
         this.bCancel = SandboxTools.newJButton("Cancel", "Exit from save mode");
         this.bCancel.setEnabled(false);
         final JPanel mySouth = new JPanel(new FlowLayout());
+        mySouth.setOpaque(false);
         mySouth.add(bSave);
         mySouth.add(bCancel);
         super.getSouthPanel().add(mySouth, BorderLayout.CENTER);
