@@ -128,7 +128,7 @@ public final class ListMatrix<X> implements Matrix<X> {
         this.matrix.forEach(row -> {
             temp.add(row.stream().map(mapper).collect(Collectors.toList()));
         });
-        return new ListMatrix<>(temp);
+        return new ListMatrix<Y>(temp);
     }
 
     @Override

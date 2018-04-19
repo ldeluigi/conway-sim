@@ -37,7 +37,7 @@ public final class GenerationFactory {
      *            the {@link Environment}
      * @return the {@link Generation} created from the arguments
      */
-    public static Generation from(final Matrix<Cell> cellMatrix, final Environment e) {
+    public static Generation from(final Matrix<? extends Cell> cellMatrix, final Environment e) {
         Objects.requireNonNull(cellMatrix);
         Objects.requireNonNull(e);
         if (cellMatrix.getHeight() != e.getHeight() || cellMatrix.getWidth() != e.getWidth()) {

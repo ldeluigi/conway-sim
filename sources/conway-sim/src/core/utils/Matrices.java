@@ -30,7 +30,7 @@ public final class Matrices {
      * @return the modified matrix
      */
     public static <X> Matrix<X> mergeXY(final Matrix<X> main, final int x, final int y,
-            final Matrix<X> smaller) {
+            final Matrix<? extends X> smaller) {
         Objects.requireNonNull(main);
         Objects.requireNonNull(smaller);
         if (x < 0 || y < 0 || x + smaller.getHeight() > main.getHeight()
@@ -63,7 +63,7 @@ public final class Matrices {
      *            the last (inclusive) column to copy
      * @return a new matrix taken from the given one
      */
-    public static <X> Matrix<X> cut(final Matrix<X> from, final int fromRow, final int toRow,
+    public static <X> Matrix<X> cut(final Matrix<? extends X> from, final int fromRow, final int toRow,
             final int fromColumn, final int toColumn) {
         if (fromRow < 0 || toRow < fromRow || toRow >= from.getHeight() || fromColumn < 0
                 || toColumn < fromColumn || toColumn >= from.getWidth()) {
@@ -73,7 +73,7 @@ public final class Matrices {
         }
         return new ListMatrix<>(IntStream.rangeClosed(fromRow, toRow)
                 .mapToObj(r -> IntStream.rangeClosed(fromColumn, toColumn)
-                        .mapToObj(c -> from.get(r, c)).collect(Collectors.toList()))
+                        .mapToObj(c -> (X) from.get(r, c)).collect(Collectors.toList()))
                 .collect(Collectors.toList()));
     }
 
@@ -86,7 +86,7 @@ public final class Matrices {
      *            the generic type of the matrix
      * @return a wrapped matrix that protects from modifications
      */
-    public static <X> Matrix<X> unmodifiableMatrix(final Matrix<X> matrix) {
+    public static <X> Matrix<X> unmodifiableMatrix(final Matrix<? extends X> matrix) {
         return new Matrix<X>() {
             @Override
             public X get(final int row, final int column) {
@@ -135,7 +135,7 @@ public final class Matrices {
 
             @Override
             public Stream<X> stream() {
-                return matrix.stream();
+                return matrix.stream().map(x -> (X) x);
             }
         };
     }
@@ -167,11 +167,12 @@ public final class Matrices {
     /**
      * Calls {@link Matrix#map(Function)} with (x -> x) on the source and returns the result.
      * 
-     * @param a
+     * @param <X> generic type
+     * @param source
      *            a matrix
      * @return the Matrix created with {@link Matrix#map} method
      */
-    public static <X> Matrix<X> copyOf(final Matrix<X> source) {
+    public static <X> Matrix<X> copyOf(final Matrix<? extends X> source) {
         return source.map(x -> x);
     }
 }

@@ -31,7 +31,7 @@ public final class EnvironmentFactory {
      *            a {@link Matrix<CellEnvironment>}
      * @return the Environment based on the given matrix
      */
-    public static Environment from(final Matrix<CellEnvironment> envMatrix) {
+    public static Environment from(final Matrix<? extends CellEnvironment> envMatrix) {
         return new Environment() {
 
             @Override
