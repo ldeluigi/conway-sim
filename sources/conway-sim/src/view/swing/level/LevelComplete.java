@@ -25,13 +25,13 @@ public class LevelComplete extends JInternalFrame {
         final JPanel jp = new JPanel() {
             private static final long serialVersionUID = 7156522143177179412L;
 
-            @Override
-            public void paintComponent(final Graphics g) {
-                g.drawImage(
-                        ResourceLoader.loadImage(Math.random() > EGG_PROB ? IMAGE_RESOURCE_MAIN
-                                : IMAGE_RESOURCE_EGG),
-                        0, 0, this.getWidth(), this.getHeight(), this);
-            }
+//            @Override
+//            public void paintComponent(final Graphics g) {
+//                g.drawImage(
+//                        ResourceLoader.loadImage(Math.random() > EGG_PROB ? IMAGE_RESOURCE_MAIN
+//                                : IMAGE_RESOURCE_EGG),
+//                        0, 0, this.getWidth(), this.getHeight(), this);
+//            }
         };
         this.setContentPane(jp);
     }

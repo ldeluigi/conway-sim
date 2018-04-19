@@ -1,12 +1,14 @@
 package view.swing.sandbox;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import controller.editor.LevelGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.LevelLoader;
 import core.campaign.Level;
 import view.DesktopGUI;
+import view.swing.level.LevelComplete;
 
 /**
  * Factory that creates sandbox JPanels.
@@ -32,6 +34,7 @@ public final class SandboxBuilder {
         final int w = l.getEnvironmentMatrix().getWidth();
         return new AbstractSandbox(gui) {
             private static final long serialVersionUID = 1L;
+            private GenerationPanel generationPanel;
 
             @Override
             protected JGridPanel buildGrid(final int cellSize) {
@@ -40,12 +43,22 @@ public final class SandboxBuilder {
 
             @Override
             protected GenerationPanel buildGenerationPanel() {
-                return new GenerationPanel(this);
+                generationPanel = new GenerationPanel(this);
+                return generationPanel;
+            }
+
+            private GenerationPanel getGenerationPanel() {
+                return this.generationPanel;
             }
 
             @Override
             protected PatternEditor buildEditor(final GridPanel gridp) {
-                return new LevelGridEditorImpl(gridp, l);
+                return new LevelGridEditorImpl(gridp, l, () -> {
+                    SwingUtilities.invokeLater(() -> {
+                        gui.popUpFrame(new LevelComplete());
+                        this.getGenerationPanel().end();
+                    });
+                });
             }
         };
     }

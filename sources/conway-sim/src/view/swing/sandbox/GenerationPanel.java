@@ -262,6 +262,7 @@ public class GenerationPanel extends JPanel {
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
+        this.generationController.pause();
         this.view.setButtonClearEnabled(true);
     }
 

@@ -1,17 +1,11 @@
 package controller.editor;
 
 import java.awt.Color;
-import java.util.Optional;
-
 import core.campaign.CellType;
 import core.campaign.Editable;
-import core.campaign.GameWinningCell;
 import core.campaign.Level;
-import core.campaign.NeverChangingCell;
-import core.model.Cell;
 import core.model.Generation;
 import core.model.GenerationFactory;
-import core.model.SimpleCell;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
@@ -24,7 +18,8 @@ import view.swing.sandbox.GridPanel;
  */
 public final class LevelGridEditorImpl extends GridEditorImpl {
 
-    private Optional<Level> currentLevel;
+    private final LevelWinnigCondition levelWinning;
+    private Level currentLevel;
     private Matrix<Status> currentStatus;
 
     /**
@@ -33,10 +28,13 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      *            the initial grid
      * @param level
      *            the level to be loaded
+     * @param victory
+     *            {@link Runnable} to lunch the victory
      */
-    public LevelGridEditorImpl(final GridPanel grid, final Level level) {
+    public LevelGridEditorImpl(final GridPanel grid, final Level level, final Runnable victory) {
         super(grid);
         setLevel(level);
+        this.levelWinning = new LevelWinnigCondition(currentLevel, victory);
     }
 
     /**
@@ -47,10 +45,10 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      *            to set as current
      */
     public void setLevel(final Level level) {
-        this.currentLevel = Optional.of(level);
-        this.getGameGrid().changeGrid(this.currentLevel.get().getEnvironmentMatrix().getWidth(),
-                this.currentLevel.get().getEnvironmentMatrix().getHeight());
-        this.currentStatus = this.currentLevel.get().getInitialStateMatrix().map(e -> e);
+        this.currentLevel = level;
+        this.getGameGrid().changeGrid(this.currentLevel.getEnvironmentMatrix().getWidth(),
+                this.currentLevel.getEnvironmentMatrix().getHeight());
+        this.currentStatus = this.currentLevel.getInitialStateMatrix().map(e -> e);
         this.clean();
     }
 
@@ -61,28 +59,8 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public Generation getGeneration() {
-        final Matrix<Cell> cellMatrix = new ListMatrix<>(this.currentLevel.get().getEnvironmentMatrix().getWidth(),
-                this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
-        for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
-            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix().getWidth(); col++) {
-                cellMatrix.set(row, col, 
-                        this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)
-                        ? new SimpleCell(this.currentStatus.get(row, col))
-                        : this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)
-                        ? new GameWinningCell(this.currentStatus.get(row, col), () -> {
-                        //born
-                            System.out.println("DEBUG| cell gold born");
-                        }, () -> {
-                        //death
-                            System.out.println("DEBUG| cell gold death");
-                        })
-                        : this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.WALL)
-                        ? new NeverChangingCell(this.currentStatus.get(row, col))
-                        : new SimpleCell(this.currentStatus.get(row, col)));
-            }
-        }
-        return GenerationFactory.from(cellMatrix,
-                this.currentLevel.get().getEnvironmentMatrix());
+        return GenerationFactory.from(this.levelWinning.getCellMatrix(currentStatus),
+                this.currentLevel.getEnvironmentMatrix());
     }
 
     /**
@@ -93,7 +71,7 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         if (!this.isEnabled()) {
             throw new IllegalStateException();
         }
-        if (this.currentLevel.get().getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
+        if (this.currentLevel.getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
             this.currentStatus.set(row, col,
                     this.currentStatus.get(row, col).equals(Status.DEAD) ? Status.ALIVE
                             : Status.DEAD);
@@ -107,7 +85,7 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void clean() {
-        this.currentStatus = Matrices.copyOf(currentLevel.get().getInitialStateMatrix());
+        this.currentStatus = Matrices.copyOf(currentLevel.getInitialStateMatrix());
         this.applyChanges();
     }
 
@@ -117,10 +95,10 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
     @Override
     protected void applyChanges() {
         final Matrix<Color> matrixColor = new ListMatrix<>(
-                this.currentLevel.get().getEnvironmentMatrix().getWidth(),
-                this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
-        for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
-            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix()
+                this.currentLevel.getEnvironmentMatrix().getWidth(),
+                this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
+        for (int row = 0; row < this.currentLevel.getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < this.currentLevel.getEnvironmentMatrix()
                     .getWidth(); col++) {
                 matrixColor.set(row, col, calculateColor(row, col));
             }
@@ -137,10 +115,10 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
     @Override
     public void draw(final Generation gen) {
         final Matrix<Color> matrixColor = new ListMatrix<>(
-                this.currentLevel.get().getEnvironmentMatrix().getWidth(),
-                this.currentLevel.get().getEnvironmentMatrix().getHeight(), () -> null);
-        for (int row = 0; row < this.currentLevel.get().getEnvironmentMatrix().getHeight(); row++) {
-            for (int col = 0; col < this.currentLevel.get().getEnvironmentMatrix()
+                this.currentLevel.getEnvironmentMatrix().getWidth(),
+                this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
+        for (int row = 0; row < this.currentLevel.getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < this.currentLevel.getEnvironmentMatrix()
                     .getWidth(); col++) {
                 matrixColor.set(row, col, calculateColorEditable(row, col, gen.getCellMatrix().map(s -> s.getStatus())));
             }
@@ -149,19 +127,19 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     private Color calculateColor(final int row, final int col) {
-        if (this.currentLevel.get().getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
+        if (this.currentLevel.getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
             return calculateColorEditable(row, col, this.currentStatus);
         } else {
-            if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
+            if (this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
                 return Colors.blend(Color.RED,
                         this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
                                 : Color.WHITE);
-            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+            } else if (this.currentLevel.getCellTypeMatrix().get(row, col)
                     .equals(CellType.GOLDEN)) {
                 return Colors.blend(Colors.GOLD,
                         this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.BLACK
                                 : Color.WHITE);
-            } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+            } else if (this.currentLevel.getCellTypeMatrix().get(row, col)
                     .equals(CellType.WALL)) {
                 return this.currentStatus.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY
                         : Color.LIGHT_GRAY;
@@ -174,15 +152,15 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     private Color calculateColorEditable(final int row, final int col, final Matrix<Status> status) {
-        if (this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
+        if (this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
             return status.get(row, col).equals(Status.ALIVE) ? Color.BLACK
                     : Color.WHITE;
-        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+        } else if (this.currentLevel.getCellTypeMatrix().get(row, col)
                 .equals(CellType.GOLDEN)) {
             return Colors.blend(Colors.GOLD,
                     status.get(row, col).equals(Status.ALIVE) ? Color.BLACK
                             : Color.WHITE);
-        } else if (this.currentLevel.get().getCellTypeMatrix().get(row, col)
+        } else if (this.currentLevel.getCellTypeMatrix().get(row, col)
                 .equals(CellType.WALL)) {
             return status.get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY
                     : Color.LIGHT_GRAY;
@@ -236,7 +214,7 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         final int newCol = vet[1];
         for (int x = newRow; x < newRow + this.getPattern().getWidth(); x++) {
             for (int y = newCol; y < newCol + this.getPattern().getHeight(); y++) {
-                if (this.currentLevel.get().getEditableMatrix().get(x, y)
+                if (this.currentLevel.getEditableMatrix().get(x, y)
                         .equals(Editable.UNEDITABLE)) {
                     return false;
                 }
