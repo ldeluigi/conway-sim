@@ -248,7 +248,11 @@ public class GenerationPanel extends JPanel {
         }
     }
 
-    private void end() {
+    /**
+     * This method terminate the execution of the generation and refresh the first status.
+     * Override this and add eventual action that should be done with the end of the game mode and the beginning of the edit mode. 
+     */
+    protected void end() {
         this.view.getGridEditor().setEnabled(true);
         this.view.getButtonBook().setEnabled(true);
         bStart.setEnabled(true);
@@ -261,7 +265,11 @@ public class GenerationPanel extends JPanel {
         this.view.setButtonClearEnabled(true);
     }
 
-    private void start() {
+    /**
+     * This method start the execution of the generation and set button enable true/false.
+     * Override this and add eventual action that should be done with the start of the game mode. 
+     */
+    protected void start() {
         this.view.getGridEditor().setEnabled(false);
         this.generationController.newGame();
         this.view.getButtonBook().setEnabled(false);

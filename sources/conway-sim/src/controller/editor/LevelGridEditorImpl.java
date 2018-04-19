@@ -1,8 +1,6 @@
 package controller.editor;
 
 import java.awt.Color;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import core.campaign.CellType;
@@ -11,13 +9,10 @@ import core.campaign.GameWinningCell;
 import core.campaign.Level;
 import core.campaign.NeverChangingCell;
 import core.model.Cell;
-import core.model.Environment;
-import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
 import core.model.SimpleCell;
 import core.model.Status;
-import core.utils.LazyMatrix;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
@@ -44,41 +39,41 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         setLevel(level);
     }
 
-    /**
-     * 
-     * @param gridp
-     *            a
-     */
-    public LevelGridEditorImpl(final GridPanel gridp) {
-        super(gridp);
-        setLevel(new Level() {
-
-            @Override
-            public Matrix<Status> getInitialStateMatrix() {
-                return new LazyMatrix<>(1, 1, Status.DEAD);
-            }
-
-            @Override
-            public Environment getEnvironmentMatrix() {
-                return EnvironmentFactory.standardRules(1, 1);
-            }
-
-            @Override
-            public Matrix<Editable> getEditableMatrix() {
-                return new LazyMatrix<>(1, 1, Editable.EDITABLE);
-            }
-
-            @Override
-            public Matrix<CellType> getCellTypeMatrix() {
-                return new LazyMatrix<>(1, 1, CellType.NORMAL);
-            }
-
-            @Override
-            public List<String> availablePatterns() {
-                return Collections.emptyList();
-            }
-        });
-    }
+//    /**
+//     * 
+//     * @param gridp
+//     *            a
+//     */
+//    public LevelGridEditorImpl(final GridPanel gridp) {
+//        super(gridp);
+//        setLevel(new Level() {
+//
+//            @Override
+//            public Matrix<Status> getInitialStateMatrix() {
+//                return new LazyMatrix<>(1, 1, Status.DEAD);
+//            }
+//
+//            @Override
+//            public Environment getEnvironmentMatrix() {
+//                return EnvironmentFactory.standardRules(1, 1);
+//            }
+//
+//            @Override
+//            public Matrix<Editable> getEditableMatrix() {
+//                return new LazyMatrix<>(1, 1, Editable.EDITABLE);
+//            }
+//
+//            @Override
+//            public Matrix<CellType> getCellTypeMatrix() {
+//                return new LazyMatrix<>(1, 1, CellType.NORMAL);
+//            }
+//
+//            @Override
+//            public List<String> availablePatterns() {
+//                return Collections.emptyList();
+//            }
+//        });
+//    }
 
     /**
      * //TODO controllo che il livello sia stato settato prima di usare tutti i metodi della classe
@@ -110,7 +105,13 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
                         this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)
                         ? new SimpleCell(this.currentStatus.get(row, col))
                         : this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)
-                        ? new GameWinningCell(this.currentStatus.get(row, col), () -> { }, () -> { })
+                        ? new GameWinningCell(this.currentStatus.get(row, col), () -> {
+                        //born
+                            System.out.println("DEBUG| cell gold born");
+                        }, () -> {
+                        //death
+                            System.out.println("DEBUG| cell gold death");
+                        })
                         : this.currentLevel.get().getCellTypeMatrix().get(row, col).equals(CellType.WALL)
                         ? new NeverChangingCell(this.currentStatus.get(row, col))
                         : new SimpleCell(this.currentStatus.get(row, col)));
