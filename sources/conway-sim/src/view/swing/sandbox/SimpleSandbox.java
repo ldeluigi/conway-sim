@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import controller.editor.ExtendedGridEditor;
 import controller.editor.ExtendedGridEditorImpl;
 import controller.editor.PatternEditor;
+import controller.io.RLEConvert;
 import controller.io.ResourceLoader;
 import view.DesktopGUI;
 import view.swing.menu.MenuSettings;
@@ -104,11 +105,8 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
     private void save() {
         if (this.extendedGridEditor.isCutReady()) {
-            this.setVisible(false);
-            this.mainGUI.popUpFrame(new JInternalFrameSave(() -> {
-                this.setVisible(true);
-                this.cancel();
-            }, this.extendedGridEditor));
+            this.mainGUI.popUpFrame(new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())));
+            this.cancel();
         } else {
             this.extendedGridEditor.selectMode(true);
             this.bCancel.setEnabled(true);

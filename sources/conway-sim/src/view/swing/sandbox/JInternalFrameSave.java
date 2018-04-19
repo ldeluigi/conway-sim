@@ -13,8 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import controller.editor.ExtendedGridEditor;
-import controller.io.RLEConvert;
 
 /**
  * 
@@ -29,12 +27,10 @@ public class JInternalFrameSave extends JInternalFrame {
 
     /**
      * 
-     * @param reset a runnable that it's run at the exit from this JInternaFrame
-     * @param gridEditor where is call gridEditor.cut() to take the Status<Matrix>
-     *                  {@link GridEditorImpl.isCutReady isCutReady} should return true. //TODO fix
+     * @param stringRLEformat is the string format RLE that contain the two dimension the version
      */
-    public JInternalFrameSave(final Runnable reset, final ExtendedGridEditor gridEditor) {
-      super("Select Title", false, false, false);
+    public JInternalFrameSave(final String stringRLEformat) {
+      super("Select Title", true, true, true);
       this.setDefaultCloseOperation(JInternalFrame.EXIT_ON_CLOSE);
       final JPanel general = new JPanel(new BorderLayout());
       final JPanel south = new JPanel(new FlowLayout());
@@ -66,17 +62,15 @@ public class JInternalFrameSave extends JInternalFrame {
       this.setVisible(true);
       this.bSave.addActionListener(e -> {
           final String preText = "#N " + textName.getText() + System.lineSeparator()
-                                 + "#O " + textAuthor.getText() + System.lineSeparator()
-                                 + "#C " + textComment.getText() + System.lineSeparator();
-          String stringMatrix = RLEConvert.write(gridEditor.cutMatrix());
-          final String stringFile = preText.concat(stringMatrix);
-          try (BufferedWriter b = new BufferedWriter(new FileWriter(new File("PatternBook" + "/" + textName.getText() + ".rle")));) {
-              b.write(stringFile);
-              b.close();
+                               + "#O " + textAuthor.getText() + System.lineSeparator()
+                               + (textComment.getText().length() > 0 ? ("#C " + textComment.getText() + System.lineSeparator()) : "");
+          final String stringFile = preText.concat(stringRLEformat);
+          try (BufferedWriter buffer = new BufferedWriter(new FileWriter(new File("PatternBook" + "/" + textName.getText() + ".rle")));) {
+              buffer.write(stringFile);
+              buffer.close();
           } catch (IOException ex) {
               ex.printStackTrace();
           }
-          reset.run();
           try {
               this.setClosed(true);
           } catch (PropertyVetoException e1) {
@@ -84,7 +78,6 @@ public class JInternalFrameSave extends JInternalFrame {
           }
       });
       bExit.addActionListener(e -> {
-          reset.run();
           try {
               this.setClosed(true);
           } catch (PropertyVetoException e1) {
@@ -98,8 +91,7 @@ public class JInternalFrameSave extends JInternalFrame {
 
     private void enableSave() {
         if (this.textName.getText().length() > 0 
-                && this.textAuthor.getText().length() > 0
-                && this.textComment.getText().length() > 0) {
+                && this.textAuthor.getText().length() > 0) {
             this.bSave.setEnabled(true);
         } else {
             this.bSave.setEnabled(false);

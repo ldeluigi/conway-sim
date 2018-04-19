@@ -113,27 +113,28 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     private void showSelect(final int newRow, final int newCol, final int lastRow, final int lastCol) {
         if (lastCol > 0 && lastRow > 0) {
             this.applyChanges();
-            int size = Math.min(Math.abs(lastCol - newCol), Math.abs(lastRow - newRow));
+            int sizeCol = Math.abs(lastCol - newCol);
+            int sizeRow =  Math.abs(lastRow - newRow);
             if (newRow < lastRow && newCol < lastCol) {
-                lowX = lastRow - size;
-                lowY = lastCol - size;
+                lowX = lastRow - sizeRow;
+                lowY = lastCol - sizeCol;
                 hightX = lastRow;
                 hightY = lastCol;
             } else if (newRow < lastRow && newCol > lastCol) {
                 lowY = lastCol;
-                lowX = lastRow - size;
-                hightY = lastCol + size;
+                lowX = lastRow - sizeRow;
+                hightY = lastCol + sizeCol;
                 hightX = lastRow;
             } else if (newRow > lastRow && newCol < lastCol) {
-                lowY = lastCol - size;
+                lowY = lastCol - sizeCol;
                 lowX = lastRow;
                 hightY = lastCol;
-                hightX = lastRow + size;
+                hightX = lastRow + sizeRow;
             } else {
                 lowY = lastCol;
                 lowX = lastRow;
-                hightY = lastCol + size;
-                hightX = lastRow + size;
+                hightY = lastCol + sizeCol;
+                hightX = lastRow + sizeRow;
             }
             for (int x = lowY; x <= hightY; x++) {
                 this.getCurrentStatus().set(lowX, x, this.getCurrentStatus().get(lowX, x));
@@ -147,7 +148,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
                 this.getCurrentStatus().set(x, hightY, this.getCurrentStatus().get(x, hightY));
                 this.getGameGrid().displaySingleCell(x, hightY, SELECT.apply(this.getCurrentStatus().get(x, hightY)));
             }
-            cutReady = size > 2;
+            cutReady = sizeRow > 2 && sizeCol > 2;
         }
     }
 }
