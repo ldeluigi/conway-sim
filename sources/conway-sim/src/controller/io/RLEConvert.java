@@ -310,7 +310,6 @@ public class RLEConvert {
             }
 
             header = header.concat("!");
-            System.out.println(header);
             return header;
     }
 
