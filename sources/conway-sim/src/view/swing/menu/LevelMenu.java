@@ -67,8 +67,8 @@ public class LevelMenu extends JPanel {
             bList.add(b);
             b.setFocusable(false);
             b.addActionListener(e -> {
-                pressButton(b);
                 currentLevel = n;
+                pressButton(b);
             });
         });
 
@@ -116,7 +116,7 @@ public class LevelMenu extends JPanel {
         this.add(exitPanel, c);
 
         bStart.addActionListener(e -> start());
-        bReturn.addActionListener(e -> mainGUI.setView(new MainMenu(mainGUI)));
+        bReturn.addActionListener(e -> mainGUI.backToMainMenu());
         SwingUtilities.invokeLater(() -> this.requestFocusInWindow());
     }
 
