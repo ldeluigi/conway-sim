@@ -15,6 +15,7 @@ import core.campaign.Editable;
 import core.campaign.Level;
 import core.campaign.LevelImplTest;
 import core.model.CellEnvironment;
+import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.StandardCellEnvironments;
 import core.model.Status;
@@ -43,7 +44,38 @@ public class LevelLoader {
         this.defaultBook = new RecipeBookImpl();
         this.selLvl = LVLPACK + Integer.toString(lvl) + "/";
         bookLoader(defaultBook);
-        this.level = new LevelImplTest(editableLoader(), cellTypeLoader(), statusLoader(), EnvironmentFactory.from(cellEnvironmentLoader()), recipeExtr(defaultBook));
+        this.level = new Level() {
+            
+            @Override
+            public Matrix<Status> getInitialStateMatrix() {
+                // TODO Auto-generated method stub
+                return statusLoader();
+            }
+            
+            @Override
+            public Environment getEnvironmentMatrix() {
+                // TODO Auto-generated method stub
+                return EnvironmentFactory.from(cellEnvironmentLoader());
+            }
+            
+            @Override
+            public Matrix<Editable> getEditableMatrix() {
+                // TODO Auto-generated method stub
+                return editableLoader();
+            }
+            
+            @Override
+            public Matrix<CellType> getCellTypeMatrix() {
+                // TODO Auto-generated method stub
+                return cellTypeLoader();
+            }
+            
+            @Override
+            public List<String> availablePatterns() {
+                // TODO Auto-generated method stub
+                return recipeExtr(defaultBook);
+            }
+        };
     }
     /**
      * 
