@@ -27,8 +27,8 @@ public final class RLETranslator {
      *            a
      * @return a
      */
-    public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle,
-            final Class<X> en) {
+    public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle, final Class<X> en) {
+        
         final int matHeight = Math.toIntExact(rle.chars().filter(ch -> ch == EL).count());
         // TODO DEBUG
         System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
@@ -68,8 +68,7 @@ public final class RLETranslator {
             // TODO RemoveMe - END OF LINE
             try {
                 if (br.read() != EL) {
-                    throw new IllegalArgumentException(
-                            "Reading out of bounds, maybe the rle got manipulated.");
+                    throw new IllegalArgumentException("Reading out of bounds, maybe the rle got manipulated.");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -91,11 +90,27 @@ public final class RLETranslator {
      */
     public static String rleMatrixToString(final Matrix<? extends Enum<?>> matrix) {
         String mtoStr = "";
+        for (int i = 0; i < matrix.getWidth(); i++) {
+            for (int k = 0; k < matrix.getHeight(); k++) {
+                int count = 1;
+                while (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
+                    if (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
+                        //TODO DEBUG
+                        //System.out.println("DEBUG | CELLA " + k + i + " uguale a cella " + (k + 1) + i);
+                        count++;
+                        k++;
+                    }
+                    if (k == matrix.getHeight() - 1) {
+                        break;
+                    }
+                }
 
-        for (int i = 0; i < matrix.getHeight(); i++) {
-            for (int k = 0; k < matrix.getWidth(); k++) {
                 final Enum<?> en = matrix.get(k, i);
+                if (count > 1) {
+                    mtoStr = mtoStr.concat(Integer.toString(count));
+                }
                 mtoStr = mtoStr.concat(Character.toString((char) (SP + en.ordinal())));
+
             }
 
             // TODO RemoveMe - END OF LINE
