@@ -66,6 +66,7 @@ public class GenerationPanel extends JPanel {
     private int cellToWin;
     private int counterLevel;
     private Runnable runnable;
+    private boolean isWin;
 
     /**
      * A panel that contain all the button for the start and control of the game.
@@ -236,9 +237,9 @@ public class GenerationPanel extends JPanel {
             final int goldDeadCell = (int) this.generationController.getCurrentElement().getCellMatrix().stream()
                     .filter(e -> e.code() == GameWinningCell.GAME_WINNING_CODE)
                     .filter(cell -> cell.getStatus().equals(Status.DEAD)).count();
-            System.err.println("DEBUG| " + goldDeadCell + "/ " + cellToWin + " counter = " + counterLevel);
             this.counterLevel = goldDeadCell == cellToWin ? this.counterLevel + 1 : 0;
-            if (this.counterLevel >= REPETITION_FOR_WIN) {
+            if (this.counterLevel >= REPETITION_FOR_WIN && !isWin) {
+                isWin = true;
                 this.view.scheduleGUIUpdate(() -> {
                     this.end();
                     this.runnable.run();
