@@ -188,7 +188,7 @@ public class RLEConvert {
             // Create a new boolean matrix
             boolean[][] grid = new boolean[y][x];
 
-            // Split cellString by //$
+            // Split cellString by \\$
             final String[] cellStrings = getCellInfoStr().split(DCSLASH + DOLLAR);
             final Pattern p = Pattern.compile(CELLRUNPATTERN);
             Matcher cellRunMatcher;

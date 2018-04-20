@@ -14,6 +14,7 @@ import core.utils.Matrix;
 public final class RLETranslator {
     private static final char EL = '$';
     private static final char SP = 'a';
+    private static final char EC = '!';
 
     private RLETranslator() {
     }
@@ -28,59 +29,79 @@ public final class RLETranslator {
      * @return a
      */
     public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle, final Class<X> en) {
-        
-        final int matHeight = Math.toIntExact(rle.chars().filter(ch -> ch == EL).count());
+
+        final int matHeight = Math.toIntExact(rle.chars().filter(ch -> ch == EL).count()) + 1;
         // TODO DEBUG
         System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
-        BufferedReader br = new BufferedReader(new StringReader(rle));
         int matWidth = matHeight;
-        try {
+        try (BufferedReader br = new BufferedReader(new StringReader(rle))) {
             int cont = 0;
-            while ((char) br.read() != EL) {
-                cont++;
+            int check = br.read();
+            while (check != EL) {
+                if (Character.isDigit(check)) {
+                    cont = cont + Character.getNumericValue(check) - 1;
+                } else if (check == EC) {
+                    break;
+                } else {
+                    cont++;
+                }
+                check = br.read();
             }
             matWidth = cont;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         // TODO DEBUG
         System.out.println("DEBUG | MAT WIDTH: " + matWidth);
         final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
-        br = new BufferedReader(new StringReader(rle));
-        for (int i = 0; i < matHeight; i++) {
-            for (int k = 0; k < matWidth; k++) {
-                try {
-                    final int readValue = (int) (char) br.read() - SP;
-                    if (readValue >= en.getEnumConstants().length) {
-                        // TODO RemoveMe - Check char bounds in status
-                        throw new IllegalArgumentException("Status out of bounds.");
+        try (BufferedReader br = new BufferedReader(new StringReader(rle))) {
+            final String l = br.readLine();
+            //TODO DEBUG
+            System.out.println(l);
+            if (l != null) {
+                int k = 0;
+                int i = 0;
+                int check = 0;
+                StringReader sr = new StringReader(l);
+                do {
+                    //TODO DEBUG
+                    //System.out.println(l);
+                    check = sr.read();
+                    //TODO DEBUG
+//                    if (Character.isDigit(check)) {
+//                        System.out.println(Character.getNumericValue(check));
+//                    } else {
+//                        System.out.println(check);
+//                    }
+                    if (Character.isDigit(check)) {
+                        int next = sr.read();
+                        for (int j = 0; j < Character.getNumericValue(check); j++) {
+                            mat.set(i, k, en.getEnumConstants()[next - SP]);
+                            k++;
+                        }
+                        //System.out.println("DEBUG | Added " + Character.getNumericValue(check) + " VALUES");
+                    } else if (check == EC) {
+                        //IF !
+                        break;
+                    } else if (check == EL) {
+                        //IF $
+                        i++;
+                        k = 0;
+                    } else {
+                        //System.out.println(mat.toString());
+                        mat.set(i, k, en.getEnumConstants()[check - SP]);
+                        k++;
+                        check = sr.read();
                     }
-                    mat.set(i, k, en.getEnumConstants()[readValue]);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                } while (check != EC);
             }
-            // TODO RemoveMe - END OF LINE
-            try {
-                if (br.read() != EL) {
-                    throw new IllegalArgumentException("Reading out of bounds, maybe the rle got manipulated.");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return mat;
     }
+
+    // PER LEGGERE mat.set(i, k, en.getEnumConstants()[readValue]);
 
     /**
      * 
@@ -95,8 +116,9 @@ public final class RLETranslator {
                 int count = 1;
                 while (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
                     if (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
-                        //TODO DEBUG
-                        //System.out.println("DEBUG | CELLA " + k + i + " uguale a cella " + (k + 1) + i);
+                        // TODO DEBUG
+                        // System.out.println("DEBUG | CELLA " + k + i + " uguale a cella " + (k + 1) +
+                        // i);
                         count++;
                         k++;
                     }
@@ -114,8 +136,14 @@ public final class RLETranslator {
             }
 
             // TODO RemoveMe - END OF LINE
-            mtoStr = mtoStr.concat(Character.toString(EL));
+            if (i == matrix.getWidth() - 1) {
+                mtoStr = mtoStr.concat(Character.toString(EC));
+            } else {
+                mtoStr = mtoStr.concat(Character.toString(EL));
+            }
+
         }
+
         // TODO RemoveMe - DEBUG
         System.out.println("DEBUG | " + mtoStr);
         return mtoStr;
