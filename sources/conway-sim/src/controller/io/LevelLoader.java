@@ -13,13 +13,12 @@ import controller.book.RecipeBookImpl;
 import core.campaign.CellType;
 import core.campaign.Editable;
 import core.campaign.Level;
-import core.campaign.LevelImplTest;
-import core.model.CellEnvironment;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.StandardCellEnvironments;
 import core.model.Status;
 import core.utils.Matrix;
+
 /**
  * 
  *
@@ -36,61 +35,65 @@ public class LevelLoader {
     private final String selLvl;
     private final RecipeBook defaultBook;
     private final Level level;
+
     /**
      * 
-     * @param lvl Number ID of the level to load
+     * @param lvl
+     *            Number ID of the level to load
      */
     public LevelLoader(final int lvl) {
         this.defaultBook = new RecipeBookImpl();
         this.selLvl = LVLPACK + Integer.toString(lvl) + "/";
         bookLoader(defaultBook);
         this.level = new Level() {
-            
+
             @Override
             public Matrix<Status> getInitialStateMatrix() {
                 // TODO Auto-generated method stub
                 return statusLoader();
             }
-            
+
             @Override
             public Environment getEnvironmentMatrix() {
                 // TODO Auto-generated method stub
                 return EnvironmentFactory.from(cellEnvironmentLoader());
             }
-            
+
             @Override
             public Matrix<Editable> getEditableMatrix() {
                 // TODO Auto-generated method stub
                 return editableLoader();
             }
-            
+
             @Override
             public Matrix<CellType> getCellTypeMatrix() {
                 // TODO Auto-generated method stub
                 return cellTypeLoader();
             }
-            
+
             @Override
             public List<String> availablePatterns() {
                 // TODO Auto-generated method stub
                 return recipeExtr(defaultBook);
             }
         };
-        //this.level = new LevelImplTest(); //TODO remove as soon as the other works
+        // this.level = new LevelImplTest(); //TODO remove as soon as the other works
     }
+
     /**
      * 
      * @param book
      * @param selLvl
      */
     private void bookLoader(final RecipeBook book) {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(selLvl + DEFLIST)))) {
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream(selLvl + DEFLIST)))) {
             final List<String> pthLst = in.lines().collect(Collectors.toList());
             String testLine = null;
             for (final String name : pthLst) {
                 if (name != null && name.contains(RLE_EXT)) {
-                    try (BufferedReader br = new BufferedReader(new InputStreamReader(
-                            getClass().getResourceAsStream(DEFBOOK + name), "UTF-8"))) {
+                    try (BufferedReader br = new BufferedReader(
+                            new InputStreamReader(getClass().getResourceAsStream(DEFBOOK + name), "UTF-8"))) {
                         final List<String> strLst = br.lines().collect(Collectors.toList());
                         final String content = String.join("\n", strLst);
                         testLine = strLst.get(0);
@@ -98,8 +101,7 @@ public class LevelLoader {
                             testLine = testLine.split("#N ")[1];
                         }
                         if (content != null && testLine != null && name != null) {
-                            book.addRecipe(content,
-                                    (!testLine.equals("")) ? testLine : name.replace(RLE_EXT, ""));
+                            book.addRecipe(content, (!testLine.equals("")) ? testLine : name.replace(RLE_EXT, ""));
                         }
                     } catch (IOException ex) {
                         ex.printStackTrace();
@@ -107,7 +109,7 @@ public class LevelLoader {
                 }
             }
         } catch (IOException e) {
-            //TODO DEBUG
+            // TODO DEBUG
             System.out.println("Couldn't load RLE List .txt from res.");
             e.printStackTrace();
             return;
@@ -116,7 +118,8 @@ public class LevelLoader {
     }
 
     private Matrix<CellType> cellTypeLoader() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(selLvl + CLTLIST)))) {
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream(selLvl + CLTLIST)))) {
             return RLETranslator.rleStringToMatrix(in.readLine(), CellType.class);
         } catch (IOException e) {
             e.printStackTrace();
@@ -125,7 +128,8 @@ public class LevelLoader {
     }
 
     private Matrix<Status> statusLoader() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(selLvl + STSLIST)))) {
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream(selLvl + STSLIST)))) {
             return RLETranslator.rleStringToMatrix(in.readLine(), Status.class);
         } catch (IOException e) {
             e.printStackTrace();
@@ -134,7 +138,8 @@ public class LevelLoader {
     }
 
     private Matrix<StandardCellEnvironments> cellEnvironmentLoader() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(selLvl + ENVLIST)))) {
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream(selLvl + ENVLIST)))) {
             return RLETranslator.rleStringToMatrix(in.readLine(), StandardCellEnvironments.class);
         } catch (IOException e) {
             e.printStackTrace();
@@ -143,7 +148,8 @@ public class LevelLoader {
     }
 
     private Matrix<Editable> editableLoader() {
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(selLvl + EDTLIST)))) {
+        try (BufferedReader in = new BufferedReader(
+                new InputStreamReader(getClass().getResourceAsStream(selLvl + EDTLIST)))) {
             return RLETranslator.rleStringToMatrix(in.readLine(), Editable.class);
         } catch (IOException e) {
             e.printStackTrace();
