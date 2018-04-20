@@ -16,23 +16,14 @@ public class GameWinningCell extends SimpleCell {
      */
     public static final int GAME_WINNING_CODE = 4;
 
-    private final Runnable born;
-    private final Runnable death;
-
     /**
      * Constructor method for a game winning cell.
      * 
      * @param state
      *            is the Status of the new cell
-     * @param born
-     *            is the Runnable to be used when the Status is changed from dead to alive
-     * @param death
-     *            is the runnable to be used when the Status is changed from alive to dead
      */
-    public GameWinningCell(final Status state, final Runnable born, final Runnable death) {
+    public GameWinningCell(final Status state) {
         super(state);
-        this.born = born;
-        this.death = death;
     }
 
     /**
@@ -44,14 +35,7 @@ public class GameWinningCell extends SimpleCell {
      */
     @Override
     public void setStatus(final Status nextStatus) {
-        if (nextStatus != this.getStatus()) {
-            super.setStatus(nextStatus);
-            if (nextStatus == Status.DEAD) {
-                this.death.run();
-            } else {
-                this.born.run();
-            }
-        }
+        super.setStatus(nextStatus);
     }
 
     /**
@@ -59,7 +43,7 @@ public class GameWinningCell extends SimpleCell {
      */
     @Override
     public Cell copy() {
-        return new GameWinningCell(this.getStatus(), born, death);
+        return new GameWinningCell(this.getStatus());
     }
 
     /**

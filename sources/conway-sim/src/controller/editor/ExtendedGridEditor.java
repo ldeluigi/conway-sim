@@ -18,7 +18,7 @@ public interface ExtendedGridEditor extends SimpleGridEditor, PatternEditor {
      * @param flag
      *            a flag
      */
-    void selectMode(boolean flag);
+    void setSelectMode(boolean flag);
 
     /**
      * 

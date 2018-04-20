@@ -120,7 +120,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
             this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
         } else {
             this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.select"));
-            this.extendedGridEditor.selectMode(true);
+            this.extendedGridEditor.setSelectMode(true);
             this.bCancel.setEnabled(true);
         }
     }

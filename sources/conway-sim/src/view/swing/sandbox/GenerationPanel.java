@@ -5,10 +5,10 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
-
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,6 +20,9 @@ import javax.swing.SwingUtilities;
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import controller.io.ResourceLoader;
+import core.campaign.CellType;
+import core.campaign.GameWinningCell;
+import core.campaign.Level;
 import core.model.Generation;
 import core.model.Status;
 import view.swing.menu.MenuSettings;
@@ -57,6 +60,12 @@ public class GenerationPanel extends JPanel {
 
     private final int fontSize = MenuSettings.getFontSize();
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    private static final int REPETITION_FOR_WIN = 3;
+    private Optional<Level> level = Optional.empty();
+    private int cellToWin;
+    private int counterLevel;
+    private Runnable runnable;
 
     /**
      * A panel that contain all the button for the start and control of the game.
@@ -172,6 +181,26 @@ public class GenerationPanel extends JPanel {
     }
 
     /**
+     * 
+     * @param view
+     *            the controller of the generation
+     * @param level
+     *            the level of this GenearationPanel
+     * @param runnableVictory
+     *            the {@link Runnable} that be lunch when winning
+     *
+     * If level is not declared, the game have no winning condition.
+     */
+    public GenerationPanel(final AbstractSandbox view, final Level level, final Runnable runnableVictory) {
+        this(view);
+        this.level = Optional.of(level);
+        this.runnable = runnableVictory;
+        this.cellToWin = (int) level.getCellTypeMatrix().stream()
+                .filter(cell -> cell.equals(CellType.GOLDEN))
+                .count();
+    }
+
+    /**
      * Call the clean on the grid.
      */
     public void clear() {
@@ -200,8 +229,23 @@ public class GenerationPanel extends JPanel {
         if (!this.view.getGridEditor().isEnabled()) {
             this.view.getGridEditor().draw(this.generationController.getCurrentElement());
         }
-        final int aliveCell = (int) this.generationController.getCurrentElement().getCellMatrix()
-                .stream().filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
+        final int aliveCell = (int) this.generationController.getCurrentElement().getCellMatrix().stream()
+                .filter(cell -> cell.getStatus().equals(Status.ALIVE)).count();
+        //LEVEL OPTION
+        if (level.isPresent()) {
+            final int goldDeadCell = (int) this.generationController.getCurrentElement().getCellMatrix().stream()
+                    .filter(e -> e.code() == GameWinningCell.GAME_WINNING_CODE)
+                    .filter(cell -> cell.getStatus().equals(Status.DEAD)).count();
+            System.err.println("DEBUG| " + goldDeadCell + "/ " + cellToWin + " counter = " + counterLevel);
+            this.counterLevel = goldDeadCell == cellToWin ? this.counterLevel + 1 : 0;
+            if (this.counterLevel >= REPETITION_FOR_WIN) {
+                this.view.scheduleGUIUpdate(() -> {
+                    this.end();
+                    this.runnable.run();
+                });
+            }
+        }
+        //END LEVEL OPTION
         this.view.scheduleGUIUpdate(() -> {
             SandboxTools.refreshStatistics(this.getCurrentSpeed(),
                     this.generationController.getCurrentNumberElement().intValue(), aliveCell,
@@ -257,12 +301,14 @@ public class GenerationPanel extends JPanel {
         this.view.getButtonBook().setEnabled(true);
         bStart.setEnabled(true);
         bPlay.setEnabled(false);
-        bPause.setEnabled(false);
         bEnd.setEnabled(false);
         bNext.setEnabled(false);
         bPrev.setEnabled(false);
         bGoTo.setEnabled(false);
-        this.generationController.pause();
+        if (bPause.isEnabled()) {
+            this.generationController.pause();
+            bPause.setEnabled(false);
+        }
         this.view.setButtonClearEnabled(true);
     }
 

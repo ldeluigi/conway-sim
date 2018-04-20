@@ -3,9 +3,13 @@ package controller.editor;
 import java.awt.Color;
 import core.campaign.CellType;
 import core.campaign.Editable;
+import core.campaign.GameWinningCell;
 import core.campaign.Level;
+import core.campaign.NeverChangingCell;
+import core.model.Cell;
 import core.model.Generation;
 import core.model.GenerationFactory;
+import core.model.SimpleCell;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
@@ -18,7 +22,6 @@ import view.swing.sandbox.GridPanel;
  */
 public final class LevelGridEditorImpl extends GridEditorImpl {
 
-    private final LevelWinnigCondition levelWinning;
     private Level currentLevel;
     private Matrix<Status> currentStatus;
 
@@ -28,13 +31,10 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      *            the initial grid
      * @param level
      *            the level to be loaded
-     * @param victory
-     *            {@link Runnable} to lunch the victory
      */
-    public LevelGridEditorImpl(final GridPanel grid, final Level level, final Runnable victory) {
+    public LevelGridEditorImpl(final GridPanel grid, final Level level) {
         super(grid);
         setLevel(level);
-        this.levelWinning = new LevelWinnigCondition(currentLevel, victory);
     }
 
     /**
@@ -59,7 +59,21 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public Generation getGeneration() {
-        return GenerationFactory.from(this.levelWinning.getCellMatrix(currentStatus),
+        final Matrix<Cell> cellMatrix = new ListMatrix<>(this.currentLevel.getEnvironmentMatrix().getWidth(),
+                this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
+        for (int row = 0; row < this.currentLevel.getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < this.currentLevel.getEnvironmentMatrix().getWidth(); col++) {
+                cellMatrix.set(row, col, 
+                        this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)
+                        ? new SimpleCell(currentStatus.get(row, col))
+                        : this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)
+                        ? new GameWinningCell(currentStatus.get(row, col))
+                        : this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.WALL)
+                        ? new NeverChangingCell(currentStatus.get(row, col))
+                        : new SimpleCell(currentStatus.get(row, col)));
+            }
+        }
+        return GenerationFactory.from(cellMatrix,
                 this.currentLevel.getEnvironmentMatrix());
     }
 

@@ -16,10 +16,10 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     private static final Function<Status, Color> SELECT = s -> s.equals(Status.DEAD) ? Color.ORANGE : Color.RED;
     private boolean selectMode;
     private boolean firstCoordinatePresent;
-    private int lowX = 0;
-    private int lowY = 0;
-    private int hightX = 0;
-    private int hightY = 0;
+    private int lowX;
+    private int lowY;
+    private int hightX;
+    private int hightY;
     private int lastRow;
     private int lastCol;
     private boolean cutReady;
@@ -78,7 +78,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
      * If selectMode is enable, u can't change status cell, but u can see what is ready for the cut.
      */
     @Override
-    public void selectMode(final boolean flag) {
+    public void setSelectMode(final boolean flag) {
         this.selectMode = flag;
     }
 
@@ -113,8 +113,8 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     private void showSelect(final int newRow, final int newCol, final int lastRow, final int lastCol) {
         if (firstCoordinatePresent) {
             this.applyChanges();
-            int sizeCol = Math.abs(lastCol - newCol);
-            int sizeRow =  Math.abs(lastRow - newRow);
+            final int sizeCol = Math.abs(lastCol - newCol);
+            final int sizeRow =  Math.abs(lastRow - newRow);
             if (newRow < lastRow && newCol < lastCol) {
                 lowX = lastRow - sizeRow;
                 lowY = lastCol - sizeCol;
