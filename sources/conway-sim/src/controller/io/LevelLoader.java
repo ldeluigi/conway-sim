@@ -3,11 +3,10 @@ package controller.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-import controller.book.Recipe;
 import controller.book.RecipeBook;
 import controller.book.RecipeBookImpl;
 import core.campaign.CellType;
@@ -45,7 +44,8 @@ public class LevelLoader {
         this.defaultBook = new RecipeBookImpl();
         this.selLvl = LVLPACK + Integer.toString(lvl) + "/";
         bookLoader(defaultBook);
-        this.level = new LevelImpl(editableLoader(), cellTypeLoader(), statusLoader(), EnvironmentFactory.from(cellEnvironmentLoader()), recipeExtr(defaultBook)); 
+        this.level = new LevelImpl(editableLoader(), cellTypeLoader(), statusLoader(),
+                EnvironmentFactory.from(cellEnvironmentLoader()));
     }
 
     /**
@@ -106,7 +106,8 @@ public class LevelLoader {
     private Matrix<StandardCellEnvironments> cellEnvironmentLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + ENVLIST)))) {
-            return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), StandardCellEnvironments.class);
+            return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()),
+                    StandardCellEnvironments.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -123,14 +124,6 @@ public class LevelLoader {
         }
     }
 
-    private List<String> recipeExtr(final RecipeBook rb) {
-        List<String> recStrList = Collections.emptyList();
-        for (Recipe recipe : rb.getRecipeList()) {
-            recStrList.add(recipe.getContent());
-        }
-        return recStrList;
-    }
-
     /**
      * 
      * @return level
@@ -138,6 +131,7 @@ public class LevelLoader {
     public final Level getLevel() {
         return this.level;
     }
+
     /**
      * 
      * @return book

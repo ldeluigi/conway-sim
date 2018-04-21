@@ -1,7 +1,5 @@
 package core.campaign;
 
-import java.util.List;
-
 import core.model.Environment;
 import core.model.Status;
 import core.utils.Matrix;
@@ -35,10 +33,4 @@ public interface Level {
      */
     Environment getEnvironmentMatrix();
 
-    /**
-     * Lists the available rle.
-     * 
-     * @return a list containing the names of the .rle files that are available in this level
-     */
-    List<String> availablePatterns();
 }
