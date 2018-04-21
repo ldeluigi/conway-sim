@@ -227,6 +227,7 @@ public class GenerationPanel extends JPanel {
     private synchronized int getGold() {
         return gold.intValue();
     }
+
     /**
      * Refresh the view of this panel and reload the constant.
      */
@@ -236,7 +237,7 @@ public class GenerationPanel extends JPanel {
         }
         int general = 0;
         //LEVEL OPTION
-        if (isLevelMode) {
+        if (isLevelMode && !SwingUtilities.isEventDispatchThread()) {
             gold = 0;
             general = (int) this.generationController.getCurrentElement().getCellMatrix()
                     .stream()
