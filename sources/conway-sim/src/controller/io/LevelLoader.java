@@ -86,7 +86,7 @@ public class LevelLoader {
     private Matrix<CellType> cellTypeLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + CLTLIST)))) {
-            return RLETranslator.rleStringToMatrix(in.readLine(), CellType.class);
+            return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), CellType.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -96,7 +96,7 @@ public class LevelLoader {
     private Matrix<Status> statusLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + STSLIST)))) {
-            return RLETranslator.rleStringToMatrix(in.readLine(), Status.class);
+            return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), Status.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -106,7 +106,7 @@ public class LevelLoader {
     private Matrix<StandardCellEnvironments> cellEnvironmentLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + ENVLIST)))) {
-            return RLETranslator.rleStringToMatrix(in.readLine(), StandardCellEnvironments.class);
+            return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), StandardCellEnvironments.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -116,7 +116,7 @@ public class LevelLoader {
     private Matrix<Editable> editableLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + EDTLIST)))) {
-            return RLETranslator.rleStringToMatrix(in.readLine(), Editable.class);
+            return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), Editable.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
