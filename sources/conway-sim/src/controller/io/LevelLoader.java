@@ -13,7 +13,7 @@ import controller.book.RecipeBookImpl;
 import core.campaign.CellType;
 import core.campaign.Editable;
 import core.campaign.Level;
-import core.model.Environment;
+import core.campaign.LevelImpl;
 import core.model.EnvironmentFactory;
 import core.model.StandardCellEnvironments;
 import core.model.Status;
@@ -45,39 +45,7 @@ public class LevelLoader {
         this.defaultBook = new RecipeBookImpl();
         this.selLvl = LVLPACK + Integer.toString(lvl) + "/";
         bookLoader(defaultBook);
-        this.level = new Level() {
-
-            @Override
-            public Matrix<Status> getInitialStateMatrix() {
-                // TODO Auto-generated method stub
-                return statusLoader();
-            }
-
-            @Override
-            public Environment getEnvironmentMatrix() {
-                // TODO Auto-generated method stub
-                return EnvironmentFactory.from(cellEnvironmentLoader());
-            }
-
-            @Override
-            public Matrix<Editable> getEditableMatrix() {
-                // TODO Auto-generated method stub
-                return editableLoader();
-            }
-
-            @Override
-            public Matrix<CellType> getCellTypeMatrix() {
-                // TODO Auto-generated method stub
-                return cellTypeLoader();
-            }
-
-            @Override
-            public List<String> availablePatterns() {
-                // TODO Auto-generated method stub
-                return recipeExtr(defaultBook);
-            }
-        };
-        // this.level = new LevelImplTest(); //TODO remove as soon as the other works
+        this.level = new LevelImpl(editableLoader(), cellTypeLoader(), statusLoader(), EnvironmentFactory.from(cellEnvironmentLoader()), recipeExtr(defaultBook)); 
     }
 
     /**
@@ -109,8 +77,6 @@ public class LevelLoader {
                 }
             }
         } catch (IOException e) {
-            // TODO DEBUG
-            System.out.println("Couldn't load RLE List .txt from res.");
             e.printStackTrace();
             return;
         }
