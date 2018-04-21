@@ -313,15 +313,18 @@ public class GenerationPanel extends JPanel {
     protected void end() {
         this.view.getGridEditor().setEnabled(true);
         this.view.getButtonBook().setEnabled(true);
-        bStart.setEnabled(true);
-        bPlay.setEnabled(false);
-        bEnd.setEnabled(false);
-        bNext.setEnabled(false);
-        bPrev.setEnabled(false);
-        bGoTo.setEnabled(false);
+        this.bStart.setEnabled(true);
+        this.bPlay.setEnabled(false);
+        this.bEnd.setEnabled(false);
+        this.bNext.setEnabled(false);
+        this.bPrev.setEnabled(false);
+        this.bGoTo.setEnabled(false);
         if (bPause.isEnabled()) {
             this.generationController.pause();
-            bPause.setEnabled(false);
+            this.bPause.setEnabled(false);
+        }
+        if (isLevelMode) {
+            this.isWin = false;
         }
         this.view.setButtonClearEnabled(true);
     }
