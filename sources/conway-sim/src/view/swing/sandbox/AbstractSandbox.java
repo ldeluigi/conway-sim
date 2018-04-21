@@ -207,11 +207,19 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         return this.south;
     }
 
+    /**
+     * Override this class to change the mode name.
+     * @return the title of the mode
+     */
+    protected String getTitle() {
+        return ResourceLoader.loadString("sandbox.mode");
+    }
+
     private void initializeNorth() {
         this.north = new JPanel(new BorderLayout());
         this.north.setOpaque(false);
         this.north.add(this.generationPanel, BorderLayout.EAST);
-        final JLabel mode = new JLabel(ResourceLoader.loadString("sandbox.mode"));
+        final JLabel mode = new JLabel(this.getTitle());
         mode.setFont(defaultFont());
         north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
         this.add(north, BorderLayout.NORTH);

@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 import controller.editor.LevelGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.LevelLoader;
+import controller.io.ResourceLoader;
 import core.campaign.Level;
 import view.DesktopGUI;
 import view.swing.level.LevelComplete;
@@ -41,7 +42,7 @@ public final class SandboxBuilder {
 
             @Override
             protected GenerationPanel buildGenerationPanel() {
-                return new GenerationPanel(this, l, () -> {
+                return new GenerationPanel(this, () -> {
                     gui.popUpFrame(new LevelComplete());
                 });
             }
@@ -49,6 +50,11 @@ public final class SandboxBuilder {
             @Override
             protected PatternEditor buildEditor(final GridPanel gridp) {
                 return new LevelGridEditorImpl(gridp, l);
+            }
+
+            @Override
+            protected String getTitle() {
+                return ResourceLoader.loadString("level.button").replaceAll("XXX", level + "");
             }
 
             @Override
