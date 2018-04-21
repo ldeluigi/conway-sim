@@ -14,6 +14,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controller.io.ResourceLoader;
+
 /**
  * This class implements the save of a {@link String} in a file .rle,
  * with in addition the name, the author and an optional comment.
@@ -32,24 +34,24 @@ public class JInternalFrameSave extends JInternalFrame {
      *                  the two dimensions, the version and the matrix in standard RLE string
      */
     public JInternalFrameSave(final String stringRLEformat) {
-      super("Select Title", true, true, true);
+      super(ResourceLoader.loadString("save.title"), true, false, true);
       this.setDefaultCloseOperation(JInternalFrame.EXIT_ON_CLOSE);
       final JPanel general = new JPanel(new BorderLayout());
       final JPanel south = new JPanel(new FlowLayout());
-      this.bSave = SandboxTools.newJButton("SAVE", "Save the current pattern");
+      this.bSave = SandboxTools.newJButton(ResourceLoader.loadString("save.button.save"), ResourceLoader.loadString("save.tooltip.save"));
       this.bSave.setEnabled(false);
-      final JButton bExit = SandboxTools.newJButton("EXIT", "Exit, without saving");
+      final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("save.button.exit"), ResourceLoader.loadString("save.tooltip.exit"));
       south.add(bSave);
       south.add(bExit);
       general.add(south, BorderLayout.AFTER_LAST_LINE);
       final JPanel gridPanel = new JPanel(new GridLayout(3, 2));
-      final JTextField fileName = new JTextField("File name:");
+      final JTextField fileName = new JTextField(ResourceLoader.loadString("save.name"));
       fileName.setEditable(false);
       this.textName = new JTextField(10);
-      final JTextField author = new JTextField("Author:");
+      final JTextField author = new JTextField(ResourceLoader.loadString("save.author"));
       author.setEditable(false);
       this.textAuthor = new JTextField(10);
-      final JTextField comment = new JTextField("Comment:");
+      final JTextField comment = new JTextField(ResourceLoader.loadString("save.comment"));
       comment.setEditable(false);
       this.textComment = new JTextField(10);
       gridPanel.add(fileName);
@@ -63,11 +65,11 @@ public class JInternalFrameSave extends JInternalFrame {
       this.pack();
       this.setVisible(true);
       this.bSave.addActionListener(e -> {
-          final String preText = "#N " + textName.getText() + System.lineSeparator()
-                               + "#O " + textAuthor.getText() + System.lineSeparator()
-                               + (textComment.getText().length() > 0 ? ("#C " + textComment.getText() + System.lineSeparator()) : "");
+          final String preText = "#N " + this.textName.getText() + System.lineSeparator()
+                               + "#O " + this.textAuthor.getText() + System.lineSeparator()
+                               + (this.textComment.getText().length() > 0 ? ("#C " + this.textComment.getText() + System.lineSeparator()) : "");
           final String stringFile = preText.concat(stringRLEformat);
-          try (BufferedWriter buffer = new BufferedWriter(new FileWriter(new File("PatternBook" + "/" + textName.getText() + ".rle")));) {
+          try (BufferedWriter buffer = new BufferedWriter(new FileWriter(new File("PatternBook" + "/" + this.textName.getText() + ".rle")));) {
               buffer.write(stringFile);
               buffer.close();
           } catch (IOException ex) {

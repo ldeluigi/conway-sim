@@ -112,14 +112,14 @@ public final class SandboxTools {
         final JPanel bottomGrid = new JPanel(new FlowLayout());
         bottomGrid.setOpaque(false);
         gridOption.setFont(font);
-        final JLabel gridText = new JLabel("Grid option ");
+        final JLabel gridText = new JLabel(ResourceLoader.loadString("simpleSandbox.resize"));
         gridText.setFont(font);
         topGrid.add(gridText);
         topGrid.add(bApply);
         gridOption.add(topGrid);
         spinnerWidth = new JSpinner(new SpinnerNumberModel(DEFAUL_SIZE, MIN_SIZE, MAX_SIZE, 1));
         spinnerWidth.setFont(font);
-        final JLabel labelDimension = new JLabel("Dimension ");
+        final JLabel labelDimension = new JLabel(ResourceLoader.loadString("simpleSandbox.dimension"));
         labelDimension.setFont(font);
         bottomGrid.add(labelDimension);
         bottomGrid.add(spinnerWidth);
@@ -163,44 +163,17 @@ public final class SandboxTools {
      * @return a new button
      */
     public static JButton newJButton(final String name, final String tooltipText) {
-        final JButton button = new JButton(name);
         final Font font = new Font(FONT_NAME, FONT_STYLE, MenuSettings.getFontSize());
-
-        final FontMetrics metrics = button.getFontMetrics(font);
-        final int width = metrics.stringWidth(name + " ");
-        final int height = metrics.getHeight();
-        final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR,
-                height * BUTTON_TEXT_SIZE_RAPPOR);
-        button.setPreferredSize(newDimension);
-
-        button.setFont(font);
-        button.setToolTipText(tooltipText);
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(BORDERD_COLOR, 2, false));
-        button.setUI(new MetalButtonUI() {
-            protected Color getDisabledTextColor() {
-                return DISABLE_TEXT_COLOR;
-            }
-        });
-        setIcon(button, newDimension);
-        button.setHorizontalAlignment(SwingConstants.CENTER);
-        button.setHorizontalTextPosition(SwingConstants.CENTER);
-        return button;
+        return newJButton(name, tooltipText, font);
     }
 
     /**
-     * @param button
-     *            the button
-     * @param dim
-     *            the button dimension
+     * @param name
+     *            JButton name
+     * @return a new JButton
      */
-    public static void setIcon(final JButton button, final Dimension dim) {
-        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on")
-                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
-        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off")
-                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
-        button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed")
-                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
+    public static JButton newJButton(final String name) {
+        return newJButton(name, NO_TOOLTIP);
     }
 
     /**
@@ -210,7 +183,7 @@ public final class SandboxTools {
      *            JButton name
      * @param font
      *            the specific font
-     * @return the new JButton
+     * @return a new JButton
      */
     public static JButton newJButton(final String name, final Font font) {
         return newJButton(name, NO_TOOLTIP, font);
@@ -253,5 +226,20 @@ public final class SandboxTools {
         button.setHorizontalAlignment(SwingConstants.CENTER);
         button.setHorizontalTextPosition(SwingConstants.CENTER);
         return button;
+    }
+
+    /**
+     * @param button
+     *            the button
+     * @param dim
+     *            the button dimension
+     */
+    public static void setIcon(final JButton button, final Dimension dim) {
+        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on")
+                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
+        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off")
+                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
+        button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed")
+                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
     }
 }

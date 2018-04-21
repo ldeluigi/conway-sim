@@ -34,7 +34,6 @@ import view.swing.sandbox.SandboxTools;
 
 /**
  * JPanel with level list.
- * TODO a lot of PMD
  */
 public class LevelMenu extends JPanel {
 
@@ -45,14 +44,14 @@ public class LevelMenu extends JPanel {
     private static final int LEVEL_FOR_PAGE = 4;
     private final List<JButton> bList = new LinkedList<>();
     private final DesktopGUI mainGUI;
-    private JGridPanel gridPanel;
-    private JTabbedPane cardPanel;
+    private final JGridPanel gridPanel;
+    private final JTabbedPane cardPanel;
     private int currentLevel;
 
     /**
      * 
      * @param mainGUI
-     *            the main gui
+     *            the main DesktopGUI that calls this LevelMenu
      */
     public LevelMenu(final DesktopGUI mainGUI) {
         this.setOpaque(false);
@@ -60,12 +59,10 @@ public class LevelMenu extends JPanel {
         this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() * 2));
 
         IntStream.rangeClosed(1, ResourceLoader.loadConstantInt("level.number")).forEach(n -> {
-            final JButton b = SandboxTools.newJButton(String.valueOf(
-                    ResourceLoader.loadString("level.button").replaceAll(VALUE, String.valueOf(n))),
-                    this.getFont());
+            final JButton b = SandboxTools.newJButton(
+                    ResourceLoader.loadString("level.button").replaceAll(VALUE, String.valueOf(n)), this.getFont());
             b.setFont(this.getFont());
             bList.add(b);
-            b.setFocusable(false);
             b.addActionListener(e -> {
                 currentLevel = n;
                 pressButton(b);
@@ -74,10 +71,9 @@ public class LevelMenu extends JPanel {
 
         cardPanel = new JTabbedPane();
         cardPanel.setOpaque(false);
-        final String page = "PAGE_X";
         for (int i = 0; i < ResourceLoader.loadConstantInt("level.number") / LEVEL_FOR_PAGE
                 + (ResourceLoader.loadConstantInt("level.number") % LEVEL_FOR_PAGE == 0 ? 0 : 1); i++) {
-            cardPanel.addTab(page.replace("X", i + ""), panelLevel(i));
+            cardPanel.addTab(ResourceLoader.loadString("level.page").replace(VALUE, String.valueOf(i)), panelLevel(i));
         }
 
         this.setLayout(new GridBagLayout());

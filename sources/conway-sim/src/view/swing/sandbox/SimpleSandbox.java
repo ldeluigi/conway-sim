@@ -1,8 +1,10 @@
 package view.swing.sandbox;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontMetrics;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -43,12 +45,17 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
                 new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         gridOption.setOpaque(false);
         super.getNorthPanel().add(gridOption, BorderLayout.WEST);
-        this.bSave = SandboxTools.newJButton("SAVE", "Save a part of the grid like standard RLE");
-        this.bCancel = SandboxTools.newJButton("Cancel", "Exit from save mode");
+        this.bSave = SandboxTools.newJButton(ResourceLoader.loadString("simpleSandbox.button.save"), ResourceLoader.loadString("simpleSandbox.tooltip.save"));
+        this.bCancel = SandboxTools.newJButton(ResourceLoader.loadString("simpleSandbox.button.cancel"), ResourceLoader.loadString("simpleSandbox.tooltip.cancel"));
         this.instructionLabel = new JLabel();
         this.instructionLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         this.instructionLabel.setOpaque(false);
         this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
+        this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.base"));
+        final FontMetrics metrics = this.instructionLabel.getFontMetrics(instructionLabel.getFont());
+        final int width = metrics.stringWidth(ResourceLoader.loadString("simpleSandbox.save.base") + " ");
+        final int height = metrics.getHeight();
+        this.instructionLabel.setPreferredSize(new Dimension(width, height));
         this.bCancel.setEnabled(false);
         final JPanel mySouth = new JPanel(new FlowLayout());
         mySouth.setOpaque(false);
@@ -70,6 +77,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     }
 
     /**
+     * {@inheritDoc}
      * Creates a {@link GridEditorImpl} as editor.
      */
     @Override
@@ -79,7 +87,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     }
 
     /**
-     * Creates a {@link ExtendedGenerationPanel} as generation panel.
+     * {@inheritDoc}
      */
     @Override
     protected GenerationPanel buildGenerationPanel() {
@@ -87,10 +95,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     }
 
     /**
-     * Sets the enabled property of the button apply to the given flag.
-     * 
-     * @param flag
-     *            a boolean flag
+     * {@inheritDoc}
      */
     @Override
     public void setButtonApplyEnabled(final boolean flag) {
@@ -104,10 +109,12 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     public void setSaveEnable(final boolean flag) {
         if (flag) {
             this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
+            this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.base"));
             this.cancel();
             this.bSave.setEnabled(true);
         } else {
             this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.disable"));
+            this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.disable"));
             this.bCancel.setEnabled(false);
             this.bSave.setEnabled(false);
         }
@@ -118,8 +125,10 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
             this.mainGUI.popUpFrame(new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())));
             this.cancel();
             this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
+            this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.base"));
         } else {
             this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.select"));
+            this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.select"));
             this.extendedGridEditor.setSelectMode(true);
             this.bCancel.setEnabled(true);
         }
@@ -129,5 +138,13 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
         this.extendedGridEditor.cancelSelectMode();
         this.bCancel.setEnabled(false);
         this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getTitle() {
+        return ResourceLoader.loadString("sandbox.mode");
     }
 }
