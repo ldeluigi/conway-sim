@@ -69,7 +69,7 @@ public class GenerationPanel extends JPanel {
     private boolean isWin;
 
     /**
-     * A panel that contain all the button for the start and control of the game.
+     * A panel that contains all the buttons for the start and control of the game.
      * 
      * @param view
      *            the controller of the generation

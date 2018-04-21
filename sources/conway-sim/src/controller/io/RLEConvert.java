@@ -247,8 +247,8 @@ public class RLEConvert {
 
     /**
      * 
-     * @param matrix the matrix to be converted
-     * @return a string of the matrix that represent the .rle of the matrix
+     * @param matrix to be converted
+     * @return a string of the matrix that represents the .rle of the matrix
      */
     public static String convertMatrixStatusToString(final Matrix<Status> matrix) {
             String header = "x = " + matrix.getHeight() + ", y = " + matrix.getWidth() + ", rule = B3/S23";
