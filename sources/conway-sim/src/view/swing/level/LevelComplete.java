@@ -1,8 +1,6 @@
 package view.swing.level;
 
 import java.awt.Graphics;
-import java.beans.PropertyVetoException;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
@@ -23,11 +21,6 @@ public class LevelComplete extends JInternalFrame {
      */
     public LevelComplete() {
         super(ResourceLoader.loadString("level.complete.frame.title"), false, true, true, false);
-        try {
-            this.setMaximum(true);
-        } catch (PropertyVetoException e) {
-            e.printStackTrace();
-        }
         final JPanel jp = new JPanel() {
             private static final long serialVersionUID = 7156522143177179412L;
 

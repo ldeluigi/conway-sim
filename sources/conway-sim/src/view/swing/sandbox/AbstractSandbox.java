@@ -245,11 +245,11 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     private void callBook() {
         if (Objects.isNull(this.book)) {
             this.book = new BookFrame(this.gridEditor);
-            this.mainGUI.popUpFrame(this.book);
+            this.mainGUI.popUpFrame(this.book, false);
         } else if (book.isClosed()) {
             this.mainGUI.detachFrame(this.book);
             this.book = new BookFrame(this.gridEditor);
-            this.mainGUI.popUpFrame(this.book);
+            this.mainGUI.popUpFrame(this.book, false);
         }
     }
 
