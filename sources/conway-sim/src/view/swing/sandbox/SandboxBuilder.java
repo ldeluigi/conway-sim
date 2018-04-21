@@ -54,12 +54,7 @@ public final class SandboxBuilder {
 
             @Override
             protected String getTitle() {
-                return ResourceLoader.loadString("level.button").replaceAll("XXX", level + "");
-            }
-
-            @Override
-            public void refreshView() {
-                super.refreshView();
+                return ResourceLoader.loadString("level.button").replaceAll("XXX", Integer.toString(level));
             }
         };
     }

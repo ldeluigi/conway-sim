@@ -67,6 +67,7 @@ public class GenerationPanel extends JPanel {
     private int counterLevel;
     private Runnable runnable;
     private boolean isWin;
+    private Integer gold;
 
     /**
      * A panel that contains all the buttons for the start and control of the game.
@@ -226,9 +227,6 @@ public class GenerationPanel extends JPanel {
     private synchronized int getGold() {
         return gold.intValue();
     }
-
-    private int general;
-    private Integer gold;
     /**
      * Refresh the view of this panel and reload the constant.
      */
@@ -236,7 +234,7 @@ public class GenerationPanel extends JPanel {
         if (!this.view.getGridEditor().isEnabled()) {
             this.view.getGridEditor().draw(this.generationController.getCurrentElement());
         }
-        general = 0;
+        int general = 0;
         //LEVEL OPTION
         if (isLevelMode) {
             gold = 0;
@@ -261,10 +259,10 @@ public class GenerationPanel extends JPanel {
             general = this.generationController.getCurrentElement().getCellMatrix().stream()
             .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
         }
-        final int general = this.general;
+        final int generalF = general;
         this.view.scheduleGUIUpdate(() -> {
             SandboxTools.refreshStatistics(this.getCurrentSpeed(),
-                    this.generationController.getCurrentNumberElement().intValue(), general,
+                    this.generationController.getCurrentNumberElement().intValue(), generalF,
                     new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         });
     }

@@ -208,12 +208,10 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Override this class to change the mode name.
+     * Implement this method to change the displayed mode name.
      * @return the title of the mode
      */
-    protected String getTitle() {
-        return ResourceLoader.loadString("sandbox.mode");
-    }
+    protected abstract String getTitle();
 
     private void initializeNorth() {
         this.north = new JPanel(new BorderLayout());

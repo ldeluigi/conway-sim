@@ -27,18 +27,6 @@ public class GameWinningCell extends SimpleCell {
     }
 
     /**
-     * Is the method which changes the current status of the Cell, this event has some consequences
-     * depending on the level.
-     * 
-     * @param nextStatus
-     *            is the new status to be taken
-     */
-    @Override
-    public void setStatus(final Status nextStatus) {
-        super.setStatus(nextStatus);
-    }
-
-    /**
      * Is the method which gives a complete copy of the cell.
      */
     @Override
