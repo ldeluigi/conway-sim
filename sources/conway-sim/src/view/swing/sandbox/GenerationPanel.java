@@ -187,8 +187,8 @@ public class GenerationPanel extends JPanel {
      * @param view
      *            the controller of the generation
      * @param runnableVictory
-     *            the {@link Runnable} that be lunch when all the {@link GameWinningCell} are dead
-     *            for 3 consecutive gneeration
+     *            the {@link Runnable} that is started when all the {@link GameWinningCell} are dead
+     *            for 3 consecutive generations
      *
      * If level is not declared, the game have no winning condition.
      */

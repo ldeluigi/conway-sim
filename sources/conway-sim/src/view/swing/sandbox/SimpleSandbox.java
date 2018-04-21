@@ -18,11 +18,12 @@ import view.DesktopGUI;
 import view.swing.menu.MenuSettings;
 
 /**
- * This is a {@link AbstractSandbox sandbox} that allows grid resize and free play.
+ * This is a {@link AbstractSandbox sandbox} that allows grid resize, save and free play.
  */
 public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
     private static final long serialVersionUID = -3566205153979731515L;
+    private static final String SAVE_BASE_TEXT = "simpleSandbox.save.base";
     private final JButton bApply;
     private final DesktopGUI mainGUI;
     private final JButton bSave;
@@ -50,10 +51,10 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
         this.instructionLabel = new JLabel();
         this.instructionLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         this.instructionLabel.setOpaque(false);
-        this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
-        this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.base"));
+        this.instructionLabel.setText(ResourceLoader.loadString(SAVE_BASE_TEXT));
+        this.instructionLabel.setToolTipText(ResourceLoader.loadString(SAVE_BASE_TEXT));
         final FontMetrics metrics = this.instructionLabel.getFontMetrics(instructionLabel.getFont());
-        final int width = metrics.stringWidth(ResourceLoader.loadString("simpleSandbox.save.base") + " ");
+        final int width = metrics.stringWidth(ResourceLoader.loadString(SAVE_BASE_TEXT) + " ");
         final int height = metrics.getHeight();
         this.instructionLabel.setPreferredSize(new Dimension(width, height));
         this.bCancel.setEnabled(false);
@@ -108,8 +109,8 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
      */
     public void setSaveEnable(final boolean flag) {
         if (flag) {
-            this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
-            this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.base"));
+            this.instructionLabel.setText(ResourceLoader.loadString(SAVE_BASE_TEXT));
+            this.instructionLabel.setToolTipText(ResourceLoader.loadString(SAVE_BASE_TEXT));
             this.cancel();
             this.bSave.setEnabled(true);
         } else {
@@ -124,8 +125,8 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
         if (this.extendedGridEditor.isCutReady()) {
             this.mainGUI.popUpFrame(new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())));
             this.cancel();
-            this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.base"));
-            this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.base"));
+            this.instructionLabel.setText(ResourceLoader.loadString(SAVE_BASE_TEXT));
+            this.instructionLabel.setToolTipText(ResourceLoader.loadString(SAVE_BASE_TEXT));
         } else {
             this.instructionLabel.setText(ResourceLoader.loadString("simpleSandbox.save.select"));
             this.instructionLabel.setToolTipText(ResourceLoader.loadString("simpleSandbox.save.select"));

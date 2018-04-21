@@ -193,7 +193,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
      * 
      * @return the panel which is going to be added northern
      */
-    public final JPanel getNorthPanel() {
+    protected final JPanel getNorthPanel() {
         return this.north;
     }
 
@@ -219,8 +219,8 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         this.north.add(this.generationPanel, BorderLayout.EAST);
         final JLabel mode = new JLabel(this.getTitle());
         mode.setFont(defaultFont());
-        north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
-        this.add(north, BorderLayout.NORTH);
+        this.north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
+        this.add(this.north, BorderLayout.NORTH);
     }
 
     private void initializeSouth() {
