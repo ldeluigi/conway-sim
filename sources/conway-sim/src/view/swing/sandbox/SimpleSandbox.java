@@ -123,7 +123,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
     private void save() {
         if (this.extendedGridEditor.isCutReady()) {
-            this.mainGUI.popUpFrame(new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())));
+            this.mainGUI.popUpFrame(new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())), false);
             this.cancel();
             this.instructionLabel.setText(ResourceLoader.loadString(SAVE_BASE_TEXT));
             this.instructionLabel.setToolTipText(ResourceLoader.loadString(SAVE_BASE_TEXT));

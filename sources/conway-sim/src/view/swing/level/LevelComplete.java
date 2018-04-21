@@ -1,8 +1,6 @@
 package view.swing.level;
 
 import java.awt.Graphics;
-import java.beans.PropertyVetoException;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 

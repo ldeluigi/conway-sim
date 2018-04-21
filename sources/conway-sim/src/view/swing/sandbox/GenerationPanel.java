@@ -253,6 +253,7 @@ public class GenerationPanel extends JPanel {
                     this.end();
                     this.runnable.run();
                 });
+                this.counterLevel = 0;
             }
             //END LEVEL OPTION
         } else {
