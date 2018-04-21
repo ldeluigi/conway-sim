@@ -193,7 +193,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
      * 
      * @return the panel which is going to be added northern
      */
-    public final JPanel getNorthPanel() {
+    protected final JPanel getNorthPanel() {
         return this.north;
     }
 

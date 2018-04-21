@@ -103,6 +103,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * @param byPixels
      *            to add
      */
+    @Override
     public void alterCellSize(final int byPixels) {
         if (this.cellSize.getWidth() + byPixels <= 0 || this.cellSize.getHeight() + byPixels <= 0) {
             throw new IllegalStateException("Final Dimensions are 0 or less.");
@@ -157,6 +158,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * @param startCol
      *            is the horizontal index where the colorMatrix should start being applied.
      */
+    @Override
     public void paintGrid(final int startRow, final int startCol, final Matrix<Color> colorMatrix) {
         if (this.labelMatrix.getHeight() < colorMatrix.getHeight()
                 || this.labelMatrix.getWidth() < colorMatrix.getWidth()) {
@@ -175,6 +177,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * @param col
      *            is the color to be set as background for the given cell at (row,column) position
      */
+    @Override
     public void displaySingleCell(final int row, final int column, final Color col) {
         if (row >= 0 && column >= 0) {
             SwingUtilities.invokeLater(() -> {
@@ -191,6 +194,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * @param listenerDispencer
      *            is the BiFunction dispensing the listener.
      */
+    @Override
     public void addListenerToGrid(
             final BiFunction<Integer, Integer, MouseListener> listenerDispencer) {
         for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
@@ -207,6 +211,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * 
      * @return the width of the grid.
      */
+    @Override
     public int getGridWidth() {
         return this.labelMatrix.getWidth();
     }
@@ -216,6 +221,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * 
      * @return the height of the grid.
      */
+    @Override
     public int getGridHeight() {
         return this.labelMatrix.getHeight();
     }
@@ -228,6 +234,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * @param vertical
      *            is the new number of rows
      */
+    @Override
     public void changeGrid(final int horizontal, final int vertical) {
         if (SwingUtilities.isEventDispatchThread()) {
             resizeGrid(horizontal, vertical);
