@@ -9,7 +9,7 @@ import core.utils.Matrix;
 import view.swing.sandbox.GridPanel;
 
 /**
- * TODO PMD and javadoc
+ * This class extends {@link GridEditorImpl} to allow the selection and the cut of a pattern of the grid.
  */
 public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGridEditor {
 
@@ -26,14 +26,14 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
 
     /**
      * 
-     * @param grid the initial grid.
+     * @param grid is the initial grid.
      */
     public ExtendedGridEditorImpl(final GridPanel grid) {
         super(grid);
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void changeSizes(final int horizontal, final int vertical) {
@@ -41,7 +41,9 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     /**
-     * Important, call only if cutReady is true, else throw new {@link IllegalStateException}.
+     * Important:
+     *            call it only if cutReady is true,
+     *            otherwise throw new {@link IllegalStateException}.
      */
     @Override
     public Matrix<Status> cutMatrix() {
@@ -52,7 +54,9 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     /**
-     * 
+     * If selectMode is enabled
+     *               it controls the selection and the cut of the pattern,
+     * otherwise {@inheritDoc}.
      */
     @Override
     public void hit(final int row, final int column) {
@@ -74,8 +78,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     /**
-     * Set selectMode with enable/disable.
-     * If selectMode is enable, u can't change status cell, but u can see what is ready for the cut.
+     * {@inheritDoc}
      */
     @Override
     public void setSelectMode(final boolean flag) {
@@ -83,7 +86,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     /**
-     * Exit from select mode.
+     * {@inheritDoc}
      */
     @Override
     public void cancelSelectMode() {
@@ -96,7 +99,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public boolean isCutReady() {

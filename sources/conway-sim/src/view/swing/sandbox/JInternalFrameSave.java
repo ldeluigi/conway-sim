@@ -15,7 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
- * TODO javadoc
+ * This class implements the save of a {@link String} in a file .rle,
+ * with in addition the name, the author and an optional comment.
  */
 public class JInternalFrameSave extends JInternalFrame {
     private static final long serialVersionUID = 111988025326750938L;
@@ -27,7 +28,8 @@ public class JInternalFrameSave extends JInternalFrame {
 
     /**
      * 
-     * @param stringRLEformat is the string format RLE that contain the two dimension the version
+     * @param stringRLEformat is a format RLE string that contains
+     *                  the two dimensions, the version and the matrix in standard RLE string
      */
     public JInternalFrameSave(final String stringRLEformat) {
       super("Select Title", true, true, true);
