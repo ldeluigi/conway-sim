@@ -40,6 +40,8 @@ public class LevelMenu extends JPanel {
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
     private static final int GRID_TO_CELL_RATIO = 10;
+    private static final String LEVEL_NUMBER = "level.number";
+    private static final String BUTTON_NAME = "level.button";
     private static final String VALUE = "XXX";
     private static final int LEVEL_FOR_PAGE = 4;
     private final List<JButton> bList = new LinkedList<>();
@@ -58,9 +60,9 @@ public class LevelMenu extends JPanel {
         this.mainGUI = mainGUI;
         this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() * 2));
 
-        IntStream.rangeClosed(1, ResourceLoader.loadConstantInt("level.number")).forEach(n -> {
+        IntStream.rangeClosed(1, ResourceLoader.loadConstantInt(LEVEL_NUMBER)).forEach(n -> {
             final JButton b = SandboxTools.newJButton(
-                    ResourceLoader.loadString("level.button").replaceAll(VALUE, String.valueOf(n)), this.getFont());
+                    ResourceLoader.loadString(BUTTON_NAME).replaceAll(VALUE, String.valueOf(n)), this.getFont());
             b.setFont(this.getFont());
             bList.add(b);
             b.addActionListener(e -> {
@@ -71,8 +73,8 @@ public class LevelMenu extends JPanel {
 
         cardPanel = new JTabbedPane();
         cardPanel.setOpaque(false);
-        for (int i = 0; i < ResourceLoader.loadConstantInt("level.number") / LEVEL_FOR_PAGE
-                + (ResourceLoader.loadConstantInt("level.number") % LEVEL_FOR_PAGE == 0 ? 0 : 1); i++) {
+        for (int i = 0; i < ResourceLoader.loadConstantInt(LEVEL_NUMBER) / LEVEL_FOR_PAGE
+                + (ResourceLoader.loadConstantInt(LEVEL_NUMBER) % LEVEL_FOR_PAGE == 0 ? 0 : 1); i++) {
             cardPanel.addTab(ResourceLoader.loadString("level.page").replace(VALUE, String.valueOf(i)), panelLevel(i));
         }
 
@@ -123,7 +125,7 @@ public class LevelMenu extends JPanel {
     }
 
     private JPanel buildRightLeftButtonPanel() {
-        JPanel rightLeftButton = new JPanel(new FlowLayout());
+        final JPanel rightLeftButton = new JPanel(new FlowLayout());
         rightLeftButton.setOpaque(false);
         final JButton right = SandboxTools.newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
         right.setFocusPainted(false);
@@ -162,7 +164,7 @@ public class LevelMenu extends JPanel {
         final LevelLoader lLoader = new LevelLoader(currentLevel);
         final Level level = lLoader.getLevel();
         gridPanel.changeGrid(level.getEnvironmentMatrix().getWidth(), level.getEnvironmentMatrix().getHeight());
-        Matrix<Color> mc = new ListMatrix<>(level.getCellTypeMatrix().getWidth(),
+        final Matrix<Color> mc = new ListMatrix<>(level.getCellTypeMatrix().getWidth(),
                 level.getCellTypeMatrix().getHeight(), () -> null);
         for (int row = 0; row < level.getCellTypeMatrix().getWidth(); row++) {
             for (int col = 0; col < level.getCellTypeMatrix().getWidth(); col++) {
@@ -191,9 +193,9 @@ public class LevelMenu extends JPanel {
     }
 
     private JPanel panelLevel(final int pageNumber) {
-        JPanel gridLevel = new JPanel();
+        final JPanel gridLevel = new JPanel();
         gridLevel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        final GridBagConstraints c = new GridBagConstraints();
         c.insets = new Insets(2, 2, 2, 2);
         c.ipadx = 1;
         c.ipady = 1;
@@ -202,7 +204,7 @@ public class LevelMenu extends JPanel {
         gridLevel.setOpaque(false);
         for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber
                 + LEVEL_FOR_PAGE; i++) {
-            if (i > ResourceLoader.loadConstantInt("level.number") - 1) {
+            if (i > ResourceLoader.loadConstantInt(LEVEL_NUMBER) - 1) {
                 return gridLevel;
             } else {
                 if (bList.size() > i) {
