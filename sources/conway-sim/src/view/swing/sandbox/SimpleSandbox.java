@@ -5,8 +5,10 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.util.Objects;
 
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import controller.editor.ExtendedGridEditor;
@@ -15,6 +17,7 @@ import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
 import controller.io.ResourceLoader;
 import view.DesktopGUI;
+import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -30,6 +33,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     private final JButton bCancel;
     private final JLabel instructionLabel;
     private ExtendedGridEditor extendedGridEditor;
+    private BookFrame book;
 
     /**
      * Calls super and the adds the grid option panel.
@@ -147,5 +151,21 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     @Override
     protected String getTitle() {
         return ResourceLoader.loadString("sandbox.mode");
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected JInternalFrame callBook() {
+        if (Objects.isNull(this.book)) {
+            this.book = new BookFrame(this.getGridEditor());
+            this.mainGUI.popUpFrame(this.book, false);
+        } else if (book.isClosed()) {
+            this.mainGUI.detachFrame(this.book);
+            this.book = new BookFrame(this.getGridEditor());
+            this.mainGUI.popUpFrame(this.book, false);
+        }
+        return book;
     }
 }

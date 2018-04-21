@@ -1,5 +1,8 @@
 package view.swing.sandbox;
 
+import java.util.Objects;
+
+import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 import controller.editor.LevelGridEditorImpl;
@@ -8,6 +11,7 @@ import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
 import core.campaign.Level;
 import view.DesktopGUI;
+import view.swing.book.CampaignBookFrame;
 import view.swing.level.LevelComplete;
 
 /**
@@ -34,6 +38,7 @@ public final class SandboxBuilder {
         final int w = l.getEnvironmentMatrix().getWidth();
         return new AbstractSandbox(gui) {
             private static final long serialVersionUID = 1L;
+            private CampaignBookFrame book;
 
             @Override
             protected JGridPanel buildGrid(final int cellSize) {
@@ -55,6 +60,19 @@ public final class SandboxBuilder {
             @Override
             protected String getTitle() {
                 return ResourceLoader.loadString("level.button").replaceAll("XXX", Integer.toString(level));
+            }
+
+            @Override
+            protected JInternalFrame callBook() {
+                if (Objects.isNull(this.book)) {
+                    this.book = new CampaignBookFrame(this.getGridEditor(), levelLoader);
+                    gui.popUpFrame(this.book, false);
+                } else if (book.isClosed()) {
+                    gui.detachFrame(this.book);
+                    this.book = new CampaignBookFrame(this.getGridEditor(), levelLoader);
+                    gui.popUpFrame(this.book, false);
+                }
+                return this.book;
             }
         };
     }
