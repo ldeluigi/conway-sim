@@ -13,7 +13,7 @@ public class TranslatorTest {
        //String matString = RLETranslator.rleMatrixToString(m);
 
 
-       Matrix<Status> matFromString = RLETranslator.rleStringToMatrix("6a2b$2a6b!", Status.class);
+       Matrix<Status> matFromString = RLETranslator.rleStringToMatrix("6a2b\n@#[$2a6b!", Status.class);
        System.out.println(matFromString.toString());
 
     }

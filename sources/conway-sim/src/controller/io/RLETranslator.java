@@ -3,6 +3,7 @@ package controller.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.stream.Collectors;
 
 import core.utils.ListMatrix;
 import core.utils.Matrix;
@@ -15,6 +16,8 @@ public final class RLETranslator {
     private static final char EL = '$';
     private static final char SP = 'a';
     private static final char EC = '!';
+
+    private static final String RLEPATTERN = "[^0-9a-z!$]";
 
     private RLETranslator() {
     }
@@ -34,7 +37,7 @@ public final class RLETranslator {
         // TODO DEBUG
         System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
         int matWidth = matHeight;
-        try (BufferedReader br = new BufferedReader(new StringReader(rle))) {
+        try (BufferedReader br = new BufferedReader(new StringReader(patternize(rle)))) {
             int cont = 0;
             int check = br.read();
             while (check != EL) {
@@ -54,46 +57,34 @@ public final class RLETranslator {
         // TODO DEBUG
         System.out.println("DEBUG | MAT WIDTH: " + matWidth);
         final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
-        try (BufferedReader br = new BufferedReader(new StringReader(rle))) {
-            final String l = br.readLine();
-            //TODO DEBUG
-            System.out.println(l);
-            if (l != null) {
-                int k = 0;
-                int i = 0;
-                int check = 0;
-                StringReader sr = new StringReader(l);
+        try (BufferedReader br = new BufferedReader(new StringReader(patternize(rle)))) {
+            try (StringReader sr = new StringReader(br.lines().collect(Collectors.joining()))) {
+                int k = 0, i = 0, check = 0;
                 do {
-                    //TODO DEBUG
-                    //System.out.println(l);
                     check = sr.read();
-                    //TODO DEBUG
-//                    if (Character.isDigit(check)) {
-//                        System.out.println(Character.getNumericValue(check));
-//                    } else {
-//                        System.out.println(check);
-//                    }
                     if (Character.isDigit(check)) {
                         int next = sr.read();
                         for (int j = 0; j < Character.getNumericValue(check); j++) {
                             mat.set(i, k, en.getEnumConstants()[next - SP]);
                             k++;
                         }
-                        //System.out.println("DEBUG | Added " + Character.getNumericValue(check) + " VALUES");
+                        // System.out.println("DEBUG | Added " + Character.getNumericValue(check) + "
+                        // VALUES");
                     } else if (check == EC) {
-                        //IF !
+                        // IF !
                         break;
                     } else if (check == EL) {
-                        //IF $
+                        // IF $
                         i++;
                         k = 0;
                     } else {
-                        //System.out.println(mat.toString());
+                        // System.out.println(mat.toString());
                         mat.set(i, k, en.getEnumConstants()[check - SP]);
                         k++;
                         check = sr.read();
                     }
                 } while (check != EC);
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -116,9 +107,6 @@ public final class RLETranslator {
                 int count = 1;
                 while (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
                     if (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
-                        // TODO DEBUG
-                        // System.out.println("DEBUG | CELLA " + k + i + " uguale a cella " + (k + 1) +
-                        // i);
                         count++;
                         k++;
                     }
@@ -147,6 +135,10 @@ public final class RLETranslator {
         // TODO RemoveMe - DEBUG
         System.out.println("DEBUG | " + mtoStr);
         return mtoStr;
+    }
+
+    private static String patternize(final String str) {
+        return str.replaceAll(RLEPATTERN, "");
     }
 
 }
