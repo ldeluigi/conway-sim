@@ -138,5 +138,12 @@ public class LevelLoader {
     public final Level getLevel() {
         return this.level;
     }
+    /**
+     * 
+     * @return book
+     */
+    public final RecipeBook getBook() {
+        return this.defaultBook;
+    }
 
 }
