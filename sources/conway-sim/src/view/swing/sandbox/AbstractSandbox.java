@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.util.Objects;
 import javax.swing.InputMap;
 import javax.swing.JButton;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,7 +20,6 @@ import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
 import view.Sandbox;
 import view.swing.DesktopGUI;
-import view.swing.book.BookFrame;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
 
@@ -39,8 +39,6 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     private final JGridPanel grid;
     private JPanel north;
     private JPanel south;
-
-    private BookFrame book;
 
     /**
      * @param mainGUI
@@ -152,13 +150,11 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Gets the button used to call the recipe book and returns it.
-     * 
-     * @return the book button
+     *{@inheritDoc}
      */
     @Override
-    public JButton getButtonBook() {
-        return this.bBook;
+    public void setButtonBookEnable(final boolean flag) {
+        this.bBook.setEnabled(flag);
     }
 
     /**
@@ -213,14 +209,19 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
      */
     protected abstract String getTitle();
 
+    /**
+     * @return the created book.
+     */
+    protected abstract JInternalFrame callBook();
+
     private void initializeNorth() {
         this.north = new JPanel(new BorderLayout());
         this.north.setOpaque(false);
         this.north.add(this.generationPanel, BorderLayout.EAST);
         final JLabel mode = new JLabel(this.getTitle());
         mode.setFont(defaultFont());
-        north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
-        this.add(north, BorderLayout.NORTH);
+        this.north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
+        this.add(this.north, BorderLayout.NORTH);
     }
 
     private void initializeSouth() {
@@ -242,17 +243,6 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         this.add(south, BorderLayout.SOUTH);
     }
 
-    private void callBook() {
-        if (Objects.isNull(this.book)) {
-            this.book = new BookFrame(this.gridEditor);
-            this.mainGUI.popUpFrame(this.book);
-        } else if (book.isClosed()) {
-            this.mainGUI.detachFrame(this.book);
-            this.book = new BookFrame(this.gridEditor);
-            this.mainGUI.popUpFrame(this.book);
-        }
-    }
-
     private void exit() {
         final int result = JOptionPane.showOptionDialog(this,
                 ResourceLoader.loadString("option.exit"),
@@ -262,9 +252,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
                         ResourceLoader.loadString("option.exit.no") },
                 null);
         if (result == JOptionPane.YES_OPTION) {
-            if (!Objects.isNull(book) && this.book.isVisible()) {
-                this.book.doDefaultCloseAction();
-            }
+            this.callBook().doDefaultCloseAction();
             this.mainGUI.backToMainMenu();
         }
     }

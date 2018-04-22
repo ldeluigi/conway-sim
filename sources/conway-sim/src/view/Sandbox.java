@@ -1,7 +1,5 @@
 package view;
 
-import javax.swing.JButton;
-
 import controller.editor.PatternEditor;
 
 /**
@@ -23,11 +21,11 @@ public interface Sandbox extends UpdateScheduler {
     void setButtonClearEnabled(boolean flag);
 
     /**
-     * Enables clear button to be clicked by the user.
-     * 
-     * @return the book button
+     * Set the book button enable or disable.
+     * @param flag true the button is enable
+     *             false the button is disable.
      */
-    JButton getButtonBook();
+    void setButtonBookEnable(boolean flag);
 
     /**
      * Gets the editor used to handle the grid and returns it.
@@ -37,7 +35,7 @@ public interface Sandbox extends UpdateScheduler {
     PatternEditor getGridEditor();
 
     /**
-     * Refreshes generation panel.
+     * Refreshes the view.
      */
     void refreshView();
 }

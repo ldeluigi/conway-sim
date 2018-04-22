@@ -1,7 +1,5 @@
 package core.campaign;
 
-import java.util.List;
-
 import core.model.Environment;
 import core.model.Status;
 import core.utils.Matrix;
@@ -11,7 +9,6 @@ import core.utils.Matrix;
  *
  */
 public class LevelImpl implements Level {
-    private final List<String> aviablePatterns;
     private final Matrix<Editable> edM;
     private final Matrix<CellType> ctM;
     private final Matrix<Status> stM;
@@ -27,16 +24,13 @@ public class LevelImpl implements Level {
      *            Matrix of Status
      * @param env
      *            Environment
-     * @param patterns
-     *            AviablePatterns list
      */
     public LevelImpl(final Matrix<Editable> edM, final Matrix<CellType> ctM, final Matrix<Status> stM,
-            final Environment env, final List<String> patterns) {
+            final Environment env) {
         this.edM = edM;
         this.ctM = ctM;
         this.stM = stM;
         this.env = env;
-        this.aviablePatterns = patterns;
     }
 
     @Override
@@ -59,9 +53,5 @@ public class LevelImpl implements Level {
         return this.env;
     }
 
-    @Override
-    public final List<String> availablePatterns() {
-        return this.aviablePatterns;
-    }
 
 }

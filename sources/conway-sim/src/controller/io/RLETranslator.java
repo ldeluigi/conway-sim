@@ -3,6 +3,8 @@ package controller.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import core.utils.ListMatrix;
@@ -32,18 +34,17 @@ public final class RLETranslator {
      * @return a
      */
     public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle, final Class<X> en) {
-
-        final int matHeight = Math.toIntExact(rle.chars().filter(ch -> ch == EL).count()) + 1;
+        final String pRLE = patternize(rle);
+        final int matHeight = Math.toIntExact(pRLE.chars().filter(ch -> ch == EL).count()) + 1;
         // TODO DEBUG
         System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
         int matWidth = matHeight;
-        try (BufferedReader br = new BufferedReader(new StringReader(patternize(rle)))) {
+        try (BufferedReader br = new BufferedReader(new StringReader(decode(pRLE.split("\\$")[0]).concat("$")))) {
+
             int cont = 0;
             int check = br.read();
             while (check != EL) {
-                if (Character.isDigit(check)) {
-                    cont = cont + Character.getNumericValue(check) - 1;
-                } else if (check == EC) {
+                if (check == EC) {
                     break;
                 } else {
                     cont++;
@@ -57,42 +58,19 @@ public final class RLETranslator {
         // TODO DEBUG
         System.out.println("DEBUG | MAT WIDTH: " + matWidth);
         final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
-        try (BufferedReader br = new BufferedReader(new StringReader(patternize(rle)))) {
-            try (StringReader sr = new StringReader(br.lines().collect(Collectors.joining()))) {
-                int k = 0, i = 0, check = 0;
-                do {
-                    check = sr.read();
-                    if (Character.isDigit(check)) {
-                        int next = sr.read();
-                        for (int j = 0; j < Character.getNumericValue(check); j++) {
-                            mat.set(i, k, en.getEnumConstants()[next - SP]);
-                            k++;
-                        }
-                        // System.out.println("DEBUG | Added " + Character.getNumericValue(check) + "
-                        // VALUES");
-                    } else if (check == EC) {
-                        // IF !
-                        break;
-                    } else if (check == EL) {
-                        // IF $
-                        i++;
-                        k = 0;
-                    } else {
-                        // System.out.println(mat.toString());
-                        mat.set(i, k, en.getEnumConstants()[check - SP]);
-                        k++;
-                        check = sr.read();
-                    }
-                } while (check != EC);
-
+        for (int i = 0; i < matHeight; i++) {
+            try (StringReader sr = new StringReader(new BufferedReader(new StringReader(decode(pRLE.split("\\$")[i])))
+                    .lines().collect(Collectors.joining()))) {
+                for (int k = 0; k < matWidth; k++) {
+                    final int check = sr.read();
+                    mat.set(i, k, en.getEnumConstants()[check - SP]);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return mat;
     }
-
-    // PER LEGGERE mat.set(i, k, en.getEnumConstants()[readValue]);
 
     /**
      * 
@@ -137,6 +115,22 @@ public final class RLETranslator {
         return mtoStr;
     }
 
+    //TODO JAVADOC
+    private static String decode(final String str) {
+        StringBuffer dest = new StringBuffer();
+        Pattern pattern = Pattern.compile("[0-9]+|[a-zA-Z]");
+        Matcher matcher = pattern.matcher(str);
+        while (matcher.find()) {
+            int number = Integer.parseInt(matcher.group());
+            matcher.find();
+            while (number-- != 0) {
+                dest.append(matcher.group());
+            }
+        }
+        return dest.toString();
+    }
+
+    //TODO JAVADOC
     private static String patternize(final String str) {
         return str.replaceAll(RLEPATTERN, "");
     }

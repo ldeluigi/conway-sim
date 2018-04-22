@@ -1,7 +1,6 @@
 package view.swing.level;
 
 import java.awt.Graphics;
-
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
