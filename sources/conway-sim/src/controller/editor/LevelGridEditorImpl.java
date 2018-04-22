@@ -24,7 +24,8 @@ import view.swing.sandbox.GridPanel;
  */
 public final class LevelGridEditorImpl extends GridEditorImpl {
 
-    private static final Function<Status, Color> ALIVETOGRAY = s -> s.equals(Status.ALIVE) ? Color.LIGHT_GRAY : Color.WHITE;
+    private static final Function<Status, Color> ALIVETOGRAY = s -> s.equals(Status.ALIVE) ? Color.LIGHT_GRAY
+            : Color.WHITE;
     private Level currentLevel;
     private boolean lastIsPresent;
     private int lastRowPlacable;
@@ -89,7 +90,10 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         if (this.currentLevel.getEditableMatrix().get(row, col).equals(Editable.EDITABLE)) {
             this.getCurrentStatus().set(row, col,
                     this.getCurrentStatus().get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
-            this.getGameGrid().displaySingleCell(row, col, calculateColorEditMode(row, col));
+            this.getGameGrid().displaySingleCell(row, col,
+                    Colors.cellColor(this.currentLevel.getEditableMatrix().get(row, col),
+                            this.currentLevel.getCellTypeMatrix().get(row, col),
+                            this.getCurrentStatus().get(row, col)));
         }
     }
 
@@ -108,14 +112,9 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     protected void applyChanges() {
-        final Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.getEnvironmentMatrix().getWidth(),
-                this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
-        for (int row = 0; row < this.currentLevel.getEnvironmentMatrix().getHeight(); row++) {
-            for (int col = 0; col < this.currentLevel.getEnvironmentMatrix().getWidth(); col++) {
-                matrixColor.set(row, col, calculateColorEditMode(row, col));
-            }
-        }
-        this.getGameGrid().paintGrid(0, 0, matrixColor);
+        this.getGameGrid().paintGrid(0, 0,
+                Colors.colorMatrix(this.getCurrentStatus(), this.currentLevel.getCellTypeMatrix(),
+                        this.currentLevel.getEditableMatrix(), this.currentLevel.getEnvironmentMatrix()));
     }
 
     /**
@@ -126,25 +125,9 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void draw(final Generation gen) {
-        final Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.getEnvironmentMatrix().getWidth(),
-                this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
-        for (int row = 0; row < this.currentLevel.getEnvironmentMatrix().getHeight(); row++) {
-            for (int col = 0; col < this.currentLevel.getEnvironmentMatrix().getWidth(); col++) {
-                matrixColor.set(row, col,
-                        calculateColorRunningMode(row, col, gen.getCellMatrix().map(s -> s.getStatus())));
-            }
-        }
-        this.getGameGrid().paintGrid(0, 0, matrixColor);
-    }
+        this.getGameGrid().paintGrid(0, 0, Colors.colorEditableMatrix(gen.getCellMatrix().map(cell -> cell.getStatus()),
+                this.currentLevel.getCellTypeMatrix(), this.currentLevel.getEnvironmentMatrix()));
 
-    private Color calculateColorEditMode(final int row, final int col) {
-        return Colors.cellColor(this.currentLevel.getEditableMatrix().get(row, col),
-                this.currentLevel.getCellTypeMatrix().get(row, col), this.getCurrentStatus().get(row, col));
-    }
-
-    private Color calculateColorRunningMode(final int row, final int col, final Matrix<Status> status) {
-        return Colors.cellColor(Editable.EDITABLE, this.currentLevel.getCellTypeMatrix().get(row, col),
-                status.get(row, col));
     }
 
     /**
@@ -152,15 +135,11 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void colorPreview(final int row, final int col) {
-        final Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.getEnvironmentMatrix().getWidth(),
-                this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
-        for (int x = 0; x < this.currentLevel.getEnvironmentMatrix().getHeight(); x++) {
-            for (int y = 0; y < this.currentLevel.getEnvironmentMatrix().getWidth(); y++) {
-                matrixColor.set(x, y, calculateColorEditMode(x, y));
-            }
-        }
-        this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(matrixColor, row,
-                col, this.getPattern().map(ALIVETOGRAY)));
+        this.getGameGrid().paintGrid(0, 0,
+                Matrices.mergeXY(
+                        Colors.colorEditableMatrix(this.getCurrentStatus(), this.currentLevel.getCellTypeMatrix(),
+                                this.currentLevel.getEnvironmentMatrix()),
+                        row, col, this.getPattern().map(ALIVETOGRAY)));
     }
 
     /**
