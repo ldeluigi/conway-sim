@@ -89,7 +89,7 @@ public class LevelMenu extends JPanel {
         final JPanel statusPanel = new JPanel(new FlowLayout());
         statusPanel.setOpaque(false);
 
-        gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
+        this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         statusPanel.add(gridPanel);
         central.add(statusPanel);
@@ -149,7 +149,8 @@ public class LevelMenu extends JPanel {
 
     private void start() {
         if (this.currentLevel != 0) {
-            this.mainGUI.setView(SandboxBuilder.buildLevelSandbox(mainGUI, currentLevel));
+            this.mainGUI.setView(new LoadingScreen());
+            SwingUtilities.invokeLater(() -> this.mainGUI.setView(SandboxBuilder.buildLevelSandbox(mainGUI, currentLevel)));
         }
     }
 
