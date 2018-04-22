@@ -23,6 +23,9 @@ import view.swing.sandbox.GridPanel;
 public final class LevelGridEditorImpl extends GridEditorImpl {
 
     private Level currentLevel;
+    private boolean lastIsPresent;
+    private int lastRowPlacable;
+    private int lastColPlacable;
 
     /**
      * 
@@ -158,6 +161,8 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         }
         if (patternIsPlacable(row, column)) {
             super.showPreview(row, column);
+        } else if (this.lastIsPresent) {
+            super.showPreview(this.lastRowPlacable, this.lastColPlacable);
         }
     }
 
@@ -178,20 +183,36 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         }
         if (patternIsPlacable(row, column)) {
             super.placeCurrentPattern(row, column);
+        } else if (this.lastIsPresent) {
+            super.placeCurrentPattern(this.lastRowPlacable, this.lastColPlacable);
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void removePatternToPlace() {
+        super.removePatternToPlace();
+        this.lastIsPresent = false;
     }
 
     private boolean patternIsPlacable(final int row, final int column) {
         final int[] vet = this.centerIndexes(row, column);
         final int newRow = vet[0];
         final int newCol = vet[1];
-        for (int x = newRow; x < newRow + this.getPattern().getWidth(); x++) {
-            for (int y = newCol; y < newCol + this.getPattern().getHeight(); y++) {
-                if (this.currentLevel.getEditableMatrix().get(x, y).equals(Editable.UNEDITABLE)) {
+        for (int x = newRow; x < newRow + this.getPattern().getWidth() - 1; x++) {
+            for (int y = newCol; y < newCol + this.getPattern().getHeight() - 1; y++) {
+                if (this.currentLevel.getEnvironmentMatrix().getHeight() < y
+                        || this.currentLevel.getEnvironmentMatrix().getWidth() < x
+                        || this.currentLevel.getEditableMatrix().get(x, y).equals(Editable.UNEDITABLE)) {
                     return false;
                 }
             }
         }
+        this.lastIsPresent = true;
+        this.lastRowPlacable = row;
+        this.lastColPlacable = column;
         return true;
     }
 
