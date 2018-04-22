@@ -21,9 +21,8 @@ import javax.swing.SwingUtilities;
 
 import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
-import core.campaign.CellType;
+import core.campaign.Editable;
 import core.campaign.Level;
-import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
 import view.DesktopGUI;
@@ -174,24 +173,8 @@ public class LevelMenu extends JPanel {
                 level.getCellTypeMatrix().getHeight(), () -> null);
         for (int row = 0; row < level.getCellTypeMatrix().getWidth(); row++) {
             for (int col = 0; col < level.getCellTypeMatrix().getWidth(); col++) {
-                Color value;
-                if (level.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
-                    value = level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.BLACK
-                            : Color.WHITE;
-                } else if (level.getCellTypeMatrix().get(row, col)
-                        .equals(CellType.GOLDEN)) {
-                    value = Colors.blend(Colors.GOLD,
-                            level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.BLACK
-                                    : Color.WHITE);
-                } else if (level.getCellTypeMatrix().get(row, col)
-                        .equals(CellType.WALL)) {
-                    value = level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.DARK_GRAY
-                            : Color.LIGHT_GRAY;
-                } else {
-                    value = level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.BLACK
-                            : Color.WHITE;
-                }
-                mc.set(row, col, value);
+                mc.set(row, col, Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col),
+                        level.getInitialStateMatrix().get(row, col)));
             }
         }
         SwingUtilities.invokeLater(() -> this.gridPanel.paintGrid(0, 0, mc));

@@ -2,6 +2,10 @@ package view.swing;
 
 import java.awt.Color;
 
+import core.campaign.CellType;
+import core.campaign.Editable;
+import core.model.Status;
+
 /**
  * Utility class for colors.
  */
@@ -33,5 +37,41 @@ public final class Colors {
                 (a.getBlue() * a.getAlpha() + b.getBlue() * b.getAlpha())
                         / (a.getAlpha() + b.getAlpha()),
                 (a.getAlpha() + b.getAlpha()) / 2);
+    }
+
+    /**
+     * 
+     * @param editable
+     *                The status that represent if a cell is editable or not
+     * @param cellType
+     *                The cell type,
+     *                Normal, Gold, Wall...
+     * @param status
+     *                The cell status,
+     *                Alive or Dead
+     * @return the color that the cell should have
+     */
+    public static Color cellColor(final Editable editable, final CellType cellType, final Status status) {
+        if (editable.equals(Editable.UNEDITABLE)) {
+            if (cellType.equals(CellType.NORMAL)) {
+                return Colors.blend(Color.RED, status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
+            } else if (cellType.equals(CellType.GOLDEN)) {
+                return Colors.blend(Colors.GOLD, status.equals(Status.ALIVE) ? new Color(0, 0, 0, 100) : Color.WHITE);
+            } else if (cellType.equals(CellType.WALL)) {
+                return status.equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
+            } else {
+                return Colors.blend(Color.RED, status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
+            }
+        } else {
+            if (cellType.equals(CellType.NORMAL)) {
+                return status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
+            } else if (cellType.equals(CellType.GOLDEN)) {
+                return Colors.blend(Colors.GOLD, status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
+            } else if (cellType.equals(CellType.WALL)) {
+                return status.equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
+            } else {
+                return status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
+            }
+        }
     }
 }
