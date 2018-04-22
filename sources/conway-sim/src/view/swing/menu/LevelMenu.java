@@ -163,8 +163,8 @@ public class LevelMenu extends JPanel {
         gridPanel.changeGrid(level.getEnvironmentMatrix().getWidth(), level.getEnvironmentMatrix().getHeight());
         Matrix<Color> mc = new ListMatrix<>(level.getCellTypeMatrix().getWidth(),
                 level.getCellTypeMatrix().getHeight(), () -> null);
-        for (int row = 0; row < level.getCellTypeMatrix().getWidth(); row++) {
-            for (int col = 0; col < level.getCellTypeMatrix().getWidth(); col++) {
+        for (int row = 0; row < level.getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < level.getEnvironmentMatrix().getWidth(); col++) {
                 Color value;
                 if (level.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)) {
                     value = level.getInitialStateMatrix().get(row, col).equals(Status.ALIVE) ? Color.BLACK
