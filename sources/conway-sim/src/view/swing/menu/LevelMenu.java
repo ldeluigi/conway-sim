@@ -150,14 +150,9 @@ public class LevelMenu extends JPanel {
     }
 
     private int fontModifier() {
-        double sh = this.mainGUI.getScreenHeight();
-        double ch = this.mainGUI.getCurrentHeight();
-        double sw = this.mainGUI.getScreenWidth();
-        double cw = this.mainGUI.getCurrentWidth();
-        double mr = Math.min(ch / sh, cw / sw);
-        if (mr < MIN_FONT) {
+        if (Math.min(this.mainGUI.getCurrentHeight() / this.mainGUI.getScreenHeight(), this.mainGUI.getCurrentWidth() / this.mainGUI.getScreenWidth()) < MIN_FONT) {
             return MenuSettings.getFontSize() * 4 / 3;
-        } else if (mr < MEDIUM_FONT) {
+        } else if (Math.min(this.mainGUI.getCurrentHeight() / this.mainGUI.getScreenHeight(), this.mainGUI.getCurrentWidth() / this.mainGUI.getScreenWidth()) < MEDIUM_FONT) {
             return MenuSettings.getFontSize() * 3 / 2;
         } else {
             return MenuSettings.getFontSize() * 2;
