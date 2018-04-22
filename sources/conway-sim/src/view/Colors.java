@@ -73,6 +73,15 @@ public final class Colors {
     }
 
     /**
+     * @param status
+     *            The cell {@link Status} that represent the cell
+     * @return the color that the cell should have
+     */
+    public static Color cellNormalColor(final Status status) {
+        return Colors.cellColor(Editable.EDITABLE, CellType.NORMAL, status);
+    }
+
+    /**
      * 
      * @param statusMatrix
      *            the current {@link Status} {@link Matrix}
@@ -94,8 +103,8 @@ public final class Colors {
             throw new IllegalArgumentException();
         }
         final Matrix<Color> colorMatrix = new ListMatrix<>(environment.getWidth(), environment.getHeight(), () -> null);
-        for (int row = 0; row < environment.getWidth(); row++) {
-            for (int col = 0; col < environment.getHeight(); col++) {
+        for (int row = 0; row < environment.getHeight(); row++) {
+            for (int col = 0; col < environment.getWidth(); col++) {
                 colorMatrix.set(row, col, Colors.cellColor(editableMatrix.get(row, col), cellTypeMatrix.get(row, col),
                         statusMatrix.get(row, col)));
             }
