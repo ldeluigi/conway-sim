@@ -34,7 +34,7 @@ public final class RLETranslator {
      * @return a
      */
     public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle, final Class<X> en) {
-        final String pRLE = patternize(rle);
+        final String pRLE = patternize(rle.split("!")[0]);
         final int matHeight = Math.toIntExact(pRLE.chars().filter(ch -> ch == EL).count()) + 1;
         // TODO DEBUG
         System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
