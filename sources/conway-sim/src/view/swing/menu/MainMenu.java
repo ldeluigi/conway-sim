@@ -18,7 +18,7 @@ import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import controller.io.ResourceLoader;
-import view.DesktopGUI;
+import view.swing.DesktopGUI;
 import view.swing.sandbox.SandboxBuilder;
 
 /**

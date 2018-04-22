@@ -7,7 +7,7 @@ import controller.editor.PatternEditor;
 import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
 import core.campaign.Level;
-import view.DesktopGUI;
+import view.swing.DesktopGUI;
 import view.swing.level.LevelComplete;
 
 /**

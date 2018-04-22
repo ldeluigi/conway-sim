@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
 import controller.io.ResourceLoader;
-import view.DesktopGUI;
 import view.swing.menu.MainMenu;
 
 /**

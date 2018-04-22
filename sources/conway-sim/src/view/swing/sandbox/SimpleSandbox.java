@@ -14,7 +14,7 @@ import controller.editor.ExtendedGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
 import controller.io.ResourceLoader;
-import view.DesktopGUI;
+import view.swing.DesktopGUI;
 import view.swing.menu.MenuSettings;
 
 /**
