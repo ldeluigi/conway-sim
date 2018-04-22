@@ -59,8 +59,9 @@ public final class RLETranslator {
         System.out.println("DEBUG | MAT WIDTH: " + matWidth);
         final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
         for (int i = 0; i < matHeight; i++) {
-            try (StringReader sr = new StringReader(new BufferedReader(new StringReader(decode(pRLE.split("\\$")[i])))
-                    .lines().collect(Collectors.joining()))) {
+            try (StringReader sr = new StringReader(
+                    new BufferedReader(new StringReader(decode(pRLE.replace("\\!", "\\$").split("\\$")[i]))).lines()
+                            .collect(Collectors.joining()))) {
                 for (int k = 0; k < matWidth; k++) {
                     final int check = sr.read();
                     mat.set(i, k, en.getEnumConstants()[check - SP]);
@@ -115,22 +116,23 @@ public final class RLETranslator {
         return mtoStr;
     }
 
-    //TODO JAVADOC
+    // TODO JAVADOC
     private static String decode(final String str) {
-        StringBuffer dest = new StringBuffer();
-        Pattern pattern = Pattern.compile("[0-9]+|[a-zA-Z]");
-        Matcher matcher = pattern.matcher(str);
+        final StringBuffer dest = new StringBuffer();
+        final Pattern pattern = Pattern.compile("[0-9]+|[a-zA-Z]");
+        final Matcher matcher = pattern.matcher(str);
         while (matcher.find()) {
             int number = Integer.parseInt(matcher.group());
             matcher.find();
-            while (number-- != 0) {
+            while (number != 0) {
                 dest.append(matcher.group());
+                number--;
             }
         }
         return dest.toString();
     }
 
-    //TODO JAVADOC
+    // TODO JAVADOC
     private static String patternize(final String str) {
         return str.replaceAll(RLEPATTERN, "");
     }
