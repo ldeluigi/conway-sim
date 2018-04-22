@@ -314,7 +314,7 @@ public class GenerationPanel extends JPanel {
      */
     protected void end() {
         this.view.getGridEditor().setEnabled(true);
-        this.view.getButtonBook().setEnabled(true);
+        this.view.setButtonBookEnable(true);
         this.bStart.setEnabled(true);
         this.bPlay.setEnabled(false);
         this.bEnd.setEnabled(false);
@@ -338,7 +338,7 @@ public class GenerationPanel extends JPanel {
     protected void start() {
         this.view.getGridEditor().setEnabled(false);
         this.generationController.newGame();
-        this.view.getButtonBook().setEnabled(false);
+        this.view.setButtonBookEnable(false);
         this.bStart.setEnabled(false);
         this.bPause.setEnabled(false);
         this.bPlay.setEnabled(true);

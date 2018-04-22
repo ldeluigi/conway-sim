@@ -150,13 +150,11 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Gets the button used to call the recipe book and returns it.
-     * 
-     * @return the book button
+     *{@inheritDoc}
      */
     @Override
-    public JButton getButtonBook() {
-        return this.bBook;
+    public void setButtonBookEnable(final boolean flag) {
+        this.bBook.setEnabled(flag);
     }
 
     /**
