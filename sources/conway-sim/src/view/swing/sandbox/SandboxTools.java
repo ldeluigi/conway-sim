@@ -242,21 +242,4 @@ public final class SandboxTools {
         button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed")
                 .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
     }
-
-    /**
-     * 
-     * @param button a
-     * @param newFont a
-     */
-    public static void resizeButton(final JButton button, final Font newFont) {
-        button.setFont(newFont);
-        final FontMetrics metrics = button.getFontMetrics(newFont);
-        final int width = metrics.stringWidth(button.getText() + " ");
-        final int height = metrics.getHeight();
-        final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR,
-                height * BUTTON_TEXT_SIZE_RAPPOR);
-        button.setPreferredSize(newDimension);
-        button.setMaximumSize(newDimension);
-        setIcon(button, newDimension);
-    }
 }
