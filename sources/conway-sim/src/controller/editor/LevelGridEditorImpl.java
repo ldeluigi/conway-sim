@@ -1,6 +1,8 @@
 package controller.editor;
 
 import java.awt.Color;
+import java.util.function.Function;
+
 import core.campaign.CellType;
 import core.campaign.Editable;
 import core.campaign.GameWinningCell;
@@ -22,6 +24,7 @@ import view.swing.sandbox.GridPanel;
  */
 public final class LevelGridEditorImpl extends GridEditorImpl {
 
+    private static final Function<Status, Color> ALIVETOGRAY = s -> s.equals(Status.ALIVE) ? Color.LIGHT_GRAY : Color.WHITE;
     private Level currentLevel;
     private boolean lastIsPresent;
     private int lastRowPlacable;
@@ -145,6 +148,22 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void colorPreview(final int row, final int col) {
+        final Matrix<Color> matrixColor = new ListMatrix<>(this.currentLevel.getEnvironmentMatrix().getWidth(),
+                this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
+        for (int x = 0; x < this.currentLevel.getEnvironmentMatrix().getHeight(); x++) {
+            for (int y = 0; y < this.currentLevel.getEnvironmentMatrix().getWidth(); y++) {
+                matrixColor.set(x, y, calculateColorEditMode(x, y));
+            }
+        }
+        this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(matrixColor, row,
+                col, this.getPattern().map(ALIVETOGRAY)));
+    }
+
+    /**
      * Is the method which displays the future pattern together with the matrix
      * already existing. The cursor of the mouse will guide the center of the
      * pattern all over the grid (if it can be fitted).
@@ -201,11 +220,13 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         final int[] vet = this.centerIndexes(row, column);
         final int newRow = vet[0];
         final int newCol = vet[1];
-        for (int x = newRow; x < newRow + this.getPattern().getWidth() - 1; x++) {
-            for (int y = newCol; y < newCol + this.getPattern().getHeight() - 1; y++) {
-                if (this.currentLevel.getEnvironmentMatrix().getHeight() < y
-                        || this.currentLevel.getEnvironmentMatrix().getWidth() < x
-                        || this.currentLevel.getEditableMatrix().get(x, y).equals(Editable.UNEDITABLE)) {
+        if (newRow + this.getPattern().getHeight() > this.currentLevel.getEnvironmentMatrix().getHeight()
+                || newCol + this.getPattern().getWidth() > this.currentLevel.getEnvironmentMatrix().getWidth()) {
+            return false;
+        }
+        for (int x = newRow; x < newRow + this.getPattern().getHeight(); x++) {
+            for (int y = newCol; y < newCol + this.getPattern().getWidth(); y++) {
+                if (this.currentLevel.getEditableMatrix().get(x, y).equals(Editable.UNEDITABLE)) {
                     return false;
                 }
             }

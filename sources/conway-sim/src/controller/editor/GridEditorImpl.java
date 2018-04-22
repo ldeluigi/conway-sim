@@ -146,11 +146,22 @@ public class GridEditorImpl implements PatternEditor {
         }
         if ((this.getGameGrid().getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.getGameGrid().getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(this.getCurrentStatus().map(ALIVETOBLACK), newRow,
-                    newColumn, this.pattern.get().map(ALIVETOGRAY)));
+            this.colorPreview(newRow, newColumn);
             this.lastPreviewRow = newRow;
             this.lastPreviewColumn = newColumn;
         }
+    }
+
+    /**
+     * 
+     * @param row
+     *          starting row where place the pattern
+     * @param col
+     *          starting column where place the pattern
+     */
+    public void colorPreview(final int row, final int col) {
+        this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(this.getCurrentStatus().map(ALIVETOBLACK), row,
+                col, this.pattern.get().map(ALIVETOGRAY)));
     }
 
     /**
