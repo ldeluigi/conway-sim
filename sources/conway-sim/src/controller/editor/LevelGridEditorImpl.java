@@ -14,7 +14,7 @@ import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
-import view.swing.Colors;
+import view.Colors;
 import view.swing.sandbox.GridPanel;
 
 /**

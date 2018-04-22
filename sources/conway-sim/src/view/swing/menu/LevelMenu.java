@@ -28,7 +28,7 @@ import core.campaign.Editable;
 import core.campaign.Level;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
-import view.swing.Colors;
+import view.Colors;
 import view.swing.DesktopGUI;
 import view.swing.sandbox.JGridPanel;
 import view.swing.sandbox.KeyListenerFactory;
