@@ -35,7 +35,7 @@ public interface Sandbox extends UpdateScheduler {
     PatternEditor getGridEditor();
 
     /**
-     * Refreshes generation panel.
+     * Refreshes the view.
      */
     void refreshView();
 }
