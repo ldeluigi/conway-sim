@@ -51,7 +51,7 @@ public final class RLETranslator {
             }
             matWidth = cont;
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
         }
         final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
         for (int i = 0; i < matHeight; i++) {
@@ -63,7 +63,7 @@ public final class RLETranslator {
                     mat.set(i, k, en.getEnumConstants()[check - SP]);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.logThrowable(e);
             }
         }
         return mat;

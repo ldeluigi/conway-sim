@@ -71,13 +71,13 @@ public class RecipeLoader {
                             this.defaultbook.addRecipe(content,
                                     flagName ? testLine : name.replace(RLE_EXT, ""));
                         }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                    } catch (IOException e) {
+                        Logger.logThrowable(e);
                     }
                 }
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            Logger.logThrowable(e);
             return;
         }
     }
@@ -92,7 +92,7 @@ public class RecipeLoader {
             try {
                 folder.mkdir();
             } catch (Exception e) {
-                e.printStackTrace();
+                Logger.logThrowable(e);
                 return;
             }
         }
@@ -124,7 +124,7 @@ public class RecipeLoader {
                             testLine = testLine.split("#N ")[1];
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Logger.logThrowable(e);
                     }
                     final Path filepath = Paths.get(file.getPath());
                     try {
@@ -133,7 +133,7 @@ public class RecipeLoader {
                         custombook2.addRecipe(content,
                                 flagName ? testLine : file.getName().replace(RLE_EXT, ""));
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        Logger.logThrowable(e);
                     }
 
                 }
