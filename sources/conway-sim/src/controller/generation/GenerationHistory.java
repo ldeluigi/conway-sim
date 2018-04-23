@@ -52,8 +52,8 @@ public final class GenerationHistory implements Memento<Long, Generation> {
     @Override
     public void addElem(final Long numberGeneration, final Generation generation) {
         if (this.historyGeneration.keySet().size() >= numberOfGenerationStored) {
-            this.historyGeneration.remove(this.historyGeneration.keySet().stream()
-                    .min((x, y) -> Long.compare(x, y)).get());
+            this.historyGeneration
+                    .remove(this.historyGeneration.keySet().stream().min((x, y) -> Long.compare(x, y)).get());
         }
         if (!this.historyGeneration.keySet().stream().allMatch(e -> e < numberGeneration)) {
             throw new IllegalArgumentException();

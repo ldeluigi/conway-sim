@@ -3,7 +3,8 @@ package controller.editor;
 import core.model.Generation;
 
 /**
- * This interface represents a simple editor for a grid of Conway's Game of Life.
+ * This interface represents a simple editor for a grid of Conway's Game of
+ * Life.
  */
 public interface SimpleGridEditor {
 

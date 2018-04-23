@@ -11,6 +11,7 @@ import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
 import core.campaign.Level;
 import view.swing.DesktopGUI;
+import view.swing.GridPanel;
 import view.swing.book.CampaignBookFrame;
 import view.swing.level.LevelComplete;
 

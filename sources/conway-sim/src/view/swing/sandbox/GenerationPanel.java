@@ -25,8 +25,9 @@ import core.model.Status;
 import view.swing.menu.MenuSettings;
 
 /**
- * This is the panel that contain all the Generation control for the application. Button start,
- * play, pause, end and time management goto, next and previous and the speed option.
+ * This is the panel that contain all the Generation control for the
+ * application. Button start, play, pause, end and time management goto, next
+ * and previous and the speed option.
  * 
  */
 public class GenerationPanel extends JPanel {
@@ -59,8 +60,8 @@ public class GenerationPanel extends JPanel {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
-     * This variable is used only in case of level mode,
-     * level mode is usable only if a runnable is given in the constructor.
+     * This variable is used only in case of level mode, level mode is usable only
+     * if a runnable is given in the constructor.
      */
     private static final int REPETITION_FOR_WIN = 3;
     private boolean isLevelMode;
@@ -133,8 +134,7 @@ public class GenerationPanel extends JPanel {
 
         northR.add(spinner); // to use the go to button
 
-        this.setFont(
-                new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
+        this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
         // Start conditions.
         this.bStart.setEnabled(true);
@@ -187,10 +187,10 @@ public class GenerationPanel extends JPanel {
      * @param view
      *            the controller of the generation
      * @param runnableVictory
-     *            the {@link Runnable} that is started when all the {@link GameWinningCell} are dead
-     *            for 3 consecutive generations
+     *            the {@link Runnable} that is started when all the
+     *            {@link GameWinningCell} are dead for 3 consecutive generations
      *
-     * If level is not declared, the game have no winning condition.
+     *            If level is not declared, the game have no winning condition.
      */
     public GenerationPanel(final AbstractSandbox view, final Runnable runnableVictory) {
         this(view);
@@ -256,10 +256,10 @@ public class GenerationPanel extends JPanel {
                 });
                 this.counterLevel = 0;
             }
-            //END LEVEL OPTION
+            // END LEVEL OPTION
         } else {
             general = this.generationController.getCurrentElement().getCellMatrix().stream()
-            .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
+                    .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
         }
         final int generalF = general;
         this.view.scheduleGUIUpdate(() -> {
@@ -275,8 +275,8 @@ public class GenerationPanel extends JPanel {
 
     private void goTo(final Long value) {
         if (value < 0) {
-            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo")
-                    .replaceAll("end", value.toString()).replaceAll("start",
+            JOptionPane.showMessageDialog(this,
+                    ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
                             this.generationController.getCurrentNumberElement().toString()));
         } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
             this.bPlay.setEnabled(false);
@@ -309,8 +309,9 @@ public class GenerationPanel extends JPanel {
     }
 
     /**
-     * This method terminate the execution of the generation and refresh the first status.
-     * Override this and add eventual action that should be done with the end of the game mode and the beginning of the edit mode. 
+     * This method terminate the execution of the generation and refresh the first
+     * status. Override this and add eventual action that should be done with the
+     * end of the game mode and the beginning of the edit mode.
      */
     protected void end() {
         this.view.getGridEditor().setEnabled(true);
@@ -332,8 +333,9 @@ public class GenerationPanel extends JPanel {
     }
 
     /**
-     * This method start the execution of the generation and set button enable true/false.
-     * Override this and add eventual action that should be done with the start of the game mode. 
+     * This method start the execution of the generation and set button enable
+     * true/false. Override this and add eventual action that should be done with
+     * the start of the game mode.
      */
     protected void start() {
         this.view.getGridEditor().setEnabled(false);

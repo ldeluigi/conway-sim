@@ -28,8 +28,8 @@ public interface RecipeBook {
     Recipe getRecipeByName(String name);
 
     /**
-     * Method for adding a new Recipe in the book given the content, the name of the recipe and the
-     * author.
+     * Method for adding a new Recipe in the book given the content, the name of the
+     * recipe and the author.
      * 
      * @param content
      *            of the Recipe.
@@ -41,7 +41,8 @@ public interface RecipeBook {
     void addRecipe(String content, String name, String author);
 
     /**
-     * Method for adding a new Recipe in the book given the content and the name of the recipe.
+     * Method for adding a new Recipe in the book given the content and the name of
+     * the recipe.
      * 
      * @param content
      *            of the Recipe.

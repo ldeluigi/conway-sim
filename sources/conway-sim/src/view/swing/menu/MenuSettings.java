@@ -76,10 +76,8 @@ public final class MenuSettings extends JPanel {
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     setUsingSystemLF(true);
                 } catch (Exception e1) {
-                    final JLabel l = new JLabel(
-                            ResourceLoader.loadString("settings.error.SysLookAndFeelNotFound"));
-                    JOptionPane.showMessageDialog(this, l,
-                            ResourceLoader.loadString("error.unavailable"),
+                    final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.SysLookAndFeelNotFound"));
+                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("error.unavailable"),
                             JOptionPane.ERROR_MESSAGE);
                 }
             } else if (e.getStateChange() == ItemEvent.DESELECTED) {
@@ -87,10 +85,8 @@ public final class MenuSettings extends JPanel {
                     UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
                     setUsingSystemLF(false);
                 } catch (Exception e1) {
-                    final JLabel l = new JLabel(
-                            ResourceLoader.loadString("settings.error.CrossLookAndFeelNotFound"));
-                    JOptionPane.showMessageDialog(this, l,
-                            ResourceLoader.loadString("settings.error.unavailable"),
+                    final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.CrossLookAndFeelNotFound"));
+                    JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("settings.error.unavailable"),
                             JOptionPane.ERROR_MESSAGE);
                 }
             }
@@ -99,14 +95,13 @@ public final class MenuSettings extends JPanel {
         });
         final JLabel checkLFLabel = new JLabel(ResourceLoader.loadString("settings.sysLF"));
         checkLFLabel.setFont(MenuSettings.generateFont());
-        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(
-                MenuSettings.getFontSize(), MIN_FONT_SIZE, MAX_FONT_SIZE, 1);
+        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(), MIN_FONT_SIZE,
+                MAX_FONT_SIZE, 1);
         final JSpinner fontSizeSelector = new JSpinner(fontSizeSelectorModel);
         fontSizeSelector.setOpaque(false);
         fontSizeSelector.setFont(generateFont());
-        fontSizeSelector
-                .setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / MINI_BUTTON_RATIO_X,
-                        mainGUI.getCurrentHeight() / MINI_BUTTON_RATIO_Y));
+        fontSizeSelector.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / MINI_BUTTON_RATIO_X,
+                mainGUI.getCurrentHeight() / MINI_BUTTON_RATIO_Y));
         fontSizeSelectorModel.addChangeListener(e -> {
             setFontSize((int) fontSizeSelectorModel.getValue());
             resizeFonts();
@@ -124,11 +119,9 @@ public final class MenuSettings extends JPanel {
                 setInstantTransitions(false);
             }
         });
-        final JLabel checkInstantAnimationsLabel = new JLabel(
-                ResourceLoader.loadString("settings.instantTransitions"));
+        final JLabel checkInstantAnimationsLabel = new JLabel(ResourceLoader.loadString("settings.instantTransitions"));
         checkInstantAnimationsLabel.setFont(MenuSettings.generateFont());
-        final JLabel languageLabel = new JLabel(
-                ResourceLoader.loadString("settings.language.label"));
+        final JLabel languageLabel = new JLabel(ResourceLoader.loadString("settings.language.label"));
         languageLabel.setFont(MenuSettings.generateFont());
         final Locale[] listLocales = ResourceLoader.getLocales();
         final JComboBox<Locale> languageComboBox = new JComboBox<>(listLocales);
@@ -148,8 +141,7 @@ public final class MenuSettings extends JPanel {
         centralButtons.add(checkLFLabel, c);
         addToCenter(GridBagConstraints.WEST, 0, 0, 3, checkLFLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 0, 1, checkLookAndFeel, c, centralButtons);
-        addToCenter(GridBagConstraints.WEST, 0, 1, 3, checkInstantAnimationsLabel, c,
-                centralButtons);
+        addToCenter(GridBagConstraints.WEST, 0, 1, 3, checkInstantAnimationsLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 1, 1, checkInstantAnimations, c, centralButtons);
         addToCenter(GridBagConstraints.WEST, 0, 2, 3, fontLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 2, 1, fontSizeSelector, c, centralButtons);
@@ -159,10 +151,9 @@ public final class MenuSettings extends JPanel {
         ret.setBackground(Color.WHITE);
         ret.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
         ret.setFocusPainted(false);
-        ret.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X,
-                mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
-        ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-                MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
+        ret.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
         ret.addActionListener(e -> {
             mainGUI.backToMainMenu();
         });
@@ -198,13 +189,11 @@ public final class MenuSettings extends JPanel {
 
     @Override
     public void paintComponent(final Graphics g) {
-        g.drawImage(ResourceLoader.loadImage("settings.background"), 0, 0, this.getWidth(),
-                this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("settings.background"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
-    private void addToCenter(final int anchor, final int gridx, final int gridy,
-            final int gridwidth, final Component comp, final GridBagConstraints c,
-            final Container dest) {
+    private void addToCenter(final int anchor, final int gridx, final int gridy, final int gridwidth,
+            final Component comp, final GridBagConstraints c, final Container dest) {
         c.anchor = anchor;
         c.gridx = gridx;
         c.gridy = gridy;

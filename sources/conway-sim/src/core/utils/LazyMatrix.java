@@ -7,7 +7,8 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
- * A matrix that keeps record of every position edited while returns a default value for the others.
+ * A matrix that keeps record of every position edited while returns a default
+ * value for the others.
  * 
  * @param <X>
  *            the generic type of this matrix
@@ -20,8 +21,8 @@ public class LazyMatrix<X> implements Matrix<X> {
     private int height;
 
     /**
-     * Creates a matrix from a base that is returned for every get call, except for edited
-     * positions, which are kept in a list.
+     * Creates a matrix from a base that is returned for every get call, except for
+     * edited positions, which are kept in a list.
      * 
      * @param width
      *            the width of the matrix
@@ -40,8 +41,8 @@ public class LazyMatrix<X> implements Matrix<X> {
     }
 
     /**
-     * Checks if that position was ever edited and if not returns base, otherwise returns the saved
-     * last edit.
+     * Checks if that position was ever edited and if not returns base, otherwise
+     * returns the saved last edit.
      */
     @Override
     public X get(final int row, final int column) {
@@ -74,7 +75,8 @@ public class LazyMatrix<X> implements Matrix<X> {
     }
 
     /**
-     * Adds the value to the edit list, which will be used before the base in the get method.
+     * Adds the value to the edit list, which will be used before the base in the
+     * get method.
      */
     @Override
     public void set(final int row, final int column, final X value) {
@@ -106,12 +108,12 @@ public class LazyMatrix<X> implements Matrix<X> {
     }
 
     /**
-     * Applies the mapper to the base and every edit done, in order to replicate them.
+     * Applies the mapper to the base and every edit done, in order to replicate
+     * them.
      */
     @Override
     public <Y> Matrix<Y> map(final Function<? super X, ? extends Y> mapper) {
-        final LazyMatrix<Y> result = new LazyMatrix<>(getWidth(), getHeight(),
-                mapper.apply(this.base));
+        final LazyMatrix<Y> result = new LazyMatrix<>(getWidth(), getHeight(), mapper.apply(this.base));
         this.edits.forEach((p, x) -> {
             result.set(p.getX(), p.getY(), mapper.apply(x));
         });
@@ -123,9 +125,9 @@ public class LazyMatrix<X> implements Matrix<X> {
      */
     @Override
     public Stream<X> stream() {
-        return IntStream.range(0, this.height).mapToObj(
-                row -> IntStream.range(0, this.width).mapToObj(col -> new Position(row, col)))
-                .flatMap(s -> s).map(pos -> this.get(pos.getX(), pos.getY()));
+        return IntStream.range(0, this.height)
+                .mapToObj(row -> IntStream.range(0, this.width).mapToObj(col -> new Position(row, col))).flatMap(s -> s)
+                .map(pos -> this.get(pos.getX(), pos.getY()));
     }
 
     /**
@@ -165,8 +167,7 @@ public class LazyMatrix<X> implements Matrix<X> {
      */
     @Override
     public String toString() {
-        return "LazyMatrix [edits=" + edits + ", base=" + base + ", width=" + width + ", height="
-                + height + "]";
+        return "LazyMatrix [edits=" + edits + ", base=" + base + ", width=" + width + ", height=" + height + "]";
     }
 
     private boolean checkBounds(final int row, final int column) {

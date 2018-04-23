@@ -59,8 +59,7 @@ public final class SandboxTools {
         numSpeedLabel = new JLabel(ResourceLoader.loadString("sandbox.label.speed") + "1" + "|");
         numSpeedLabel.setFont(font);
         // display for current generation
-        numGenerationLabel = new JLabel(
-                ResourceLoader.loadString("sandbox.label.generation") + "0" + "|");
+        numGenerationLabel = new JLabel(ResourceLoader.loadString("sandbox.label.generation") + "0" + "|");
         numGenerationLabel.setFont(font);
         // display the number of the alive cell
         aliveCell = new JLabel(ResourceLoader.loadString("sandbox.label.alivecell") + "0" + "|");
@@ -81,14 +80,12 @@ public final class SandboxTools {
      * @param font
      *            the new font
      */
-    public static void refreshStatistics(final int speedSlider, final int genNumber,
-            final int aliveCell, final Font font) {
+    public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell,
+            final Font font) {
         SandboxTools.numGenerationLabel
                 .setText(ResourceLoader.loadString("sandbox.label.generation") + genNumber + "|");
-        SandboxTools.numSpeedLabel
-                .setText(ResourceLoader.loadString("sandbox.label.speed") + speedSlider + "|");
-        SandboxTools.aliveCell
-                .setText(ResourceLoader.loadString("sandbox.label.alivecell") + aliveCell + "|");
+        SandboxTools.numSpeedLabel.setText(ResourceLoader.loadString("sandbox.label.speed") + speedSlider + "|");
+        SandboxTools.aliveCell.setText(ResourceLoader.loadString("sandbox.label.alivecell") + aliveCell + "|");
         SandboxTools.numGenerationLabel.setFont(font);
         SandboxTools.numSpeedLabel.setFont(font);
         SandboxTools.aliveCell.setFont(font);
@@ -103,8 +100,8 @@ public final class SandboxTools {
      *            the font
      * @return a JPanel
      */
-    public static JPanel newGridOptionDimension(final AbstractSandbox sandboxImpl,
-            final JButton bApply, final Font font) {
+    public static JPanel newGridOptionDimension(final AbstractSandbox sandboxImpl, final JButton bApply,
+            final Font font) {
         final JPanel gridOption = new JPanel(new GridLayout(2, 1));
         gridOption.setOpaque(false);
         final JPanel topGrid = new JPanel(new FlowLayout());
@@ -206,8 +203,7 @@ public final class SandboxTools {
         final FontMetrics metrics = button.getFontMetrics(font);
         final int width = metrics.stringWidth(name + " ");
         final int height = metrics.getHeight();
-        final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR,
-                height * BUTTON_TEXT_SIZE_RAPPOR);
+        final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
         button.setPreferredSize(newDimension);
         button.setMaximumSize(newDimension);
 
@@ -235,10 +231,10 @@ public final class SandboxTools {
      *            the button dimension
      */
     public static void setIcon(final JButton button, final Dimension dim) {
-        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on")
-                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
-        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off")
-                .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
+        button.setIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.on").getScaledInstance(dim.width,
+                dim.height, Image.SCALE_SMOOTH)));
+        button.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.off").getScaledInstance(dim.width,
+                dim.height, Image.SCALE_SMOOTH)));
         button.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("sandbox.button.pressed")
                 .getScaledInstance(dim.width, dim.height, Image.SCALE_SMOOTH)));
     }

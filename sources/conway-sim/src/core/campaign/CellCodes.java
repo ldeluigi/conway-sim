@@ -8,10 +8,11 @@ import java.util.Set;
 import core.model.SimpleCell;
 
 /**
- * Utility static class that collects cellCodes globally. Cell codes are used to recognize which
- * cell type hides under the {@link Cell} interface without using the "instance of" construct. It's
- * possible that two or more cell types have the same code. This is the case for specialized cells
- * that want to be considered as their supertype.
+ * Utility static class that collects cellCodes globally. Cell codes are used to
+ * recognize which cell type hides under the {@link Cell} interface without
+ * using the "instance of" construct. It's possible that two or more cell types
+ * have the same code. This is the case for specialized cells that want to be
+ * considered as their supertype.
  */
 public final class CellCodes {
 
@@ -61,8 +62,8 @@ public final class CellCodes {
     /**
      * Returns the maximum code that appears in the map + 1.
      * 
-     * @return an integer that is 99.99% sure to be available as a unique code (the 0.001% is the
-     *         case of integer overflowing to an already used value)
+     * @return an integer that is 99.99% sure to be available as a unique code (the
+     *         0.001% is the case of integer overflowing to an already used value)
      */
     public static synchronized int getFirstAvailableCode() {
         return CODES.values().stream().mapToInt(x -> x).max().orElse(0) + 1;

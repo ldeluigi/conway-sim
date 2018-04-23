@@ -5,19 +5,20 @@ import core.model.Status;
 import core.utils.Matrix;
 
 /**
- * Represents a single level of the campaign. If the matrices returned have different dimension the
- * Level is in Illegal State.
+ * Represents a single level of the campaign. If the matrices returned have
+ * different dimension the Level is in Illegal State.
  */
 public interface Level {
 
     /**
-     * @return A matrix of {@link Editable} that indicates which cells should be editable or not
+     * @return A matrix of {@link Editable} that indicates which cells should be
+     *         editable or not
      */
     Matrix<Editable> getEditableMatrix();
 
     /**
-     * @return A matrix of {@link CellType} that indicates which type (that is which implementation)
-     *         of a cell should correspond to each position
+     * @return A matrix of {@link CellType} that indicates which type (that is which
+     *         implementation) of a cell should correspond to each position
      */
     Matrix<CellType> getCellTypeMatrix();
 

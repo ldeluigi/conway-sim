@@ -71,7 +71,7 @@ public class CampaignBookFrame extends JInternalFrame {
             jList = new JList<String>(lstArr);
         } else {
             jList = new JList<String>(new String[0]);
-            //TODO DEBUG
+            // TODO DEBUG
             System.out.println("EMPTY BOOKLIST");
         }
 
