@@ -48,7 +48,7 @@ public final class SandboxBuilder {
             @Override
             protected GenerationPanel buildGenerationPanel() {
                 return new GenerationPanel(this, () -> {
-                    gui.popUpFrame(new LevelComplete(), true);
+                    gui.popUpFrame(new LevelComplete(), false);
                 });
             }
 

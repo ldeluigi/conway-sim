@@ -2,6 +2,7 @@ package view.swing.menu;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -39,7 +40,7 @@ public class LevelMenu extends JPanel {
 
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
-    private static final int GRID_TO_CELL_RATIO = 10;
+    private static final int GRID_TO_CELL_RATIO = 7;
     private static final String LEVEL_NUMBER = "level.number";
     private static final String VALUE = "XXX";
     private static final int LEVEL_FOR_PAGE = 4;
@@ -92,6 +93,7 @@ public class LevelMenu extends JPanel {
         this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         statusPanel.add(gridPanel);
+        gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / 4, this.mainGUI.getCurrentHeight() / 4));
         central.add(statusPanel);
         central.add(rightPanel);
 
@@ -111,6 +113,8 @@ public class LevelMenu extends JPanel {
 
         bStart.addActionListener(e -> start());
         bReturn.addActionListener(e -> mainGUI.backToMainMenu());
+        KeyListenerFactory.addKeyListener(this, "start", KeyEvent.VK_ENTER, () -> bStart.doClick());
+        KeyListenerFactory.addKeyListener(this, "return", KeyEvent.VK_ESCAPE, () -> bReturn.doClick());
         SwingUtilities.invokeLater(() -> this.requestFocusInWindow());
     }
 
