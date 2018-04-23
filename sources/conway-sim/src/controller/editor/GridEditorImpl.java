@@ -1,12 +1,10 @@
+ 
 package controller.editor;
 
-import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 
 import javax.swing.SwingUtilities;
 
@@ -21,8 +19,8 @@ import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
-import view.Colors;
 import view.swing.sandbox.GridPanel;
+import view.Colors;
 
 /**
  * GridEditorImpl is the editor for the grid and the pattern manager depending
@@ -32,9 +30,6 @@ import view.swing.sandbox.GridPanel;
  */
 public class GridEditorImpl implements PatternEditor {
 
-    private static final BiFunction<Status, Color, Color> STATUSTOCOLOR = (s, c) -> s.equals(Status.ALIVE) ? c
-            : Color.WHITE;
-    private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
     private static final String MESSAGE = "Cannot modify the matrix out of 'Placing' mode or without choosing a pattern";
 
     private final GridPanel gameGrid;
@@ -86,7 +81,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void draw(final Generation gen) {
-        this.getGameGrid().paintGrid(0, 0, Colors.colorNormalMatrix(gen.getCellMatrix().map(cell -> cell.getStatus()), this.env));
+        this.getGameGrid().paintGrid(0, 0, Colors.cellToColor(gen.getCellMatrix()));
     }
 
     /**
@@ -104,7 +99,7 @@ public class GridEditorImpl implements PatternEditor {
         }
         this.getCurrentStatus().set(row, column,
                 this.getCurrentStatus().get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
-        this.getGameGrid().displaySingleCell(row, column, Colors.cellNormalColor(this.getCurrentStatus().get(row, column)));
+        this.getGameGrid().displaySingleCell(row, column, Colors.colorSingleCell(this.getCurrentStatus().get(row, column)));
     }
 
     /**
@@ -144,22 +139,11 @@ public class GridEditorImpl implements PatternEditor {
         }
         if ((this.getGameGrid().getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.getGameGrid().getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.colorPreview(newRow, newColumn);
+            this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(Colors.statusToBlack(this.getCurrentStatus()), newRow,
+                    newColumn, Colors.statusToGray(this.pattern.get())));
             this.lastPreviewRow = newRow;
             this.lastPreviewColumn = newColumn;
         }
-    }
-
-    /**
-     * 
-     * @param row
-     *          starting row where place the pattern
-     * @param col
-     *          starting column where place the pattern
-     */
-    public void colorPreview(final int row, final int col) {
-        this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(Colors.colorNormalMatrix(this.getCurrentStatus(), this.env), row,
-                col, this.pattern.get().map(ALIVETOGRAY)));
     }
 
     /**
@@ -344,7 +328,7 @@ public class GridEditorImpl implements PatternEditor {
      * 
      */
     protected void applyChanges() {
-        this.getGameGrid().paintGrid(0, 0, Colors.colorNormalMatrix(this.getCurrentStatus(), this.env));
+        this.getGameGrid().paintGrid(0, 0, Colors.statusToBlack(this.getCurrentStatus()));
     }
 
     /**
