@@ -36,9 +36,10 @@ public final class Logger {
             err().println(message);
         }
     }
- 
+
     /**
-     * Prints (formatted) the {@link Throwable} stack trace to a file if possible or else to {@link System#err}.
+     * Prints (formatted) the {@link Throwable} stack trace to a file if possible or else to
+     * {@link System#err}.
      * 
      * @param e
      *            the throwable to log
@@ -47,18 +48,19 @@ public final class Logger {
         try (PrintStream out = out()) {
             e.printStackTrace(out);
         } catch (FileNotFoundException e1) {
-            e.printStackTrace(err());
+            final PrintStream err = err();
+            err.println("Stack trace:");
+            e.printStackTrace(err);
         }
     }
 
     private static PrintStream err() {
         System.err.println("Couldn't create a log file in " + System.getProperty("user.dir"));
-        System.err.println("Stack trace:");
         return System.err;
     }
 
     private static PrintStream out() throws FileNotFoundException {
-        return new PrintStream(new FileOutputStream(ResourceLoader.loadString("log.file.name"), true),
-                    true);
+        return new PrintStream(
+                new FileOutputStream(ResourceLoader.loadString("log.file.name"), true), true);
     }
 }
