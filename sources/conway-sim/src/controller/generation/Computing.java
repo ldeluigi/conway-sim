@@ -22,7 +22,7 @@ public interface Computing<X, Y extends Number> {
      * @param oldNumber
      *            the Long number of the element to load
      */
-    void loadOldElement(Y oldNumber);
+    void loadElement(Y oldNumber);
 
     /**
      * @return the current element X

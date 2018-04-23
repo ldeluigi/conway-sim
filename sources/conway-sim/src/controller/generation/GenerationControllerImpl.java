@@ -43,7 +43,7 @@ public class GenerationControllerImpl implements GenerationController {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView()); // TODO
     }
 
     /**
@@ -87,7 +87,7 @@ public class GenerationControllerImpl implements GenerationController {
      * 
      */
     @Override
-    public void loadOldElement(final Long generationNumber) {
+    public void loadElement(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);

@@ -288,7 +288,7 @@ public class GenerationPanel extends JPanel {
 
             final FutureTask<Generation> fTask = new FutureTask<>(() -> {
 
-                this.generationController.loadOldElement(value);
+                this.generationController.loadElement(value);
 
                 try {
                     SwingUtilities.invokeAndWait(() -> {
