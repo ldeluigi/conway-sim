@@ -48,21 +48,16 @@ public final class Logger {
     }
 
     /**
-<<<<<<< HEAD
      * Prints (formatted) the {@link Throwable} stack trace to a file if possible or
      * else to {@link System#err}.
-=======
      * Prints (formatted) the {@link Throwable} stack trace to a file if possible or else to
      * {@link System#err}.
->>>>>>> 09767c1c3bc2cfef3dd0838fb497b5eb1c215eed
      * 
      * @param e
      *            the throwable to log
      */
     public static void logThrowable(final Throwable e) {
-<<<<<<< HEAD
         e.printStackTrace(out);
-=======
         try (PrintStream out = out()) {
             e.printStackTrace(out);
         } catch (FileNotFoundException e1) {
@@ -80,6 +75,5 @@ public final class Logger {
     private static PrintStream out() throws FileNotFoundException {
         return new PrintStream(
                 new FileOutputStream(ResourceLoader.loadString("log.file.name"), true), true);
->>>>>>> 09767c1c3bc2cfef3dd0838fb497b5eb1c215eed
     }
 }
