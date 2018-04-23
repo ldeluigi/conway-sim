@@ -35,6 +35,8 @@ public final class MainGUI implements DesktopGUI {
      * Starts the application.
      */
     public MainGUI() {
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        System.setProperty("sun.awt.exception.handler", ExceptionHandler.class.getName());
         this.frame = new JFrame(ResourceLoader.loadString("frame.title"));
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.frame.addWindowListener(new WindowListener() {
