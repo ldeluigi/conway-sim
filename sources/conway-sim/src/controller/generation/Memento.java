@@ -15,7 +15,7 @@ import core.model.Generation;
  * @param <X>
  *            the type of the elements to store.
  */
-interface Memento<Y extends Comparable<Y>, X> {
+interface Memento<Y extends Number, X> {
 
     /**
      * 

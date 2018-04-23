@@ -1,8 +1,5 @@
 package controller.editor;
 
-import java.awt.Color;
-import java.util.function.Function;
-
 import core.campaign.CellType;
 import core.campaign.Editable;
 import core.campaign.GameWinningCell;
@@ -24,9 +21,7 @@ import view.swing.sandbox.GridPanel;
  */
 public final class LevelGridEditorImpl extends GridEditorImpl {
 
-    private static final Function<Status, Color> ALIVETOGRAY = s -> s.equals(Status.ALIVE) ? Color.LIGHT_GRAY
-            : Color.WHITE;
-    private Level currentLevel;
+    private final Level currentLevel;
     private boolean lastIsPresent;
     private int lastRowPlacable;
     private int lastColPlacable;
@@ -40,14 +35,6 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     public LevelGridEditorImpl(final GridPanel grid, final Level level) {
         super(grid);
-        setLevel(level);
-    }
-
-    /**
-     * @param level
-     *            to set as current
-     */
-    public void setLevel(final Level level) {
         this.currentLevel = level;
         this.getGameGrid().changeGrid(this.currentLevel.getEnvironmentMatrix().getWidth(),
                 this.currentLevel.getEnvironmentMatrix().getHeight());
@@ -66,14 +53,17 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
                 this.currentLevel.getEnvironmentMatrix().getHeight(), () -> null);
         for (int row = 0; row < this.currentLevel.getEnvironmentMatrix().getHeight(); row++) {
             for (int col = 0; col < this.currentLevel.getEnvironmentMatrix().getWidth(); col++) {
-                cellMatrix.set(row, col,
-                        this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)
-                                ? new SimpleCell(this.getCurrentStatus().get(row, col))
-                                : this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)
-                                        ? new GameWinningCell(this.getCurrentStatus().get(row, col))
-                                        : this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.WALL)
-                                                ? new NeverChangingCell(this.getCurrentStatus().get(row, col))
-                                                : new SimpleCell(this.getCurrentStatus().get(row, col)));
+                cellMatrix.set(row, col, this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.NORMAL)
+                        // NORMAL CELL
+                        ? new SimpleCell(this.getCurrentStatus().get(row, col))
+                        : this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.GOLDEN)
+                                // GOLDEN CELL
+                                ? new GameWinningCell(this.getCurrentStatus().get(row, col))
+                                : this.currentLevel.getCellTypeMatrix().get(row, col).equals(CellType.WALL)
+                                        // WALL CELL
+                                        ? new NeverChangingCell(this.getCurrentStatus().get(row, col))
+                                        // DEFAULT CELL
+                                        : new SimpleCell(this.getCurrentStatus().get(row, col)));
             }
         }
         return GenerationFactory.from(cellMatrix, this.currentLevel.getEnvironmentMatrix());
@@ -131,18 +121,6 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void colorPreview(final int row, final int col) {
-        this.getGameGrid().paintGrid(0, 0,
-                Matrices.mergeXY(
-                        Colors.colorEditableMatrix(this.getCurrentStatus(), this.currentLevel.getCellTypeMatrix(),
-                                this.currentLevel.getEnvironmentMatrix()),
-                        row, col, this.getPattern().map(ALIVETOGRAY)));
-    }
-
-    /**
      * Is the method which displays the future pattern together with the matrix
      * already existing. The cursor of the mouse will guide the center of the
      * pattern all over the grid (if it can be fitted).
@@ -158,10 +136,21 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
             throw new IllegalStateException();
         }
         if (patternIsPlacable(row, column)) {
-            super.showPreview(row, column);
-        } else if (this.lastIsPresent) {
-            super.showPreview(this.lastRowPlacable, this.lastColPlacable);
+            this.paintPreview(row, column);
+        } else if (this.lastIsPresent && patternIsPlacable(lastRowPlacable, lastColPlacable)) {
+            this.paintPreview(this.lastRowPlacable, this.lastColPlacable);
         }
+    }
+
+    private void paintPreview(final int row, final int column) {
+        final int[] vet = this.centerIndexes(row, column);
+        final int newRow = vet[0];
+        final int newCol = vet[1];
+        this.getGameGrid().paintGrid(0, 0,
+                Matrices.mergeXY(
+                        Colors.colorMatrix(getCurrentStatus(), this.currentLevel.getCellTypeMatrix(),
+                                this.currentLevel.getEditableMatrix(), this.currentLevel.getEnvironmentMatrix()),
+                        newRow, newCol, Colors.statusToGray(this.getPattern())));
     }
 
     /**
@@ -181,7 +170,7 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
         }
         if (patternIsPlacable(row, column)) {
             super.placeCurrentPattern(row, column);
-        } else if (this.lastIsPresent) {
+        } else if (this.lastIsPresent && patternIsPlacable(lastRowPlacable, lastColPlacable)) {
             super.placeCurrentPattern(this.lastRowPlacable, this.lastColPlacable);
         }
     }

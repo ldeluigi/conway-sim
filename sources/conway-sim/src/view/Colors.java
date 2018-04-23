@@ -7,7 +7,9 @@ import java.util.function.Function;
 import core.campaign.CellType;
 import core.campaign.Editable;
 import core.model.Cell;
+import core.model.Environment;
 import core.model.Status;
+import core.utils.ListMatrix;
 import core.utils.Matrix;
 
 /**
@@ -123,4 +125,77 @@ public final class Colors {
     public static Matrix<Color> statusToBlack(final Matrix<Status> mat) {
         return mat.map(Colors.ALIVETOBLACK);
     }
+
+    /**
+     * @param status
+     *            The cell {@link Status} that represent the cell
+     * @return the color that the cell should have
+     */
+    public static Color cellNormalColor(final Status status) {
+        return Colors.cellColor(Editable.EDITABLE, CellType.NORMAL, status);
+    }
+
+    /**
+     * 
+     * @param statusMatrix
+     *            the current {@link Status} {@link Matrix}
+     * @param cellTypeMatrix
+     *            the matrix of {@link CellType}
+     * @param editableMatrix
+     *            the matrix of {@link Editable}
+     * @param environment
+     *            the {@link Environment}
+     * @return a Matrix<{@link Color}>, ready to be displayed
+     */
+    public static Matrix<Color> colorMatrix(final Matrix<Status> statusMatrix, final Matrix<CellType> cellTypeMatrix,
+            final Matrix<Editable> editableMatrix, final Environment environment) {
+        if (environment.getHeight() != statusMatrix.getHeight() || environment.getWidth() != statusMatrix.getWidth()
+                || environment.getHeight() != cellTypeMatrix.getHeight()
+                || environment.getWidth() != cellTypeMatrix.getWidth()
+                || environment.getHeight() != editableMatrix.getHeight()
+                || environment.getWidth() != editableMatrix.getWidth()) {
+            throw new IllegalArgumentException();
+        }
+        final Matrix<Color> colorMatrix = new ListMatrix<>(environment.getWidth(), environment.getHeight(), () -> null);
+        for (int row = 0; row < environment.getHeight(); row++) {
+            for (int col = 0; col < environment.getWidth(); col++) {
+                colorMatrix.set(row, col, Colors.cellColor(editableMatrix.get(row, col), cellTypeMatrix.get(row, col),
+                        statusMatrix.get(row, col)));
+            }
+        }
+        return colorMatrix;
+    }
+
+    /**
+     * 
+     * @param statusMatrix
+     *            the current {@link Status} {@link Matrix}
+     * @param cellTypeMatrix
+     *            the matrix of {@link CellType}
+     * @param environment
+     *            the {@link Environment}
+     * @return a Matrix<{@link Color}>, ready to be displayed
+     */
+    public static Matrix<Color> colorEditableMatrix(final Matrix<Status> statusMatrix,
+            final Matrix<CellType> cellTypeMatrix, final Environment environment) {
+        return Colors.colorMatrix(statusMatrix, cellTypeMatrix,
+                new ListMatrix<>(environment.getWidth(), environment.getHeight(), () -> null)
+                        .map(e -> Editable.EDITABLE),
+                environment);
+    }
+
+    /**
+     * 
+     * @param statusMatrix
+     *            the current {@link Status} {@link Matrix}
+     * @param environment
+     *            the {@link Environment}
+     * @return a Matrix<{@link Color}>, ready to be displayed
+     */
+    public static Matrix<Color> colorNormalMatrix(final Matrix<Status> statusMatrix, final Environment environment) {
+        return Colors.colorEditableMatrix(statusMatrix,
+                new ListMatrix<>(environment.getWidth(), environment.getHeight(), () -> null).map(e -> CellType.NORMAL),
+                environment);
+    }
+
 }

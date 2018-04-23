@@ -13,16 +13,21 @@ import view.swing.sandbox.GridPanel;
  */
 public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGridEditor {
 
+    /**
+     * 
+     */
     private static final Function<Status, Color> SELECT = s -> s.equals(Status.DEAD) ? Color.ORANGE : Color.RED;
+
     private boolean selectMode;
-    private boolean firstCoordinatePresent;
+    private boolean firstCoordinateIsPresent;
+    private boolean cutReady;
+
     private int lowX;
     private int lowY;
     private int hightX;
     private int hightY;
     private int lastRow;
     private int lastCol;
-    private boolean cutReady;
 
     /**
      * 
@@ -30,14 +35,6 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
      */
     public ExtendedGridEditorImpl(final GridPanel grid) {
         super(grid);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void changeSizes(final int horizontal, final int vertical) {
-        super.changeSizes(horizontal, vertical);
     }
 
     /**
@@ -61,15 +58,15 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     @Override
     public void hit(final int row, final int column) {
         if (selectMode) {
-            if (firstCoordinatePresent) {
+            if (firstCoordinateIsPresent) {
                 final int saveRow = lastRow;
                 final int saveCol = lastCol;
                 setFirstCoordinate(row, column);
                 showSelect(row, column, saveRow, saveCol);
-                firstCoordinatePresent = false;
+                firstCoordinateIsPresent = false;
             } else {
                 setFirstCoordinate(row, column);
-                firstCoordinatePresent = true;
+                firstCoordinateIsPresent = true;
                 cutReady = false;
             }
         } else {
@@ -92,7 +89,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     public void cancelSelectMode() {
         if (selectMode) {
             this.applyChanges();
-            firstCoordinatePresent = false;
+            firstCoordinateIsPresent = false;
             selectMode = false;
             cutReady = false;
         }
@@ -114,7 +111,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     private void showSelect(final int newRow, final int newCol, final int lastRow, final int lastCol) {
-        if (firstCoordinatePresent) {
+        if (firstCoordinateIsPresent) {
             this.applyChanges();
             final int sizeCol = Math.abs(lastCol - newCol);
             final int sizeRow =  Math.abs(lastRow - newRow);

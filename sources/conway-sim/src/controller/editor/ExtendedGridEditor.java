@@ -16,7 +16,7 @@ public interface ExtendedGridEditor extends SimpleGridEditor, PatternEditor {
 
     /**
      * Sets selectMode with enabled/disabled.
-     * If selectMode is enabled, you can't change the {@link Status} cell, but you can see what is ready for the cut.
+     * If selectMode is enabled, you can't change the {@link Status} of cells, but you can see/select what is ready for the cut.
      * @param flag
      *            if flag is true selectMode is set enabled
      */
