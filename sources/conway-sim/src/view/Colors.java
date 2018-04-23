@@ -24,7 +24,7 @@ public final class Colors {
             : Color.WHITE;
     private static final Function<Status, Color> ALIVETOBLACK = s -> STATUSTOCOLOR.apply(s, Color.BLACK);
     private static final Function<Status, Color> ALIVETOGRAY = s -> STATUSTOCOLOR.apply(s, Color.GRAY);
-    private static final Function<Cell, Color> CELLTOCOLOR = c -> ALIVETOBLACK.apply(c.getStatus());
+    private static final Function<Cell, Color> CELLTOCOLORS = c -> ALIVETOBLACK.apply(c.getStatus());
 
     private Colors() {
     }
@@ -39,26 +39,20 @@ public final class Colors {
      * @return the result
      */
     public static Color blend(final Color a, final Color b) {
-        return new Color(
-                (a.getRed() * a.getAlpha() + b.getRed() * b.getAlpha())
-                        / (a.getAlpha() + b.getAlpha()),
-                (a.getGreen() * a.getAlpha() + b.getGreen() * b.getAlpha())
-                        / (a.getAlpha() + b.getAlpha()),
-                (a.getBlue() * a.getAlpha() + b.getBlue() * b.getAlpha())
-                        / (a.getAlpha() + b.getAlpha()),
+        return new Color((a.getRed() * a.getAlpha() + b.getRed() * b.getAlpha()) / (a.getAlpha() + b.getAlpha()),
+                (a.getGreen() * a.getAlpha() + b.getGreen() * b.getAlpha()) / (a.getAlpha() + b.getAlpha()),
+                (a.getBlue() * a.getAlpha() + b.getBlue() * b.getAlpha()) / (a.getAlpha() + b.getAlpha()),
                 (a.getAlpha() + b.getAlpha()) / 2);
     }
 
     /**
      * 
      * @param editable
-     *                The status that represent if a cell is editable or not
+     *            The status that represent if a cell is editable or not
      * @param cellType
-     *                The cell type,
-     *                Normal, Gold, Wall...
+     *            The cell type, Normal, Gold, Wall...
      * @param status
-     *                The cell status,
-     *                Alive or Dead
+     *            The cell status, Alive or Dead
      * @return the color that the cell should have
      */
     public static Color cellColor(final Editable editable, final CellType cellType, final Status status) {
@@ -88,26 +82,32 @@ public final class Colors {
     /**
      * Gives back the color representing the given Status.
      *
-     * @param s the Status to be mapped
-     * @return the Color representing that Status 
+     * @param s
+     *            the Status to be mapped
+     * @return the Color representing that Status
      */
     public static Color colorSingleCell(final Status s) {
         return Colors.ALIVETOBLACK.apply(s);
     }
 
     /**
-     * Gives back a matrix of colors (Black and White) painting it from the given one of Cell.
+     * Gives back a matrix of colors (Black and White) painting it from the given
+     * one of Cell.
      * 
-     * @param mat a Matrix of Cell to be mapped
+     * @param mat
+     *            a Matrix of Cell to be mapped
      * @return the resulting Matrix of Color
      */
     public static Matrix<Color> cellToColor(final Matrix<Cell> mat) {
-        return mat.map(Colors.CELLTOCOLOR);
+        return mat.map(Colors.CELLTOCOLORS);
     }
 
     /**
-     * Gives back a matrix of colors (Gray)  painting it from the given one of Status.
-     * @param mat a Matrix of Status to be mapped
+     * Gives back a matrix of colors (Gray) painting it from the given one of
+     * Status.
+     * 
+     * @param mat
+     *            a Matrix of Status to be mapped
      * @return the resulting Matrix of Color
      */
     public static Matrix<Color> statusToGray(final Matrix<Status> mat) {
@@ -115,9 +115,11 @@ public final class Colors {
     }
 
     /**
-     * Gives back a matrix of colors (Black) painting it from the given one of Status.
+     * Gives back a matrix of colors (Black) painting it from the given one of
+     * Status.
      * 
-     * @param mat a Matrix of Status to be mapped
+     * @param mat
+     *            a Matrix of Status to be mapped
      * @return the resulting Matrix of Color
      */
     public static Matrix<Color> statusToBlack(final Matrix<Status> mat) {

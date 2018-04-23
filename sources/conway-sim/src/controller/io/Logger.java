@@ -14,8 +14,7 @@ public final class Logger {
 
     static {
         try {
-            out = new PrintStream(new FileOutputStream(ResourceLoader.loadString("log.file.name")),
-                    true);
+            out = new PrintStream(new FileOutputStream(ResourceLoader.loadString("log.file.name")), true);
         } catch (FileNotFoundException e) {
             out = System.err;
             out.println("Couldn't create a log file in " + System.getProperty("user.dir"));
@@ -28,7 +27,8 @@ public final class Logger {
     }
 
     /**
-     * Logs the message to a file if possible or else to {@link System#err}, with the current time.
+     * Logs the message to a file if possible or else to {@link System#err}, with
+     * the current time.
      * 
      * @param message
      *            the message to log
@@ -46,9 +46,10 @@ public final class Logger {
     public static void log(final String message) {
         out.println(message);
     }
- 
+
     /**
-     * Prints (formatted) the {@link Throwable} stack trace to a file if possible or else to {@link System#err}.
+     * Prints (formatted) the {@link Throwable} stack trace to a file if possible or
+     * else to {@link System#err}.
      * 
      * @param e
      *            the throwable to log

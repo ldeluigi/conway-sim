@@ -64,8 +64,8 @@ public final class MainGUI implements DesktopGUI {
             }
         });
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.frame.setMinimumSize(new Dimension(screenSize.width / MINIMUM_FRAME_RATIO,
-                screenSize.height / MINIMUM_FRAME_RATIO));
+        this.frame.setMinimumSize(
+                new Dimension(screenSize.width / MINIMUM_FRAME_RATIO, screenSize.height / MINIMUM_FRAME_RATIO));
         this.frame.setSize(screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2,
                 screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
         this.frame.setLocationRelativeTo(null);
@@ -81,8 +81,7 @@ public final class MainGUI implements DesktopGUI {
         }
         this.background.setLayer(JDesktopPane.DEFAULT_LAYER);
         this.background.setEnabled(false);
-        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background
-                .getUI());
+        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background.getUI());
         basicInternalFrameUI.setNorthPane(null);
         this.background.setBorder(null);
         this.background.setVisible(true);
@@ -97,7 +96,8 @@ public final class MainGUI implements DesktopGUI {
      * A method that changes the main view of the application (background).
      * 
      * @param viewPanel
-     *            the panel that will be shown as main screen on the application desktop.
+     *            the panel that will be shown as main screen on the application
+     *            desktop.
      */
     @Override
     public void setView(final JComponent viewPanel) {

@@ -5,7 +5,8 @@ import core.model.SimpleCell;
 import core.model.Status;
 
 /**
- * Implementation of {@link Cell} which is always alive or dead and can't be changed.
+ * Implementation of {@link Cell} which is always alive or dead and can't be
+ * changed.
  */
 public class NeverChangingCell extends SimpleCell {
 
@@ -25,7 +26,8 @@ public class NeverChangingCell extends SimpleCell {
     }
 
     /**
-     * Is the method to change the status of this cell. Won't work as this change is not supported.
+     * Is the method to change the status of this cell. Won't work as this change is
+     * not supported.
      * 
      * @param nextStatus
      */

@@ -25,8 +25,9 @@ import core.model.Status;
 import view.swing.menu.MenuSettings;
 
 /**
- * This is the panel that contain all the Generation control for the application. Button start,
- * play, pause, end and time management goto, next and previous and the speed option.
+ * This is the panel that contain all the Generation control for the
+ * application. Button start, play, pause, end and time management goto, next
+ * and previous and the speed option.
  * 
  */
 public class GenerationPanel extends JPanel {
@@ -59,8 +60,8 @@ public class GenerationPanel extends JPanel {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
-     * This variable is used only in case of level mode,
-     * level mode is usable only if a runnable is given in the constructor.
+     * This variable is used only in case of level mode, level mode is usable only
+     * if a runnable is given in the constructor.
      */
     private static final int REPETITION_FOR_WIN = 3;
     private boolean isLevelMode;
@@ -133,8 +134,7 @@ public class GenerationPanel extends JPanel {
 
         northR.add(spinner); // to use the go to button
 
-        this.setFont(
-                new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
+        this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
         // Start conditions.
         bStart.setEnabled(true);
@@ -152,10 +152,8 @@ public class GenerationPanel extends JPanel {
         bPlay.addActionListener(e -> this.resume());
         bPause.addActionListener(e -> this.pause());
         bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
-        bPrev.addActionListener(
-                e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
-        bNext.addActionListener(
-                e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
+        bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
+        bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (bStart.isEnabled()) {
                 bStart.doClick();
@@ -167,14 +165,10 @@ public class GenerationPanel extends JPanel {
         });
 
         // Key listener of the panel
-        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE,
-                () -> bEnd.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT,
-                () -> bNext.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT,
-                () -> bPrev.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER,
-                () -> bGoTo.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> bEnd.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> bNext.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> bPrev.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER, () -> bGoTo.doClick());
         KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP,
                 () -> speedSlider.setValue(speedSlider.getValue() + 1));
         KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN,
@@ -187,10 +181,10 @@ public class GenerationPanel extends JPanel {
      * @param view
      *            the controller of the generation
      * @param runnableVictory
-     *            the {@link Runnable} that is started when all the {@link GameWinningCell} are dead
-     *            for 3 consecutive generations
+     *            the {@link Runnable} that is started when all the
+     *            {@link GameWinningCell} are dead for 3 consecutive generations
      *
-     * If level is not declared, the game have no winning condition.
+     *            If level is not declared, the game have no winning condition.
      */
     public GenerationPanel(final AbstractSandbox view, final Runnable runnableVictory) {
         this(view);
@@ -236,12 +230,10 @@ public class GenerationPanel extends JPanel {
             this.view.getGridEditor().draw(this.generationController.getCurrentElement());
         }
         int general = 0;
-        //LEVEL OPTION
+        // LEVEL OPTION
         if (isLevelMode && !SwingUtilities.isEventDispatchThread()) {
             gold = 0;
-            general = (int) this.generationController.getCurrentElement().getCellMatrix()
-                    .stream()
-                    .parallel()
+            general = (int) this.generationController.getCurrentElement().getCellMatrix().stream().parallel()
                     .filter(cell -> cell.getStatus().equals(Status.ALIVE)).peek(e -> {
                         if (e.code() == GameWinningCell.GAME_WINNING_CODE) {
                             incGold();
@@ -256,10 +248,10 @@ public class GenerationPanel extends JPanel {
                 });
                 this.counterLevel = 0;
             }
-            //END LEVEL OPTION
+            // END LEVEL OPTION
         } else {
             general = this.generationController.getCurrentElement().getCellMatrix().stream()
-            .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
+                    .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
         }
         final int generalF = general;
         this.view.scheduleGUIUpdate(() -> {
@@ -275,8 +267,8 @@ public class GenerationPanel extends JPanel {
 
     private void goTo(final Long value) {
         if (value < 0) {
-            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo")
-                    .replaceAll("end", value.toString()).replaceAll("start",
+            JOptionPane.showMessageDialog(this,
+                    ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
                             this.generationController.getCurrentNumberElement().toString()));
         } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
             this.bPlay.setEnabled(false);
@@ -309,8 +301,9 @@ public class GenerationPanel extends JPanel {
     }
 
     /**
-     * This method terminate the execution of the generation and refresh the first status.
-     * Override this and add eventual action that should be done with the end of the game mode and the beginning of the edit mode. 
+     * This method terminate the execution of the generation and refresh the first
+     * status. Override this and add eventual action that should be done with the
+     * end of the game mode and the beginning of the edit mode.
      */
     protected void end() {
         this.view.getGridEditor().setEnabled(true);
@@ -332,8 +325,9 @@ public class GenerationPanel extends JPanel {
     }
 
     /**
-     * This method start the execution of the generation and set button enable true/false.
-     * Override this and add eventual action that should be done with the start of the game mode. 
+     * This method start the execution of the generation and set button enable
+     * true/false. Override this and add eventual action that should be done with
+     * the start of the game mode.
      */
     protected void start() {
         this.view.getGridEditor().setEnabled(false);

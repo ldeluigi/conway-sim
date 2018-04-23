@@ -97,14 +97,13 @@ public class GenerationControllerImpl implements GenerationController {
         } else if (generationNumber > this.getCurrentNumberElement()) {
             final Long difference = generationNumber - this.getCurrentNumberElement();
             final int threadNumber = Runtime.getRuntime().availableProcessors();
-            final Generation valueGeneration = Generations.compute(difference.intValue(),
-                    this.getCurrentElement(), threadNumber);
+            final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentElement(),
+                    threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
         } else {
-            final Long value = this.oldGeneration.getSavedState().keySet().stream()
-                    .filter(l -> l <= generationNumber).max((x, y) -> Long.compare(x, y))
-                    .orElse(-1L);
+            final Long value = this.oldGeneration.getSavedState().keySet().stream().filter(l -> l <= generationNumber)
+                    .max((x, y) -> Long.compare(x, y)).orElse(-1L);
             Generation valueGeneration;
             Long difference;
             if (value.equals(-1L)) {
@@ -115,16 +114,14 @@ public class GenerationControllerImpl implements GenerationController {
             difference = generationNumber - value;
             if (difference.longValue() != 0L) {
                 final int threadNumber = Runtime.getRuntime().availableProcessors();
-                valueGeneration = Generations.compute(difference.intValue(), valueGeneration,
-                        threadNumber);
+                valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
             }
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
             this.oldGeneration.removeAllElemsAfter(this.getCurrentNumberElement());
         }
-        this.savedState.removeAll(
-                savedState.stream().filter(l -> l > 1 && l > this.getCurrentNumberElement())
-                        .collect(Collectors.toList()));
+        this.savedState.removeAll(savedState.stream().filter(l -> l > 1 && l > this.getCurrentNumberElement())
+                .collect(Collectors.toList()));
         this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 

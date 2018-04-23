@@ -31,7 +31,8 @@ public class RecipeLoader {
     private static final String DEFAULTRECIPEFOLDER = "/recipebook/";
 
     /**
-     * This class parses all the files in the preset folder. than it loads it in the recipebook.
+     * This class parses all the files in the preset folder. than it loads it in the
+     * recipebook.
      * 
      * @throws IOException
      *             .
@@ -68,8 +69,7 @@ public class RecipeLoader {
                             testLine = testLine.split("#N ")[1];
                         }
                         if (content != null && testLine != null && name != null) {
-                            this.defaultbook.addRecipe(content,
-                                    flagName ? testLine : name.replace(RLE_EXT, ""));
+                            this.defaultbook.addRecipe(content, flagName ? testLine : name.replace(RLE_EXT, ""));
                         }
                     } catch (IOException e) {
                         Logger.logThrowable(e);
@@ -130,8 +130,7 @@ public class RecipeLoader {
                     try {
                         final String content = String.join("\n",
                                 Files.readAllLines(filepath, Charset.forName("UTF-8")));
-                        custombook2.addRecipe(content,
-                                flagName ? testLine : file.getName().replace(RLE_EXT, ""));
+                        custombook2.addRecipe(content, flagName ? testLine : file.getName().replace(RLE_EXT, ""));
                     } catch (IOException e) {
                         Logger.logThrowable(e);
                     }

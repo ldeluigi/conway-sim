@@ -11,8 +11,8 @@ import java.util.ResourceBundle.Control;
 import javax.imageio.ImageIO;
 
 /**
- * Resource loader. Set the default {@link Locale} to use it as default language of string
- * properties loading.
+ * Resource loader. Set the default {@link Locale} to use it as default language
+ * of string properties loading.
  */
 public final class ResourceLoader {
 
@@ -63,8 +63,7 @@ public final class ResourceLoader {
             addBufferedImage(resource, result);
             return result;
         } catch (IOException e) {
-            throw new IllegalStateException(
-                    "Resource " + resource + " not found (or not accessible) in " + path);
+            throw new IllegalStateException("Resource " + resource + " not found (or not accessible) in " + path);
         }
     }
 

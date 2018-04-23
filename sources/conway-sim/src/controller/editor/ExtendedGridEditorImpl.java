@@ -6,10 +6,11 @@ import java.util.function.Function;
 import core.model.Status;
 import core.utils.Matrices;
 import core.utils.Matrix;
-import view.swing.sandbox.GridPanel;
+import view.swing.GridPanel;
 
 /**
- * This class extends {@link GridEditorImpl} to allow the selection and the cut of a pattern of the grid.
+ * This class extends {@link GridEditorImpl} to allow the selection and the cut
+ * of a pattern of the grid.
  */
 public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGridEditor {
 
@@ -26,7 +27,8 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
 
     /**
      * 
-     * @param grid is the initial grid.
+     * @param grid
+     *            is the initial grid.
      */
     public ExtendedGridEditorImpl(final GridPanel grid) {
         super(grid);
@@ -41,9 +43,8 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     /**
-     * Important:
-     *            call it only if cutReady is true,
-     *            otherwise throw new {@link IllegalStateException}.
+     * Important: call it only if cutReady is true, otherwise throw new
+     * {@link IllegalStateException}.
      */
     @Override
     public Matrix<Status> cutMatrix() {
@@ -54,9 +55,8 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     }
 
     /**
-     * If selectMode is enabled
-     *               it controls the selection and the cut of the pattern,
-     * otherwise {@inheritDoc}.
+     * If selectMode is enabled it controls the selection and the cut of the
+     * pattern, otherwise {@inheritDoc}.
      */
     @Override
     public void hit(final int row, final int column) {
@@ -106,7 +106,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
         return this.cutReady;
     }
 
-    private void setFirstCoordinate(final int row, final int col) { //when click
+    private void setFirstCoordinate(final int row, final int col) { // when click
         this.applyChanges();
         this.getGameGrid().displaySingleCell(row, col, SELECT.apply(this.getCurrentStatus().get(row, col)));
         lastCol = col;
@@ -117,7 +117,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
         if (firstCoordinatePresent) {
             this.applyChanges();
             final int sizeCol = Math.abs(lastCol - newCol);
-            final int sizeRow =  Math.abs(lastRow - newRow);
+            final int sizeRow = Math.abs(lastRow - newRow);
             if (newRow < lastRow && newCol < lastCol) {
                 lowX = lastRow - sizeRow;
                 lowY = lastCol - sizeCol;

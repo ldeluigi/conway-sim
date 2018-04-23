@@ -44,8 +44,8 @@ public class BookFrame extends JInternalFrame {
     private String selectedList = DEFAULT;
 
     /**
-     * The constructor shows and fills the JList(s) with the default patterns and the user added
-     * ones.
+     * The constructor shows and fills the JList(s) with the default patterns and
+     * the user added ones.
      * 
      * @param patternE
      *            the {@link PatternEditor}
@@ -77,8 +77,7 @@ public class BookFrame extends JInternalFrame {
         defaultList.setLayoutOrientation(JList.VERTICAL);
         defaultList.setVisibleRowCount(-1);
         final JScrollPane defaultListPane = new JScrollPane(defaultList);
-        final TitledBorder defaultBookBord = new TitledBorder(
-                ResourceLoader.loadString("book.defaultbtitle"));
+        final TitledBorder defaultBookBord = new TitledBorder(ResourceLoader.loadString("book.defaultbtitle"));
         defaultListPane.setBorder(defaultBookBord);
 
         defaultList.addMouseListener(new MouseListener() {
@@ -86,14 +85,12 @@ public class BookFrame extends JInternalFrame {
                 setSelectedItem(defaultList.getSelectedValue());
                 setSelectedList(DEFAULT);
                 final Matrix<Status> mat = new RLEConvert(
-                        rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent())
-                                .convert();
+                        rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(),
-                        pg.getGridHeight(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
+                        () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
-                pg.paintGrid(0, 0,
-                        newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+                pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
 
             @Override
@@ -119,22 +116,19 @@ public class BookFrame extends JInternalFrame {
         customList.setLayoutOrientation(JList.VERTICAL);
         customList.setVisibleRowCount(-1);
         final JScrollPane customListPane = new JScrollPane(customList);
-        final TitledBorder customBookBord = new TitledBorder(
-                ResourceLoader.loadString("book.custombtitle"));
+        final TitledBorder customBookBord = new TitledBorder(ResourceLoader.loadString("book.custombtitle"));
         customListPane.setBorder(customBookBord);
         customList.addMouseListener(new MouseListener() {
             public void mousePressed(final MouseEvent e) {
                 setSelectedItem(customList.getSelectedValue());
                 setSelectedList(CUSTOM);
                 final Matrix<Status> mat = new RLEConvert(
-                        rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent())
-                                .convert();
+                        rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
                 pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(),
-                        pg.getGridHeight(), () -> Status.DEAD);
+                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
+                        () -> Status.DEAD);
                 Matrices.mergeXY(newmat, 0, 0, mat);
-                pg.paintGrid(0, 0,
-                        newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+                pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
             }
 
             @Override
@@ -162,13 +156,9 @@ public class BookFrame extends JInternalFrame {
         final ActionListener place = e -> {
             final Matrix<Status> mat;
             if (getSelectedList() == DEFAULT) {
-                mat = new RLEConvert(
-                        rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent())
-                                .convert();
+                mat = new RLEConvert(rl.getDefaultBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             } else {
-                mat = new RLEConvert(
-                        rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent())
-                                .convert();
+                mat = new RLEConvert(rl.getCustomBook().getRecipeByName(getSelectedItem()).getContent()).convert();
             }
             patternE.addPatternToPlace(mat);
             this.doDefaultCloseAction();

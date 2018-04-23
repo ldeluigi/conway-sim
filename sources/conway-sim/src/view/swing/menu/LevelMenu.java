@@ -90,22 +90,21 @@ public class LevelMenu extends JPanel {
         final JPanel statusPanel = new JPanel(new FlowLayout());
         statusPanel.setOpaque(false);
 
-        this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
-                INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
+        this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         statusPanel.add(gridPanel);
-        gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / 4, this.mainGUI.getCurrentHeight() / 4));
+        gridPanel.setPreferredSize(
+                new Dimension(this.mainGUI.getCurrentWidth() / 4, this.mainGUI.getCurrentHeight() / 4));
         central.add(statusPanel);
         central.add(rightPanel);
 
         final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         exitPanel.setOpaque(false);
-        final JButton bStart = SandboxTools
-                .newJButton(ResourceLoader.loadString("level.button.start"), this.getFont());
+        final JButton bStart = SandboxTools.newJButton(ResourceLoader.loadString("level.button.start"), this.getFont());
         bStart.setFocusable(false);
         exitPanel.add(bStart);
 
-        final JButton bReturn = SandboxTools
-                .newJButton(ResourceLoader.loadString("level.button.return"), this.getFont());
+        final JButton bReturn = SandboxTools.newJButton(ResourceLoader.loadString("level.button.return"),
+                this.getFont());
         bReturn.setFocusable(false);
         exitPanel.add(bReturn);
         this.add(central, BorderLayout.CENTER);
@@ -120,8 +119,7 @@ public class LevelMenu extends JPanel {
 
     @Override
     public final void paintComponent(final Graphics g) {
-        g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(),
-                this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     private JPanel buildRightLeftButtonPanel() {
@@ -142,19 +140,20 @@ public class LevelMenu extends JPanel {
     }
 
     private void previousPage() {
-        cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() - 1 < 0
-                ? 0 : cardPanel.getSelectedIndex() - 1);
+        cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() - 1 < 0 ? 0 : cardPanel.getSelectedIndex() - 1);
     }
 
     private void nextPage() {
-        cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() + 1 >= cardPanel.getComponentCount()
-                ? cardPanel.getSelectedIndex() : cardPanel.getSelectedIndex() + 1);
+        cardPanel.setSelectedIndex(
+                cardPanel.getSelectedIndex() + 1 >= cardPanel.getComponentCount() ? cardPanel.getSelectedIndex()
+                        : cardPanel.getSelectedIndex() + 1);
     }
 
     private void start() {
         if (this.currentLevel != 0) {
             this.mainGUI.setView(new LoadingScreen());
-            SwingUtilities.invokeLater(() -> this.mainGUI.setView(SandboxBuilder.buildLevelSandbox(mainGUI, currentLevel)));
+            SwingUtilities
+                    .invokeLater(() -> this.mainGUI.setView(SandboxBuilder.buildLevelSandbox(mainGUI, currentLevel)));
         }
     }
 
@@ -169,7 +168,7 @@ public class LevelMenu extends JPanel {
                 level.getCellTypeMatrix().getHeight(), () -> null);
         for (int row = 0; row < level.getEnvironmentMatrix().getHeight(); row++) {
             for (int col = 0; col < level.getEnvironmentMatrix().getWidth(); col++) {
-                colorMatrix.set(row, col, Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col), 
+                colorMatrix.set(row, col, Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col),
                         level.getInitialStateMatrix().get(row, col)));
             }
         }
@@ -187,8 +186,7 @@ public class LevelMenu extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         gridLevel.setOpaque(false);
-        for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber
-                + LEVEL_FOR_PAGE; i++) {
+        for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber + LEVEL_FOR_PAGE; i++) {
             if (i > ResourceLoader.loadConstantInt(LEVEL_NUMBER) - 1) {
                 return gridLevel;
             } else {

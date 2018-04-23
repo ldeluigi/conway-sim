@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.MouseListener;
 import java.util.function.BiFunction;
 import java.util.stream.IntStream;
 
@@ -15,9 +14,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
+import controller.editor.CMouseListener;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
+import view.swing.GridPanel;
 import view.swing.menu.MenuSettings;
 
 /**
@@ -61,8 +62,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
         this.maxCellSize = startingCellSize * MAX_CELL_SIZE_RATIO;
         this.minCellSize = Math.max(startingCellSize / MIN_CELL_SIZE_RATIO, MIN_CELL_SIZE);
         this.cellSize = new Dimension(startingCellSize, startingCellSize);
-        this.labelMatrix = new ListMatrix<>(width, height,
-                () -> new JCell(this.cellSize, Color.WHITE));
+        this.labelMatrix = new ListMatrix<>(width, height, () -> new JCell(this.cellSize, Color.WHITE));
         this.grid = new JPanel(new GridBagLayout());
         this.grid.setOpaque(false);
         c.fill = GridBagConstraints.NONE;
@@ -109,8 +109,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
             throw new IllegalStateException("Final Dimensions are 0 or less.");
         }
         this.grid.setVisible(false);
-        this.cellSize.setSize(this.cellSize.getWidth() + byPixels,
-                this.cellSize.getHeight() + byPixels);
+        this.cellSize.setSize(this.cellSize.getWidth() + byPixels, this.cellSize.getHeight() + byPixels);
         this.labelMatrix.stream().forEach(label -> {
             label.setSize(this.cellSize);
             label.setPreferredSize(this.cellSize);
@@ -124,8 +123,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      */
     @Override
     public void notifyToUser(final String s) {
-        JOptionPane.showMessageDialog(this, s, "Error choosing pattern",
-                JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, s, "Error choosing pattern", JOptionPane.WARNING_MESSAGE);
     }
 
     private void setBorder(final JComponent jComponent, final int row, final int col, final Color c,
@@ -134,16 +132,13 @@ public class JGridPanel extends JScrollPane implements GridPanel {
             if (col == 0) {
                 jComponent.setBorder(BorderFactory.createLineBorder(c, borderWidth));
             } else {
-                jComponent.setBorder(BorderFactory.createMatteBorder(borderWidth, 0, borderWidth,
-                        borderWidth, c));
+                jComponent.setBorder(BorderFactory.createMatteBorder(borderWidth, 0, borderWidth, borderWidth, c));
             }
         } else {
             if (col == 0) {
-                jComponent.setBorder(BorderFactory.createMatteBorder(0, borderWidth, borderWidth,
-                        borderWidth, c));
+                jComponent.setBorder(BorderFactory.createMatteBorder(0, borderWidth, borderWidth, borderWidth, c));
             } else {
-                jComponent.setBorder(
-                        BorderFactory.createMatteBorder(0, 0, borderWidth, borderWidth, c));
+                jComponent.setBorder(BorderFactory.createMatteBorder(0, 0, borderWidth, borderWidth, c));
             }
         }
     }
@@ -154,9 +149,11 @@ public class JGridPanel extends JScrollPane implements GridPanel {
      * @param colorMatrix
      *            is the matrix containing the colors to paint.
      * @param startRow
-     *            is the vertical index explaining where the colorMatrix should start being applied.
+     *            is the vertical index explaining where the colorMatrix should
+     *            start being applied.
      * @param startCol
-     *            is the horizontal index where the colorMatrix should start being applied.
+     *            is the horizontal index where the colorMatrix should start being
+     *            applied.
      */
     @Override
     public void paintGrid(final int startRow, final int startCol, final Matrix<Color> colorMatrix) {
@@ -168,14 +165,16 @@ public class JGridPanel extends JScrollPane implements GridPanel {
     }
 
     /**
-     * Is the method to invoke when a single cell changes instead of repainting the whole grid.
+     * Is the method to invoke when a single cell changes instead of repainting the
+     * whole grid.
      * 
      * @param row
      *            is the vertical index of the cell
      * @param column
      *            is the horizontal index of the cell
      * @param col
-     *            is the color to be set as background for the given cell at (row,column) position
+     *            is the color to be set as background for the given cell at
+     *            (row,column) position
      */
     @Override
     public void displaySingleCell(final int row, final int column, final Color col) {
@@ -189,18 +188,18 @@ public class JGridPanel extends JScrollPane implements GridPanel {
     }
 
     /**
-     * Is the method to invoke in order to add an observer to the components of the grid.
+     * Is the method to invoke in order to add an observer to the components of the
+     * grid.
      * 
      * @param listenerDispencer
      *            is the BiFunction dispensing the listener.
      */
     @Override
-    public void addListenerToGrid(
-            final BiFunction<Integer, Integer, MouseListener> listenerDispencer) {
+    public void addListenerToGrid(final BiFunction<Integer, Integer, CMouseListener> listenerDispencer) {
         for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
                 if (this.labelMatrix.get(i, j).getMouseListeners().length == 0) {
-                    this.labelMatrix.get(i, j).addMouseListener(listenerDispencer.apply(i, j));
+                    this.labelMatrix.get(i, j).addMouseListener(new SwingMouseListener(listenerDispencer.apply(i, j)));
                 }
             }
         }
@@ -243,8 +242,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
         }
     }
 
-    private void displayColors(final int startRow, final int startColumn,
-            final Matrix<Color> colorMatrix) {
+    private void displayColors(final int startRow, final int startColumn, final Matrix<Color> colorMatrix) {
         if (colorMatrix != null && startRow >= 0 && startColumn >= 0
                 && this.labelMatrix.getHeight() >= colorMatrix.getHeight() + startRow
                 && this.labelMatrix.getWidth() >= colorMatrix.getWidth() + startColumn) {
@@ -269,28 +267,23 @@ public class JGridPanel extends JScrollPane implements GridPanel {
         if (this.labelMatrix.getWidth() < horizontal) {
             if (this.labelMatrix.getHeight() < vertical) {
                 this.labelMatrix = Matrices.mergeXY(
-                        new ListMatrix<>(horizontal, vertical,
-                                () -> new JCell(this.cellSize, Color.WHITE)),
-                        0, 0, this.labelMatrix);
+                        new ListMatrix<>(horizontal, vertical, () -> new JCell(this.cellSize, Color.WHITE)), 0, 0,
+                        this.labelMatrix);
             } else {
-                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical - 1, 0,
-                        this.labelMatrix.getWidth() - 1);
+                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical - 1, 0, this.labelMatrix.getWidth() - 1);
                 this.labelMatrix = Matrices.mergeXY(
-                        new ListMatrix<>(horizontal, vertical,
-                                () -> new JCell(this.cellSize, Color.WHITE)),
-                        0, 0, this.labelMatrix);
+                        new ListMatrix<>(horizontal, vertical, () -> new JCell(this.cellSize, Color.WHITE)), 0, 0,
+                        this.labelMatrix);
             }
         } else {
             if (this.labelMatrix.getHeight() < vertical) {
-                this.labelMatrix = Matrices.cut(this.labelMatrix, 0,
-                        this.labelMatrix.getHeight() - 1, 0, horizontal - 1);
-                this.labelMatrix = Matrices.mergeXY(
-                        new ListMatrix<>(horizontal, vertical,
-                                () -> new JCell(this.cellSize, Color.WHITE)),
-                        0, 0, this.labelMatrix);
-            } else {
-                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical - 1, 0,
+                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, this.labelMatrix.getHeight() - 1, 0,
                         horizontal - 1);
+                this.labelMatrix = Matrices.mergeXY(
+                        new ListMatrix<>(horizontal, vertical, () -> new JCell(this.cellSize, Color.WHITE)), 0, 0,
+                        this.labelMatrix);
+            } else {
+                this.labelMatrix = Matrices.cut(this.labelMatrix, 0, vertical - 1, 0, horizontal - 1);
             }
         }
         this.claspLabels();
@@ -302,8 +295,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
                 c.gridx = j;
                 c.gridy = i;
-                JGridPanel.this.setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor,
-                        this.borderWidth);
+                JGridPanel.this.setBorder(this.labelMatrix.get(i, j), i, j, this.borderColor, this.borderWidth);
                 this.grid.add(this.labelMatrix.get(i, j), c);
             }
         }

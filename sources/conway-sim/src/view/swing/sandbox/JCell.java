@@ -30,8 +30,9 @@ public class JCell extends JComponent {
     }
 
     /**
-     * Sets {@link Graphics} color, draws a rectangle with the same color as background, calls
-     * paintBorder on the {@link javax.swing.border.Border Border}.
+     * Sets {@link Graphics} color, draws a rectangle with the same color as
+     * background, calls paintBorder on the {@link javax.swing.border.Border
+     * Border}.
      */
     @Override
     public void paintComponent(final Graphics g) {

@@ -30,8 +30,8 @@ public final class KeyListenerFactory {
      * @param event
      *            the event
      */
-    public static void addKeyListener(final JComponent component, final String name,
-            final int keyCode, final int modifier, final Runnable event) {
+    public static void addKeyListener(final JComponent component, final String name, final int keyCode,
+            final int modifier, final Runnable event) {
         final List<InputMap> inputMap = new LinkedList<>();
         inputMap.add(component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT));
         final ActionMap actionMap = component.getActionMap();
@@ -60,8 +60,8 @@ public final class KeyListenerFactory {
      * @param event
      *            the event
      */
-    public static void addKeyListener(final JComponent component, final String name,
-            final int keyCode, final Runnable event) {
+    public static void addKeyListener(final JComponent component, final String name, final int keyCode,
+            final Runnable event) {
         KeyListenerFactory.addKeyListener(component, name, keyCode, 0, event);
     }
 
