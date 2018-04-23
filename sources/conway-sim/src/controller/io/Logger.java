@@ -10,25 +10,11 @@ import java.time.LocalDateTime;
  */
 public final class Logger {
 
-    private static PrintStream out;
-
-    static {
-        try {
-            out = new PrintStream(new FileOutputStream(ResourceLoader.loadString("log.file.name")), true);
-        } catch (FileNotFoundException e) {
-            out = System.err;
-            out.println("Couldn't create a log file in " + System.getProperty("user.dir"));
-            out.println("Stack trace:");
-            e.printStackTrace(out);
-        }
-    }
-
     private Logger() {
     }
 
     /**
-     * Logs the message to a file if possible or else to {@link System#err}, with
-     * the current time.
+     * Logs the message to a file if possible or else to {@link System#err}, with the current time.
      * 
      * @param message
      *            the message to log
@@ -44,12 +30,14 @@ public final class Logger {
      *            the message to log
      */
     public static void log(final String message) {
-        out.println(message);
+        try (PrintStream out = out()) {
+            out.println(message);
+        } catch (FileNotFoundException e) {
+            err().println(message);
+        }
     }
 
     /**
-     * Prints (formatted) the {@link Throwable} stack trace to a file if possible or
-     * else to {@link System#err}.
      * Prints (formatted) the {@link Throwable} stack trace to a file if possible or else to
      * {@link System#err}.
      * 
@@ -57,7 +45,6 @@ public final class Logger {
      *            the throwable to log
      */
     public static void logThrowable(final Throwable e) {
-        e.printStackTrace(out);
         try (PrintStream out = out()) {
             e.printStackTrace(out);
         } catch (FileNotFoundException e1) {
