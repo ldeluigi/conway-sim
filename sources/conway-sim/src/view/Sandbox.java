@@ -1,12 +1,12 @@
 package view;
 
-import javax.swing.JButton;
-
 import controller.editor.PatternEditor;
 
 /**
- * These are the method that were necessary to the implementation of a panel that contained all the main functions in the swing package.
- * More precisely this panel allowed to edit a grid, show generation computing and control of it, grid resize, clear and book integration.
+ * These are the method that were necessary to the implementation of a panel
+ * that contained all the main functions in the swing package. More precisely
+ * this panel allowed to edit a grid, show generation computing and control of
+ * it, grid resize, clear and book integration.
  */
 public interface Sandbox extends UpdateScheduler {
     /**
@@ -23,11 +23,12 @@ public interface Sandbox extends UpdateScheduler {
     void setButtonClearEnabled(boolean flag);
 
     /**
-     * Enables clear button to be clicked by the user.
+     * Set the book button enable or disable.
      * 
-     * @return the book button
+     * @param flag
+     *            true the button is enable false the button is disable.
      */
-    JButton getButtonBook();
+    void setButtonBookEnable(boolean flag);
 
     /**
      * Gets the editor used to handle the grid and returns it.
@@ -37,7 +38,7 @@ public interface Sandbox extends UpdateScheduler {
     PatternEditor getGridEditor();
 
     /**
-     * Refreshes generation panel.
+     * Refreshes the view.
      */
     void refreshView();
 }

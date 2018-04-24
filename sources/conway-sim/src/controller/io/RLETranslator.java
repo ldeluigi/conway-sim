@@ -11,8 +11,8 @@ import core.utils.ListMatrix;
 import core.utils.Matrix;
 
 /**
- * 
- *
+ * RLETranslator contains static methods that converts RLE Strings (Our personal
+ * standard format) into a {@link Matrix} of {@link Enum} and vice versa.
  */
 public final class RLETranslator {
     private static final char EL = '$';
@@ -26,18 +26,16 @@ public final class RLETranslator {
 
     /**
      * @param <X>
-     *            a
+     *            Abstract type that extends {@link Enum}
      * @param rle
-     *            a
+     *            The RLE String to be converted into {@link Matrix}
      * @param en
-     *            a
-     * @return a
+     *            The Enumerative class
+     * @return The converted {@link Matrix}
      */
     public static <X extends Enum<?>> Matrix<X> rleStringToMatrix(final String rle, final Class<X> en) {
-        final String pRLE = patternize(rle);
+        final String pRLE = patternize(rle.split("!")[0]);
         final int matHeight = Math.toIntExact(pRLE.chars().filter(ch -> ch == EL).count()) + 1;
-        // TODO DEBUG
-        System.out.println("DEBUG | MAT HEIGHT: " + matHeight);
         int matWidth = matHeight;
         try (BufferedReader br = new BufferedReader(new StringReader(decode(pRLE.split("\\$")[0]).concat("$")))) {
 
@@ -53,20 +51,19 @@ public final class RLETranslator {
             }
             matWidth = cont;
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
         }
-        // TODO DEBUG
-        System.out.println("DEBUG | MAT WIDTH: " + matWidth);
         final Matrix<X> mat = new ListMatrix<X>(matWidth, matHeight, () -> null);
         for (int i = 0; i < matHeight; i++) {
-            try (StringReader sr = new StringReader(new BufferedReader(new StringReader(decode(pRLE.split("\\$")[i])))
-                    .lines().collect(Collectors.joining()))) {
+            try (StringReader sr = new StringReader(
+                    new BufferedReader(new StringReader(decode(pRLE.replace("\\!", "\\$").split("\\$")[i]))).lines()
+                            .collect(Collectors.joining()))) {
                 for (int k = 0; k < matWidth; k++) {
                     final int check = sr.read();
                     mat.set(i, k, en.getEnumConstants()[check - SP]);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.logThrowable(e);
             }
         }
         return mat;
@@ -101,7 +98,7 @@ public final class RLETranslator {
 
             }
 
-            // TODO RemoveMe - END OF LINE
+            // END OF LINE
             if (i == matrix.getWidth() - 1) {
                 mtoStr = mtoStr.concat(Character.toString(EC));
             } else {
@@ -109,28 +106,39 @@ public final class RLETranslator {
             }
 
         }
-
-        // TODO RemoveMe - DEBUG
-        System.out.println("DEBUG | " + mtoStr);
         return mtoStr;
     }
 
-    //TODO JAVADOC
+    /**
+     * This method decodes the given string from RLE format to exploded RLE format
+     * (like "aaabb$babaa!").
+     * 
+     * @param str
+     *            String to be decoded
+     * @return decoded String
+     */
     private static String decode(final String str) {
-        StringBuffer dest = new StringBuffer();
-        Pattern pattern = Pattern.compile("[0-9]+|[a-zA-Z]");
-        Matcher matcher = pattern.matcher(str);
+        final StringBuffer dest = new StringBuffer();
+        final Pattern pattern = Pattern.compile("[0-9]+|[a-zA-Z]");
+        final Matcher matcher = pattern.matcher(str);
         while (matcher.find()) {
             int number = Integer.parseInt(matcher.group());
             matcher.find();
-            while (number-- != 0) {
+            while (number != 0) {
                 dest.append(matcher.group());
+                number--;
             }
         }
         return dest.toString();
     }
 
-    //TODO JAVADOC
+    /**
+     * Static method for applying the pattern in order to normalize the RLE String.
+     * 
+     * @param str
+     *            The String to be patternized
+     * @return the patternized Strings
+     */
     private static String patternize(final String str) {
         return str.replaceAll(RLEPATTERN, "");
     }

@@ -1,5 +1,6 @@
 package view.swing.menu;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -7,6 +8,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -23,10 +26,11 @@ import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
 import core.campaign.Editable;
 import core.campaign.Level;
+import core.model.StandardCellEnvironments;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
-import view.DesktopGUI;
-import view.swing.Colors;
+import view.Colors;
+import view.swing.DesktopGUI;
 import view.swing.sandbox.JGridPanel;
 import view.swing.sandbox.KeyListenerFactory;
 import view.swing.sandbox.SandboxBuilder;
@@ -39,13 +43,11 @@ public class LevelMenu extends JPanel {
 
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
-    private static final int GRID_TO_CELL_RATIO = 5;
+    private static final int GRID_TO_CELL_RATIO = 7;
+    private static final int GRID_RAPPORT_SCREEN = 4;
     private static final String LEVEL_NUMBER = "level.number";
-    private static final String BUTTON_NAME = "level.button";
     private static final String VALUE = "XXX";
     private static final int LEVEL_FOR_PAGE = 4;
-    private static final int RAPPORT_NORMAL_DIMENSION = 2;
-    private static final int GRID_RAPPORT_WITH_FRAME = 3;
     private final List<JButton> bList = new LinkedList<>();
     private final DesktopGUI mainGUI;
     private final JGridPanel gridPanel;
@@ -60,12 +62,11 @@ public class LevelMenu extends JPanel {
     public LevelMenu(final DesktopGUI mainGUI) {
         this.setOpaque(false);
         this.mainGUI = mainGUI;
-        this.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth(), this.mainGUI.getCurrentHeight()));
-        this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() * RAPPORT_NORMAL_DIMENSION));
+        this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() * 2));
 
         IntStream.rangeClosed(1, ResourceLoader.loadConstantInt(LEVEL_NUMBER)).forEach(n -> {
             final JButton b = SandboxTools.newJButton(
-                    ResourceLoader.loadString(BUTTON_NAME).replaceAll(VALUE, String.valueOf(n)), this.getFont());
+                    ResourceLoader.loadString("level.button").replaceAll(VALUE, String.valueOf(n)), this.getFont());
             b.setFont(this.getFont());
             this.bList.add(b);
             b.addActionListener(e -> {
@@ -78,64 +79,82 @@ public class LevelMenu extends JPanel {
         this.cardPanel.setOpaque(false);
         for (int i = 0; i < ResourceLoader.loadConstantInt(LEVEL_NUMBER) / LEVEL_FOR_PAGE
                 + (ResourceLoader.loadConstantInt(LEVEL_NUMBER) % LEVEL_FOR_PAGE == 0 ? 0 : 1); i++) {
-            this.cardPanel.addTab(ResourceLoader.loadString("level.page").replace(VALUE, String.valueOf(i)), panelLevel(i));
+            this.cardPanel.addTab(ResourceLoader.loadString("level.page").replace(VALUE, String.valueOf(i)),
+                    panelLevel(i));
         }
 
-        this.setLayout(new GridBagLayout());
+        this.setLayout(new BorderLayout());
+        final JPanel gridBagCenter = new JPanel(new GridBagLayout());
+        gridBagCenter.setOpaque(false);
+        final GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 0.5;
+        c.weighty = 0.5;
         final JPanel central = new JPanel(new FlowLayout());
         central.setOpaque(false);
         final JPanel rightPanel = new JPanel();
         rightPanel.setOpaque(false);
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.add(this.cardPanel);
+        rightPanel.add(cardPanel);
         rightPanel.add(buildRightLeftButtonPanel());
 
         final JPanel statusPanel = new JPanel(new FlowLayout());
         statusPanel.setOpaque(false);
 
         this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        this.gridPanel.setPreferredSize(new Dimension(
-                Math.max(this.mainGUI.getCurrentWidth(), this.mainGUI.getCurrentHeight()) / GRID_RAPPORT_WITH_FRAME,
-                Math.max(this.mainGUI.getCurrentWidth(), this.mainGUI.getCurrentHeight()) / GRID_RAPPORT_WITH_FRAME));
         statusPanel.add(this.gridPanel);
+        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / GRID_RAPPORT_SCREEN,
+                this.mainGUI.getCurrentHeight() / GRID_RAPPORT_SCREEN));
         central.add(statusPanel);
         central.add(rightPanel);
 
         final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         exitPanel.setOpaque(false);
-        final JButton bStart = SandboxTools
-                .newJButton(ResourceLoader.loadString("level.button.start"), this.getFont());
+        final JButton bStart = SandboxTools.newJButton(ResourceLoader.loadString("level.button.start"), this.getFont());
         bStart.setFocusable(false);
         exitPanel.add(bStart);
 
-        final JButton bReturn = SandboxTools
-                .newJButton(ResourceLoader.loadString("level.button.return"), this.getFont());
+        final JButton bReturn = SandboxTools.newJButton(ResourceLoader.loadString("level.button.return"),
+                this.getFont());
         bReturn.setFocusable(false);
         exitPanel.add(bReturn);
-        final GridBagConstraints c = new GridBagConstraints();
-        c.anchor = GridBagConstraints.CENTER;
-        this.add(central, c);
-        c.anchor = GridBagConstraints.LAST_LINE_END;
-        this.add(exitPanel, c);
+        gridBagCenter.add(central, c);
+        this.add(gridBagCenter, BorderLayout.CENTER);
+        this.add(exitPanel, BorderLayout.AFTER_LAST_LINE);
 
         bStart.addActionListener(e -> start());
         bReturn.addActionListener(e -> mainGUI.backToMainMenu());
+        KeyListenerFactory.addKeyListener(this, "start", KeyEvent.VK_ENTER, () -> bStart.doClick());
+        KeyListenerFactory.addKeyListener(this, "return", KeyEvent.VK_ESCAPE, () -> bReturn.doClick());
         SwingUtilities.invokeLater(() -> this.requestFocusInWindow());
     }
 
     @Override
     public final void paintComponent(final Graphics g) {
-        g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(),
-                this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     private JPanel buildRightLeftButtonPanel() {
         final JPanel rightLeftButton = new JPanel(new FlowLayout());
         rightLeftButton.setOpaque(false);
         final JButton right = SandboxTools.newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
-        right.setFocusPainted(false);
+        right.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.on").getScaledInstance((int) right.getPreferredSize().getWidth(),
+                (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        right.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.off").getScaledInstance((int) right.getPreferredSize().getWidth(),
+                (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        right.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.pressed")
+                .getScaledInstance((int) right.getPreferredSize().getWidth(),
+                        (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        right.setText("");
         final JButton left = SandboxTools.newJButton(ResourceLoader.loadString("level.button.left"), this.getFont());
         left.setFocusable(false);
+        left.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.on").getScaledInstance((int) left.getPreferredSize().getWidth(),
+                (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        left.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.off").getScaledInstance((int) left.getPreferredSize().getWidth(),
+                (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        left.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.pressed")
+                .getScaledInstance((int) left.getPreferredSize().getWidth(),
+                        (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        left.setText("");
         rightLeftButton.add(left);
         rightLeftButton.add(right);
 
@@ -147,18 +166,21 @@ public class LevelMenu extends JPanel {
     }
 
     private void previousPage() {
-        cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() - 1 < 0
-                ? 0 : cardPanel.getSelectedIndex() - 1);
+        this.cardPanel
+                .setSelectedIndex(cardPanel.getSelectedIndex() - 1 < 0 ? 0 : this.cardPanel.getSelectedIndex() - 1);
     }
 
     private void nextPage() {
-        cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() + 1 >= cardPanel.getComponentCount()
-                ? cardPanel.getSelectedIndex() : cardPanel.getSelectedIndex() + 1);
+        this.cardPanel.setSelectedIndex(this.cardPanel.getSelectedIndex() + 1 >= this.cardPanel.getComponentCount()
+                ? this.cardPanel.getSelectedIndex()
+                : this.cardPanel.getSelectedIndex() + 1);
     }
 
     private void start() {
         if (this.currentLevel != 0) {
-            this.mainGUI.setView(SandboxBuilder.buildLevelSandbox(this.mainGUI, this.currentLevel));
+            this.mainGUI.setView(new LoadingScreen());
+            SwingUtilities
+                    .invokeLater(() -> this.mainGUI.setView(SandboxBuilder.buildLevelSandbox(mainGUI, currentLevel)));
         }
     }
 
@@ -169,15 +191,15 @@ public class LevelMenu extends JPanel {
         final LevelLoader lLoader = new LevelLoader(this.currentLevel);
         final Level level = lLoader.getLevel();
         this.gridPanel.changeGrid(level.getEnvironmentMatrix().getWidth(), level.getEnvironmentMatrix().getHeight());
-        final Matrix<Color> mc = new ListMatrix<>(level.getCellTypeMatrix().getWidth(),
+        final Matrix<Color> colorMatrix = new ListMatrix<>(level.getCellTypeMatrix().getWidth(),
                 level.getCellTypeMatrix().getHeight(), () -> null);
-        for (int row = 0; row < level.getCellTypeMatrix().getWidth(); row++) {
-            for (int col = 0; col < level.getCellTypeMatrix().getWidth(); col++) {
-                mc.set(row, col, Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col),
-                        level.getInitialStateMatrix().get(row, col)));
+        for (int row = 0; row < level.getEnvironmentMatrix().getHeight(); row++) {
+            for (int col = 0; col < level.getEnvironmentMatrix().getWidth(); col++) {
+                colorMatrix.set(row, col, Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col),
+                        level.getInitialStateMatrix().get(row, col), (StandardCellEnvironments) level.getEnvironmentMatrix().getCellEnvironment(row, col)));
             }
         }
-        SwingUtilities.invokeLater(() -> this.gridPanel.paintGrid(0, 0, mc));
+        SwingUtilities.invokeLater(() -> this.gridPanel.paintGrid(0, 0, Colors.colorMatrix(level)));
         this.gridPanel.setVisible(true);
     }
 
@@ -191,8 +213,7 @@ public class LevelMenu extends JPanel {
         c.gridx = 0;
         c.gridy = 0;
         gridLevel.setOpaque(false);
-        for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber
-                + LEVEL_FOR_PAGE; i++) {
+        for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber + LEVEL_FOR_PAGE; i++) {
             if (i > ResourceLoader.loadConstantInt(LEVEL_NUMBER) - 1) {
                 return gridLevel;
             } else {

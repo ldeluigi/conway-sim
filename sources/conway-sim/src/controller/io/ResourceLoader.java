@@ -11,8 +11,8 @@ import java.util.ResourceBundle.Control;
 import javax.imageio.ImageIO;
 
 /**
- * Resource loader. Set the default {@link Locale} to use it as default language of string
- * properties loading.
+ * Resource loader. Set the default {@link Locale} to use it as default language
+ * of string properties loading.
  */
 public final class ResourceLoader {
 
@@ -33,9 +33,15 @@ public final class ResourceLoader {
         RESOURCE_MAP.put("loading.background", "bg_main_blurred.jpg");
         RESOURCE_MAP.put("sandbox.background1", "bg_blank_blurred.jpg");
         RESOURCE_MAP.put("sandbox.background2", "corner.sandbox.jpg");
-        RESOURCE_MAP.put("sandbox.button.on", "buttonOn.jpg");
-        RESOURCE_MAP.put("sandbox.button.off", "buttonOff.jpg");
-        RESOURCE_MAP.put("sandbox.button.pressed", "buttonPressed.jpg");
+        RESOURCE_MAP.put("sandbox.button.on", "button_pixel.png");
+        RESOURCE_MAP.put("sandbox.button.off", "button_pixel_off.png");
+        RESOURCE_MAP.put("sandbox.button.pressed", "button_pixel_pressed.png");
+        RESOURCE_MAP.put("menu.arrow.left.on", "arrow_left.png");
+        RESOURCE_MAP.put("menu.arrow.left.off", "arrow_left_off.png");
+        RESOURCE_MAP.put("menu.arrow.left.pressed", "arrow_left_pressed.png");
+        RESOURCE_MAP.put("menu.arrow.right.on", "arrow_right.png");
+        RESOURCE_MAP.put("menu.arrow.right.off", "arrow_right_off.png");
+        RESOURCE_MAP.put("menu.arrow.right.pressed", "arrow_right_pressed.png");
         RESOURCE_MAP.put("level.complete.background", "bg_level_complete.jpg");
         RESOURCE_MAP.put("level.complete.egg", "bg_level_complete_egg.jpg");
     }
@@ -63,8 +69,7 @@ public final class ResourceLoader {
             addBufferedImage(resource, result);
             return result;
         } catch (IOException e) {
-            throw new IllegalStateException(
-                    "Resource " + resource + " not found (or not accessible) in " + path);
+            throw new IllegalStateException("Resource " + resource + " not found (or not accessible) in " + path);
         }
     }
 

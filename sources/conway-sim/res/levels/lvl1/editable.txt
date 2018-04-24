@@ -1,1 +1,24 @@
-10b$10b$10b$10b$10b$10b$6b4a$6b4a$6b4a$6b4a!
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+20b$
+16b4a$
+16b4a$
+16b4a$
+16b4a!
+
+
+a = editable
+b = uneditable

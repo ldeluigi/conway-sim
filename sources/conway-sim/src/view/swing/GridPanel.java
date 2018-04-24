@@ -1,8 +1,8 @@
-package view.swing.sandbox;
+package view.swing;
 
 import java.awt.Color;
-import java.awt.event.MouseListener;
 import java.util.function.BiFunction;
+import controller.editor.CMouseListener;
 
 import core.utils.Matrix;
 
@@ -25,31 +25,36 @@ public interface GridPanel {
      * @param colorMatrix
      *            is the matrix containing the colors to paint.
      * @param startRow
-     *            is the vertical index explaining where the colorMatrix should start being applied.
+     *            is the vertical index explaining where the colorMatrix should
+     *            start being applied.
      * @param startCol
-     *            is the horizontal index where the colorMatrix should start being applied.
+     *            is the horizontal index where the colorMatrix should start being
+     *            applied.
      */
     void paintGrid(int startRow, int startCol, Matrix<Color> colorMatrix);
 
     /**
-     * Is the method to invoke when a single cell changes instead of repainting the whole grid.
+     * Is the method to invoke when a single cell changes instead of repainting the
+     * whole grid.
      * 
      * @param row
      *            is the vertical index of the cell
      * @param column
      *            is the horizontal index of the cell
      * @param col
-     *            is the color to be set as background for the given cell at (row,column) position
+     *            is the color to be set as background for the given cell at
+     *            (row,column) position
      */
     void displaySingleCell(int row, int column, Color col);
 
     /**
-     * Is the method to invoke in order to add an observer to the components of the grid.
+     * Is the method to invoke in order to add an observer to the components of the
+     * grid.
      * 
      * @param listenerDispencer
      *            is the BiFunction dispensing the listener.
      */
-    void addListenerToGrid(BiFunction<Integer, Integer, MouseListener> listenerDispencer);
+    void addListenerToGrid(BiFunction<Integer, Integer, CMouseListener> listenerDispencer);
 
     /**
      * Is the method to invoke in order to discover the number of horizontal cells.

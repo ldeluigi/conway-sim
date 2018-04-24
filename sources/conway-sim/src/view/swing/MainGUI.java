@@ -15,8 +15,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
+import controller.io.Logger;
 import controller.io.ResourceLoader;
-import view.DesktopGUI;
 import view.swing.menu.MainMenu;
 
 /**
@@ -36,6 +36,8 @@ public final class MainGUI implements DesktopGUI {
      * Starts the application.
      */
     public MainGUI() {
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        System.setProperty("sun.awt.exception.handler", ExceptionHandler.class.getName());
         this.frame = new JFrame(ResourceLoader.loadString("frame.title"));
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.frame.addWindowListener(new WindowListener() {
@@ -63,8 +65,8 @@ public final class MainGUI implements DesktopGUI {
             }
         });
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.frame.setMinimumSize(new Dimension(screenSize.width / MINIMUM_FRAME_RATIO,
-                screenSize.height / MINIMUM_FRAME_RATIO));
+        this.frame.setMinimumSize(
+                new Dimension(screenSize.width / MINIMUM_FRAME_RATIO, screenSize.height / MINIMUM_FRAME_RATIO));
         this.frame.setSize(screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2,
                 screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
         this.frame.setLocationRelativeTo(null);
@@ -80,8 +82,7 @@ public final class MainGUI implements DesktopGUI {
         }
         this.background.setLayer(JDesktopPane.DEFAULT_LAYER);
         this.background.setEnabled(false);
-        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background
-                .getUI());
+        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background.getUI());
         basicInternalFrameUI.setNorthPane(null);
         this.background.setBorder(null);
         this.background.setVisible(true);
@@ -90,13 +91,16 @@ public final class MainGUI implements DesktopGUI {
         setView(menuPanel);
         this.frame.setIconImage(ResourceLoader.loadImage("main.icon"));
         this.frame.setVisible(true);
+
+        Logger.logTime("Started application from " + this.getClass().getName());
     }
 
     /**
      * A method that changes the main view of the application (background).
      * 
      * @param viewPanel
-     *            the panel that will be shown as main screen on the application desktop.
+     *            the panel that will be shown as main screen on the application
+     *            desktop.
      */
     @Override
     public void setView(final JComponent viewPanel) {
@@ -108,6 +112,7 @@ public final class MainGUI implements DesktopGUI {
      */
     @Override
     public void close() {
+        Logger.logTime("Closed application");
         System.exit(0);
     }
 

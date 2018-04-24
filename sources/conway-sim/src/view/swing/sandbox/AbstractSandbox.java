@@ -18,8 +18,9 @@ import javax.swing.UIManager;
 
 import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
-import view.DesktopGUI;
 import view.Sandbox;
+import view.swing.DesktopGUI;
+import view.swing.GridPanel;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
 
@@ -50,8 +51,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         this.setLayout(new BorderLayout());
         this.bClear = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.clear"),
                 ResourceLoader.loadString("sandbox.clear.tooltip"));
-        this.grid = buildGrid(
-                Math.max(mainGUI.getScreenHeight(), mainGUI.getCurrentWidth()) / CELL_SIZE_RATIO);
+        this.grid = buildGrid(Math.max(mainGUI.getScreenHeight(), mainGUI.getCurrentWidth()) / CELL_SIZE_RATIO);
         this.add(this.grid, BorderLayout.CENTER);
         this.gridEditor = buildEditor(this.grid);
         this.gridEditor.setEnabled(true);
@@ -82,8 +82,8 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * This method is called by {@link AbstractSandbox} constructor to create the JGridPanel used
-     * inside the editor.
+     * This method is called by {@link AbstractSandbox} constructor to create the
+     * JGridPanel used inside the editor.
      * 
      * @param cellSize
      *            the call of the method gives a suggested cellSize to start with
@@ -92,19 +92,20 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     protected abstract JGridPanel buildGrid(int cellSize);
 
     /**
-     * This method is called by {@link AbstractSandbox} constructor to create the GenerationPanel
-     * used to manage generations.
+     * This method is called by {@link AbstractSandbox} constructor to create the
+     * GenerationPanel used to manage generations.
      * 
      * @return the custom created {@link GenerationPanel} or one subclass.
      */
     protected abstract GenerationPanel buildGenerationPanel();
 
     /**
-     * This method is called by {@link AbstractSandbox} constructor to create the PatternEditor used
-     * as the editor.
+     * This method is called by {@link AbstractSandbox} constructor to create the
+     * PatternEditor used as the editor.
      * 
      * @param gridp
-     *            the call of the method gives a reference to the current {@link GridPanel} in use
+     *            the call of the method gives a reference to the current
+     *            {@link GridPanel} in use
      * @return the custom created {@link PatternEditor}
      */
     protected abstract PatternEditor buildEditor(GridPanel gridp);
@@ -121,8 +122,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         this.add(loading, BorderLayout.CENTER);
         this.setVisible(true);
         SwingUtilities.invokeLater(() -> {
-            this.gridEditor.changeSizes(SandboxTools.getWidthSelect(),
-                    SandboxTools.getHeightSelect());
+            this.gridEditor.changeSizes(SandboxTools.getWidthSelect(), SandboxTools.getHeightSelect());
             this.remove(loading);
             this.add(grid, BorderLayout.CENTER);
             this.grid.setVisible(true);
@@ -134,8 +134,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
      */
     @Override
     public void paintComponent(final Graphics g) {
-        g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(),
-                this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("sandbox.background1"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
     /**
@@ -150,13 +149,11 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Gets the button used to call the recipe book and returns it.
-     * 
-     * @return the book button
+     * {@inheritDoc}
      */
     @Override
-    public JButton getButtonBook() {
-        return this.bBook;
+    public void setButtonBookEnable(final boolean flag) {
+        this.bBook.setEnabled(flag);
     }
 
     /**
@@ -186,8 +183,8 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Before {@link BorderLayoit.BEFORE_FIRST_LINE first_line} and {@link BorderLayoout.EAST east}
-     * are already used for this north panel.
+     * Before {@link BorderLayoit.BEFORE_FIRST_LINE first_line} and
+     * {@link BorderLayoout.EAST east} are already used for this north panel.
      * 
      * @return the panel which is going to be added northern
      */
@@ -207,6 +204,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
 
     /**
      * Implement this method to change the displayed mode name.
+     * 
      * @return the title of the mode
      */
     protected abstract String getTitle();
@@ -237,21 +235,17 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         southRight.add(bClear);
         southRight.add(this.bBook);
         southRight.add(bExit);
-        south.add(
-                SandboxTools.newJPanelStatistics(
-                        new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())),
+        south.add(SandboxTools.newJPanelStatistics(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())),
                 BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);
         this.add(south, BorderLayout.SOUTH);
     }
 
     private void exit() {
-        final int result = JOptionPane.showOptionDialog(this,
-                ResourceLoader.loadString("option.exit"),
-                ResourceLoader.loadString("option.exit.title"), JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE, null,
-                new String[] { ResourceLoader.loadString("option.exit.yes"),
-                        ResourceLoader.loadString("option.exit.no") },
+        final int result = JOptionPane.showOptionDialog(
+                this, ResourceLoader.loadString("option.exit"), ResourceLoader.loadString("option.exit.title"),
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[] {
+                        ResourceLoader.loadString("option.exit.yes"), ResourceLoader.loadString("option.exit.no") },
                 null);
         if (result == JOptionPane.YES_OPTION) {
             this.callBook().doDefaultCloseAction();

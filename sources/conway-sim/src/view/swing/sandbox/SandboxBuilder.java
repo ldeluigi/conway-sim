@@ -10,7 +10,8 @@ import controller.editor.PatternEditor;
 import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
 import core.campaign.Level;
-import view.DesktopGUI;
+import view.swing.DesktopGUI;
+import view.swing.GridPanel;
 import view.swing.book.CampaignBookFrame;
 import view.swing.level.LevelComplete;
 
@@ -48,7 +49,7 @@ public final class SandboxBuilder {
             @Override
             protected GenerationPanel buildGenerationPanel() {
                 return new GenerationPanel(this, () -> {
-                    gui.popUpFrame(new LevelComplete(), true);
+                    gui.popUpFrame(new LevelComplete(), false);
                 });
             }
 

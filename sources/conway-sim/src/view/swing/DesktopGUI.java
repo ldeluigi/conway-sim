@@ -1,8 +1,10 @@
-package view;
+package view.swing;
 
 import java.util.List;
 
 import javax.swing.JInternalFrame;
+
+import view.GUI;
 
 /**
  * Represents a GUI which allows to display and manage {@link JInternalFrame}.
@@ -27,7 +29,8 @@ public interface DesktopGUI extends GUI {
     List<JInternalFrame> getAllFrames();
 
     /**
-     * Detaches permanently a open or closed {@link JInternalFrame} from the DesktopGUI.
+     * Detaches permanently a open or closed {@link JInternalFrame} from the
+     * DesktopGUI.
      * 
      * @param iFrame
      *            the {@link JInternalFrame} to detach

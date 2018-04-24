@@ -46,8 +46,8 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Method for adding a new Recipe in the book given the content, the name of the recipe and the
-     * author.
+     * Method for adding a new Recipe in the book given the content, the name of the
+     * recipe and the author.
      * 
      * @param content
      *            of the Recipe.
@@ -62,7 +62,8 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Method for adding a new Recipe in the book given the content and the name of the recipe.
+     * Method for adding a new Recipe in the book given the content and the name of
+     * the recipe.
      * 
      * @param content
      *            of the Recipe.

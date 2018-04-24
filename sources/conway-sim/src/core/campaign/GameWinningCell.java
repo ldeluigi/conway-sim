@@ -5,8 +5,8 @@ import core.model.SimpleCell;
 import core.model.Status;
 
 /**
- * Implementation of {@link Cell} which makes the user win the game when involved in the development
- * of the level.
+ * Implementation of {@link Cell} which makes the user win the game when
+ * involved in the development of the level.
  *
  */
 public class GameWinningCell extends SimpleCell {

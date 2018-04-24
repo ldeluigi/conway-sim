@@ -15,12 +15,14 @@ public final class Matrices {
     }
 
     /**
-     * A method to modify a {@link Matrix<X>} by applying a smaller matrix of the same type.
+     * A method to modify a {@link Matrix<X>} by applying a smaller matrix of the
+     * same type.
      * 
      * @param <X>
      *            the generic type of matrix
      * @param main
-     *            is the larger {@link Matrix<X>} where the smaller should be applied
+     *            is the larger {@link Matrix<X>} where the smaller should be
+     *            applied
      * @param x
      *            is the row of the top left cell of the matrix
      * @param y
@@ -33,8 +35,7 @@ public final class Matrices {
             final Matrix<? extends X> smaller) {
         Objects.requireNonNull(main);
         Objects.requireNonNull(smaller);
-        if (x < 0 || y < 0 || x + smaller.getHeight() > main.getHeight()
-                || y + smaller.getWidth() > main.getWidth()) {
+        if (x < 0 || y < 0 || x + smaller.getHeight() > main.getHeight() || y + smaller.getWidth() > main.getWidth()) {
             throw new IllegalArgumentException("Invalid position or invalid matrices dimensions.");
         }
         IntStream.range(0, smaller.getHeight()).forEach(row -> {
@@ -46,8 +47,8 @@ public final class Matrices {
     }
 
     /**
-     * Copies a rectangular portion of a given {@link Matrix} to a new matrix of the required
-     * dimension.
+     * Copies a rectangular portion of a given {@link Matrix} to a new matrix of the
+     * required dimension.
      * 
      * @param <X>
      *            the generic type of matrix
@@ -65,16 +66,17 @@ public final class Matrices {
      */
     public static <X> Matrix<X> cut(final Matrix<? extends X> from, final int fromRow, final int toRow,
             final int fromColumn, final int toColumn) {
-        if (fromRow < 0 || toRow < fromRow || toRow >= from.getHeight() || fromColumn < 0
-                || toColumn < fromColumn || toColumn >= from.getWidth()) {
-            throw new IllegalArgumentException("Input coordinates are invalid (from row: " + fromRow
-                    + " to " + toRow + " - max is " + (from.getHeight() - 1) + "; from column: "
-                    + fromColumn + " to " + toColumn + " - max is " + (from.getWidth() - 1) + ")");
+        if (fromRow < 0 || toRow < fromRow || toRow >= from.getHeight() || fromColumn < 0 || toColumn < fromColumn
+                || toColumn >= from.getWidth()) {
+            throw new IllegalArgumentException("Input coordinates are invalid (from row: " + fromRow + " to " + toRow
+                    + " - max is " + (from.getHeight() - 1) + "; from column: " + fromColumn + " to " + toColumn
+                    + " - max is " + (from.getWidth() - 1) + ")");
         }
-        return new ListMatrix<>(IntStream.rangeClosed(fromRow, toRow)
-                .mapToObj(r -> IntStream.rangeClosed(fromColumn, toColumn)
-                        .mapToObj(c -> (X) from.get(r, c)).collect(Collectors.toList()))
-                .collect(Collectors.toList()));
+        return new ListMatrix<>(
+                IntStream
+                        .rangeClosed(fromRow, toRow).mapToObj(r -> IntStream.rangeClosed(fromColumn, toColumn)
+                                .mapToObj(c -> (X) from.get(r, c)).collect(Collectors.toList()))
+                        .collect(Collectors.toList()));
     }
 
     /**
@@ -141,8 +143,8 @@ public final class Matrices {
     }
 
     /**
-     * Returns true only if the two Matrices have the same dimensions and every corresponding cell
-     * equals the counterpart.
+     * Returns true only if the two Matrices have the same dimensions and every
+     * corresponding cell equals the counterpart.
      * 
      * @param a
      *            a matrix
@@ -165,9 +167,11 @@ public final class Matrices {
     }
 
     /**
-     * Calls {@link Matrix#map(Function)} with (x -> x) on the source and returns the result.
+     * Calls {@link Matrix#map(Function)} with (x -> x) on the source and returns
+     * the result.
      * 
-     * @param <X> generic type
+     * @param <X>
+     *            generic type
      * @param source
      *            a matrix
      * @return the Matrix created with {@link Matrix#map} method

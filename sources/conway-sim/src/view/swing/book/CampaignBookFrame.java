@@ -46,11 +46,13 @@ public class CampaignBookFrame extends JInternalFrame {
     private String selectedItem;
 
     /**
+     * The constructor shows and fills the JList(s) with the patterns of the given
+     * LevelLoader.
      * 
      * @param patternE
-     *            sdas
+     *            the {@link PatternEditor}
      * @param ll
-     *            dsad
+     *            the {@link LevelLoader}
      */
     public CampaignBookFrame(final PatternEditor patternE, final LevelLoader ll) {
         super("Campaign Book", true, true, true, true);
@@ -58,21 +60,26 @@ public class CampaignBookFrame extends JInternalFrame {
         this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         final JGridPanel pg = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
                 INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        List<String> lst = new ArrayList<String>();
-        for (Recipe r : ll.getBook().getRecipeList()) {
-            lst.add(r.getName());
+        final JList<String> jList;
+        if (!ll.getBook().getRecipeList().isEmpty()) {
+            final List<String> lst = new ArrayList<String>();
+            for (final Recipe r : ll.getBook().getRecipeList()) {
+                lst.add(r.getName());
+            }
+            String[] lstArr = new String[lst.size()];
+            lstArr = lst.toArray(lstArr);
+            jList = new JList<String>(lstArr);
+        } else {
+            jList = new JList<String>(new String[0]);
+            // TODO DEBUG
+            System.out.println("EMPTY BOOKLIST");
         }
 
-        String[] lstArr = new String[lst.size()];
-        lstArr = lst.toArray(lstArr);
-
-        final JList<String> jList = new JList<String>(lstArr);
         jList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         jList.setLayoutOrientation(JList.VERTICAL);
         jList.setVisibleRowCount(-1);
         final JScrollPane jListPane = new JScrollPane(jList);
-        final TitledBorder defaultBookBord = new TitledBorder(ResourceLoader.loadString("book.defaultbtitle"));
-        jListPane.setBorder(defaultBookBord);
+        jListPane.setBorder(new TitledBorder(ResourceLoader.loadString("book.defaultbtitle")));
 
         jList.addMouseListener(new MouseListener() {
             public void mousePressed(final MouseEvent e) {

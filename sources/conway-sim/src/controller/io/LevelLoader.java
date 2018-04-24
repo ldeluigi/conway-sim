@@ -71,13 +71,13 @@ public class LevelLoader {
                         if (content != null && testLine != null && name != null) {
                             book.addRecipe(content, (!testLine.equals("")) ? testLine : name.replace(RLE_EXT, ""));
                         }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
+                    } catch (IOException e) {
+                        Logger.logThrowable(e);
                     }
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
             return;
         }
 
@@ -88,7 +88,7 @@ public class LevelLoader {
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + CLTLIST)))) {
             return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), CellType.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
             return null;
         }
     }
@@ -98,7 +98,7 @@ public class LevelLoader {
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + STSLIST)))) {
             return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), Status.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
             return null;
         }
     }
@@ -109,7 +109,7 @@ public class LevelLoader {
             return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()),
                     StandardCellEnvironments.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
             return null;
         }
     }
@@ -119,7 +119,7 @@ public class LevelLoader {
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + EDTLIST)))) {
             return RLETranslator.rleStringToMatrix(in.lines().collect(Collectors.joining()), Editable.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
             return null;
         }
     }

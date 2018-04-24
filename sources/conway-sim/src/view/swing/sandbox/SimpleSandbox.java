@@ -16,12 +16,14 @@ import controller.editor.ExtendedGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
 import controller.io.ResourceLoader;
-import view.DesktopGUI;
+import view.swing.DesktopGUI;
+import view.swing.GridPanel;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
 
 /**
- * This is a {@link AbstractSandbox sandbox} that allows grid resize, save and free play.
+ * This is a {@link AbstractSandbox sandbox} that allows grid resize, save and
+ * free play.
  */
 public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
@@ -50,8 +52,10 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
                 new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         gridOption.setOpaque(false);
         super.getNorthPanel().add(gridOption, BorderLayout.WEST);
-        this.bSave = SandboxTools.newJButton(ResourceLoader.loadString("simpleSandbox.button.save"), ResourceLoader.loadString("simpleSandbox.tooltip.save"));
-        this.bCancel = SandboxTools.newJButton(ResourceLoader.loadString("simpleSandbox.button.cancel"), ResourceLoader.loadString("simpleSandbox.tooltip.cancel"));
+        this.bSave = SandboxTools.newJButton(ResourceLoader.loadString("simpleSandbox.button.save"),
+                ResourceLoader.loadString("simpleSandbox.tooltip.save"));
+        this.bCancel = SandboxTools.newJButton(ResourceLoader.loadString("simpleSandbox.button.cancel"),
+                ResourceLoader.loadString("simpleSandbox.tooltip.cancel"));
         this.instructionLabel = new JLabel();
         this.instructionLabel.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         this.instructionLabel.setOpaque(false);
@@ -82,8 +86,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     }
 
     /**
-     * {@inheritDoc}
-     * Creates a {@link GridEditorImpl} as editor.
+     * {@inheritDoc} Creates a {@link GridEditorImpl} as editor.
      */
     @Override
     protected PatternEditor buildEditor(final GridPanel grid) {
@@ -109,7 +112,8 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
     /**
      * 
-     * @param flag set the save button enable or disable
+     * @param flag
+     *            set the save button enable or disable
      */
     public void setSaveEnable(final boolean flag) {
         if (flag) {
@@ -127,7 +131,9 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
 
     private void save() {
         if (this.extendedGridEditor.isCutReady()) {
-            this.mainGUI.popUpFrame(new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())), false);
+            this.mainGUI.popUpFrame(
+                    new JInternalFrameSave(RLEConvert.convertMatrixStatusToString(extendedGridEditor.cutMatrix())),
+                    false);
             this.cancel();
             this.instructionLabel.setText(ResourceLoader.loadString(SAVE_BASE_TEXT));
             this.instructionLabel.setToolTipText(ResourceLoader.loadString(SAVE_BASE_TEXT));

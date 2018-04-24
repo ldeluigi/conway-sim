@@ -25,8 +25,9 @@ import core.model.Status;
 import view.swing.menu.MenuSettings;
 
 /**
- * This is the panel that contain all the Generation control for the application. Button start,
- * play, pause, end and time management goto, next and previous and the speed option.
+ * This is the panel that contain all the Generation control for the
+ * application. Button start, play, pause, end and time management goto, next
+ * and previous and the speed option.
  * 
  */
 public class GenerationPanel extends JPanel {
@@ -59,8 +60,8 @@ public class GenerationPanel extends JPanel {
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     /**
-     * This variable is used only in case of level mode,
-     * level mode is usable only if a runnable is given in the constructor.
+     * This variable is used only in case of level mode, level mode is usable only
+     * if a runnable is given in the constructor.
      */
     private static final int REPETITION_FOR_WIN = 3;
     private boolean isLevelMode;
@@ -80,23 +81,23 @@ public class GenerationPanel extends JPanel {
         this.setOpaque(false);
         this.generationController = new GenerationControllerImpl(view);
 
-        bStart = SandboxTools.newJButton(ResourceLoader.loadString("generation.start"),
+        this.bStart = SandboxTools.newJButton(ResourceLoader.loadString("generation.start"),
                 ResourceLoader.loadString("generation.start.tooltip"));
-        bEnd = SandboxTools.newJButton(ResourceLoader.loadString("generation.end"),
+        this.bEnd = SandboxTools.newJButton(ResourceLoader.loadString("generation.end"),
                 ResourceLoader.loadString("generation.end.tooltip"));
-        bPause = SandboxTools.newJButton(ResourceLoader.loadString("generation.pause"),
+        this.bPause = SandboxTools.newJButton(ResourceLoader.loadString("generation.pause"),
                 ResourceLoader.loadString("generation.pause.tooltip"));
-        bNext = SandboxTools.newJButton(ResourceLoader.loadString("generation.next"),
+        this.bNext = SandboxTools.newJButton(ResourceLoader.loadString("generation.next"),
                 ResourceLoader.loadString("generation.next.tooltip"));
-        bGoTo = SandboxTools.newJButton(ResourceLoader.loadString("generation.goto"),
+        this.bGoTo = SandboxTools.newJButton(ResourceLoader.loadString("generation.goto"),
                 ResourceLoader.loadString("generation.goto.tooltip"));
-        bPrev = SandboxTools.newJButton(ResourceLoader.loadString("generation.previous"),
+        this.bPrev = SandboxTools.newJButton(ResourceLoader.loadString("generation.previous"),
                 ResourceLoader.loadString("generation.previous.tooltip"));
-        bPlay = SandboxTools.newJButton(ResourceLoader.loadString("generation.play"),
+        this.bPlay = SandboxTools.newJButton(ResourceLoader.loadString("generation.play"),
                 ResourceLoader.loadString("generation.play.tooltip"));
-        progresBar = new JProgressBar();
-        progresBar.setIndeterminate(true);
-        progresBar.setVisible(false);
+        this.progresBar = new JProgressBar();
+        this.progresBar.setIndeterminate(true);
+        this.progresBar.setVisible(false);
 
         this.setLayout(new GridLayout(2, 2));
         final JPanel northL = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -115,70 +116,69 @@ public class GenerationPanel extends JPanel {
         final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000000, 10);
         final JSpinner spinner = new JSpinner(spin);
 
-        northL.add(bStart);
+        northL.add(this.bStart);
 
         // speed control
-        speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
-        speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
+        this.speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
+        this.speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
         northL.add(speedSlider);
 
         // add button to the layout
-        southL.add(bPlay);
-        southL.add(bPause);
-        southL.add(bEnd);
-        southR.add(bPrev);
-        southR.add(bNext);
-        northR.add(bGoTo);
-        northR.add(progresBar);
+        southL.add(this.bPlay);
+        southL.add(this.bPause);
+        southL.add(this.bEnd);
+        southR.add(this.bPrev);
+        southR.add(this.bNext);
+        northR.add(this.bGoTo);
+        northR.add(this.progresBar);
 
         northR.add(spinner); // to use the go to button
 
-        this.setFont(
-                new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
+        this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
         // Start conditions.
-        bStart.setEnabled(true);
-        bPlay.setEnabled(false);
-        bPause.setEnabled(false);
-        bEnd.setEnabled(false);
+        this.bStart.setEnabled(true);
+        this.bPlay.setEnabled(false);
+        this.bPause.setEnabled(false);
+        this.bEnd.setEnabled(false);
         this.view.setButtonClearEnabled(true);
-        bNext.setEnabled(false);
-        bPrev.setEnabled(false);
-        bGoTo.setEnabled(false);
+        this.bNext.setEnabled(false);
+        this.bPrev.setEnabled(false);
+        this.bGoTo.setEnabled(false);
 
-        speedSlider.addChangeListener(e -> this.speedControl());
-        bStart.addActionListener(e -> this.start());
-        bEnd.addActionListener(e -> this.end());
-        bPlay.addActionListener(e -> this.resume());
-        bPause.addActionListener(e -> this.pause());
-        bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
-        bPrev.addActionListener(
+        this.speedSlider.addChangeListener(e -> this.speedControl());
+        this.bStart.addActionListener(e -> this.start());
+        this.bEnd.addActionListener(e -> this.end());
+        this.bPlay.addActionListener(e -> this.resume());
+        this.bPause.addActionListener(e -> this.pause());
+        this.bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
+        this.bPrev.addActionListener(
                 e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
-        bNext.addActionListener(
+        this.bNext.addActionListener(
                 e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
-            if (bStart.isEnabled()) {
-                bStart.doClick();
-            } else if (bPlay.isEnabled()) {
-                bPlay.doClick();
-            } else if (bPause.isEnabled()) {
-                bPause.doClick();
+            if (this.bStart.isEnabled()) {
+                this.bStart.doClick();
+            } else if (this.bPlay.isEnabled()) {
+                this.bPlay.doClick();
+            } else if (this.bPause.isEnabled()) {
+                this.bPause.doClick();
             }
         });
 
         // Key listener of the panel
         KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE,
-                () -> bEnd.doClick());
+                () -> this.bEnd.doClick());
         KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT,
-                () -> bNext.doClick());
+                () -> this.bNext.doClick());
         KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT,
-                () -> bPrev.doClick());
+                () -> this.bPrev.doClick());
         KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER,
-                () -> bGoTo.doClick());
+                () -> this.bGoTo.doClick());
         KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP,
-                () -> speedSlider.setValue(speedSlider.getValue() + 1));
+                () -> this.speedSlider.setValue(speedSlider.getValue() + 1));
         KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN,
-                () -> speedSlider.setValue(speedSlider.getValue() - 1));
+                () -> this.speedSlider.setValue(this.speedSlider.getValue() - 1));
         this.requestFocusInWindow();
     }
 
@@ -187,10 +187,10 @@ public class GenerationPanel extends JPanel {
      * @param view
      *            the controller of the generation
      * @param runnableVictory
-     *            the {@link Runnable} that is started when all the {@link GameWinningCell} are dead
-     *            for 3 consecutive generations
+     *            the {@link Runnable} that is started when all the
+     *            {@link GameWinningCell} are dead for 3 consecutive generations
      *
-     * If level is not declared, the game have no winning condition.
+     *            If level is not declared, the game have no winning condition.
      */
     public GenerationPanel(final AbstractSandbox view, final Runnable runnableVictory) {
         this(view);
@@ -217,15 +217,17 @@ public class GenerationPanel extends JPanel {
      * Reset the current game to the original status.
      */
     public void resetGrid() {
+        this.generationController.pause();
+        this.end();
         this.generationController.reset();
     }
 
     private synchronized void incGold() {
-        gold++;
+        this.gold++;
     }
 
     private synchronized int getGold() {
-        return gold.intValue();
+        return this.gold.intValue();
     }
 
     /**
@@ -237,8 +239,8 @@ public class GenerationPanel extends JPanel {
         }
         int general = 0;
         //LEVEL OPTION
-        if (isLevelMode && !SwingUtilities.isEventDispatchThread()) {
-            gold = 0;
+        if (this.isLevelMode) {
+            this.gold = 0;
             general = (int) this.generationController.getCurrentElement().getCellMatrix()
                     .stream()
                     .parallel()
@@ -249,17 +251,18 @@ public class GenerationPanel extends JPanel {
                     }).count();
             this.counterLevel = getGold() == 0 ? this.counterLevel + 1 : 0;
             if (this.counterLevel >= REPETITION_FOR_WIN && !isWin) {
-                isWin = true;
+                this.isWin = true;
                 this.view.scheduleGUIUpdate(() -> {
-                    this.end();
+                    this.resetGrid();
                     this.runnable.run();
                 });
                 this.counterLevel = 0;
             }
-            //END LEVEL OPTION
+            // END LEVEL OPTION
         } else {
+            this.isWin = false;
             general = this.generationController.getCurrentElement().getCellMatrix().stream()
-            .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
+                    .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
         }
         final int generalF = general;
         this.view.scheduleGUIUpdate(() -> {
@@ -275,8 +278,8 @@ public class GenerationPanel extends JPanel {
 
     private void goTo(final Long value) {
         if (value < 0) {
-            JOptionPane.showMessageDialog(this, ResourceLoader.loadString("generation.undo")
-                    .replaceAll("end", value.toString()).replaceAll("start",
+            JOptionPane.showMessageDialog(this,
+                    ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
                             this.generationController.getCurrentNumberElement().toString()));
         } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
             this.bPlay.setEnabled(false);
@@ -288,7 +291,7 @@ public class GenerationPanel extends JPanel {
 
             final FutureTask<Generation> fTask = new FutureTask<>(() -> {
 
-                this.generationController.loadOldElement(value);
+                this.generationController.loadElement(value);
 
                 try {
                     SwingUtilities.invokeAndWait(() -> {
@@ -304,41 +307,42 @@ public class GenerationPanel extends JPanel {
                 } catch (InterruptedException e) {
                 }
             }, null);
-            executor.execute(fTask);
+            this.executor.execute(fTask);
         }
     }
 
     /**
-     * This method terminate the execution of the generation and refresh the first status.
-     * Override this and add eventual action that should be done with the end of the game mode and the beginning of the edit mode. 
+     * This method terminate the execution of the generation and refresh the first
+     * status. Override this and add eventual action that should be done with the
+     * end of the game mode and the beginning of the edit mode.
      */
     protected void end() {
         this.view.getGridEditor().setEnabled(true);
-        this.view.getButtonBook().setEnabled(true);
+        this.view.setButtonBookEnable(true);
         this.bStart.setEnabled(true);
         this.bPlay.setEnabled(false);
         this.bEnd.setEnabled(false);
         this.bNext.setEnabled(false);
         this.bPrev.setEnabled(false);
         this.bGoTo.setEnabled(false);
-        if (bPause.isEnabled()) {
-            this.generationController.pause();
+        if (this.bPause.isEnabled()) {
             this.bPause.setEnabled(false);
         }
-        if (isLevelMode) {
+        if (this.isLevelMode) {
             this.isWin = false;
         }
         this.view.setButtonClearEnabled(true);
     }
 
     /**
-     * This method start the execution of the generation and set button enable true/false.
-     * Override this and add eventual action that should be done with the start of the game mode. 
+     * This method start the execution of the generation and set button enable
+     * true/false. Override this and add eventual action that should be done with
+     * the start of the game mode.
      */
     protected void start() {
         this.view.getGridEditor().setEnabled(false);
         this.generationController.newGame();
-        this.view.getButtonBook().setEnabled(false);
+        this.view.setButtonBookEnable(false);
         this.bStart.setEnabled(false);
         this.bPause.setEnabled(false);
         this.bPlay.setEnabled(true);
@@ -368,5 +372,4 @@ public class GenerationPanel extends JPanel {
         this.bPrev.setEnabled(flag);
         this.bGoTo.setEnabled(flag);
     }
-
 }

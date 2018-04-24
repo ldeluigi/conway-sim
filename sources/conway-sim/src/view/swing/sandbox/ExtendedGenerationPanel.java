@@ -1,8 +1,8 @@
 package view.swing.sandbox;
 
 /**
- * This class implements the management of the resize apply button and the save button, extending all the functionalities
- * of {@link GenerationPanel}.
+ * This class implements the management of the resize apply button and the save
+ * button, extending all the functionalities of {@link GenerationPanel}.
  */
 public class ExtendedGenerationPanel extends GenerationPanel {
     private static final long serialVersionUID = -4340679165012371205L;
@@ -10,7 +10,8 @@ public class ExtendedGenerationPanel extends GenerationPanel {
 
     /**
      * 
-     * @param view is the SimpleSandbox that calls this ExtendedGenerationPanel
+     * @param view
+     *            is the SimpleSandbox that calls this ExtendedGenerationPanel
      */
     public ExtendedGenerationPanel(final SimpleSandbox view) {
         super(view);
