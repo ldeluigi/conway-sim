@@ -199,7 +199,7 @@ public class JGridPanel extends JScrollPane implements GridPanel {
         for (int i = 0; i < this.labelMatrix.getHeight(); i++) {
             for (int j = 0; j < this.labelMatrix.getWidth(); j++) {
                 if (this.labelMatrix.get(i, j).getMouseListeners().length == 0) {
-                    this.labelMatrix.get(i, j).addMouseListener(new SwingMouseListener(listenerDispencer.apply(i, j)));
+                    this.labelMatrix.get(i, j).addMouseListener(new MouseListenerAdapter(listenerDispencer.apply(i, j)));
                 }
             }
         }

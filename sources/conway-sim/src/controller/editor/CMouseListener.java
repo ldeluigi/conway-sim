@@ -32,22 +32,27 @@ public interface CMouseListener {
     /**
      * Method which manages a left mouse button release.
      */
-    void mousereleasedleft();
+    void mouseReleasedLeft();
 
     /**
      * Method which manages a right mouse button release.
      */
-    void mousereleasedright();
+    void mouseReleasedRight();
 
     /**
      * Method which manages left mouse button being pressed while changing position
      * on the grid.
      */
-    void mouseenteredwhilepressingleft();
+    void mouseEnteredWhilePressingLeft();
 
     /**
      * Method which manages right mouse button being pressed while changing position
      * on the grid.
      */
-    void mouseenteredwhilepressingright();
+    void mouseEnteredWhilePressingRight();
+
+    /**
+     * Method which manages mouse entering without pressing right or left.
+     */
+    void mouseEnteredWithoutPress();
 }
