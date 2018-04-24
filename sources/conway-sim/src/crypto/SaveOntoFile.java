@@ -1,6 +1,5 @@
 package crypto;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -27,7 +26,7 @@ import javax.crypto.spec.IvParameterSpec;
 import controller.io.Logger;
 
 /**
- * 
+ * It Is an utility class for storing and loading informations an a file.
  *
  */
 public final class SaveOntoFile {
@@ -39,17 +38,21 @@ public final class SaveOntoFile {
     private static Cipher cip;
     private static SecretKey key;
 
+    private SaveOntoFile() {
+    }
+
     /**
+     * Method which stores the progress made, for example the level reached.
      * 
      * @param level
+     *            the number representing the level reched
      */
     public static void saveProgress(final int level) {
         SaveOntoFile.createfile();
         SaveOntoFile.cipInit(true);
         try (ObjectOutputStream oStream = new ObjectOutputStream(
-                //new CipherOutputStream(
-                        new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip)*/)
-        ) {
+                // new CipherOutputStream(
+                new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
             SaveOntoFile.settings = new ArrayList<>();
             SaveOntoFile.settings.add(level);
             oStream.writeObject(SaveOntoFile.settings);
@@ -61,34 +64,39 @@ public final class SaveOntoFile {
     }
 
     /**
+     * Method which gives reads from file the number representing the level reached.
      * 
-     * @return
+     * @return an Optional containing the level reached so far.
      */
     public static Optional<Integer> loadProgress() {
-        List<Integer> saved = SaveOntoFile.loadList();
-        if (saved.isEmpty()) {
-            return Optional.empty();
+        Optional<List<Integer>> saved = SaveOntoFile.loadList();
+        if (saved.isPresent()) {
+            if (saved.get().isEmpty()) {
+                return Optional.empty();
+            }
+            return Optional.of(saved.get().get(0));
         }
-        return Optional.of(saved.get(0));
+        return Optional.empty();
     }
 
     /**
+     * Method which stores the setting of the game on a file via ArrayList.
      * 
      * @param toSave
+     *            is the List of integers to be stored
      */
-    public static void saveSettings(final ArrayList<Integer> saveMe) {
-      //initialization
+    public static void saveSettings(final ArrayList<Integer> toSave) {
+        // initialization
         SaveOntoFile.createfile();
         SaveOntoFile.cipInit(true);
         try (ObjectOutputStream oStream = new ObjectOutputStream(
-                //new CipherOutputStream(
-                        new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip)*/)
-        ) {
-            if (saveMe != null && (!saveMe.isEmpty())) {
+                // new CipherOutputStream(
+                new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
+            if (toSave != null && (!toSave.isEmpty())) {
                 if (SaveOntoFile.settings.isEmpty()) {
                     SaveOntoFile.settings.add(0);
                 }
-                SaveOntoFile.settings.addAll(saveMe);
+                SaveOntoFile.settings.addAll(toSave);
                 oStream.writeObject(SaveOntoFile.settings);
                 oStream.flush();
                 SaveOntoFile.settings = new ArrayList<>();
@@ -100,35 +108,23 @@ public final class SaveOntoFile {
     }
 
     /**
-     * 
-     * @return
-     */
-    public static Optional<List<Integer>> loadSettings(){
-        List<Integer> saved = SaveOntoFile.loadList();
-        int length = saved.size();
-        if (length == 0) {
-            return Optional.empty();
-        }
-        return Optional.of(Collections.unmodifiableList(saved.subList(1, length)));
-    }
-
-    /**
+     * Method which stores the setting of the game on a file via LinkedList.
      * 
      * @param toSave
+     *            is the list of integers to be stored
      */
-    public static void saveSettings(final LinkedList<Integer> saveMe) {
-        //initialization
+    public static void saveSettings(final LinkedList<Integer> toSave) {
+        // initialization
         SaveOntoFile.createfile();
         SaveOntoFile.cipInit(true);
         try (ObjectOutputStream oStream = new ObjectOutputStream(
-                //new CipherOutputStream(
-                        new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip)*/)
-        ) {
-            if (saveMe != null && (!saveMe.isEmpty())) {
+                // new CipherOutputStream(
+                new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
+            if (toSave != null && (!toSave.isEmpty())) {
                 if (SaveOntoFile.settings.isEmpty()) {
                     SaveOntoFile.settings.add(0);
                 }
-                SaveOntoFile.settings.addAll(saveMe);
+                SaveOntoFile.settings.addAll(toSave);
                 oStream.writeObject(SaveOntoFile.settings);
                 oStream.flush();
                 SaveOntoFile.settings = new ArrayList<>();
@@ -139,18 +135,35 @@ public final class SaveOntoFile {
 
     }
 
-    private static List<Integer> loadList() {
+    /**
+     * Method which loads the settings of the game already stored on the file.
+     * 
+     * @return the Optional containing the list of integers describing the settings
+     */
+    public static Optional<List<Integer>> loadSettings() {
+        Optional<List<Integer>> saved = SaveOntoFile.loadList();
+        if (saved.isPresent()) {
+            int length = saved.get().size();
+            if (length == 0) {
+                return Optional.empty();
+            }
+            return Optional.of(Collections.unmodifiableList(saved.get().subList(1, length)));
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<List<Integer>> loadList() {
         if (SaveOntoFile.f.exists()) {
             try (ObjectInputStream oStream2 = new ObjectInputStream(
-                    //new CipherInputStream(
-                            new FileInputStream(SaveOntoFile.f)/* , SaveOntoFile.cip)*/)
-            ) {
-                return (List<Integer>) oStream2.readObject();
+                    // new CipherInputStream(
+                    new FileInputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
+                List<Integer> list = (List<Integer>) oStream2.readObject();
+                return Optional.ofNullable(list);
             } catch (IOException | ClassNotFoundException e) {
                 Logger.logThrowable(e);
             }
         }
-        return SaveOntoFile.settings;
+        return Optional.empty();
     }
 
     private static void createfile() {
@@ -175,7 +188,8 @@ public final class SaveOntoFile {
                 final IvParameterSpec ivParamSpec = new IvParameterSpec(key.getEncoded());
                 SaveOntoFile.cip.init(Cipher.DECRYPT_MODE, SaveOntoFile.key, ivParamSpec);
             }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException e) {
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
+                | InvalidAlgorithmParameterException e) {
             Logger.logThrowable(e);
         }
     }
