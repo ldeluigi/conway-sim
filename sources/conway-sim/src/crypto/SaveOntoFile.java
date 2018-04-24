@@ -1,5 +1,5 @@
 package crypto;
- 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
- 
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
@@ -20,24 +20,24 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
- 
+
 import controller.io.Logger;
- 
+
 /**
  * It Is an utility class for storing and loading informations an a file.
  *
  */
 public final class SaveOntoFile {
- 
+
     private static final String NAME = ".conway";
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
     private static File f = new File(SaveOntoFile.NAME);
     private static Cipher cip;
     private static SecretKey key;
- 
+
     private SaveOntoFile() {
     }
- 
+
     /**
      * Method which stores the progress made, for example the level reached.
      *
@@ -57,7 +57,7 @@ public final class SaveOntoFile {
             Logger.logThrowable(e);
         }
     }
- 
+
     /**
      * Method which gives reads from file the number representing the level reached.
      *
@@ -67,7 +67,7 @@ public final class SaveOntoFile {
         final List<Integer> saved = SaveOntoFile.loadList();
         return saved.get(0);
     }
- 
+
     /**
      * Method which stores the setting of the game on a file via ArrayList.
      *
@@ -80,15 +80,15 @@ public final class SaveOntoFile {
         try (ObjectOutputStream oStream = new ObjectOutputStream(
                 // new CipherOutputStream(
                 new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
-                final List<Integer> list = new LinkedList<>(completeList.subList(0, 1));
-                list.addAll(toSave);
-                oStream.writeObject(list);
-                oStream.flush();
+            final List<Integer> list = new LinkedList<>(completeList.subList(0, 1));
+            list.addAll(toSave);
+            oStream.writeObject(list);
+            oStream.flush();
         } catch (IOException e) {
             Logger.logThrowable(e);
         }
     }
- 
+
     /**
      * Method which loads the settings of the game already stored on the file.
      *
@@ -99,7 +99,7 @@ public final class SaveOntoFile {
         list.remove(0);
         return list;
     }
- 
+
     private static List<Integer> loadList() {
         if (SaveOntoFile.f.exists()) {
             try (ObjectInputStream oStream2 = new ObjectInputStream(
@@ -113,7 +113,7 @@ public final class SaveOntoFile {
         }
         return new LinkedList<>(Arrays.asList(0));
     }
- 
+
     private static void createfile() {
         if (!SaveOntoFile.f.exists()) {
             try {
