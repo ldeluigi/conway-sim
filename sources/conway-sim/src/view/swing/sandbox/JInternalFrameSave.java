@@ -3,7 +3,6 @@ package view.swing.sandbox;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.beans.PropertyVetoException;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -81,18 +80,9 @@ public class JInternalFrameSave extends JInternalFrame {
             } catch (IOException ioex) {
                 Logger.logThrowable(ioex);
             }
-            try {
-                this.setClosed(true);
-            } catch (PropertyVetoException pve) {
-                Logger.logThrowable(pve);
-            }
         });
         bExit.addActionListener(e -> {
-            try {
-                this.setClosed(true);
-            } catch (PropertyVetoException pve) {
-                Logger.logThrowable(pve);
-            }
+            this.doDefaultCloseAction();
         });
         this.textName.addCaretListener(l -> enableSave());
         this.textAuthor.addCaretListener(l -> enableSave());
