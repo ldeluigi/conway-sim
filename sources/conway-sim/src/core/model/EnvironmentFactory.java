@@ -55,7 +55,7 @@ public final class EnvironmentFactory {
 
     /**
      * A method that creates an {@link Environment} filled with the given
-     * {@link CellEnvironment}.
+     * {@link CellEnvironment}. Pattern: Flyweight.
      * 
      * @param width
      *            of the Environment

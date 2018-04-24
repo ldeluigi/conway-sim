@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 
 /**
  * A matrix that keeps record of every position edited while returns a default
- * value for the others.
+ * value for the others. Pattern: Flyweight.
  * 
  * @param <X>
  *            the generic type of this matrix

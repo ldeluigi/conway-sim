@@ -22,7 +22,7 @@ import view.swing.DesktopGUI;
 import view.swing.sandbox.SandboxBuilder;
 
 /**
- * This class displays the main menu. Pattern: Singleton.
+ * This class displays the main menu.
  */
 public final class MainMenu extends JPanel {
     private static final long serialVersionUID = 1L;
