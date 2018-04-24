@@ -16,7 +16,10 @@ public class ExceptionHandler implements UncaughtExceptionHandler {
         Logger.logTime("Exception in thread: " + t.getName()
                 + (e.getMessage() == null ? "" : ". Message: " + e.getMessage() + "."));
         Logger.logThrowable(e);
-        SwingUtilities.invokeLater(() -> System.exit(1));
+        SwingUtilities.invokeLater(() -> {
+            Logger.logTime("Aborted");
+            System.exit(1);
+        });
     }
 
 }
