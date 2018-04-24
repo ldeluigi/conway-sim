@@ -114,6 +114,7 @@ public final class SandboxTools {
         gridOption.add(gridText, c);
         // button apply
         c.gridy = 0;
+        c.gridx = 1;
         c.gridwidth = 3;
         gridOption.add(bApply, c);
         c.gridwidth = 1;
