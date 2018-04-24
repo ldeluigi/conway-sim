@@ -12,7 +12,7 @@ import controller.editor.CMouseListener;
  * implementation using Swing.
  *
  */
-public class SwingMouseListener implements MouseListener {
+public class MouseListenerAdapter implements MouseListener {
 
     private final CMouseListener listener;
 
@@ -22,7 +22,7 @@ public class SwingMouseListener implements MouseListener {
      * @param l
      *            the listener to be joined to the real implementation
      */
-    public SwingMouseListener(final CMouseListener l) {
+    public MouseListenerAdapter(final CMouseListener l) {
         this.listener = l;
     }
 
@@ -47,7 +47,7 @@ public class SwingMouseListener implements MouseListener {
             } else {
                 this.listener.mousePressedIsLeftWithoutControl();
             }
-        } else {
+        } else if (SwingUtilities.isRightMouseButton(e)) {
             if (e.isControlDown()) {
                 this.listener.mousePressedisRightWithControl();
             } else {
@@ -65,7 +65,9 @@ public class SwingMouseListener implements MouseListener {
     @Override
     public void mouseReleased(final MouseEvent e) {
         if (SwingUtilities.isLeftMouseButton(e)) {
-            this.listener.mousereleasedleft();
+            this.listener.mouseReleasedLeft();
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+            this.listener.mouseReleasedRight();
         }
     }
 
@@ -79,9 +81,11 @@ public class SwingMouseListener implements MouseListener {
     @Override
     public void mouseEntered(final MouseEvent e) {
         if (SwingUtilities.isLeftMouseButton(e)) {
-            this.listener.mouseenteredwhilepressingleft();
+            this.listener.mouseEnteredWhilePressingLeft();
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+            this.listener.mouseEnteredWhilePressingRight();
         } else {
-            this.listener.mouseenteredwhilepressingright();
+            this.listener.mouseEnteredWithoutPress();
         }
     }
 

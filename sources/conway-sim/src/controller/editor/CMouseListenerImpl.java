@@ -66,14 +66,16 @@ public class CMouseListenerImpl implements CMouseListener {
      * control.
      */
     public void mousePressedisRightWithoutControl() {
-        this.editor.rotateCurrentPattern(1);
+        if (this.editor.isEnabled() && this.editor.isPlacingModeOn()) {
+            this.editor.rotateCurrentPattern(1);
+        }
     }
 
     /**
      * Method which manages a left mouse button release.
      */
     @Override
-    public void mousereleasedleft() {
+    public void mouseReleasedLeft() {
         this.editor.setMouseBeingPressed(false);
     }
 
@@ -81,7 +83,7 @@ public class CMouseListenerImpl implements CMouseListener {
      * This method is not supported.
      */
     @Override
-    public void mousereleasedright() {
+    public void mouseReleasedRight() {
     }
 
     /**
@@ -89,13 +91,9 @@ public class CMouseListenerImpl implements CMouseListener {
      * on the grid.
      */
     @Override
-    public void mouseenteredwhilepressingleft() {
-        if (this.editor.isEnabled()) {
-            if (this.editor.isPlacingModeOn()) {
-                this.editor.showPreview(this.row, this.column);
-            } else if (this.editor.isMouseBeingPressed()) {
+    public void mouseEnteredWhilePressingLeft() {
+        if (this.editor.isEnabled() && this.editor.isMouseBeingPressed()) {
                 this.editor.hit(this.row, this.column);
-            }
         }
     }
 
@@ -104,7 +102,15 @@ public class CMouseListenerImpl implements CMouseListener {
      * on the grid.
      */
     @Override
-    public void mouseenteredwhilepressingright() {
+    public void mouseEnteredWhilePressingRight() {
+    }
+
+    /**
+     * Method which manages mouse motion while changing position
+     * on the grid.
+     */
+    @Override
+    public void mouseEnteredWithoutPress() {
         if (this.editor.isEnabled() && this.editor.isPlacingModeOn()) {
             this.editor.showPreview(this.row, this.column);
         }
