@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.GridLayout;
 import java.awt.Image;
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -29,12 +28,11 @@ public final class SandboxTools {
     private static final int MIN_SIZE = 2;
     private static final int DEFAUL_SIZE = 100;
 
-    private static final Color BORDERD_COLOR = Color.BLACK;
     private static final Color DISABLE_TEXT_COLOR = Color.LIGHT_GRAY;
     private static final String FONT_NAME = Font.MONOSPACED;
     private static final int FONT_STYLE = Font.PLAIN;
 
-    private static final int BUTTON_TEXT_SIZE_RAPPOR = 12 / 10;
+    private static final int BUTTON_TEXT_SIZE_RAPPOR = 13 / 10;
     private static final String NO_TOOLTIP = "none";
 
     private static JSpinner spinnerWidth;
@@ -212,7 +210,8 @@ public final class SandboxTools {
             button.setToolTipText(tooltipText);
         }
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createLineBorder(BORDERD_COLOR, 2, false));
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
         button.setUI(new MetalButtonUI() {
             protected Color getDisabledTextColor() {
                 return DISABLE_TEXT_COLOR;

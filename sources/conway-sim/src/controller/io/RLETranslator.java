@@ -11,8 +11,8 @@ import core.utils.ListMatrix;
 import core.utils.Matrix;
 
 /**
- * 
- *
+ * RLETranslator contains static methods that converts RLE Strings (Our personal
+ * standard format) into a {@link Matrix} of {@link Enum} and vice versa.
  */
 public final class RLETranslator {
     private static final char EL = '$';
@@ -133,7 +133,7 @@ public final class RLETranslator {
     }
 
     /**
-     * Static method to apply the pattern to normalize the RLE String.
+     * Static method for applying the pattern in order to normalize the RLE String.
      * 
      * @param str
      *            The String to be patternized
