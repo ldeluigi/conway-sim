@@ -217,6 +217,8 @@ public class GenerationPanel extends JPanel {
      * Reset the current game to the original status.
      */
     public void resetGrid() {
+        this.generationController.pause();
+        this.end();
         this.generationController.reset();
     }
 
@@ -237,7 +239,7 @@ public class GenerationPanel extends JPanel {
         }
         int general = 0;
         //LEVEL OPTION
-        if (this.isLevelMode && !SwingUtilities.isEventDispatchThread()) {
+        if (this.isLevelMode) {
             this.gold = 0;
             general = (int) this.generationController.getCurrentElement().getCellMatrix()
                     .stream()
@@ -251,13 +253,14 @@ public class GenerationPanel extends JPanel {
             if (this.counterLevel >= REPETITION_FOR_WIN && !isWin) {
                 this.isWin = true;
                 this.view.scheduleGUIUpdate(() -> {
-                    this.end();
+                    this.resetGrid();
                     this.runnable.run();
                 });
                 this.counterLevel = 0;
             }
             // END LEVEL OPTION
         } else {
+            this.isWin = false;
             general = this.generationController.getCurrentElement().getCellMatrix().stream()
                     .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
         }
@@ -323,7 +326,6 @@ public class GenerationPanel extends JPanel {
         this.bPrev.setEnabled(false);
         this.bGoTo.setEnabled(false);
         if (this.bPause.isEnabled()) {
-            this.generationController.pause();
             this.bPause.setEnabled(false);
         }
         if (this.isLevelMode) {

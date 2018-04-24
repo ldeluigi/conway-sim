@@ -6,6 +6,7 @@ import core.campaign.Editable;
 import core.campaign.Level;
 import core.model.Cell;
 import core.model.Environment;
+import core.model.StandardCellEnvironments;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
@@ -18,7 +19,15 @@ public final class Colors {
     /**
      * Color for gold.
      */
-    public static final Color GOLD = new Color(255, 215, 0);
+    public static final Color GOLD = new Color(210, 210, 0);
+    /**
+     * Color for light gold.
+     */
+    public static final Color LIGHT_GOLD = new Color(255, 255, 150);
+    /**
+     * Color for light green.
+     */
+    public static final Color LIGHT_GREEN = new Color(200, 255, 200);
 
     private Colors() {
     }
@@ -47,24 +56,30 @@ public final class Colors {
      *            The cell type, Normal, Gold, Wall...
      * @param status
      *            The cell status, Alive or Dead
+     * @param cellEnvironments
+     *            The {@link Environment} of this cell
      * @return the color that the cell should have
      */
-    public static Color cellColor(final Editable editable, final CellType cellType, final Status status) {
+    public static Color cellColor(final Editable editable, final CellType cellType, final Status status, final StandardCellEnvironments cellEnvironments) {
         if (editable.equals(Editable.UNEDITABLE)) {
-            if (cellType.equals(CellType.NORMAL)) {
+            if (cellEnvironments.equals(StandardCellEnvironments.RADIOACTIVE)) {
+                return status.equals(Status.ALIVE) ? Colors.blend(Color.BLACK, Color.GREEN) : Colors.blend(Color.BLACK, Colors.blend(Color.BLACK, Color.GREEN));
+            } else if (cellType.equals(CellType.NORMAL)) {
                 return Colors.blend(Color.RED, status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
             } else if (cellType.equals(CellType.GOLDEN)) {
-                return Colors.blend(Colors.GOLD, status.equals(Status.ALIVE) ? Color.DARK_GRAY : Color.WHITE);
+                return status.equals(Status.ALIVE) ? Colors.GOLD : Colors.LIGHT_GOLD;
             } else if (cellType.equals(CellType.WALL)) {
                 return status.equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
             } else {
                 return Colors.blend(Color.RED, status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
             }
         } else {
-            if (cellType.equals(CellType.NORMAL)) {
+            if (cellEnvironments.equals(StandardCellEnvironments.RADIOACTIVE)) {
+                return status.equals(Status.ALIVE) ? Colors.blend(Color.GREEN, Color.BLACK) : Colors.LIGHT_GREEN;
+            } else if (cellType.equals(CellType.NORMAL)) {
                 return status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE;
             } else if (cellType.equals(CellType.GOLDEN)) {
-                return Colors.blend(Colors.GOLD, status.equals(Status.ALIVE) ? Color.DARK_GRAY : Color.WHITE);
+                return status.equals(Status.ALIVE) ? Colors.GOLD : Colors.LIGHT_GOLD;
             } else if (cellType.equals(CellType.WALL)) {
                 return status.equals(Status.ALIVE) ? Color.DARK_GRAY : Color.LIGHT_GRAY;
             } else {
@@ -114,7 +129,7 @@ public final class Colors {
      * @return the color that the cell should have
      */
     public static Color colorDefaultCell(final Status status) {
-        return Colors.cellColor(Editable.EDITABLE, CellType.NORMAL, status);
+        return Colors.cellColor(Editable.EDITABLE, CellType.NORMAL, status, StandardCellEnvironments.STANDARD);
     }
 
     /**
@@ -142,7 +157,7 @@ public final class Colors {
         for (int row = 0; row < environment.getHeight(); row++) {
             for (int col = 0; col < environment.getWidth(); col++) {
                 colorMatrix.set(row, col, Colors.cellColor(editableMatrix.get(row, col), cellTypeMatrix.get(row, col),
-                        statusMatrix.get(row, col)));
+                        statusMatrix.get(row, col), environment.getCellEnvironment(row, col) == StandardCellEnvironments.RADIOACTIVE ? StandardCellEnvironments.RADIOACTIVE : StandardCellEnvironments.STANDARD));
             }
         }
         return colorMatrix;

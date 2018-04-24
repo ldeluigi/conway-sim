@@ -10,7 +10,11 @@ public enum StandardCellEnvironments implements CellEnvironment {
     /**
      * This is the classic rule set of Conway's Game of Life.
      */
-    STANDARD(n -> n == 3, n -> n < 2 || n > 3);
+    STANDARD(n -> n == 3, n -> n < 2 || n > 3),
+    /**
+     * 
+     */
+    RADIOACTIVE(n -> n == 3, n -> true);
 
     private final Function<Integer, Boolean> checkBorn;
     private final Function<Integer, Boolean> checkDeath;

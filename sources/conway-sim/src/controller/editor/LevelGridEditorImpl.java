@@ -9,6 +9,7 @@ import core.model.Cell;
 import core.model.Generation;
 import core.model.GenerationFactory;
 import core.model.SimpleCell;
+import core.model.StandardCellEnvironments;
 import core.model.Status;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
@@ -82,8 +83,10 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
                     this.getCurrentStatus().get(row, col).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
             this.getGameGrid().displaySingleCell(row, col,
                     Colors.cellColor(this.currentLevel.getEditableMatrix().get(row, col),
-                            this.currentLevel.getCellTypeMatrix().get(row, col),
-                            this.getCurrentStatus().get(row, col)));
+                            this.currentLevel.getCellTypeMatrix().get(row, col), this.getCurrentStatus().get(row, col),
+                            this.currentLevel.getEnvironmentMatrix().getCellEnvironment(row, col)
+                                    == StandardCellEnvironments.RADIOACTIVE ? StandardCellEnvironments.RADIOACTIVE
+                                            : StandardCellEnvironments.STANDARD));
         }
     }
 

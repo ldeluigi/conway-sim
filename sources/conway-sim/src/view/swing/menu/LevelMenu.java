@@ -24,6 +24,7 @@ import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
 import core.campaign.Editable;
 import core.campaign.Level;
+import core.model.StandardCellEnvironments;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
 import view.Colors;
@@ -41,6 +42,7 @@ public class LevelMenu extends JPanel {
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
     private static final int GRID_TO_CELL_RATIO = 7;
+    private static final int GRID_RAPPORT_SCREEN = 4;
     private static final String LEVEL_NUMBER = "level.number";
     private static final String VALUE = "XXX";
     private static final int LEVEL_FOR_PAGE = 4;
@@ -75,10 +77,16 @@ public class LevelMenu extends JPanel {
         this.cardPanel.setOpaque(false);
         for (int i = 0; i < ResourceLoader.loadConstantInt(LEVEL_NUMBER) / LEVEL_FOR_PAGE
                 + (ResourceLoader.loadConstantInt(LEVEL_NUMBER) % LEVEL_FOR_PAGE == 0 ? 0 : 1); i++) {
-            this.cardPanel.addTab(ResourceLoader.loadString("level.page").replace(VALUE, String.valueOf(i)), panelLevel(i));
+            this.cardPanel.addTab(ResourceLoader.loadString("level.page").replace(VALUE, String.valueOf(i)),
+                    panelLevel(i));
         }
 
         this.setLayout(new BorderLayout());
+        final JPanel gridBagCenter = new JPanel(new GridBagLayout());
+        gridBagCenter.setOpaque(false);
+        final GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 0.5;
+        c.weighty = 0.5;
         final JPanel central = new JPanel(new FlowLayout());
         central.setOpaque(false);
         final JPanel rightPanel = new JPanel();
@@ -90,10 +98,10 @@ public class LevelMenu extends JPanel {
         final JPanel statusPanel = new JPanel(new FlowLayout());
         statusPanel.setOpaque(false);
 
-        this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE,
-                INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
+        this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
         statusPanel.add(this.gridPanel);
-        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / 4, this.mainGUI.getCurrentHeight() / 4));
+        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / GRID_RAPPORT_SCREEN,
+                this.mainGUI.getCurrentHeight() / GRID_RAPPORT_SCREEN));
         central.add(statusPanel);
         central.add(rightPanel);
 
@@ -107,7 +115,8 @@ public class LevelMenu extends JPanel {
                 this.getFont());
         bReturn.setFocusable(false);
         exitPanel.add(bReturn);
-        this.add(central, BorderLayout.CENTER);
+        gridBagCenter.add(central, c);
+        this.add(gridBagCenter, BorderLayout.CENTER);
         this.add(exitPanel, BorderLayout.AFTER_LAST_LINE);
 
         bStart.addActionListener(e -> start());
@@ -140,13 +149,14 @@ public class LevelMenu extends JPanel {
     }
 
     private void previousPage() {
-        this.cardPanel.setSelectedIndex(cardPanel.getSelectedIndex() - 1 < 0
-                ? 0 : this.cardPanel.getSelectedIndex() - 1);
+        this.cardPanel
+                .setSelectedIndex(cardPanel.getSelectedIndex() - 1 < 0 ? 0 : this.cardPanel.getSelectedIndex() - 1);
     }
 
     private void nextPage() {
         this.cardPanel.setSelectedIndex(this.cardPanel.getSelectedIndex() + 1 >= this.cardPanel.getComponentCount()
-                ? this.cardPanel.getSelectedIndex() : this.cardPanel.getSelectedIndex() + 1);
+                ? this.cardPanel.getSelectedIndex()
+                : this.cardPanel.getSelectedIndex() + 1);
     }
 
     private void start() {
@@ -169,7 +179,7 @@ public class LevelMenu extends JPanel {
         for (int row = 0; row < level.getEnvironmentMatrix().getHeight(); row++) {
             for (int col = 0; col < level.getEnvironmentMatrix().getWidth(); col++) {
                 colorMatrix.set(row, col, Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col),
-                        level.getInitialStateMatrix().get(row, col)));
+                        level.getInitialStateMatrix().get(row, col), (StandardCellEnvironments) level.getEnvironmentMatrix().getCellEnvironment(row, col)));
             }
         }
         SwingUtilities.invokeLater(() -> this.gridPanel.paintGrid(0, 0, Colors.colorMatrix(level)));
