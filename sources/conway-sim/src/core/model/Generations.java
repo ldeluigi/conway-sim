@@ -52,7 +52,7 @@ public final class Generations {
      * @param start
      *            that is the previous {@link Generation}
      * @param threads
-     *            to use (the caller will wait for the others to end)
+     *            to use (the caller thread will wait for the others to end)
      * @return the new computed {@link Generation}
      */
     public static Generation compute(final Generation start, final int threads) {
@@ -67,13 +67,13 @@ public final class Generations {
      * @param start
      *            is the first {@link Generation}
      * @param threads
-     *            to use (the caller will wait for the others to end)
+     *            to use (the caller thread will wait for the others to end)
      * @return the result of the computations
      */
     public static Generation compute(final int number, final Generation start, final int threads) {
         Objects.requireNonNull(start);
-        if (number < 0) {
-            throw new IllegalArgumentException("Number must be non-negative.");
+        if (number <= 0) {
+            throw new IllegalArgumentException("Number of threads must be greater than zero.");
         }
         final int cells = start.getWidth() * start.getHeight();
         final int nThread = Math.min(cells, threads);

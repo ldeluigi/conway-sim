@@ -28,7 +28,7 @@ import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 
 import controller.io.ResourceLoader;
-import view.GUI;
+import view.swing.GUI;
 
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;

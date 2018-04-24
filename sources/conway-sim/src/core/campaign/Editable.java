@@ -6,11 +6,11 @@ package core.campaign;
  */
 public enum Editable {
     /**
-     * 
+     * If should be editable.
      */
     EDITABLE,
     /**
-     * 
+     * If shouldn't be editable.
      */
     UNEDITABLE;
 }

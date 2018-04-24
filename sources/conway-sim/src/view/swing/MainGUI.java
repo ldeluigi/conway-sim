@@ -20,20 +20,21 @@ import controller.io.ResourceLoader;
 import view.swing.menu.MainMenu;
 
 /**
- * Implementation of a {@link DesktopGUI} with java.swing.
+ * Implementation of a {@link DesktopGUI} with swing.
  */
 public final class MainGUI implements DesktopGUI {
 
     private static final int PIXELS_FROM_SCREEN_BORDERS = 50;
-    private static final int MINIMUM_FRAME_RATIO = 2;
+    private static final float MINIMUM_FRAME_RATIO = 1.5f;
     private static final int INNER_FRAME_SCALE = 5;
+    private static final float MINIMUM_INTERNAL_FRAME_RATIO = 2f;
 
     private final JFrame frame;
     private final JDesktopPane desktop;
     private final JInternalFrame background;
 
     /**
-     * Starts the application.
+     * Starts the application, displaying the frame.
      */
     public MainGUI() {
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
@@ -65,8 +66,8 @@ public final class MainGUI implements DesktopGUI {
             }
         });
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.frame.setMinimumSize(
-                new Dimension(screenSize.width / MINIMUM_FRAME_RATIO, screenSize.height / MINIMUM_FRAME_RATIO));
+        this.frame.setMinimumSize(new Dimension(Math.round(screenSize.width / MINIMUM_FRAME_RATIO),
+                Math.round(screenSize.height / MINIMUM_FRAME_RATIO)));
         this.frame.setSize(screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2,
                 screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
         this.frame.setLocationRelativeTo(null);
@@ -125,8 +126,10 @@ public final class MainGUI implements DesktopGUI {
     @Override
     public void popUpFrame(final JInternalFrame iFrame, final boolean maximum) {
         final Dimension minDim = new Dimension(
-                Math.max(iFrame.getMinimumSize().width, this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
-                Math.max(iFrame.getMinimumSize().height, this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
+                Math.max(iFrame.getMinimumSize().width,
+                        Math.round(this.frame.getMinimumSize().width / MINIMUM_INTERNAL_FRAME_RATIO)),
+                Math.max(iFrame.getMinimumSize().height,
+                        Math.round(this.frame.getMinimumSize().height / MINIMUM_INTERNAL_FRAME_RATIO)));
         iFrame.setMinimumSize(minDim);
         iFrame.setSize(Math.max(minDim.width, iFrame.getWidth()), Math.max(minDim.height, iFrame.getHeight()));
         iFrame.setLocation((this.getCurrentWidth() - iFrame.getWidth()) / 2,
