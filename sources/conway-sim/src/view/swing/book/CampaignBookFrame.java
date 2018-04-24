@@ -83,14 +83,17 @@ public class CampaignBookFrame extends JInternalFrame {
 
         jList.addMouseListener(new MouseListener() {
             public void mousePressed(final MouseEvent e) {
-                setSelectedItem(jList.getSelectedValue());
-                final Matrix<Status> mat = new RLEConvert(ll.getBook().getRecipeByName(getSelectedItem()).getContent())
-                        .convert();
-                pg.changeGrid(mat.getWidth(), mat.getHeight());
-                final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
-                        () -> Status.DEAD);
-                Matrices.mergeXY(newmat, 0, 0, mat);
-                pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+                if (jList.getSelectedValue() != null) {
+                    setSelectedItem(jList.getSelectedValue());
+                    final Matrix<Status> mat = new RLEConvert(
+                            ll.getBook().getRecipeByName(getSelectedItem()).getContent()).convert();
+                    pg.changeGrid(mat.getWidth(), mat.getHeight());
+                    final Matrix<Status> newmat = new ListMatrix<Status>(pg.getGridWidth(), pg.getGridHeight(),
+                            () -> Status.DEAD);
+                    Matrices.mergeXY(newmat, 0, 0, mat);
+                    pg.paintGrid(0, 0, newmat.map(s -> s.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE));
+                }
+
             }
 
             @Override
