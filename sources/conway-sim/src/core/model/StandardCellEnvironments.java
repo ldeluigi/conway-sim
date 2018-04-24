@@ -3,8 +3,7 @@ package core.model;
 import java.util.function.Function;
 
 /**
- * Enumeration for common rule sets used in Conway's Game of Life.
- * 
+ * Enumeration for common rule sets of the Conway's Game of Life.
  */
 public enum StandardCellEnvironments implements CellEnvironment {
     /**
@@ -12,7 +11,8 @@ public enum StandardCellEnvironments implements CellEnvironment {
      */
     STANDARD(n -> n == 3, n -> n < 2 || n > 3),
     /**
-     * 
+     * This environment has the standard birth rules but makes cell die after 1
+     * generation.
      */
     RADIOACTIVE(n -> n == 3, n -> true);
 

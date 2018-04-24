@@ -2,7 +2,6 @@ package core.model;
 
 /**
  * Status describes the current state of a {@link Cell}.
- * 
  */
 public enum Status {
     /**

@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * Logger that outputs string to the selected LogOutput if available or to
  * {@link System#err}. The default LogOutput is a file output stream that
- * targets a file specified in properties (log.file.name)
+ * targets a file specified in properties (log.file.name).
  */
 public final class Logger {
 
@@ -27,7 +27,7 @@ public final class Logger {
      *            the message to log
      */
     public static void logTime(final String message) {
-        log(LocalDateTime.now() + " @ " + message);
+        log(LocalDateTime.now() + " # " + message);
     }
 
     /**
@@ -66,6 +66,10 @@ public final class Logger {
      * PrintStream that will be used as LogOutput. If this method is never called,
      * if it's called after the first log request, or if null is produced by the
      * supplier, the default LogOutput will be used instead.
+     * 
+     * Pass null to restore default LogOutput.
+     * 
+     * See {@link Logger} for information about the default LogOutput.
      * 
      * @param printStreamSupplier
      *            the supplier of {@link PrintStream} for LogOutput

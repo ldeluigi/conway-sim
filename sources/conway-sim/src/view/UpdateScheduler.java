@@ -6,7 +6,6 @@ package view;
 public interface UpdateScheduler {
 
     /**
-     * 
      * @param runnable
      *            the runnable that have to be added to the scheduler
      */

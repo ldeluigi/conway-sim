@@ -6,8 +6,7 @@ import core.model.Status;
 
 /**
  * Implementation of {@link Cell} which makes the user win the game when
- * involved in the development of the level.
- *
+ * involved in the solution of the level.
  */
 public class GameWinningCell extends SimpleCell {
 
@@ -27,7 +26,7 @@ public class GameWinningCell extends SimpleCell {
     }
 
     /**
-     * Is the method which gives a complete copy of the cell.
+     * Is the method which gives a exact copy of the cell.
      */
     @Override
     public Cell copy() {

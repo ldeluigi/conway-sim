@@ -28,7 +28,8 @@ public interface Level {
     Matrix<Status> getInitialStateMatrix();
 
     /**
-     * This method is also suggested to be used for level overall dimensions.
+     * This method is also suggested to be used for level overall dimensions,
+     * because Environment is usually a Flyweight object.
      * 
      * @return The environment of the generations in this level
      */

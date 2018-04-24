@@ -144,7 +144,7 @@ public final class Matrices {
 
     /**
      * Returns true only if the two Matrices have the same dimensions and every
-     * corresponding cell equals the counterpart.
+     * corresponding object equals the counterpart.
      * 
      * @param a
      *            a matrix
@@ -167,8 +167,9 @@ public final class Matrices {
     }
 
     /**
-     * Calls {@link Matrix#map(Function)} with (x -> x) on the source and returns
-     * the result.
+     * Calls {@link Matrix#map(Function)} with (x -> x) as visitor and returns the
+     * result. The effect is to recreate a new matrix data structure but with the
+     * same references to the contained objects.
      * 
      * @param <X>
      *            generic type
