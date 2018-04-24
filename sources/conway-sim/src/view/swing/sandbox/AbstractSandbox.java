@@ -1,9 +1,11 @@
 package view.swing.sandbox;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
 import javax.swing.InputMap;
@@ -217,7 +219,8 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     private void initializeNorth() {
         this.north = new JPanel(new BorderLayout());
         this.north.setOpaque(false);
-        this.north.add(this.generationPanel, BorderLayout.EAST);
+        this.north.add(this.generationPanel, BorderLayout.CENTER);
+        this.north.add(this.generationPanel.getGenerationJumpPanel(), BorderLayout.EAST);
         final JLabel mode = new JLabel(this.getTitle());
         mode.setFont(defaultFont());
         this.north.add(mode, BorderLayout.BEFORE_FIRST_LINE);
@@ -228,13 +231,25 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         this.south = new JPanel(new BorderLayout());
         final JButton bExit = SandboxTools.newJButton(ResourceLoader.loadString("sandbox.exit"),
                 ResourceLoader.loadString("sandbox.exit.tooltip"));
+        final Dimension newDim = bExit.getPreferredSize();
+        newDim.setSize(newDim.getWidth() * 2, newDim.height);
+        bExit.setPreferredSize(newDim);
+        SandboxTools.setIcon(bExit, newDim);
         south.setOpaque(false);
         bExit.addActionListener(e -> exit());
-        final JPanel southRight = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        final JPanel southRight = new JPanel(new GridBagLayout());
+        final GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
         southRight.setOpaque(false);
-        southRight.add(bClear);
-        southRight.add(this.bBook);
-        southRight.add(bExit);
+        southRight.add(this.bBook, c);
+        c.gridx = 1;
+        c.gridy = 0;
+        southRight.add(this.bClear, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 2;
+        southRight.add(bExit, c);
         south.add(SandboxTools.newJPanelStatistics(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize())),
                 BorderLayout.WEST);
         south.add(southRight, BorderLayout.EAST);

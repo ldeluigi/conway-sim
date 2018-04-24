@@ -15,7 +15,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -43,8 +42,10 @@ public class LevelMenu extends JPanel {
 
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
-    private static final int GRID_TO_CELL_RATIO = 7;
-    private static final int GRID_RAPPORT_SCREEN = 4;
+    private static final int GRID_TO_CELL_RATIO = 6;
+    private static final int GRID_WIDTH_RELATIONSHIP = 3;
+    private static final int GRID_HEIGHT_RELATIONSHIP = 2;
+    private static final int INSET_RELATIONSHIP = 30;
     private static final String LEVEL_NUMBER = "level.number";
     private static final String VALUE = "XXX";
     private static final int LEVEL_FOR_PAGE = 4;
@@ -62,11 +63,15 @@ public class LevelMenu extends JPanel {
     public LevelMenu(final DesktopGUI mainGUI) {
         this.setOpaque(false);
         this.mainGUI = mainGUI;
-        this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() * 2));
+        this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
 
         IntStream.rangeClosed(1, ResourceLoader.loadConstantInt(LEVEL_NUMBER)).forEach(n -> {
             final JButton b = SandboxTools.newJButton(
                     ResourceLoader.loadString("level.button").replaceAll(VALUE, String.valueOf(n)), this.getFont());
+            final Dimension newDim = b.getPreferredSize();
+            newDim.setSize(newDim.width, newDim.height * 2);
+            b.setPreferredSize(newDim);
+            SandboxTools.setIcon(b, newDim);
             b.setFont(this.getFont());
             this.bList.add(b);
             b.addActionListener(e -> {
@@ -82,30 +87,32 @@ public class LevelMenu extends JPanel {
             this.cardPanel.addTab(ResourceLoader.loadString("level.page").replace(VALUE, String.valueOf(i)),
                     panelLevel(i));
         }
+        this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
+        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / GRID_WIDTH_RELATIONSHIP, this.mainGUI.getCurrentHeight() / GRID_HEIGHT_RELATIONSHIP));
 
         this.setLayout(new BorderLayout());
         final JPanel gridBagCenter = new JPanel(new GridBagLayout());
         gridBagCenter.setOpaque(false);
         final GridBagConstraints c = new GridBagConstraints();
-        c.weightx = 0.5;
-        c.weighty = 0.5;
-        final JPanel central = new JPanel(new FlowLayout());
-        central.setOpaque(false);
-        final JPanel rightPanel = new JPanel();
-        rightPanel.setOpaque(false);
-        rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        rightPanel.add(cardPanel);
-        rightPanel.add(buildRightLeftButtonPanel());
-
-        final JPanel statusPanel = new JPanel(new FlowLayout());
-        statusPanel.setOpaque(false);
-
-        this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        statusPanel.add(this.gridPanel);
-        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / GRID_RAPPORT_SCREEN,
-                this.mainGUI.getCurrentHeight() / GRID_RAPPORT_SCREEN));
-        central.add(statusPanel);
-        central.add(rightPanel);
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridheight = 4;
+        c.gridwidth = 4;
+        c.insets = new Insets(this.mainGUI.getCurrentHeight() / INSET_RELATIONSHIP,
+                this.mainGUI.getCurrentWidth() / INSET_RELATIONSHIP,
+                this.mainGUI.getCurrentHeight() / INSET_RELATIONSHIP,
+                this.mainGUI.getCurrentWidth() / INSET_RELATIONSHIP);
+        gridBagCenter.add(gridPanel, c);
+        c.gridx = 4;
+        c.gridy = 0;
+        c.gridheight = 3;
+        c.gridwidth = 4;
+        gridBagCenter.add(cardPanel, c);
+        c.gridx = 6;
+        c.gridy = 3;
+        c.gridheight = 1;
+        c.gridwidth = 2;
+        gridBagCenter.add(buildRightLeftButtonPanel(), c);
 
         final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         exitPanel.setOpaque(false);
@@ -117,7 +124,6 @@ public class LevelMenu extends JPanel {
                 this.getFont());
         bReturn.setFocusable(false);
         exitPanel.add(bReturn);
-        gridBagCenter.add(central, c);
         this.add(gridBagCenter, BorderLayout.CENTER);
         this.add(exitPanel, BorderLayout.AFTER_LAST_LINE);
 
@@ -137,23 +143,33 @@ public class LevelMenu extends JPanel {
         final JPanel rightLeftButton = new JPanel(new FlowLayout());
         rightLeftButton.setOpaque(false);
         final JButton right = SandboxTools.newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
-        right.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.on").getScaledInstance((int) right.getPreferredSize().getWidth(),
-                (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
-        right.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.off").getScaledInstance((int) right.getPreferredSize().getWidth(),
-                (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
-        right.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.pressed")
-                .getScaledInstance((int) right.getPreferredSize().getWidth(),
-                        (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        final Dimension newDimR = right.getPreferredSize();
+        newDimR.setSize(right.getPreferredSize().width / 2, right.getPreferredSize().height);
+        right.setPreferredSize(newDimR);
+        right.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.on").getScaledInstance(
+                (int) right.getPreferredSize().getWidth(), (int) right.getPreferredSize().getHeight(),
+                Image.SCALE_SMOOTH)));
+        right.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.off").getScaledInstance(
+                (int) right.getPreferredSize().getWidth(), (int) right.getPreferredSize().getHeight(),
+                Image.SCALE_SMOOTH)));
+        right.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.pressed").getScaledInstance(
+                (int) right.getPreferredSize().getWidth(), (int) right.getPreferredSize().getHeight(),
+                Image.SCALE_SMOOTH)));
         right.setText("");
         final JButton left = SandboxTools.newJButton(ResourceLoader.loadString("level.button.left"), this.getFont());
         left.setFocusable(false);
-        left.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.on").getScaledInstance((int) left.getPreferredSize().getWidth(),
-                (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
-        left.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.off").getScaledInstance((int) left.getPreferredSize().getWidth(),
-                (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
-        left.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.pressed")
-                .getScaledInstance((int) left.getPreferredSize().getWidth(),
-                        (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        final Dimension newDimL = left.getPreferredSize();
+        newDimL.setSize(left.getPreferredSize().width / 2, left.getPreferredSize().height);
+        left.setPreferredSize(newDimL);
+        left.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.on").getScaledInstance(
+                (int) left.getPreferredSize().getWidth(), (int) left.getPreferredSize().getHeight(),
+                Image.SCALE_SMOOTH)));
+        left.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.off").getScaledInstance(
+                (int) left.getPreferredSize().getWidth(), (int) left.getPreferredSize().getHeight(),
+                Image.SCALE_SMOOTH)));
+        left.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.pressed").getScaledInstance(
+                (int) left.getPreferredSize().getWidth(), (int) left.getPreferredSize().getHeight(),
+                Image.SCALE_SMOOTH)));
         left.setText("");
         rightLeftButton.add(left);
         rightLeftButton.add(right);
@@ -195,8 +211,10 @@ public class LevelMenu extends JPanel {
                 level.getCellTypeMatrix().getHeight(), () -> null);
         for (int row = 0; row < level.getEnvironmentMatrix().getHeight(); row++) {
             for (int col = 0; col < level.getEnvironmentMatrix().getWidth(); col++) {
-                colorMatrix.set(row, col, Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col),
-                        level.getInitialStateMatrix().get(row, col), (StandardCellEnvironments) level.getEnvironmentMatrix().getCellEnvironment(row, col)));
+                colorMatrix.set(row, col,
+                        Colors.cellColor(Editable.EDITABLE, level.getCellTypeMatrix().get(row, col),
+                                level.getInitialStateMatrix().get(row, col),
+                                (StandardCellEnvironments) level.getEnvironmentMatrix().getCellEnvironment(row, col)));
             }
         }
         SwingUtilities.invokeLater(() -> this.gridPanel.paintGrid(0, 0, Colors.colorMatrix(level)));

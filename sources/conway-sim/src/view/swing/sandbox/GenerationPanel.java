@@ -1,8 +1,8 @@
 package view.swing.sandbox;
 
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
@@ -53,6 +53,8 @@ public class GenerationPanel extends JPanel {
     private final JButton bPlay;
     private final JProgressBar progresBar;
 
+    private final JPanel generationJumpPanel;
+
     private final GenerationController generationController;
     private final AbstractSandbox view;
 
@@ -99,40 +101,51 @@ public class GenerationPanel extends JPanel {
         this.progresBar.setIndeterminate(true);
         this.progresBar.setVisible(false);
 
-        this.setLayout(new GridLayout(2, 2));
-        final JPanel northL = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        northL.setOpaque(false);
-        final JPanel northR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        northR.setOpaque(false);
-        final JPanel southL = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        southL.setOpaque(false);
-        final JPanel southR = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        southR.setOpaque(false);
-        this.add(northL);
-        this.add(northR);
-        this.add(southL);
-        this.add(southR);
+        this.setLayout(new GridBagLayout());
+        this.setOpaque(false);
+        final GridBagConstraints c1 = new GridBagConstraints();
 
-        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000000, 10);
-        final JSpinner spinner = new JSpinner(spin);
-
-        northL.add(this.bStart);
+        // start, play, pause, stop
+        c1.gridx = 0;
+        c1.gridy = 0;
+        this.add(this.bStart, c1);
+        c1.gridx = 0;
+        c1.gridy = 1;
+        this.add(this.bPlay, c1);
+        c1.gridx = 1;
+        c1.gridy = 1;
+        this.add(this.bPause, c1);
+        c1.gridx = 2;
+        c1.gridy = 1;
+        this.add(this.bEnd, c1);
 
         // speed control
         this.speedSlider = new JSlider(MIN_SPEED, MAX_SPEED, 1);
         this.speedSlider.setFont(new Font(Font.MONOSPACED, Font.PLAIN, this.fontSize));
-        northL.add(speedSlider);
+        c1.gridwidth = 2;
+        c1.gridx = 1;
+        c1.gridy = 0;
+        this.add(speedSlider, c1);
 
-        // add button to the layout
-        southL.add(this.bPlay);
-        southL.add(this.bPause);
-        southL.add(this.bEnd);
-        southR.add(this.bPrev);
-        southR.add(this.bNext);
-        northR.add(this.bGoTo);
-        northR.add(this.progresBar);
-
-        northR.add(spinner); // to use the go to button
+        // generation jump panel
+        this.generationJumpPanel = new JPanel(new GridBagLayout());
+        this.generationJumpPanel.setOpaque(false);
+        final GridBagConstraints c2 = new GridBagConstraints();
+        c2.gridx = 0;
+        c2.gridy = 1;
+        this.generationJumpPanel.add(this.bPrev, c2);
+        c2.gridx = 1;
+        c2.gridy = 1;
+        this.generationJumpPanel.add(this.bNext, c2);
+        c2.gridx = 0;
+        c2.gridy = 0;
+        this.generationJumpPanel.add(this.bGoTo, c2);
+        this.generationJumpPanel.add(this.progresBar, c2);
+        c2.gridx = 1;
+        c2.gridy = 0;
+        final SpinnerNumberModel spin = new SpinnerNumberModel(0, 0, 1000000, 10);
+        final JSpinner spinner = new JSpinner(spin);
+        this.generationJumpPanel.add(spinner, c2); // to use the go to button
 
         this.setFont(new Font(this.getFont().getFontName(), this.getFont().getStyle(), this.fontSize));
 
@@ -146,6 +159,7 @@ public class GenerationPanel extends JPanel {
         this.bPrev.setEnabled(false);
         this.bGoTo.setEnabled(false);
 
+        //listener
         this.speedSlider.addChangeListener(e -> this.speedControl());
         this.bStart.addActionListener(e -> this.start());
         this.bEnd.addActionListener(e -> this.end());
@@ -196,6 +210,14 @@ public class GenerationPanel extends JPanel {
         this(view);
         this.runnable = runnableVictory;
         this.isLevelMode = true;
+    }
+
+    /**
+     * 
+     * @return the panel with the generation jump control.
+     */
+    public JPanel getGenerationJumpPanel() {
+        return this.generationJumpPanel;
     }
 
     /**
