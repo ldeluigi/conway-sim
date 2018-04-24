@@ -1,11 +1,9 @@
 package controller.editor;
 
-import java.awt.Color;
-import java.util.function.Function;
-
 import core.model.Status;
 import core.utils.Matrices;
 import core.utils.Matrix;
+import view.Colors;
 import view.swing.GridPanel;
 
 /**
@@ -13,11 +11,6 @@ import view.swing.GridPanel;
  * of a pattern of the grid.
  */
 public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGridEditor {
-
-    /**
-     * 
-     */
-    private static final Function<Status, Color> SELECT = s -> s.equals(Status.DEAD) ? Color.ORANGE : Color.RED;
 
     private boolean selectMode;
     private boolean firstCoordinateIsPresent;
@@ -105,7 +98,7 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
 
     private void setFirstCoordinate(final int row, final int col) { // when click
         this.applyChanges();
-        this.getGameGrid().displaySingleCell(row, col, SELECT.apply(this.getCurrentStatus().get(row, col)));
+        this.getGameGrid().displaySingleCell(row, col, Colors.selectMode(this.getCurrentStatus().get(row, col)));
         lastCol = col;
         lastRow = row;
     }
@@ -138,15 +131,15 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
             }
             for (int x = lowY; x <= hightY; x++) {
                 this.getCurrentStatus().set(lowX, x, this.getCurrentStatus().get(lowX, x));
-                this.getGameGrid().displaySingleCell(lowX, x, SELECT.apply(this.getCurrentStatus().get(lowX, x)));
+                this.getGameGrid().displaySingleCell(lowX, x, Colors.selectMode(this.getCurrentStatus().get(lowX, x)));
                 this.getCurrentStatus().set(hightX, x, this.getCurrentStatus().get(hightX, x));
-                this.getGameGrid().displaySingleCell(hightX, x, SELECT.apply(this.getCurrentStatus().get(hightX, x)));
+                this.getGameGrid().displaySingleCell(hightX, x, Colors.selectMode(this.getCurrentStatus().get(hightX, x)));
             }
             for (int x = lowX; x <= hightX; x++) {
                 this.getCurrentStatus().set(x, lowY, this.getCurrentStatus().get(x, lowY));
-                this.getGameGrid().displaySingleCell(x, lowY, SELECT.apply(this.getCurrentStatus().get(x, lowY)));
+                this.getGameGrid().displaySingleCell(x, lowY, Colors.selectMode(this.getCurrentStatus().get(x, lowY)));
                 this.getCurrentStatus().set(x, hightY, this.getCurrentStatus().get(x, hightY));
-                this.getGameGrid().displaySingleCell(x, hightY, SELECT.apply(this.getCurrentStatus().get(x, hightY)));
+                this.getGameGrid().displaySingleCell(x, hightY, Colors.selectMode(this.getCurrentStatus().get(x, hightY)));
             }
             cutReady = sizeRow > 2 && sizeCol > 2;
         }

@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Color;
+
 import core.campaign.CellType;
 import core.campaign.Editable;
 import core.campaign.Level;
@@ -220,5 +221,16 @@ public final class Colors {
     public static Matrix<Color> colorMatrix(final Level level) {
         return colorMatrix(level.getInitialStateMatrix(), level.getCellTypeMatrix(), level.getEditableMatrix(),
                 level.getEnvironmentMatrix());
+    }
+
+    /**
+     * 
+     * @param status
+     *          Status of the cell
+     * @return
+     *        color that the cell should have in select mode.
+     */
+    public static Color selectMode(final Status status) {
+        return status.equals(Status.DEAD) ? Color.ORANGE : Color.RED;
     }
 }

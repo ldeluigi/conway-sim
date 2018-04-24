@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -135,9 +137,24 @@ public class LevelMenu extends JPanel {
         final JPanel rightLeftButton = new JPanel(new FlowLayout());
         rightLeftButton.setOpaque(false);
         final JButton right = SandboxTools.newJButton(ResourceLoader.loadString("level.button.right"), this.getFont());
-        right.setFocusPainted(false);
+        right.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.on").getScaledInstance((int) right.getPreferredSize().getWidth(),
+                (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        right.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.off").getScaledInstance((int) right.getPreferredSize().getWidth(),
+                (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        right.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.right.pressed")
+                .getScaledInstance((int) right.getPreferredSize().getWidth(),
+                        (int) right.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        right.setText("");
         final JButton left = SandboxTools.newJButton(ResourceLoader.loadString("level.button.left"), this.getFont());
         left.setFocusable(false);
+        left.setIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.on").getScaledInstance((int) left.getPreferredSize().getWidth(),
+                (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        left.setDisabledIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.off").getScaledInstance((int) left.getPreferredSize().getWidth(),
+                (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        left.setPressedIcon(new ImageIcon(ResourceLoader.loadImage("menu.arrow.left.pressed")
+                .getScaledInstance((int) left.getPreferredSize().getWidth(),
+                        (int) left.getPreferredSize().getHeight(), Image.SCALE_SMOOTH)));
+        left.setText("");
         rightLeftButton.add(left);
         rightLeftButton.add(right);
 

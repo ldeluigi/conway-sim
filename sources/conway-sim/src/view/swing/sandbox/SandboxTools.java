@@ -32,7 +32,7 @@ public final class SandboxTools {
     private static final String FONT_NAME = Font.MONOSPACED;
     private static final int FONT_STYLE = Font.PLAIN;
 
-    private static final int BUTTON_TEXT_SIZE_RAPPOR = 13 / 10;
+    private static final double BUTTON_TEXT_SIZE_RAPPOR = 1.2;
     private static final String NO_TOOLTIP = "none";
 
     private static JSpinner spinnerWidth;
@@ -199,9 +199,9 @@ public final class SandboxTools {
         final JButton button = new JButton(name);
 
         final FontMetrics metrics = button.getFontMetrics(font);
-        final int width = metrics.stringWidth(name + " ");
+        final int width = metrics.stringWidth(name + "   ");
         final int height = metrics.getHeight();
-        final Dimension newDimension = new Dimension(width * BUTTON_TEXT_SIZE_RAPPOR, height * BUTTON_TEXT_SIZE_RAPPOR);
+        final Dimension newDimension = new Dimension((int) (width * BUTTON_TEXT_SIZE_RAPPOR), (int) (height * BUTTON_TEXT_SIZE_RAPPOR));
         button.setPreferredSize(newDimension);
         button.setMaximumSize(newDimension);
 
