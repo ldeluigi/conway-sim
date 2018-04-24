@@ -36,12 +36,12 @@ public final class ResourceLoader {
         RESOURCE_MAP.put("sandbox.button.on", "button_pixel.png");
         RESOURCE_MAP.put("sandbox.button.off", "button_pixel_off.png");
         RESOURCE_MAP.put("sandbox.button.pressed", "button_pixel_pressed.png");
-        RESOURCE_MAP.put("level.arrow.left.on", "arrow_left.png");
-        RESOURCE_MAP.put("level.arrow.left.off", "arrow_left_off.png");
-        RESOURCE_MAP.put("level.arrow.left.pressed", "arrow_left_pressed.png");
-        RESOURCE_MAP.put("level.arrow.right.on", "arrow_right.png");
-        RESOURCE_MAP.put("level.arrow.right.off", "arrow_right_off.png");
-        RESOURCE_MAP.put("level.arrow.right.pressed", "arrow_right_pressed.png");
+        RESOURCE_MAP.put("menu.arrow.left.on", "arrow_left.png");
+        RESOURCE_MAP.put("menu.arrow.left.off", "arrow_left_off.png");
+        RESOURCE_MAP.put("menu.arrow.left.pressed", "arrow_left_pressed.png");
+        RESOURCE_MAP.put("menu.arrow.right.on", "arrow_right.png");
+        RESOURCE_MAP.put("menu.arrow.right.off", "arrow_right_off.png");
+        RESOURCE_MAP.put("menu.arrow.right.pressed", "arrow_right_pressed.png");
         RESOURCE_MAP.put("level.complete.background", "bg_level_complete.jpg");
         RESOURCE_MAP.put("level.complete.egg", "bg_level_complete_egg.jpg");
     }
