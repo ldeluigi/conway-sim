@@ -1,5 +1,9 @@
 package crypto;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * 
  *
@@ -10,10 +14,30 @@ public class TestCrypto {
      * 
      * @param args
      */
-    public static void main(String[] args) {
-        int[] array = { 1, 2, 5, 18, -23 };
-        SaveOntoFile.saveSettings(array);
-        SaveOntoFile.loadSettings();
+    public static void main(final String[] args) {
+
+        ArrayList<Integer> aList = new ArrayList<>();
+        LinkedList<Integer> lList = new LinkedList<>();
+
+        /*aList.add(13);
+        aList.add(16);
+        aList.add(91);
+        aList.add(-44);
+
+        lList.add(8);
+        lList.add(9);
+        lList.add(-129);*/
+
+        //SaveOntoFile.saveProgress(31);
+
+        //SaveOntoFile.saveSettings(aList);
+        System.out.println(SaveOntoFile.loadProgress());
+        System.out.println(SaveOntoFile.loadSettings());
+
+
+        //SaveOntoFile.saveSettings(lList);
+        System.out.println(SaveOntoFile.loadProgress());
+        System.out.println(SaveOntoFile.loadSettings());
     }
 
 }

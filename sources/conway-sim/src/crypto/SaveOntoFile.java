@@ -11,8 +11,10 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
@@ -32,7 +34,7 @@ public final class SaveOntoFile {
 
     private static final String NAME = ".conway";
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
-    private static File f;
+    private static File f = new File(SaveOntoFile.NAME);
     private static List<Integer> settings = new ArrayList<>();
     private static Cipher cip;
     private static SecretKey key;
@@ -56,6 +58,18 @@ public final class SaveOntoFile {
         } catch (IOException e) {
             Logger.logThrowable(e);
         }
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public static Optional<Integer> loadProgress() {
+        List<Integer> saved = SaveOntoFile.loadList();
+        if (saved.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(saved.get(0));
     }
 
     /**
@@ -87,6 +101,19 @@ public final class SaveOntoFile {
 
     /**
      * 
+     * @return
+     */
+    public static Optional<List<Integer>> loadSettings(){
+        List<Integer> saved = SaveOntoFile.loadList();
+        int length = saved.size();
+        if (length == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(Collections.unmodifiableList(saved.subList(1, length)));
+    }
+
+    /**
+     * 
      * @param toSave
      */
     public static void saveSettings(final LinkedList<Integer> saveMe) {
@@ -112,25 +139,21 @@ public final class SaveOntoFile {
 
     }
 
-    /**
-     * 
-     */
-    public static void loadSettings() {
+    private static List<Integer> loadList() {
         if (SaveOntoFile.f.exists()) {
             try (ObjectInputStream oStream2 = new ObjectInputStream(
                     //new CipherInputStream(
                             new FileInputStream(SaveOntoFile.f)/* , SaveOntoFile.cip)*/)
             ) {
-                SaveOntoFile.settings = (List<Integer>) oStream2.readObject();
-                System.out.println(SaveOntoFile.settings);
+                return (List<Integer>) oStream2.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 Logger.logThrowable(e);
             }
         }
+        return SaveOntoFile.settings;
     }
 
     private static void createfile() {
-        SaveOntoFile.f = new File(SaveOntoFile.NAME);
         if (!SaveOntoFile.f.exists()) {
             try {
                 SaveOntoFile.f.createNewFile();
