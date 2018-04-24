@@ -76,7 +76,7 @@ public class GridEditorImpl implements PatternEditor {
      */
     @Override
     public void draw(final Generation gen) {
-        this.getGameGrid().paintGrid(0, 0, Colors.cellToColor(gen.getCellMatrix()));
+        this.getGameGrid().paintGrid(0, 0, Colors.colorDefaultCellMatrix(gen.getCellMatrix()));
     }
 
     /**
@@ -95,7 +95,7 @@ public class GridEditorImpl implements PatternEditor {
         this.getCurrentStatus().set(row, column,
                 this.getCurrentStatus().get(row, column).equals(Status.DEAD) ? Status.ALIVE : Status.DEAD);
         this.getGameGrid().displaySingleCell(row, column,
-                Colors.colorSingleCell(this.getCurrentStatus().get(row, column)));
+                Colors.colorDefaultCell(this.getCurrentStatus().get(row, column)));
     }
 
     /**
@@ -135,8 +135,8 @@ public class GridEditorImpl implements PatternEditor {
         }
         if ((this.getGameGrid().getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.getGameGrid().getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(Colors.statusToBlack(this.getCurrentStatus()), newRow,
-                    newColumn, Colors.statusToGray(this.pattern.get())));
+            this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(Colors.colorDefaultMatrix(this.getCurrentStatus()), newRow,
+                    newColumn, Colors.colorPattern(this.pattern.get())));
             this.lastPreviewRow = newRow;
             this.lastPreviewColumn = newColumn;
         }
@@ -342,7 +342,7 @@ public class GridEditorImpl implements PatternEditor {
      * 
      */
     protected void applyChanges() {
-        this.getGameGrid().paintGrid(0, 0, Colors.statusToBlack(this.getCurrentStatus()));
+        this.getGameGrid().paintGrid(0, 0, Colors.colorDefaultMatrix(this.getCurrentStatus()));
     }
 
     /**

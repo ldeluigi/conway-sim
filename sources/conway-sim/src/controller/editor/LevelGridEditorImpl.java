@@ -115,7 +115,7 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void draw(final Generation gen) {
-        this.getGameGrid().paintGrid(0, 0, Colors.colorEditableMatrix(gen.getCellMatrix().map(cell -> cell.getStatus()),
+        this.getGameGrid().paintGrid(0, 0, Colors.colorMatrix(gen.getCellMatrix().map(cell -> cell.getStatus()),
                 this.currentLevel.getCellTypeMatrix(), this.currentLevel.getEnvironmentMatrix()));
 
     }
@@ -150,7 +150,7 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
                 Matrices.mergeXY(
                         Colors.colorMatrix(getCurrentStatus(), this.currentLevel.getCellTypeMatrix(),
                                 this.currentLevel.getEditableMatrix(), this.currentLevel.getEnvironmentMatrix()),
-                        newRow, newCol, Colors.statusToGray(this.getPattern())));
+                        newRow, newCol, Colors.colorPattern(this.getPattern())));
     }
 
     /**
@@ -169,8 +169,8 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
             throw new IllegalStateException();
         }
         if (patternIsPlacable(row, column)) {
-            super.placeCurrentPattern(row, column);
-        } else if (this.lastIsPresent && patternIsPlacable(lastRowPlacable, lastColPlacable)) {
+            super.placeCurrentPattern(this.lastRowPlacable, this.lastColPlacable);
+        } else if (this.lastIsPresent && patternIsPlacable(this.lastRowPlacable, this.lastColPlacable)) {
             super.placeCurrentPattern(this.lastRowPlacable, this.lastColPlacable);
         }
     }

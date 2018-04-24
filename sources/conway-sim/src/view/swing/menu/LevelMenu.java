@@ -172,7 +172,7 @@ public class LevelMenu extends JPanel {
                         level.getInitialStateMatrix().get(row, col)));
             }
         }
-        SwingUtilities.invokeLater(() -> this.gridPanel.paintGrid(0, 0, colorMatrix));
+        SwingUtilities.invokeLater(() -> this.gridPanel.paintGrid(0, 0, Colors.colorMatrix(level)));
         this.gridPanel.setVisible(true);
     }
 
