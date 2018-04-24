@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.swing.JInternalFrame;
 
-import view.GUI;
-
 /**
  * Represents a GUI which allows to display and manage {@link JInternalFrame}.
  */

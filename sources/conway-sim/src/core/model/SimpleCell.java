@@ -22,11 +22,7 @@ public class SimpleCell implements Cell {
     }
 
     /**
-     * setStatus is the method to invoke in order to change the current status of
-     * the cell.
-     * 
-     * @param nextstatus
-     *            is the new status to be assumed.
+     * {@inheritDoc}
      */
     @Override
     public void setStatus(final Status nextstatus) {
@@ -34,9 +30,7 @@ public class SimpleCell implements Cell {
     }
 
     /**
-     * getStatus is the method to get the current status of the cell.
-     * 
-     * @return the current status
+     * {@inheritDoc}
      */
     @Override
     public Status getStatus() {

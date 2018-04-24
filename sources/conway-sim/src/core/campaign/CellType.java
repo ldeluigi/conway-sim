@@ -14,7 +14,7 @@ public enum CellType {
      */
     GOLDEN,
     /**
-     * These cells never changes and start as alive or dead.
+     * These cells never change and start as alive or dead.
      */
-    WALL,
+    WALL;
 }
