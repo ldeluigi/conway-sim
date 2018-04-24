@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import controller.io.ResourceLoader;
 import view.swing.DesktopGUI;
+import view.swing.level.LevelMenu;
 import view.swing.sandbox.SandboxBuilder;
 
 /**

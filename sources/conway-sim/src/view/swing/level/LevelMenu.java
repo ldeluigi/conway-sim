@@ -1,4 +1,4 @@
-package view.swing.menu;
+package view.swing.level;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -31,6 +31,8 @@ import core.utils.ListMatrix;
 import core.utils.Matrix;
 import view.Colors;
 import view.swing.DesktopGUI;
+import view.swing.menu.LoadingScreen;
+import view.swing.menu.MenuSettings;
 import view.swing.sandbox.JGridPanel;
 import view.swing.sandbox.KeyListenerFactory;
 import view.swing.sandbox.SandboxBuilder;
