@@ -34,6 +34,14 @@ public class GameWinningCell extends SimpleCell {
     }
 
     /**
+     * Describes Cell status with a string.
+     */
+    @Override
+    public String toString() {
+        return "GameWinningCell: " + getStatus().toString();
+    }
+
+    /**
      * Is the method which gives the code for this kind of cells.
      */
     @Override
@@ -41,4 +49,30 @@ public class GameWinningCell extends SimpleCell {
         return GameWinningCell.GAME_WINNING_CODE;
     }
 
+    /**
+     * Equals checks if the two cells have the same {@link Status} and if they are
+     * both {@link GameWinningCell}.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final GameWinningCell other = (GameWinningCell) obj;
+        return this.getStatus().equals(other.getStatus());
+    }
+
+    /**
+     * It's the same as {@link Status}.hashCode().
+     */
+    @Override
+    public int hashCode() {
+        return code() * 3 + super.hashCode();
+    }
 }
