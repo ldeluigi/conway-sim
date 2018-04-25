@@ -84,8 +84,8 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
             this.getGameGrid().displaySingleCell(row, col,
                     Colors.cellColor(this.currentLevel.getEditableMatrix().get(row, col),
                             this.currentLevel.getCellTypeMatrix().get(row, col), this.getCurrentStatus().get(row, col),
-                            this.currentLevel.getEnvironmentMatrix().getCellEnvironment(row, col)
-                                    == StandardCellEnvironments.RADIOACTIVE ? StandardCellEnvironments.RADIOACTIVE
+                            this.currentLevel.getEnvironmentMatrix().getCellEnvironment(row,
+                                    col) == StandardCellEnvironments.RADIOACTIVE ? StandardCellEnvironments.RADIOACTIVE
                                             : StandardCellEnvironments.STANDARD));
         }
     }

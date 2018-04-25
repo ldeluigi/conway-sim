@@ -31,8 +31,7 @@ public final class InformationManager {
     public static void saveProgress(final int level) {
         InformationManager.createfile();
         final List<Integer> completeList = InformationManager.loadList();
-        try (ObjectOutputStream oStream = new ObjectOutputStream(
-                new FileOutputStream(InformationManager.f))) {
+        try (ObjectOutputStream oStream = new ObjectOutputStream(new FileOutputStream(InformationManager.f))) {
             completeList.set(0, level);
             oStream.writeObject(completeList);
             oStream.flush();
@@ -60,8 +59,7 @@ public final class InformationManager {
     public static void saveSettings(final List<Integer> toSave) {
         InformationManager.createfile();
         final List<Integer> completeList = InformationManager.loadList();
-        try (ObjectOutputStream oStream = new ObjectOutputStream(
-                new FileOutputStream(InformationManager.f))) {
+        try (ObjectOutputStream oStream = new ObjectOutputStream(new FileOutputStream(InformationManager.f))) {
             final List<Integer> list = new LinkedList<>(completeList.subList(0, 1));
             list.addAll(toSave);
             oStream.writeObject(list);
@@ -85,11 +83,11 @@ public final class InformationManager {
     @SuppressWarnings("unchecked")
     private static List<Integer> loadList() {
         if (InformationManager.f.exists()) {
-            try (ObjectInputStream oStream2 = new ObjectInputStream(
-                    new FileInputStream(InformationManager.f))) {
+            try (ObjectInputStream oStream2 = new ObjectInputStream(new FileInputStream(InformationManager.f))) {
                 final Object read = oStream2.readObject();
                 List<Integer> list = null;
-                if (read instanceof LinkedList<?> && !((LinkedList<?>) read).isEmpty() && ((LinkedList<?>) read).stream().allMatch(o -> o instanceof Integer)) {
+                if (read instanceof LinkedList<?> && !((LinkedList<?>) read).isEmpty()
+                        && ((LinkedList<?>) read).stream().allMatch(o -> o instanceof Integer)) {
                     list = (LinkedList<Integer>) read;
                 }
                 return list != null && !list.isEmpty() ? list : new LinkedList<>(Arrays.asList(0));

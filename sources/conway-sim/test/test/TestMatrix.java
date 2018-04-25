@@ -37,14 +37,16 @@ public class TestMatrix {
 
     private static final Function<Integer[][], Matrix<Integer>> MATRIX_MAKER_INT = x -> new ListMatrix<>(x);
     private static final Function<String[][], Matrix<String>> MATRIX_MAKER_STRING = x -> new ListMatrix<>(x);
+
     private static <X> Matrix<X> filler(final int w, final int h, final Supplier<X> supplier) {
         return new ListMatrix<>(w, h, supplier);
     }
+
     /**
      * Test for get method.
      */
     @Test
-    public void testGet() { 
+    public void testGet() {
         final Matrix<Integer> m = MATRIX_MAKER_INT.apply(INTMATRIX);
         assertEquals(4, (int) m.get(1, 0), "Got wrong number in [1,0]");
         try {
@@ -141,8 +143,7 @@ public class TestMatrix {
      */
     @Test
     public void testEquals() {
-        assertEquals(filler(2, 2, () -> true),
-                Matrices.unmodifiableMatrix(filler(2, 2, () -> true)));
+        assertEquals(filler(2, 2, () -> true), Matrices.unmodifiableMatrix(filler(2, 2, () -> true)));
     }
 
     /**
