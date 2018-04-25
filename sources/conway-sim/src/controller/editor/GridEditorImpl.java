@@ -18,8 +18,7 @@ import view.Colors;
 import view.swing.GridPanel;
 
 /**
- * GridEditorImpl is the editor for the grid and the pattern manager depending
- * on which interface is used; it allows to perform changes to the view of the
+ * GridEditorImpl is the editor for the grid and the pattern manager; it allows to perform changes to the view of the
  * grid.
  *
  */
