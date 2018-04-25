@@ -70,7 +70,6 @@ public class GenerationPanel extends JPanel {
     private int counterLevel;
     private Runnable runnable;
     private boolean isWin;
-    private Integer gold;
 
     /**
      * A panel that contains all the buttons for the start and control of the game.
@@ -244,14 +243,6 @@ public class GenerationPanel extends JPanel {
         this.generationController.reset();
     }
 
-    private synchronized void incGold() {
-        this.gold++;
-    }
-
-    private synchronized int getGold() {
-        return this.gold.intValue();
-    }
-
     /**
      * Refresh the view of this panel and reload the constant.
      */
@@ -262,16 +253,13 @@ public class GenerationPanel extends JPanel {
         int general = 0;
         //LEVEL OPTION
         if (this.isLevelMode) {
-            this.gold = 0;
-            general = (int) this.generationController.getCurrentElement().getCellMatrix()
+            final int gold = this.generationController.getCurrentElement().getCellMatrix()
                     .stream()
-                    .parallel()
-                    .filter(cell -> cell.getStatus().equals(Status.ALIVE)).peek(e -> {
-                        if (e.code() == GameWinningCell.GAME_WINNING_CODE) {
-                            incGold();
-                        }
-                    }).count();
-            this.counterLevel = getGold() == 0 ? this.counterLevel + 1 : 0;
+                    .parallel().mapToInt(e -> e.getStatus().equals(Status.ALIVE) && e.code() == GameWinningCell.GAME_WINNING_CODE ? 1 : 0).sum();
+            general = this.generationController.getCurrentElement().getCellMatrix()
+                    .stream()
+                    .parallel().mapToInt(e -> e.getStatus().equals(Status.ALIVE) ? 1 : 0).sum();
+            this.counterLevel = gold == 0 ? this.counterLevel + 1 : 0;
             if (this.counterLevel >= REPETITION_FOR_WIN && !isWin) {
                 this.isWin = true;
                 this.view.scheduleGUIUpdate(() -> {

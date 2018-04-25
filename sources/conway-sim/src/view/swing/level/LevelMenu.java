@@ -13,7 +13,9 @@ import java.awt.Insets;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,6 +25,7 @@ import javax.swing.SwingUtilities;
 
 import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
+import controller.io.SaveOntoFile;
 import core.campaign.Editable;
 import core.campaign.Level;
 import core.model.StandardCellEnvironments;
@@ -52,6 +55,7 @@ public class LevelMenu extends JPanel {
     private static final String VALUE = "XXX";
     private static final int LEVEL_FOR_PAGE = 4;
     private final List<JButton> bList = new LinkedList<>();
+    private final List<JButton> bListUnReacedLevel = new LinkedList<>();
     private final DesktopGUI mainGUI;
     private final JGridPanel gridPanel;
     private final JTabbedPane cardPanel;
@@ -65,6 +69,7 @@ public class LevelMenu extends JPanel {
     public LevelMenu(final DesktopGUI mainGUI) {
         this.setOpaque(false);
         this.mainGUI = mainGUI;
+        final int currentProgress = SaveOntoFile.loadProgress();
         this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
 
         IntStream.rangeClosed(1, ResourceLoader.loadConstantInt(LEVEL_NUMBER)).forEach(n -> {
@@ -74,8 +79,18 @@ public class LevelMenu extends JPanel {
             newDim.setSize(newDim.width, newDim.height * 2);
             b.setPreferredSize(newDim);
             SandboxTools.setIcon(b, newDim);
+            System.out.println("load " + currentProgress);
+            if (currentProgress == 0 && n == 1) {
+                b.setEnabled(true);
+                this.bList.add(b);
+            } else if (currentProgress < n) {
+                b.setEnabled(false);
+                this.bListUnReacedLevel.add(b);
+            } else {
+                b.setEnabled(true);
+                this.bList.add(b);
+            }
             b.setFont(this.getFont());
-            this.bList.add(b);
             b.addActionListener(e -> {
                 this.currentLevel = n;
                 pressButton(b);
@@ -90,7 +105,8 @@ public class LevelMenu extends JPanel {
                     panelLevel(i));
         }
         this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / GRID_WIDTH_RELATIONSHIP, this.mainGUI.getCurrentHeight() / GRID_HEIGHT_RELATIONSHIP));
+        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / GRID_WIDTH_RELATIONSHIP,
+                this.mainGUI.getCurrentHeight() / GRID_HEIGHT_RELATIONSHIP));
 
         this.setLayout(new BorderLayout());
         final JPanel gridBagCenter = new JPanel(new GridBagLayout());
@@ -110,7 +126,7 @@ public class LevelMenu extends JPanel {
         c.gridheight = 3;
         c.gridwidth = 4;
         gridBagCenter.add(cardPanel, c);
-        c.gridx = 6;
+        c.gridx = 3 + 3;
         c.gridy = 3;
         c.gridheight = 1;
         c.gridwidth = 2;
@@ -232,7 +248,6 @@ public class LevelMenu extends JPanel {
         c.ipady = 1;
         c.gridx = 0;
         c.gridy = 0;
-        gridLevel.setOpaque(false);
         for (int i = LEVEL_FOR_PAGE * pageNumber; i < LEVEL_FOR_PAGE * pageNumber + LEVEL_FOR_PAGE; i++) {
             if (i > ResourceLoader.loadConstantInt(LEVEL_NUMBER) - 1) {
                 return gridLevel;
@@ -240,7 +255,8 @@ public class LevelMenu extends JPanel {
                 if (bList.size() > i) {
                     c.gridx = i % LEVEL_FOR_PAGE % 2 == 0 ? 0 : 1;
                     c.gridy = i % LEVEL_FOR_PAGE / 2;
-                    gridLevel.add(bList.get(i), c);
+                    gridLevel.add(Stream.concat(bList.stream(), bListUnReacedLevel.stream())
+                            .collect(Collectors.toList()).get(i), c);
                 }
             }
         }
