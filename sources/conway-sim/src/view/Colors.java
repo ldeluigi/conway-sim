@@ -50,6 +50,7 @@ public final class Colors {
     }
 
     /**
+     * Method to get to know the color to be shown by the cell.
      * 
      * @param editable
      *            The status that represent if a cell is editable or not
@@ -61,10 +62,12 @@ public final class Colors {
      *            The {@link Environment} of this cell
      * @return the color that the cell should have
      */
-    public static Color cellColor(final Editable editable, final CellType cellType, final Status status, final StandardCellEnvironments cellEnvironments) {
+    public static Color cellColor(final Editable editable, final CellType cellType, final Status status,
+            final StandardCellEnvironments cellEnvironments) {
         if (editable.equals(Editable.UNEDITABLE)) {
             if (cellEnvironments.equals(StandardCellEnvironments.RADIOACTIVE)) {
-                return status.equals(Status.ALIVE) ? Colors.blend(Color.BLACK, Color.GREEN) : Colors.blend(Color.BLACK, Colors.blend(Color.BLACK, Color.GREEN));
+                return status.equals(Status.ALIVE) ? Colors.blend(Color.BLACK, Color.GREEN)
+                        : Colors.blend(Color.BLACK, Colors.blend(Color.BLACK, Color.GREEN));
             } else if (cellType.equals(CellType.NORMAL)) {
                 return Colors.blend(Color.RED, status.equals(Status.ALIVE) ? Color.BLACK : Color.WHITE);
             } else if (cellType.equals(CellType.GOLDEN)) {
@@ -125,6 +128,8 @@ public final class Colors {
     }
 
     /**
+     * Method to color a simple cell.
+     * 
      * @param status
      *            The cell {@link Status} that represent the cell
      * @return the color that the cell should have
@@ -134,6 +139,8 @@ public final class Colors {
     }
 
     /**
+     * Method which gives a matrix of colors to be shown based on those representing
+     * the status, type and the editable areas.
      * 
      * @param statusMatrix
      *            the current {@link Status} {@link Matrix}
@@ -157,14 +164,20 @@ public final class Colors {
         final Matrix<Color> colorMatrix = new ListMatrix<>(environment.getWidth(), environment.getHeight(), () -> null);
         for (int row = 0; row < environment.getHeight(); row++) {
             for (int col = 0; col < environment.getWidth(); col++) {
-                colorMatrix.set(row, col, Colors.cellColor(editableMatrix.get(row, col), cellTypeMatrix.get(row, col),
-                        statusMatrix.get(row, col), environment.getCellEnvironment(row, col) == StandardCellEnvironments.RADIOACTIVE ? StandardCellEnvironments.RADIOACTIVE : StandardCellEnvironments.STANDARD));
+                colorMatrix.set(row, col,
+                        Colors.cellColor(editableMatrix.get(row, col), cellTypeMatrix.get(row, col),
+                                statusMatrix.get(row, col),
+                                environment.getCellEnvironment(row, col) == StandardCellEnvironments.RADIOACTIVE
+                                        ? StandardCellEnvironments.RADIOACTIVE
+                                        : StandardCellEnvironments.STANDARD));
             }
         }
         return colorMatrix;
     }
 
     /**
+     * Method which gives a matrix of colors to be shown based on those representing
+     * the status, type and the environment used.
      * 
      * @param statusMatrix
      *            the current {@link Matrix} of {@link Status}
@@ -183,6 +196,8 @@ public final class Colors {
     }
 
     /**
+     * Method which gives a matrix of colors to be shown based on those representing
+     * the status and the environment.
      * 
      * @param statusMatrix
      *            the current {@link Status} {@link Matrix}
@@ -197,9 +212,12 @@ public final class Colors {
     }
 
     /**
+     * Method which gives a matrix of colors to be shown based on those representing
+     * the status and those given in the level.
      * 
      * @param currentStatus
-     *            is the current {@link Matrix} of {@link Status} of the {@link Level}
+     *            is the current {@link Matrix} of {@link Status} of the
+     *            {@link Level}
      * @param level
      *            is the current Level
      * @return A Matrix of Color of the current status with the current level
@@ -211,12 +229,13 @@ public final class Colors {
     }
 
     /**
+     * Method which gives a matrix of colors to be shown based on those given in the
+     * level.
      * 
      * @param level
-     *          is the current level
-     * @return
-     *          a matrix<{@link Color}> of this level
-     *          with statusMatrix is initialStateMatrix
+     *            is the current level
+     * @return a matrix<{@link Color}> of this level with statusMatrix is
+     *         initialStateMatrix
      */
     public static Matrix<Color> colorMatrix(final Level level) {
         return colorMatrix(level.getInitialStateMatrix(), level.getCellTypeMatrix(), level.getEditableMatrix(),
@@ -224,11 +243,11 @@ public final class Colors {
     }
 
     /**
+     * Method which gives a color to be assumed by the cell based on the status.
      * 
      * @param status
-     *          Status of the cell
-     * @return
-     *        color that the cell should have in select mode.
+     *            Status of the cell
+     * @return color that the cell should have in select mode.
      */
     public static Color selectMode(final Status status) {
         return status.equals(Status.DEAD) ? Color.ORANGE : Color.RED;

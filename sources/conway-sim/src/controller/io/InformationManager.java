@@ -25,15 +25,15 @@ import javax.crypto.spec.IvParameterSpec;
  * It Is an utility class for storing and loading informations an a file.
  *
  */
-public final class SaveOntoFile {
+public final class InformationManager {
 
     private static final String NAME = ".conway";
     private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
-    private static File f = new File(SaveOntoFile.NAME);
+    private static File f = new File(InformationManager.NAME);
     private static Cipher cip;
     private static SecretKey key;
 
-    private SaveOntoFile() {
+    private InformationManager() {
     }
 
     /**
@@ -43,11 +43,11 @@ public final class SaveOntoFile {
      *            the number representing the level reached
      */
     public static void saveProgress(final int level) {
-        SaveOntoFile.createfile();
-        final List<Integer> completeList = SaveOntoFile.loadList();
+        InformationManager.createfile();
+        final List<Integer> completeList = InformationManager.loadList();
         try (ObjectOutputStream oStream = new ObjectOutputStream(
                 // new CipherOutputStream(
-                new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
+                new FileOutputStream(InformationManager.f)/* , InformationManager.cip) */)) {
             completeList.set(0, level);
             oStream.writeObject(completeList);
             oStream.flush();
@@ -62,7 +62,7 @@ public final class SaveOntoFile {
      * @return an Optional containing the level reached so far.
      */
     public static int loadProgress() {
-        final List<Integer> saved = SaveOntoFile.loadList();
+        final List<Integer> saved = InformationManager.loadList();
         return saved.get(0);
     }
 
@@ -73,11 +73,11 @@ public final class SaveOntoFile {
      *            is the List of integers to be stored
      */
     public static void saveSettings(final List<Integer> toSave) {
-        SaveOntoFile.createfile();
-        final List<Integer> completeList = SaveOntoFile.loadList();
+        InformationManager.createfile();
+        final List<Integer> completeList = InformationManager.loadList();
         try (ObjectOutputStream oStream = new ObjectOutputStream(
                 // new CipherOutputStream(
-                new FileOutputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
+                new FileOutputStream(InformationManager.f)/* , InformationManager.cip) */)) {
             final List<Integer> list = new LinkedList<>(completeList.subList(0, 1));
             list.addAll(toSave);
             oStream.writeObject(list);
@@ -93,16 +93,16 @@ public final class SaveOntoFile {
      * @return the Optional containing the list of integers describing the settings
      */
     public static List<Integer> loadSettings() {
-        final List<Integer> list = SaveOntoFile.loadList();
+        final List<Integer> list = InformationManager.loadList();
         list.remove(0);
         return list;
     }
 
     private static List<Integer> loadList() {
-        if (SaveOntoFile.f.exists()) {
+        if (InformationManager.f.exists()) {
             try (ObjectInputStream oStream2 = new ObjectInputStream(
                     // new CipherInputStream(
-                    new FileInputStream(SaveOntoFile.f)/* , SaveOntoFile.cip) */)) {
+                    new FileInputStream(InformationManager.f)/* , InformationManager.cip) */)) {
                 List<Integer> list = (LinkedList<Integer>) oStream2.readObject();
                 return list != null && !list.isEmpty() ? list : new LinkedList<>(Arrays.asList(0));
             } catch (IOException | ClassNotFoundException e) {
@@ -113,9 +113,9 @@ public final class SaveOntoFile {
     }
 
     private static void createfile() {
-        if (!SaveOntoFile.f.exists()) {
+        if (!InformationManager.f.exists()) {
             try {
-                SaveOntoFile.f.createNewFile();
+                InformationManager.f.createNewFile();
             } catch (Exception e) {
                 Logger.logThrowable(e);
             }
@@ -124,15 +124,15 @@ public final class SaveOntoFile {
 
     private static void cipInit(final boolean isEncription) {
         try {
-            SaveOntoFile.cip = Cipher.getInstance(ALGORITHM);
+            InformationManager.cip = Cipher.getInstance(ALGORITHM);
             final KeyGenerator keygen = KeyGenerator.getInstance("AES");
             keygen.init(128);
-            SaveOntoFile.key = keygen.generateKey();
+            InformationManager.key = keygen.generateKey();
             if (isEncription) {
-                SaveOntoFile.cip.init(Cipher.ENCRYPT_MODE, SaveOntoFile.key);
+                InformationManager.cip.init(Cipher.ENCRYPT_MODE, InformationManager.key);
             } else {
                 final IvParameterSpec ivParamSpec = new IvParameterSpec(key.getEncoded());
-                SaveOntoFile.cip.init(Cipher.DECRYPT_MODE, SaveOntoFile.key, ivParamSpec);
+                InformationManager.cip.init(Cipher.DECRYPT_MODE, InformationManager.key, ivParamSpec);
             }
         } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
                 | InvalidAlgorithmParameterException e) {

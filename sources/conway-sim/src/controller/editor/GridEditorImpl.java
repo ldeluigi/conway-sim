@@ -79,7 +79,7 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which places the current chosen pattern in the selected place.
+     * Is the method which changes the current status of the selected cell.
      * 
      * @param row
      *            is the vertical index of the cell where the user has clicked
@@ -108,7 +108,7 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which displays the future pattern together with the matrix
+     * Is the method which displays the pattern together with the matrix
      * already existing. The cursor of the mouse will guide the center of the
      * pattern all over the grid (if it can be fitted).
      * 
@@ -154,7 +154,7 @@ public class GridEditorImpl implements PatternEditor {
             this.pattern = Optional.of(Objects.requireNonNull(statusMatrix));
         } else {
             this.getGameGrid().notifyToUser(ResourceLoader.loadString("grideditor.pattern.error"));
-            this.removePatternWIthoutRedraw();
+            this.removePatternWithoutRedraw();
         }
     }
 
@@ -180,7 +180,7 @@ public class GridEditorImpl implements PatternEditor {
                 && (this.getGameGrid().getGridHeight() - newRow) >= this.getPattern().getHeight()) {
             this.setCurrentStatus(Matrices.mergeXY(this.getCurrentStatus(), newRow, newColumn, this.getPattern()));
             this.applyChanges();
-            this.removePatternWIthoutRedraw();
+            this.removePatternWithoutRedraw();
         } else if (!(newRow == this.lastPreviewRow && newColumn == this.lastPreviewColumn)) {
             this.placeCurrentPattern(this.lastPreviewRow, this.lastPreviewColumn);
         }
@@ -295,6 +295,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
+     * Is the method to get to know if a mouse button is being pressed.
+     * 
      * @return the mouseBeingPressed
      */
     public boolean isMouseBeingPressed() {
@@ -302,6 +304,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
+     * Is the method to invoke to let the editor know if a mouse button is being pressed.
+     * 
      * @param pressed
      *            is the boolean describing if the user is keeping a mouse button
      *            pressed
@@ -380,9 +384,9 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which removes the current pattern selectedfrom the book.
+     * Is the method which removes the current pattern selected from the book.
      */
-    private void removePatternWIthoutRedraw() {
+    private void removePatternWithoutRedraw() {
         this.pattern = Optional.empty();
     }
 }

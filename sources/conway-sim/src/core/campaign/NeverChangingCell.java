@@ -79,7 +79,7 @@ public class NeverChangingCell extends SimpleCell {
     }
 
     /**
-     * It's the same as {@link Status}.hashCode().
+     * Returns a number based o the .code() and the status of this kind of cells.
      */
     @Override
     public int hashCode() {

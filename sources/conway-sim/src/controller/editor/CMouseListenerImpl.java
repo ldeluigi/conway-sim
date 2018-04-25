@@ -93,7 +93,7 @@ public class CMouseListenerImpl implements CMouseListener {
     @Override
     public void mouseEnteredWhilePressingLeft() {
         if (this.editor.isEnabled() && this.editor.isMouseBeingPressed()) {
-                this.editor.hit(this.row, this.column);
+            this.editor.hit(this.row, this.column);
         }
     }
 
@@ -106,8 +106,7 @@ public class CMouseListenerImpl implements CMouseListener {
     }
 
     /**
-     * Method which manages mouse motion while changing position
-     * on the grid.
+     * Method which manages mouse motion while changing position on the grid.
      */
     @Override
     public void mouseEnteredWithoutPress() {

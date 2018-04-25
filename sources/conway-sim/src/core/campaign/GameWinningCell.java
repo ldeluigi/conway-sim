@@ -11,7 +11,7 @@ import core.model.Status;
 public class GameWinningCell extends SimpleCell {
 
     /**
-     * This is the code returned by {@link SimpleCell#code}.
+     * This is the code returned by {@link GameWinningCell#code}.
      */
     public static final int GAME_WINNING_CODE = 4;
 
@@ -69,7 +69,7 @@ public class GameWinningCell extends SimpleCell {
     }
 
     /**
-     * It's the same as {@link Status}.hashCode().
+     * Returns a number based o the .code() and the status of this kind of cells.
      */
     @Override
     public int hashCode() {
