@@ -82,20 +82,19 @@ public final class InformationManager {
 
     @SuppressWarnings("unchecked")
     private static List<Integer> loadList() {
+        List<Integer> list = null;
         if (InformationManager.f.exists()) {
             try (ObjectInputStream oStream2 = new ObjectInputStream(new FileInputStream(InformationManager.f))) {
                 final Object read = oStream2.readObject();
-                List<Integer> list = null;
                 if (read instanceof LinkedList<?> && !((LinkedList<?>) read).isEmpty()
                         && ((LinkedList<?>) read).stream().allMatch(o -> o instanceof Integer)) {
                     list = (LinkedList<Integer>) read;
                 }
-                return list != null && !list.isEmpty() ? list : new LinkedList<>(Arrays.asList(0));
             } catch (IOException | ClassNotFoundException e) {
                 Logger.logThrowable(e);
             }
         }
-        return new LinkedList<>(Arrays.asList(0));
+        return list != null && !list.isEmpty() ? list : new LinkedList<>(Arrays.asList(0));
     }
 
     private static void createfile() {
