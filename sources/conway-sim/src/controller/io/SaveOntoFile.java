@@ -1,4 +1,4 @@
-package crypto;
+package controller.io;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,8 +20,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
-
-import controller.io.Logger;
 
 /**
  * It Is an utility class for storing and loading informations an a file.
