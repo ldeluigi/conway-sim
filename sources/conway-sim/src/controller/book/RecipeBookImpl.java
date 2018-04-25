@@ -18,9 +18,7 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * @param pos
-     *            of the elem to extract
-     * @return recipe in given position
+     * {@inheritDoc}
      */
     @Override
     public Recipe getRecipeByPos(final int pos) {
@@ -28,11 +26,7 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * @param name
-     *            of elem to get
-     * @return elem with given name
-     * @throws NullPointerException
-     *             if recipe not found
+     * {@inheritDoc}
      */
     @Override
     public Recipe getRecipeByName(final String name) throws NullPointerException {
@@ -46,15 +40,7 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Method for adding a new Recipe in the book given the content, the name of the
-     * recipe and the author.
-     * 
-     * @param content
-     *            of the Recipe.
-     * @param name
-     *            of the Recipe.
-     * @param author
-     *            of the Recipe.
+     * {@inheritDoc}
      */
     @Override
     public void addRecipe(final String content, final String name, final String author) {
@@ -62,13 +48,7 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Method for adding a new Recipe in the book given the content and the name of
-     * the recipe.
-     * 
-     * @param content
-     *            of the Recipe.
-     * @param name
-     *            of the Recipe.
+     * {@inheritDoc}
      */
     @Override
     public void addRecipe(final String content, final String name) {
@@ -76,10 +56,7 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Method for adding a new Recipe in the book given only the content of it.
-     * 
-     * @param content
-     *            of the Recipe
+     * {@inheritDoc}
      */
     @Override
     public void addRecipe(final String content) {
@@ -87,9 +64,7 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Method for getting the Book Size.
-     * 
-     * @return size of Book
+     * {@inheritDoc}
      */
     @Override
     public int getRecipeBookSize() {
@@ -97,7 +72,7 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * Returns an unmodifiable list of {@link Recipe}.
+     * {@inheritDoc}
      */
     @Override
     public List<Recipe> getRecipeList() {

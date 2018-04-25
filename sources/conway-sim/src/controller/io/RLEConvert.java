@@ -201,7 +201,7 @@ public class RLEConvert {
 
                 String tag;
 
-                // RULE STILL NOT IMPLEMENTED
+                // RULE STILL UNUSED IN THIS PROJECT
                 @SuppressWarnings("unused")
                 String rule;
 
