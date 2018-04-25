@@ -6,20 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.crypto.Cipher;
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 
 /**
  * It Is an utility class for storing and loading informations an a file.
@@ -28,10 +17,7 @@ import javax.crypto.spec.IvParameterSpec;
 public final class InformationManager {
 
     private static final String NAME = ".conway";
-    private static final String ALGORITHM = "AES/CBC/PKCS5Padding";
     private static File f = new File(InformationManager.NAME);
-    private static Cipher cip;
-    private static SecretKey key;
 
     private InformationManager() {
     }
@@ -46,8 +32,7 @@ public final class InformationManager {
         InformationManager.createfile();
         final List<Integer> completeList = InformationManager.loadList();
         try (ObjectOutputStream oStream = new ObjectOutputStream(
-                // new CipherOutputStream(
-                new FileOutputStream(InformationManager.f)/* , InformationManager.cip) */)) {
+                new FileOutputStream(InformationManager.f))) {
             completeList.set(0, level);
             oStream.writeObject(completeList);
             oStream.flush();
@@ -76,8 +61,7 @@ public final class InformationManager {
         InformationManager.createfile();
         final List<Integer> completeList = InformationManager.loadList();
         try (ObjectOutputStream oStream = new ObjectOutputStream(
-                // new CipherOutputStream(
-                new FileOutputStream(InformationManager.f)/* , InformationManager.cip) */)) {
+                new FileOutputStream(InformationManager.f))) {
             final List<Integer> list = new LinkedList<>(completeList.subList(0, 1));
             list.addAll(toSave);
             oStream.writeObject(list);
@@ -98,12 +82,16 @@ public final class InformationManager {
         return list;
     }
 
+    @SuppressWarnings("unchecked")
     private static List<Integer> loadList() {
         if (InformationManager.f.exists()) {
             try (ObjectInputStream oStream2 = new ObjectInputStream(
-                    // new CipherInputStream(
-                    new FileInputStream(InformationManager.f)/* , InformationManager.cip) */)) {
-                List<Integer> list = (LinkedList<Integer>) oStream2.readObject();
+                    new FileInputStream(InformationManager.f))) {
+                final Object read = oStream2.readObject();
+                List<Integer> list = null;
+                if (read instanceof LinkedList<?> && !((LinkedList<?>) read).isEmpty() && ((LinkedList<?>) read).stream().allMatch(o -> o instanceof Integer)) {
+                    list = (LinkedList<Integer>) read;
+                }
                 return list != null && !list.isEmpty() ? list : new LinkedList<>(Arrays.asList(0));
             } catch (IOException | ClassNotFoundException e) {
                 Logger.logThrowable(e);
@@ -119,24 +107,6 @@ public final class InformationManager {
             } catch (Exception e) {
                 Logger.logThrowable(e);
             }
-        }
-    }
-
-    private static void cipInit(final boolean isEncription) {
-        try {
-            InformationManager.cip = Cipher.getInstance(ALGORITHM);
-            final KeyGenerator keygen = KeyGenerator.getInstance("AES");
-            keygen.init(128);
-            InformationManager.key = keygen.generateKey();
-            if (isEncription) {
-                InformationManager.cip.init(Cipher.ENCRYPT_MODE, InformationManager.key);
-            } else {
-                final IvParameterSpec ivParamSpec = new IvParameterSpec(key.getEncoded());
-                InformationManager.cip.init(Cipher.DECRYPT_MODE, InformationManager.key, ivParamSpec);
-            }
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException
-                | InvalidAlgorithmParameterException e) {
-            Logger.logThrowable(e);
         }
     }
 }
