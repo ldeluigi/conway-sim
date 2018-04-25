@@ -29,8 +29,9 @@ public class CMouseListenerImpl implements CMouseListener {
     }
 
     /**
-     * Method which manages a click on the left mouse button without pressing
-     * control.
+     * This method checks if the user can edit the grid, in this case notifies the
+     * editor and calls the methods to place a pattern or change the status of a
+     * cell.
      */
     @Override
     public void mousePressedIsLeftWithoutControl() {
@@ -51,8 +52,8 @@ public class CMouseListenerImpl implements CMouseListener {
     }
 
     /**
-     * Method which manages a click on the right mouse button while pressing
-     * control.
+     * This method checks if the user can edit the grid and a pattern has been
+     * chosen, in this case removes the pattern notifying the editor.
      */
     @Override
     public void mousePressedisRightWithControl() {
@@ -62,8 +63,8 @@ public class CMouseListenerImpl implements CMouseListener {
     }
 
     /**
-     * Method which manages a click on the right mouse button without pressing
-     * control.
+     * This method checks if the user can edit the grid and a pattern has been
+     * chosen, in this case rotates the pattern notifying the editor.
      */
     public void mousePressedisRightWithoutControl() {
         if (this.editor.isEnabled() && this.editor.isPlacingModeOn()) {
@@ -72,7 +73,7 @@ public class CMouseListenerImpl implements CMouseListener {
     }
 
     /**
-     * Method which manages a left mouse button release.
+     * This method notifies the editor as the mouse left button is being pressed.
      */
     @Override
     public void mouseReleasedLeft() {
@@ -87,8 +88,9 @@ public class CMouseListenerImpl implements CMouseListener {
     }
 
     /**
-     * Method which manages left mouse button being pressed while changing position
-     * on the grid.
+     * This method checks if the user can edit the grid and the mouse entered a cell
+     * while pressing a button, in that case calls the method to change the status
+     * of the cell.
      */
     @Override
     public void mouseEnteredWhilePressingLeft() {
@@ -98,15 +100,15 @@ public class CMouseListenerImpl implements CMouseListener {
     }
 
     /**
-     * Method which manages right mouse button being pressed while changing position
-     * on the grid.
+     * This method is not supported.
      */
     @Override
     public void mouseEnteredWhilePressingRight() {
     }
 
     /**
-     * Method which manages mouse motion while changing position on the grid.
+     * This method checks if the user can edit the grid and a pattern has been
+     * chosen, in that case shows the pattern as it was on the grid.
      */
     @Override
     public void mouseEnteredWithoutPress() {

@@ -53,6 +53,9 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
+     * This is returns a boolean got from the Optional object containing the
+     * pattern.
+     * 
      * @return true if a pattern is being placed
      */
     protected boolean patternIsPresent() {
@@ -60,6 +63,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
+     * This method returns the matrix describing the pattern currently chosen.
+     * 
      * @return current pattern if present or else throws
      *         {@link NoSuchElementException}
      */
@@ -68,7 +73,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which draws the generation on the grid.
+     * Is the method which draws the generation on the grid notifying the panel
+     * containing the grid and telling what to paint.
      * 
      * @param gen
      *            is the {@link Generation} which should be displayed
@@ -79,7 +85,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which changes the current status of the selected cell.
+     * This method changes the status of the selected cell and making the grid
+     * repaint it.
      * 
      * @param row
      *            is the vertical index of the cell where the user has clicked
@@ -98,7 +105,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which gives back the current generation displayed.
+     * This method gives back the generation representing the current status of the
+     * grid generating it in the factory.
      * 
      * @return the generation displayed.
      */
@@ -110,7 +118,9 @@ public class GridEditorImpl implements PatternEditor {
     /**
      * Is the method which displays the pattern together with the matrix already
      * existing. The cursor of the mouse will guide the center of the pattern all
-     * over the grid (if it can be fitted).
+     * over the grid (if it can be fitted) as they will be calculated differently
+     * from the actual position of the pointer. It also makes the grid paint the
+     * pattern.
      * 
      * @param row
      *            is the vertical index of the cell where the user is pointing
@@ -142,7 +152,9 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which sets the given pattern as the one to be placed.
+     * Is the method which checks if the the given pattern can be placed, if so its
+     * matrix can be saved in the editor to be displayed (invoking the method in the
+     * grid) or merged in the future. Else the user gets notified.
      * 
      * @param statusMatrix
      *            is the matrix containing the pattern
@@ -159,7 +171,9 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which merges together the existing matrix and the pattern.
+     * Is the method which merges together the existing matrix and the pattern. The
+     * indexes are changed as the pattern is centered following the cursor. The
+     * resulting matrix gets shown in the grid.
      * 
      * @param row
      *            is the index describing the lastPreviewRow where to add the first
@@ -187,7 +201,7 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method to invoke to know if a pattern is set and can be placed.
+     * This method checks if the pattern is present and saved in the editor.
      * 
      * @return a boolean describing the presence (or absence) of the pattern
      */
@@ -197,7 +211,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method to invoke in order to rotate the pattern.
+     * This method checks if the user can edit the grid and the pattern is present,
+     * if so it gets rotated using the method in Matrix.
      * 
      * @param hits
      *            is the number of click(s) from the mouse
@@ -232,7 +247,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method to set enable (or disable) the placing mode.
+     * Is the method to set enable (or disable) the placing mode. If so repaints the
+     * grid.
      * 
      * @param enabled
      *            is the boolean describing the next setting
@@ -258,7 +274,8 @@ public class GridEditorImpl implements PatternEditor {
 
     /**
      * Is the method which changes both dimensions of the grid currently used and
-     * shown.
+     * shown. It cuts the existing matrix using the method in Matrix and applies it
+     * merging the cut piece on a new larger or smaller one.
      * 
      * @param horizontal
      *            is the length of the future grid in number of cells
@@ -316,6 +333,7 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
+     * This method changes the indexes to let matrixes be cut or merged.
      * 
      * @param row
      *            start row
