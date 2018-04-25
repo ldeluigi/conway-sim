@@ -27,6 +27,7 @@ public class TestRLETranslator {
         final String resultTranslation = RLETranslator.rleMatrixToString(RESULTMATRIX);
         assertEquals(RESULTSTRING, resultTranslation, "Matrix to String Translation Test:");
     }
+
     /**
      * Test for conversion from String to Matrix<? extends Enum<?>>
      */

@@ -158,17 +158,15 @@ public class GenerationPanel extends JPanel {
         this.bPrev.setEnabled(false);
         this.bGoTo.setEnabled(false);
 
-        //listener
+        // listener
         this.speedSlider.addChangeListener(e -> this.speedControl());
         this.bStart.addActionListener(e -> this.start());
         this.bEnd.addActionListener(e -> this.end());
         this.bPlay.addActionListener(e -> this.resume());
         this.bPause.addActionListener(e -> this.pause());
         this.bGoTo.addActionListener(e -> this.goTo(Long.parseLong(spinner.getValue().toString())));
-        this.bPrev.addActionListener(
-                e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
-        this.bNext.addActionListener(
-                e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
+        this.bPrev.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() - 1L));
+        this.bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (this.bStart.isEnabled()) {
                 this.bStart.doClick();
@@ -180,14 +178,10 @@ public class GenerationPanel extends JPanel {
         });
 
         // Key listener of the panel
-        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE,
-                () -> this.bEnd.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT,
-                () -> this.bNext.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT,
-                () -> this.bPrev.doClick());
-        KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER,
-                () -> this.bGoTo.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "end", KeyEvent.VK_ESCAPE, () -> this.bEnd.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "next", KeyEvent.VK_RIGHT, () -> this.bNext.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "previous", KeyEvent.VK_LEFT, () -> this.bPrev.doClick());
+        KeyListenerFactory.addKeyListener(this.view, "goto", KeyEvent.VK_ENTER, () -> this.bGoTo.doClick());
         KeyListenerFactory.addKeyListener(this.view, "speedUp", KeyEvent.VK_UP,
                 () -> this.speedSlider.setValue(speedSlider.getValue() + 1));
         KeyListenerFactory.addKeyListener(this.view, "speedDown", KeyEvent.VK_DOWN,
@@ -251,14 +245,13 @@ public class GenerationPanel extends JPanel {
             this.view.getGridEditor().draw(this.generationController.getCurrentElement());
         }
         int general = 0;
-        //LEVEL OPTION
+        // LEVEL OPTION
         if (this.isLevelMode) {
-            final int gold = this.generationController.getCurrentElement().getCellMatrix()
-                    .stream()
-                    .parallel().mapToInt(e -> e.getStatus().equals(Status.ALIVE) && e.code() == GameWinningCell.GAME_WINNING_CODE ? 1 : 0).sum();
-            general = this.generationController.getCurrentElement().getCellMatrix()
-                    .stream()
-                    .parallel().mapToInt(e -> e.getStatus().equals(Status.ALIVE) ? 1 : 0).sum();
+            final int gold = this.generationController.getCurrentElement().getCellMatrix().stream().parallel().mapToInt(
+                    e -> e.getStatus().equals(Status.ALIVE) && e.code() == GameWinningCell.GAME_WINNING_CODE ? 1 : 0)
+                    .sum();
+            general = this.generationController.getCurrentElement().getCellMatrix().stream().parallel()
+                    .mapToInt(e -> e.getStatus().equals(Status.ALIVE) ? 1 : 0).sum();
             this.counterLevel = gold == 0 ? this.counterLevel + 1 : 0;
             if (this.counterLevel >= REPETITION_FOR_WIN && !isWin) {
                 this.isWin = true;

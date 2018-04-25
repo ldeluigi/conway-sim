@@ -71,7 +71,8 @@ public interface PatternEditor extends SimpleGridEditor {
     boolean isMouseBeingPressed();
 
     /**
-     * Is the method to invoke to let the editor know if a mouse button is being pressed.
+     * Is the method to invoke to let the editor know if a mouse button is being
+     * pressed.
      * 
      * @param pressed
      *            is the boolean describing if the user is keeping a mouse button

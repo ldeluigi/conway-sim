@@ -18,8 +18,8 @@ import view.Colors;
 import view.swing.GridPanel;
 
 /**
- * GridEditorImpl is the editor for the grid and the pattern manager; it allows to perform changes to the view of the
- * grid.
+ * GridEditorImpl is the editor for the grid and the pattern manager; it allows
+ * to perform changes to the view of the grid.
  *
  */
 public class GridEditorImpl implements PatternEditor {
@@ -108,9 +108,9 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method which displays the pattern together with the matrix
-     * already existing. The cursor of the mouse will guide the center of the
-     * pattern all over the grid (if it can be fitted).
+     * Is the method which displays the pattern together with the matrix already
+     * existing. The cursor of the mouse will guide the center of the pattern all
+     * over the grid (if it can be fitted).
      * 
      * @param row
      *            is the vertical index of the cell where the user is pointing
@@ -134,8 +134,8 @@ public class GridEditorImpl implements PatternEditor {
         }
         if ((this.getGameGrid().getGridWidth() - newColumn) >= this.pattern.get().getWidth()
                 && (this.getGameGrid().getGridHeight() - newRow) >= this.pattern.get().getHeight()) {
-            this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(Colors.colorDefaultMatrix(this.getCurrentStatus()), newRow,
-                    newColumn, Colors.colorPattern(this.pattern.get())));
+            this.getGameGrid().paintGrid(0, 0, Matrices.mergeXY(Colors.colorDefaultMatrix(this.getCurrentStatus()),
+                    newRow, newColumn, Colors.colorPattern(this.pattern.get())));
             this.lastPreviewRow = newRow;
             this.lastPreviewColumn = newColumn;
         }
@@ -304,7 +304,8 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * Is the method to invoke to let the editor know if a mouse button is being pressed.
+     * Is the method to invoke to let the editor know if a mouse button is being
+     * pressed.
      * 
      * @param pressed
      *            is the boolean describing if the user is keeping a mouse button

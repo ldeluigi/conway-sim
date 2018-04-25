@@ -133,13 +133,15 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
                 this.getCurrentStatus().set(lowX, x, this.getCurrentStatus().get(lowX, x));
                 this.getGameGrid().displaySingleCell(lowX, x, Colors.selectMode(this.getCurrentStatus().get(lowX, x)));
                 this.getCurrentStatus().set(hightX, x, this.getCurrentStatus().get(hightX, x));
-                this.getGameGrid().displaySingleCell(hightX, x, Colors.selectMode(this.getCurrentStatus().get(hightX, x)));
+                this.getGameGrid().displaySingleCell(hightX, x,
+                        Colors.selectMode(this.getCurrentStatus().get(hightX, x)));
             }
             for (int x = lowX; x <= hightX; x++) {
                 this.getCurrentStatus().set(x, lowY, this.getCurrentStatus().get(x, lowY));
                 this.getGameGrid().displaySingleCell(x, lowY, Colors.selectMode(this.getCurrentStatus().get(x, lowY)));
                 this.getCurrentStatus().set(x, hightY, this.getCurrentStatus().get(x, hightY));
-                this.getGameGrid().displaySingleCell(x, hightY, Colors.selectMode(this.getCurrentStatus().get(x, hightY)));
+                this.getGameGrid().displaySingleCell(x, hightY,
+                        Colors.selectMode(this.getCurrentStatus().get(x, hightY)));
             }
             cutReady = sizeRow > 2 && sizeCol > 2;
         }
