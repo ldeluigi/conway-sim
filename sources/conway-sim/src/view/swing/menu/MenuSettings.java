@@ -34,7 +34,6 @@ import view.swing.GUI;
 
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
 /**
@@ -148,7 +147,7 @@ public final class MenuSettings extends JPanel {
                 new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
         ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
         ret.addActionListener(e -> {
-            SwingUtilities.invokeLater(this::saveSettings);
+            saveSettings();
             mainGUI.backToMainMenu();
         });
         c.anchor = GridBagConstraints.CENTER;
