@@ -21,6 +21,7 @@ import core.utils.Matrix;
  */
 public class TestMatrix {
 
+    private static final String EXCEPTION_CORRECTLY_THROWN = "Exception correctly thrown";
     private static final int SIX = 6;
     private static final int TWELVE = 12;
     private static final int CASUAL_NUMBER = 999;
@@ -53,13 +54,13 @@ public class TestMatrix {
             m.get(10, 0);
             fail("Should throw exception out of bounds");
         } catch (Exception e) {
-            System.out.println("Exception correctly thrown");
+            System.out.println(EXCEPTION_CORRECTLY_THROWN);
         }
         try {
             m.get(0, 10);
             fail("Should throw exception out of bounds");
         } catch (Exception e) {
-            System.out.println("Exception correctly thrown");
+            System.out.println(EXCEPTION_CORRECTLY_THROWN);
         }
         assertEquals(1, (int) m.get(0, 0), "Wrong number in [0,0]");
     }
@@ -97,13 +98,13 @@ public class TestMatrix {
             m.set(10, 0, CASUAL_NUMBER);
             fail("Should throw exception");
         } catch (Exception e) {
-            System.out.println("Exception correctly thrown");
+            System.out.println(EXCEPTION_CORRECTLY_THROWN);
         }
         try {
             m.set(0, 10, CASUAL_NUMBER);
             fail("Should throw exception");
         } catch (Exception e) {
-            System.out.println("Exception correctly thrown");
+            System.out.println(EXCEPTION_CORRECTLY_THROWN);
         }
         m.set(0, 0, CASUAL_NUMBER);
         m.set(m.getHeight() - 1, m.getWidth() - 1, CASUAL_NUMBER);
@@ -135,7 +136,11 @@ public class TestMatrix {
      */
     @Test
     public void testConstructors() {
-        System.out.println(filler(TWELVE, SIX, () -> "hi"));
+        try {
+            System.out.println(filler(TWELVE, SIX, () -> "hi"));
+        } catch (Exception e) {
+            fail(e);
+        }
     }
 
     /**
@@ -151,7 +156,7 @@ public class TestMatrix {
      */
     @Test
     public void testForEach() {
-        Matrix<List<Boolean>> m = filler(10, 10, () -> new LinkedList<Boolean>());
+        final Matrix<List<Boolean>> m = filler(10, 10, () -> new LinkedList<Boolean>());
         m.stream().forEach(x -> {
             x.add(true);
             x.add(true);
