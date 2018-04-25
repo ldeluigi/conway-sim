@@ -95,9 +95,25 @@ public class GenerationControllerImpl implements GenerationController {
         } else if (generationNumber.longValue() < 0L) {
             throw new IllegalArgumentException();
         } else if (generationNumber > this.getCurrentNumberElement()) {
-            final Long difference = generationNumber - this.getCurrentNumberElement();
+            Long difference = generationNumber - this.getCurrentNumberElement();
+            Generation toBeComputed = this.getCurrentElement();
+            if (difference > 1000) {
+                final Long gap = difference / this.oldGeneration.getNumberOfElementsStored();
+                while (difference > gap) {
+                    if (this.savedState.size() >= this.oldGeneration.getNumberOfElementsStored()) {
+                        this.savedState.remove(0);
+                    }
+                    final int threadNumber = Runtime.getRuntime().availableProcessors();
+                    toBeComputed = Generations.compute(gap.intValue(), toBeComputed,
+                            threadNumber);
+                    this.setCurrentNumberGeneration(this.getCurrentNumberElement() + gap);
+                    this.savedState.add(this.getCurrentNumberElement());
+                    this.oldGeneration.addElem(this.getCurrentNumberElement(), toBeComputed);
+                    difference = difference - gap;
+                }
+            }
             final int threadNumber = Runtime.getRuntime().availableProcessors();
-            final Generation valueGeneration = Generations.compute(difference.intValue(), this.getCurrentElement(),
+            final Generation valueGeneration = Generations.compute(difference.intValue(), toBeComputed,
                     threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);

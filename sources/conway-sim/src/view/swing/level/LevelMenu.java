@@ -109,13 +109,12 @@ public class LevelMenu extends JPanel {
         final JPanel cpWrapper = new JPanel(new GridBagLayout());
         cpWrapper.setOpaque(false);
         cpWrapper.add(cardPanel);
-        c.ipady = this.mainGUI.getCurrentHeight() / 2;
+        c.ipady = this.mainGUI.getCurrentHeight() / 3;
         c.gridx = 0;
         c.gridy = 0;
         right.add(cpWrapper, c);
         c.ipady = 0;
         c.gridy = 1;
-        c.weighty = 0.5;
         right.add(buildRightLeftButtonPanel(), c);
 
         final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -128,6 +127,7 @@ public class LevelMenu extends JPanel {
                 this.getFont());
         bReturn.setFocusable(false);
         exitPanel.add(bReturn);
+        c.gridy = 2;
         c.anchor = GridBagConstraints.LAST_LINE_END;
         right.add(exitPanel, c);
         this.add(right, BorderLayout.EAST);
