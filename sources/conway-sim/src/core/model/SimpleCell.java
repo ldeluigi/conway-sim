@@ -50,7 +50,7 @@ public class SimpleCell implements Cell {
      */
     @Override
     public String toString() {
-        return current.toString();
+        return "SimpleCell: " + current.toString();
     }
 
     /**
@@ -62,7 +62,8 @@ public class SimpleCell implements Cell {
     }
 
     /**
-     * Equals checks if the two cells have the same {@link Status}.
+     * Equals checks if the two cells have the same {@link Status} and if they are
+     * both {@link SimpleCell}.
      */
     @Override
     public boolean equals(final Object obj) {
@@ -76,7 +77,7 @@ public class SimpleCell implements Cell {
             return false;
         }
         final SimpleCell other = (SimpleCell) obj;
-        return current.equals(other.current);
+        return this.getStatus().equals(other.getStatus());
     }
 
     /**
