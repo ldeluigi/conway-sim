@@ -47,10 +47,7 @@ public class LevelMenu extends JPanel {
 
     private static final long serialVersionUID = -6668213230963613342L;
     private static final int INITIAL_GRID_SIZE = 50;
-    private static final int GRID_TO_CELL_RATIO = 6;
-    private static final int GRID_WIDTH_RELATIONSHIP = 3;
-    private static final int GRID_HEIGHT_RELATIONSHIP = 2;
-    private static final int INSET_RELATIONSHIP = 30;
+    private static final int GRID_TO_CELL_RATIO = 4;
     private static final String LEVEL_NUMBER = "level.number";
     private static final String VALUE = "XXX";
     private static final int LEVEL_FOR_PAGE = 4;
@@ -79,7 +76,6 @@ public class LevelMenu extends JPanel {
             newDim.setSize(newDim.width, newDim.height * 2);
             b.setPreferredSize(newDim);
             SandboxTools.setIcon(b, newDim);
-            System.out.println("load " + currentProgress);
             if (currentProgress == 0 && n == 1) {
                 b.setEnabled(true);
                 this.bList.add(b);
@@ -105,32 +101,22 @@ public class LevelMenu extends JPanel {
                     panelLevel(i));
         }
         this.gridPanel = new JGridPanel(INITIAL_GRID_SIZE, INITIAL_GRID_SIZE, INITIAL_GRID_SIZE / GRID_TO_CELL_RATIO);
-        this.gridPanel.setPreferredSize(new Dimension(this.mainGUI.getCurrentWidth() / GRID_WIDTH_RELATIONSHIP,
-                this.mainGUI.getCurrentHeight() / GRID_HEIGHT_RELATIONSHIP));
-
         this.setLayout(new BorderLayout());
-        final JPanel gridBagCenter = new JPanel(new GridBagLayout());
-        gridBagCenter.setOpaque(false);
+        this.add(this.gridPanel, BorderLayout.CENTER);
+        final JPanel right = new JPanel(new GridBagLayout());
+        right.setOpaque(false);
         final GridBagConstraints c = new GridBagConstraints();
+        final JPanel cpWrapper = new JPanel(new GridBagLayout());
+        cpWrapper.setOpaque(false);
+        cpWrapper.add(cardPanel);
+        c.ipady = this.mainGUI.getCurrentHeight() / 2;
         c.gridx = 0;
         c.gridy = 0;
-        c.gridheight = 4;
-        c.gridwidth = 4;
-        c.insets = new Insets(this.mainGUI.getCurrentHeight() / INSET_RELATIONSHIP,
-                this.mainGUI.getCurrentWidth() / INSET_RELATIONSHIP,
-                this.mainGUI.getCurrentHeight() / INSET_RELATIONSHIP,
-                this.mainGUI.getCurrentWidth() / INSET_RELATIONSHIP);
-        gridBagCenter.add(gridPanel, c);
-        c.gridx = 4;
-        c.gridy = 0;
-        c.gridheight = 3;
-        c.gridwidth = 4;
-        gridBagCenter.add(cardPanel, c);
-        c.gridx = 3 + 3;
-        c.gridy = 3;
-        c.gridheight = 1;
-        c.gridwidth = 2;
-        gridBagCenter.add(buildRightLeftButtonPanel(), c);
+        right.add(cpWrapper, c);
+        c.ipady = 0;
+        c.gridy = 1;
+        c.weighty = 0.5;
+        right.add(buildRightLeftButtonPanel(), c);
 
         final JPanel exitPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         exitPanel.setOpaque(false);
@@ -142,8 +128,9 @@ public class LevelMenu extends JPanel {
                 this.getFont());
         bReturn.setFocusable(false);
         exitPanel.add(bReturn);
-        this.add(gridBagCenter, BorderLayout.CENTER);
-        this.add(exitPanel, BorderLayout.AFTER_LAST_LINE);
+        c.anchor = GridBagConstraints.LAST_LINE_END;
+        right.add(exitPanel, c);
+        this.add(right, BorderLayout.EAST);
 
         bStart.addActionListener(e -> start());
         bReturn.addActionListener(e -> mainGUI.backToMainMenu());
@@ -252,7 +239,7 @@ public class LevelMenu extends JPanel {
             if (i > ResourceLoader.loadConstantInt(LEVEL_NUMBER) - 1) {
                 return gridLevel;
             } else {
-                if (bList.size() > i) {
+                if (bList.size() + bListUnReacedLevel.size() > i) {
                     c.gridx = i % LEVEL_FOR_PAGE % 2 == 0 ? 0 : 1;
                     c.gridy = i % LEVEL_FOR_PAGE / 2;
                     gridLevel.add(Stream.concat(bList.stream(), bListUnReacedLevel.stream())
