@@ -138,7 +138,7 @@ public class TestGenerationUndo {
                     }
 
                     @Override
-                    public void setMouseBeingPressed(boolean pressed) {
+                    public void setMouseBeingPressed(final boolean pressed) {
                     }
                 };
             }

@@ -1,6 +1,6 @@
 package test;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
@@ -44,9 +44,9 @@ public class TestMatrix {
      * Test for get method.
      */
     @Test
-    public void testGet() {
+    public void testGet() { 
         final Matrix<Integer> m = MATRIX_MAKER_INT.apply(INTMATRIX);
-        assertEquals(4, (int) m.get(1, 0), "Got wrong number in 1,0");
+        assertEquals(4, (int) m.get(1, 0), "Got wrong number in [1,0]");
         try {
             m.get(10, 0);
             fail("Should throw exception out of bounds");
@@ -59,7 +59,7 @@ public class TestMatrix {
         } catch (Exception e) {
             System.out.println("Exception correctly thrown");
         }
-        assertEquals(1, (int) m.get(0, 0), "Wrong number in 0,0");
+        assertEquals(1, (int) m.get(0, 0), "Wrong number in [0,0]");
     }
 
     /**
@@ -95,15 +95,17 @@ public class TestMatrix {
             m.set(10, 0, CASUAL_NUMBER);
             fail("Should throw exception");
         } catch (Exception e) {
+            System.out.println("Exception correctly thrown");
         }
         try {
             m.set(0, 10, CASUAL_NUMBER);
             fail("Should throw exception");
         } catch (Exception e) {
+            System.out.println("Exception correctly thrown");
         }
         m.set(0, 0, CASUAL_NUMBER);
         m.set(m.getHeight() - 1, m.getWidth() - 1, CASUAL_NUMBER);
-        assertEquals(MATRIX_MAKER_INT.apply(MODIFIEDMATRIX), m);
+        assertEquals(MATRIX_MAKER_INT.apply(MODIFIEDMATRIX), m, "message:");
     }
 
     /**
