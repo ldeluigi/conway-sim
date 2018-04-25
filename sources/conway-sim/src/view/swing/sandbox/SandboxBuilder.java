@@ -9,7 +9,7 @@ import controller.editor.LevelGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
-import controller.io.SaveOntoFile;
+import controller.io.InformationManager;
 import core.campaign.Level;
 import view.swing.DesktopGUI;
 import view.swing.GridPanel;
@@ -51,8 +51,8 @@ public final class SandboxBuilder {
             protected GenerationPanel buildGenerationPanel() {
                 return new GenerationPanel(this, () -> {
                     gui.popUpFrame(new LevelComplete(), false);
-                    if (SaveOntoFile.loadProgress() <= level) {
-                        SaveOntoFile.saveProgress(level + 1);
+                    if (InformationManager.loadProgress() <= level) {
+                        InformationManager.saveProgress(level + 1);
                     }
                 });
             }

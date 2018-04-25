@@ -23,9 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
+import controller.io.InformationManager;
 import controller.io.LevelLoader;
 import controller.io.ResourceLoader;
-import controller.io.SaveOntoFile;
 import core.campaign.Editable;
 import core.campaign.Level;
 import core.model.StandardCellEnvironments;
@@ -69,7 +69,7 @@ public class LevelMenu extends JPanel {
     public LevelMenu(final DesktopGUI mainGUI) {
         this.setOpaque(false);
         this.mainGUI = mainGUI;
-        final int currentProgress = SaveOntoFile.loadProgress();
+        final int currentProgress = InformationManager.loadProgress();
         this.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
 
         IntStream.rangeClosed(1, ResourceLoader.loadConstantInt(LEVEL_NUMBER)).forEach(n -> {
