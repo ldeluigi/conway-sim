@@ -80,18 +80,20 @@ public final class RLETranslator {
         for (int i = 0; i < matrix.getWidth(); i++) {
             for (int k = 0; k < matrix.getHeight(); k++) {
                 int count = 1;
-                while (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
-                    if (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
-                        count++;
-                        k++;
-                    }
-                    if (k == matrix.getHeight() - 1) {
-                        break;
+                if (k < matrix.getHeight() - 1) {
+                    while (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
+                        if (matrix.get(k, i).equals(matrix.get(k + 1, i))) {
+                            count++;
+                            k++;
+                        }
+                        if (k == matrix.getHeight() - 1) {
+                            break;
+                        }
                     }
                 }
 
                 final Enum<?> en = matrix.get(k, i);
-                if (count > 1) {
+                if (count >= 1) {
                     mtoStr = mtoStr.concat(Integer.toString(count));
                 }
                 mtoStr = mtoStr.concat(Character.toString((char) (SP + en.ordinal())));

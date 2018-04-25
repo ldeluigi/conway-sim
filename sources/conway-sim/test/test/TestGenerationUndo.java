@@ -89,7 +89,7 @@ public class TestGenerationUndo {
                     @Override
                     public Generation getGeneration() {
                         return GenerationFactory.from(
-                                new ListMatrix(10, 10,
+                                new ListMatrix<>(10, 10,
                                         () -> new SimpleCell(Math.random() > 0.5 ? Status.DEAD : Status.ALIVE)),
                                 EnvironmentFactory.standardRules(10, 10));
                     }
@@ -129,6 +129,16 @@ public class TestGenerationUndo {
 
                     @Override
                     public void addPatternToPlace(final Matrix<Status> statusMatrix) {
+                    }
+
+                    @Override
+                    public boolean isMouseBeingPressed() {
+                        // TODO Auto-generated method stub
+                        return false;
+                    }
+
+                    @Override
+                    public void setMouseBeingPressed(boolean pressed) {
                     }
                 };
             }
