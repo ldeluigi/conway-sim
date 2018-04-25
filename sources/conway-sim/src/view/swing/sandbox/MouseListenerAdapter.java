@@ -10,7 +10,6 @@ import controller.editor.CMouseListener;
 /**
  * The Adapter which joins events from user interaction to the correct
  * implementation using Swing.
- *
  */
 public class MouseListenerAdapter implements MouseListener {
 
