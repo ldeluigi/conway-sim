@@ -70,3 +70,5 @@ hs_err_pid*
 sources/conway-sim/src/test/saves/
 
 sources/conway-sim/log\.txt
+
+sources/conway-sim/\.conway
