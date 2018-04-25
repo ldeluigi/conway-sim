@@ -1,7 +1,9 @@
 package controller.io;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -32,6 +34,7 @@ public final class InformationManager {
         InformationManager.createfile();
         final List<Integer> completeList = InformationManager.loadList();
         try (ObjectOutputStream oStream = new ObjectOutputStream(new FileOutputStream(InformationManager.f))) {
+            oStream.flush();
             completeList.set(0, level);
             oStream.writeObject(completeList);
             oStream.flush();
@@ -60,6 +63,7 @@ public final class InformationManager {
         InformationManager.createfile();
         final List<Integer> completeList = InformationManager.loadList();
         try (ObjectOutputStream oStream = new ObjectOutputStream(new FileOutputStream(InformationManager.f))) {
+            oStream.flush();
             final List<Integer> list = new LinkedList<>(completeList.subList(0, 1));
             list.addAll(toSave);
             oStream.writeObject(list);
@@ -90,8 +94,14 @@ public final class InformationManager {
                         && ((LinkedList<?>) read).stream().allMatch(o -> o instanceof Integer)) {
                     list = (LinkedList<Integer>) read;
                 }
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 Logger.logThrowable(e);
+            } catch (EOFException e1) {
+
+            } catch (FileNotFoundException e2) {
+                Logger.logThrowable(e2);
+            } catch (IOException e3) {
+                Logger.logThrowable(e3);
             }
         }
         return list != null && !list.isEmpty() ? list : new LinkedList<>(Arrays.asList(0));
