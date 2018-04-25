@@ -3,7 +3,6 @@ package controller.io;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -94,14 +93,11 @@ public final class InformationManager {
                         && ((LinkedList<?>) read).stream().allMatch(o -> o instanceof Integer)) {
                     list = (LinkedList<Integer>) read;
                 }
-            } catch (ClassNotFoundException e) {
-                Logger.logThrowable(e);
             } catch (EOFException e1) {
-
-            } catch (FileNotFoundException e2) {
+                list = null;
+            } catch (Exception e2) {
+                Logger.logTime("Couldn't read from the specified file");
                 Logger.logThrowable(e2);
-            } catch (IOException e3) {
-                Logger.logThrowable(e3);
             }
         }
         return list != null && !list.isEmpty() ? list : new LinkedList<>(Arrays.asList(0));
