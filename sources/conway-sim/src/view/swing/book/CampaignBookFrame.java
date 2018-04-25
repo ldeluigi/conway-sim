@@ -71,8 +71,6 @@ public class CampaignBookFrame extends JInternalFrame {
             jList = new JList<String>(lstArr);
         } else {
             jList = new JList<String>(new String[0]);
-            // TODO DEBUG
-            System.out.println("EMPTY BOOKLIST");
         }
 
         jList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
