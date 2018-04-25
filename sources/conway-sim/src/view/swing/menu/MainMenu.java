@@ -43,6 +43,7 @@ public final class MainMenu extends JPanel {
      *            the main GUI
      */
     public MainMenu(final DesktopGUI mainGUI) {
+        MenuSettings.tryLoadSettings();
         UIManager.put("Button.select", Color.LIGHT_GRAY);
         this.setLayout(new BorderLayout());
         final JPanel center = new JPanel(new GridBagLayout());
