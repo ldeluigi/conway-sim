@@ -1,7 +1,7 @@
 package controller.book;
 
 import java.util.Random;
-
+//TODO JAVADOOOOC!!
 /**
  * 
  *
@@ -56,57 +56,42 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
-     * The method which gives the name of the recipe.
-     * 
-     * @return name of recipe
+     * {@inheritDoc}
      */
     public String getName() {
         return this.name;
     }
 
     /**
-     * The method which sets the given string as the name of the recipe.
-     * 
-     * @param name
-     *            of recipe
+     * {@inheritDoc}
      */
     public void setName(final String name) {
         this.name = name;
     }
 
     /**
-     * The method which gives the content of the recipe.
-     * 
-     * @return content of recipe
+     * {@inheritDoc}
      */
     public String getContent() {
         return content;
     }
 
     /**
-     * The method which sets the specified string as the content of the recipe.
-     * 
-     * @param content
-     *            of recipe
+     * {@inheritDoc}
      */
     public void setContent(final String content) {
         this.content = content;
     }
 
     /**
-     * The method which gives the creator of the recipe.
-     * 
-     * @return author of recipe
+     * {@inheritDoc}
      */
     public String getAuthor() {
         return author;
     }
 
     /**
-     * The method which sets the creator of the recipe.
-     * 
-     * @param author
-     *            of recipe
+     * {@inheritDoc}
      */
     public void setAuthor(final String author) {
         this.author = author;
