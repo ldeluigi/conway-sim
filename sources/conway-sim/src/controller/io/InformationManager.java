@@ -38,7 +38,7 @@ public final class InformationManager {
             oStream.writeObject(completeList);
             oStream.flush();
         } catch (IOException e) {
-            Logger.logTime("Couldn't write on the specified file" + InformationManager.f);
+            Logger.logTime("Couldn't write on the specified file" + InformationManager.NAME);
             Logger.logThrowable(e);
         }
     }
@@ -69,7 +69,7 @@ public final class InformationManager {
             oStream.writeObject(list);
             oStream.flush();
         } catch (IOException e) {
-            Logger.logTime("Couldn't write on the specified file" + InformationManager.f);
+            Logger.logTime("Couldn't write on the specified file" + InformationManager.NAME);
             Logger.logThrowable(e);
         }
     }
@@ -98,7 +98,7 @@ public final class InformationManager {
             } catch (EOFException e1) {
                 list = null;
             } catch (Exception e2) {
-                Logger.logTime("Couldn't read from the specified file " + InformationManager.f);
+                Logger.logTime("Couldn't read from the specified file " + InformationManager.NAME);
                 Logger.logThrowable(e2);
             }
         }
@@ -110,7 +110,7 @@ public final class InformationManager {
             try {
                 InformationManager.f.createNewFile();
             } catch (Exception e) {
-                Logger.logTime("Couldn't create the specified file" + InformationManager.f);
+                Logger.logTime("Couldn't create the specified file" + InformationManager.NAME);
                 Logger.logThrowable(e);
             }
         }

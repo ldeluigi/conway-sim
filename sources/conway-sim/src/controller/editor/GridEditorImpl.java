@@ -53,26 +53,6 @@ public class GridEditorImpl implements PatternEditor {
     }
 
     /**
-     * This is returns a boolean got from the Optional object containing the
-     * pattern.
-     * 
-     * @return true if a pattern is being placed
-     */
-    protected boolean patternIsPresent() {
-        return this.pattern.isPresent();
-    }
-
-    /**
-     * This method returns the matrix describing the pattern currently chosen.
-     * 
-     * @return current pattern if present or else throws
-     *         {@link NoSuchElementException}
-     */
-    protected Matrix<Status> getPattern() {
-        return this.pattern.get();
-    }
-
-    /**
      * Is the method which draws the generation on the grid notifying the panel
      * containing the grid and telling what to paint.
      * 
@@ -316,6 +296,7 @@ public class GridEditorImpl implements PatternEditor {
      * 
      * @return the mouseBeingPressed
      */
+    @Override
     public boolean isMouseBeingPressed() {
         return this.mouseBeingPressed;
     }
@@ -328,8 +309,42 @@ public class GridEditorImpl implements PatternEditor {
      *            is the boolean describing if the user is keeping a mouse button
      *            pressed
      */
+    @Override
     public void setMouseBeingPressed(final boolean pressed) {
         this.mouseBeingPressed = pressed;
+    }
+
+    /**
+     * This method checks if the user can edit the grid and the pattern is present,
+     * if so it gets every row reverted using the method in Matrix.
+     */
+    @Override
+    public void reversePatternRows() {
+        if (!this.isEnabled() || !this.patternIsPresent()) {
+            throw new IllegalStateException(GridEditorImpl.MESSAGE);
+        }
+        this.getPattern().reverseEachRow();
+        this.showPreview(this.lastPreviewRow, this.lastPreviewColumn);
+    }
+
+    /**
+     * This is returns a boolean got from the Optional object containing the
+     * pattern.
+     * 
+     * @return true if a pattern is being placed
+     */
+    protected boolean patternIsPresent() {
+        return this.pattern.isPresent();
+    }
+
+    /**
+     * This method returns the matrix describing the pattern currently chosen.
+     * 
+     * @return current pattern if present or else throws
+     *         {@link NoSuchElementException}
+     */
+    protected Matrix<Status> getPattern() {
+        return this.pattern.get();
     }
 
     /**
@@ -407,18 +422,5 @@ public class GridEditorImpl implements PatternEditor {
      */
     private void removePatternWithoutRedraw() {
         this.pattern = Optional.empty();
-    }
-
-    /**
-     * This method checks if the user can edit the grid and the pattern is present,
-     * if so it gets every row reverted using the method in Matrix.
-     */
-    @Override
-    public void reversePatternRows() {
-        if (!this.isEnabled() || !this.patternIsPresent()) {
-            throw new IllegalStateException(GridEditorImpl.MESSAGE);
-        }
-        this.getPattern().reverseEachRow();
-        this.showPreview(this.lastPreviewRow, this.lastPreviewColumn);
     }
 }
