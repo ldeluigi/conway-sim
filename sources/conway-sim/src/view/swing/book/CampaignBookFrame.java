@@ -28,16 +28,14 @@ import core.utils.Matrix;
 import view.swing.sandbox.JGridPanel;
 import view.swing.sandbox.SandboxTools;
 
-//TODO ADD JAVADOC!!!
 /**
  * 
+ * This Frame displays the lists of pattern for the given {@link Level} aviable
+ * to be placed into the grid.
  *
  */
 public class CampaignBookFrame extends JInternalFrame {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
     private static final int FRAME_WIDTH = 800;
     private static final int FRAME_HEIGHT = 400;
