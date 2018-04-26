@@ -87,7 +87,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     }
 
     /**
-     * Creates a {@link JGridPanel} as GridPanel.
+     * {@inheritDoc}
      */
     @Override
     protected JGridPanel buildGrid(final int cellSize) {
@@ -96,7 +96,7 @@ public class SimpleSandbox extends AbstractSandbox implements ResizableSandbox {
     }
 
     /**
-     * {@inheritDoc} Creates a {@link GridEditorImpl} as editor.
+     * {@inheritDoc}
      */
     @Override
     protected PatternEditor buildEditor(final GridPanel grid) {

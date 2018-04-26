@@ -21,8 +21,7 @@ import view.swing.level.LevelComplete;
  */
 public final class SandboxBuilder {
 
-    private SandboxBuilder() {
-    }
+    private SandboxBuilder() { }
 
     /**
      * Creates the sandbox for level mode.
@@ -50,7 +49,7 @@ public final class SandboxBuilder {
             @Override
             protected GenerationPanel buildGenerationPanel() {
                 return new GenerationPanel(this, () -> {
-                    gui.popUpFrame(new LevelComplete(), false);
+                    gui.popUpFrame(new LevelComplete(gui), false);
                     if (InformationManager.loadProgress() <= level) {
                         InformationManager.saveProgress(level + 1);
                     }

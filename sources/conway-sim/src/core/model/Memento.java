@@ -72,7 +72,7 @@ public interface Memento<Y extends Number, X> {
     /**
      * 
      * @param numberOfElementsToStored
-     *              the new number of elements that the memento should save
+     *            the new number of elements that the memento should save
      */
     void setNumberOfElementsStored(int numberOfElementsToStored);
 }

@@ -38,7 +38,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Load a new game, setting up the generation history.
+     * {@inheritDoc}
      */
     @Override
     public void newGame() {
@@ -49,7 +49,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Stop the clock and refreshes view.
+     * {@inheritDoc}
      */
     @Override
     public void pause() {
@@ -58,7 +58,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Start the clock.
+     * {@inheritDoc}
      */
     @Override
     public void play() {
@@ -66,7 +66,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Reset the game.
+     * {@inheritDoc}
      */
     @Override
     public void reset() {
@@ -77,7 +77,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Sets the speed of the clock and refreshes the view.
+     * {@inheritDoc}
      */
     @Override
     public void setSpeed(final int speed) {
@@ -86,7 +86,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
     public void loadGeneration(final Long generationNumber) {
@@ -106,8 +106,7 @@ public class GenerationControllerImpl implements GenerationObserver {
                         this.savedState.remove(0);
                     }
                     final int threadNumber = Runtime.getRuntime().availableProcessors();
-                    toBeComputed = Generations.compute(gap.intValue(), toBeComputed,
-                            threadNumber);
+                    toBeComputed = Generations.compute(gap.intValue(), toBeComputed, threadNumber);
                     this.setCurrentNumberGeneration(this.getCurrentNumberElement() + gap);
                     this.savedState.add(this.getCurrentNumberElement());
                     this.oldGeneration.addElem(this.getCurrentNumberElement(), toBeComputed);
@@ -115,8 +114,7 @@ public class GenerationControllerImpl implements GenerationObserver {
                 }
             }
             final int threadNumber = Runtime.getRuntime().availableProcessors();
-            final Generation valueGeneration = Generations.compute(difference.intValue(), toBeComputed,
-                    threadNumber);
+            final Generation valueGeneration = Generations.compute(difference.intValue(), toBeComputed, threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
         } else {
@@ -144,7 +142,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Returns current Generation.
+     * {@inheritDoc}
      */
     @Override
     public Generation getCurrentElement() {
@@ -156,7 +154,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Returns current Generation index.
+     * {@inheritDoc}
      */
     @Override
     public synchronized Long getCurrentNumberElement() {
@@ -168,7 +166,7 @@ public class GenerationControllerImpl implements GenerationObserver {
     }
 
     /**
-     * Computes next generation and adds it to the history.
+     * {@inheritDoc}
      */
     @Override
     public synchronized void computeNext() {

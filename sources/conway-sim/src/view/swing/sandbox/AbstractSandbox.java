@@ -115,7 +115,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     protected abstract PatternEditor buildEditor(GridPanel gridp);
 
     /**
-     * Applies size changes to the grid, showing a loading screen while waiting.
+     * {@inheritDoc}
      */
     @Override
     public void resetGrid() {
@@ -134,7 +134,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Paints Sandbox background.
+     * {@inheritDoc}
      */
     @Override
     public void paintComponent(final Graphics g) {
@@ -142,10 +142,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Enables "clear" button to be clicked by the user.
-     * 
-     * @param flag
-     *            a boolean flag
+     * {@inheritDoc}
      */
     @Override
     public void setButtonClearEnabled(final boolean flag) {
@@ -161,9 +158,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Gets the editor used to handle the grid and returns it.
-     * 
-     * @return the gridEtitor
+     * {@inheritDoc}
      */
     @Override
     public PatternEditor getGridEditor() {
@@ -171,7 +166,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Refreshes generation panel.
+     * {@inheritDoc}
      */
     @Override
     public void refreshView() {
@@ -179,7 +174,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
     }
 
     /**
-     * Add the runnable to the sandbox scheduler.
+     * {@inheritDoc}
      */
     @Override
     public void scheduleGUIUpdate(final Runnable runnable) {
@@ -222,7 +217,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         this.north = new JPanel(new BorderLayout());
         this.north.setOpaque(false);
         this.north.add(this.generationPanel, BorderLayout.CENTER);
-        this.north.add(this.generationPanel.getGenerationJumpPanel(), BorderLayout.EAST);
+        this.north.add(this.generationPanel.getGenerationTimePanel(), BorderLayout.EAST);
         final JLabel mode = new JLabel(this.getTitle());
         mode.setFont(defaultFont());
         this.north.add(mode, BorderLayout.BEFORE_FIRST_LINE);

@@ -171,52 +171,52 @@ public final class SandboxTools {
     }
 
     /**
-     * @param name
-     *            JButton name
+     * @param text
+     *            JButton text
      * @return a new JButton
      */
-    public static JButton newJButton(final String name) {
-        return newJButton(name, NO_TOOLTIP);
+    public static JButton newJButton(final String text) {
+        return newJButton(text, NO_TOOLTIP);
     }
 
     /**
-     * @param name
-     *            the name of the button
+     * @param text
+     *            the text of the button
      * @param tooltipText
      *            the tool tip of the button
      * @return a new button
      */
-    public static JButton newJButton(final String name, final String tooltipText) {
+    public static JButton newJButton(final String text, final String tooltipText) {
         final Font font = new Font(FONT_NAME, FONT_STYLE, MenuSettings.getFontSize());
-        return newJButton(name, tooltipText, font);
+        return newJButton(text, tooltipText, font);
     }
 
     /**
      * Create a new JButton with the specific font.
      * 
-     * @param name
-     *            JButton name
+     * @param text
+     *            JButton text
      * @param font
      *            the specific font
      * @return a new JButton
      */
-    public static JButton newJButton(final String name, final Font font) {
-        return newJButton(name, NO_TOOLTIP, font);
+    public static JButton newJButton(final String text, final Font font) {
+        return newJButton(text, NO_TOOLTIP, font);
     }
 
     /**
      * Create a new JButton with the specific font.
      * 
-     * @param name
-     *            JButton name
+     * @param text
+     *            JButton text
      * @param tooltipText
      *            the tool tip text
      * @param font
      *            the specific font
-     * @return the new JButton
+     * @return a new JButton
      */
-    public static JButton newJButton(final String name, final String tooltipText, final Font font) {
-        final JButton button = new JButton(name);
+    public static JButton newJButton(final String text, final String tooltipText, final Font font) {
+        final JButton button = new JButton(text);
 
         final FontMetrics metrics = button.getFontMetrics(font);
         final int width = Toolkit.getDefaultToolkit().getScreenSize().width / 12;
@@ -244,6 +244,8 @@ public final class SandboxTools {
     }
 
     /**
+     * This method apply the default icon to the button,
+     * To have expected result, set the preferred size of the button to dim.
      * @param button
      *            the button
      * @param dim
