@@ -8,7 +8,7 @@ import java.util.List;
  * Implementation of {@link RecipeBook}.
  */
 public class RecipeBookImpl implements RecipeBook {
-    private List<Recipe> rb;
+    private List<Recipe> recipeList;
 
     /**
      * Constructor that initializes an empty list of recipes.
@@ -22,7 +22,7 @@ public class RecipeBookImpl implements RecipeBook {
      */
     @Override
     public Recipe getRecipeByPos(final int pos) {
-        return this.rb.get(pos);
+        return this.recipeList.get(pos);
     }
 
     /**
@@ -30,12 +30,12 @@ public class RecipeBookImpl implements RecipeBook {
      */
     @Override
     public Recipe getRecipeByName(final String name) throws NullPointerException {
-        for (final Recipe e : this.rb) {
+        for (final Recipe e : this.recipeList) {
             if ((e.getName()).equals(name)) {
                 return e;
             }
         }
-        return this.rb.get(0);
+        return this.recipeList.get(0);
 
     }
 
@@ -44,7 +44,7 @@ public class RecipeBookImpl implements RecipeBook {
      */
     @Override
     public void addRecipe(final String content, final String name, final String author) {
-        this.rb.add(new RecipeImpl(content, name, author));
+        this.recipeList.add(new RecipeImpl(content, name, author));
     }
 
     /**
@@ -52,7 +52,7 @@ public class RecipeBookImpl implements RecipeBook {
      */
     @Override
     public void addRecipe(final String content, final String name) {
-        this.rb.add(new RecipeImpl(content, name));
+        this.recipeList.add(new RecipeImpl(content, name));
     }
 
     /**
@@ -60,7 +60,7 @@ public class RecipeBookImpl implements RecipeBook {
      */
     @Override
     public void addRecipe(final String content) {
-        this.rb.add(new RecipeImpl(content));
+        this.recipeList.add(new RecipeImpl(content));
     }
 
     /**
@@ -68,7 +68,7 @@ public class RecipeBookImpl implements RecipeBook {
      */
     @Override
     public int getRecipeBookSize() {
-        return this.rb.size();
+        return this.recipeList.size();
     }
 
     /**
@@ -76,10 +76,16 @@ public class RecipeBookImpl implements RecipeBook {
      */
     @Override
     public List<Recipe> getRecipeList() {
-        return Collections.unmodifiableList(rb);
+        return Collections.unmodifiableList(recipeList);
     }
 
+    /**
+     * Sets the given Recipe List.
+     * 
+     * @param rb
+     *            the Recipe List
+     */
     private void setRb(final List<Recipe> rb) {
-        this.rb = (ArrayList<Recipe>) rb;
+        this.recipeList = (ArrayList<Recipe>) rb;
     }
 }

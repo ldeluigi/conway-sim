@@ -70,10 +70,10 @@ public final class RLETranslator {
     }
 
     /**
-     * 
+     * Converts a RLE (String) into a {@link Matrix}<{@link Enum}<?>>.
      * @param matrix
      *            to be translated
-     * @return string to be converted into String .conwaysrle type.
+     * @return string to be converted into String of ours RLE type.
      */
     public static String rleMatrixToString(final Matrix<? extends Enum<?>> matrix) {
         String mtoStr = "";
@@ -112,7 +112,7 @@ public final class RLETranslator {
     }
 
     /**
-     * This method decodes the given string from RLE format to exploded RLE format
+     * Decodes the given string from RLE format to exploded RLE format
      * (like "aaabb$babaa!").
      * 
      * @param str

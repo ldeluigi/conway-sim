@@ -2,9 +2,8 @@ package controller.book;
 
 import java.util.Random;
 
-//TODO JAVADOOOOC!!
 /**
- * 
+ * Implementation of a single {@link Recipe}.
  *
  */
 public class RecipeImpl implements Recipe {
@@ -15,7 +14,7 @@ public class RecipeImpl implements Recipe {
     private final Random rand = new Random();
 
     /**
-     * First constructor method for a recipe object. Three strings needed.
+     * First constructor for a recipe object. Three strings needed.
      * 
      * @param name
      *            of recipe
@@ -31,7 +30,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
-     * Second constructor method for a recipe object. Two stings needed.
+     * Second constructor for a recipe object. Two stings needed.
      * 
      * @param content
      *            of recipe
@@ -45,7 +44,7 @@ public class RecipeImpl implements Recipe {
     }
 
     /**
-     * Third constructor method for a recipe object. Just one string needed.
+     * Third constructor for a recipe object. Just one string needed.
      * 
      * @param content
      *            of recipe

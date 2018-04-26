@@ -11,19 +11,20 @@ import core.utils.Matrix;
 public interface Level {
 
     /**
-     * @return A matrix of {@link Editable} that indicates which cells should be
-     *         editable or not
+     * @return A {@link Matrix}<{@link Editable}> that indicates which cells should
+     *         be editable or not
      */
     Matrix<Editable> getEditableMatrix();
 
     /**
-     * @return A matrix of {@link CellType} that indicates which type (that is which
-     *         implementation) of a cell should correspond to each position
+     * @return A {@link Matrix}<{@link CellType}> that indicates which type (that is
+     *         which implementation) of a cell should correspond to each position
      */
     Matrix<CellType> getCellTypeMatrix();
 
     /**
-     * @return The initial status of each cell
+     * @return A {@link Matrix}<{@link Status}> that indicates the {@link Status} of
+     *         each cell
      */
     Matrix<Status> getInitialStateMatrix();
 
@@ -31,7 +32,7 @@ public interface Level {
      * This method is also suggested to be used for level overall dimensions,
      * because Environment is usually a Flyweight object.
      * 
-     * @return The environment of the generations in this level
+     * @return The {@link Environment} of the generations in this level
      */
     Environment getEnvironmentMatrix();
 

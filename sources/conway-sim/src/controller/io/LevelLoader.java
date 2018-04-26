@@ -18,9 +18,8 @@ import core.model.StandardCellEnvironments;
 import core.model.Status;
 import core.utils.Matrix;
 
-//TODO JAVADOC
 /**
- * 
+ * Loads the level info & data from package and filesystem into memory.
  *
  */
 public class LevelLoader {
@@ -50,6 +49,7 @@ public class LevelLoader {
     }
 
     /**
+     * Loads the {@link RecipeBook} from the level package.
      * 
      * @param book
      * @param selLvl
@@ -84,6 +84,11 @@ public class LevelLoader {
 
     }
 
+    /**
+     * Loads a {@link Matrix}<{@link CellType}> from the level package.
+     * 
+     * @return the loaded {@link Matrix}<{@link CellType}>
+     */
     private Matrix<CellType> cellTypeLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + CLTLIST)))) {
@@ -94,6 +99,11 @@ public class LevelLoader {
         }
     }
 
+    /**
+     * Loads a {@link Matrix}<{@link Status}> from the level package.
+     * 
+     * @return the loaded {@link Matrix}<{@link Status}>
+     */
     private Matrix<Status> statusLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + STSLIST)))) {
@@ -103,6 +113,13 @@ public class LevelLoader {
             return null;
         }
     }
+
+    /**
+     * Loads a {@link Matrix}<{@link StandardCellEnvironments}> from the level
+     * package.
+     * 
+     * @return the loaded {@link Matrix}<{@link StandardCellEnvironments}>
+     */
 
     private Matrix<StandardCellEnvironments> cellEnvironmentLoader() {
         try (BufferedReader in = new BufferedReader(
@@ -115,6 +132,11 @@ public class LevelLoader {
         }
     }
 
+    /**
+     * Loads a {@link Matrix}<{@link Editable}> from the level package.
+     * 
+     * @return the loaded {@link Matrix}<{@link Editable}>
+     */
     private Matrix<Editable> editableLoader() {
         try (BufferedReader in = new BufferedReader(
                 new InputStreamReader(getClass().getResourceAsStream(selLvl + EDTLIST)))) {
@@ -126,16 +148,18 @@ public class LevelLoader {
     }
 
     /**
+     * Gets the currently loaded {@link Level}.
      * 
-     * @return level
+     * @return level {@link Level}
      */
     public final Level getLevel() {
         return this.level;
     }
 
     /**
+     * Gets the currently loaded {@link RecipeBook}.
      * 
-     * @return book
+     * @return book {@link RecipeBook}
      */
     public final RecipeBook getBook() {
         return this.defaultBook;

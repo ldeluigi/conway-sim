@@ -20,7 +20,8 @@ import controller.book.RecipeBookImpl;
 //TODO JAVADOC
 
 /**
- * 
+ * Loads the aviable {@link Recipe}s from package and filesystem into memory
+ * ({@link RecipeBook}.
  *
  */
 public class RecipeLoader {
@@ -33,11 +34,9 @@ public class RecipeLoader {
     private static final String DEFAULTRECIPEFOLDER = "/recipebook/";
 
     /**
-     * This class parses all the files in the preset folder. than it loads it in the
-     * recipebook.
+     * Parses all the files in the preset folder. Than it loads it into the
+     * {@link RecipeBook}.
      * 
-     * @throws IOException
-     *             .
      */
     public RecipeLoader() {
         this.folderInit(CUSTOMRECIPEFOLDER);
@@ -49,7 +48,7 @@ public class RecipeLoader {
     }
 
     /**
-     * This method loads and saves the default recipebook.
+     * Lads and saves the default {@link RecipeBook}.
      */
     private void defRecipeLoader() {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(
@@ -85,6 +84,7 @@ public class RecipeLoader {
     }
 
     /**
+     * Initializes the custom {@link RecipeBook} folder.
      * 
      * @param folder
      *            to be initialized.
@@ -101,11 +101,12 @@ public class RecipeLoader {
     }
 
     /**
+     * Parses the {@link Recipe}s from the given filesystem folder.
      * 
      * @param custombook2
-     *            to be filled
+     *            {@link RecipeBook} to be filled.
      * @param folder
-     *            to be parsed
+     *            Folder to be parsed.
      */
     private void recipeParser(final RecipeBook custombook2, final File folder) {
         final File[] list = folder.listFiles(new FilenameFilter() {
@@ -145,18 +146,18 @@ public class RecipeLoader {
     }
 
     /**
-     * This methods returns the recipebook when loaded.
+     * Gets the Default {@link RecipeBook}.
      * 
-     * @return the recipebook
+     * @return the Default {@link RecipeBook}
      */
     public RecipeBook getDefaultBook() {
         return this.defaultbook;
     }
 
     /**
-     * This methods returns the custombook when loaded.
+     * Gets the Custom {@link RecipeBook}.
      * 
-     * @return the custombook
+     * @return The Custom {@link RecipeBook}
      */
     public RecipeBook getCustomBook() {
         return this.custombook;

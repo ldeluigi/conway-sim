@@ -14,7 +14,7 @@ import core.utils.ListMatrix;
 import core.utils.Matrix;
 
 /**
- * 
+ * Converts a Standard RLE into a {@link Matrix}<{@link Status}>.
  * 
  */
 public class RLEConvert {
@@ -39,12 +39,8 @@ public class RLEConvert {
     // ALIVE CELL
     private static final String AC = "o";
 
-    // This will contain methods to convert a given matrix into a RLE Format
-    // http://www.conwaylife.com/w/index.php?title=Run_Length_Encoded
-    // NB: This will be used also as I/O method and SaveToFile
-
     /**
-     * This is the builder from file, it takes a fileName of File type and builds
+     * Constructor from file, it takes a fileName of {@link File} type and builds
      * the buffer with the given text found.
      * 
      * @param fileName
@@ -57,8 +53,8 @@ public class RLEConvert {
     }
 
     /**
-     * This is the builder from String, it takes a rle of String type and builds the
-     * buffer with the given text found in the String.
+     * Constructor from String, it takes a rle of and builds the buffer with the
+     * given text found in the String.
      * 
      * @param rle
      *            String in RLE Format.
@@ -68,7 +64,7 @@ public class RLEConvert {
     }
 
     /**
-     * This is a wrapper of the readLine() method of buffer.
+     * Wrapper of the readLine() method of buffer.
      * 
      * @return
      * @throws IOException
@@ -78,7 +74,7 @@ public class RLEConvert {
     }
 
     /**
-     * This is a wrapper of the close() method of buffer.
+     * Wrapper of the close() method of buffer.
      * 
      * @throws IOException
      */
@@ -87,7 +83,7 @@ public class RLEConvert {
     }
 
     /**
-     * This method finds and returns the header line of the RLE.
+     * Finds and returns the header line of the RLE.
      * 
      * @return the header line in String format
      * @throws IOException
@@ -108,8 +104,9 @@ public class RLEConvert {
     }
 
     /**
+     * Gets the Cell information String.
      * 
-     * @return
+     * @return the String with the Cell informations
      * @throws IOException
      * @throws IllegalArgumentException
      */
@@ -138,15 +135,15 @@ public class RLEConvert {
 
     /**
      * This method converts the Matrix from the format Boolean[][] into a
-     * Matrix<Status>.
+     * {@link Matrix}<{@link Status}>.
      * 
      * @param grid
-     *            Grid of boolean to be converted.
+     *            Grid of boolean to be converted
      * @param row
-     *            Size of the row of the grid.
+     *            Size of the row of the grid
      * @param col
-     *            Size of the column of the grid.
-     * @return matrix The matrix converted in Matrix<Status> format.
+     *            Size of the column of the grid
+     * @return matrix The matrix converted in {@link Matrix}<{@link Status}> format
      */
     public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row, final int col) {
         final Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
@@ -162,10 +159,10 @@ public class RLEConvert {
     }
 
     /**
-     * This is the main method, it returns the matrix (Matrix<Status>) converted
-     * from the RLE format.
+     * This is the main method, it returns the matrix
+     * ({@link Matrix}<{@link Status}>) converted from the RLE format.
      * 
-     * @return The converted pattern in Matrix<Status> format.
+     * @return The converted pattern in {@link Matrix}<{@link Status}> format.
      */
     public Matrix<Status> convert() {
         try {
@@ -246,10 +243,11 @@ public class RLEConvert {
     }
 
     /**
+     * Converts a {@link Matrix}<{@link Status}> into a Standard RLE String.
      * 
      * @param matrix
      *            to be converted
-     * @return a string of the matrix that represents the .rle of the matrix
+     * @return a string of the matrix that represents the RLE of the matrix
      */
     public static String convertMatrixStatusToString(final Matrix<Status> matrix) {
         String header = "x = " + matrix.getHeight() + ", y = " + matrix.getWidth() + ", rule = B3/S23";
