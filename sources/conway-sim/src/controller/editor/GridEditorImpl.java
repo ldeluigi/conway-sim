@@ -409,6 +409,10 @@ public class GridEditorImpl implements PatternEditor {
         this.pattern = Optional.empty();
     }
 
+    /**
+     * This method checks if the user can edit the grid and the pattern is present,
+     * if so it gets every row reverted using the method in Matrix.
+     */
     @Override
     public void reversePatternRows() {
         if (!this.isEnabled() || !this.patternIsPresent()) {
