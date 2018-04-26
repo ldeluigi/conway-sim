@@ -96,7 +96,7 @@ public final class LevelGridEditorImpl extends GridEditorImpl {
      */
     @Override
     public void clean() {
-        this.setCurrentStatus(Matrices.copyOf(currentLevel.getInitialStateMatrix()));
+        this.setCurrentStatus(Matrices.copyOf(this.currentLevel.getInitialStateMatrix()));
         this.applyChanges();
     }
 

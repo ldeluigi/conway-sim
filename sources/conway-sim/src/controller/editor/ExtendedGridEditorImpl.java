@@ -38,8 +38,8 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
      */
     @Override
     public Matrix<Status> cutMatrix() {
-        if (cutReady) {
-            return Matrices.cut(this.getCurrentStatus(), lowX, hightX, lowY, hightY);
+        if (this.cutReady) {
+            return Matrices.cut(this.getCurrentStatus(), this.lowX, this.hightX, this.lowY, this.hightY);
         }
         throw new IllegalStateException();
     }
@@ -50,17 +50,17 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
      */
     @Override
     public void hit(final int row, final int column) {
-        if (selectMode) {
-            if (firstCoordinateIsPresent) {
-                final int saveRow = lastRow;
-                final int saveCol = lastCol;
+        if (this.selectMode) {
+            if (this.firstCoordinateIsPresent) {
+                final int saveRow = this.lastRow;
+                final int saveCol = this.lastCol;
                 setFirstCoordinate(row, column);
                 showSelect(row, column, saveRow, saveCol);
-                firstCoordinateIsPresent = false;
+                this.firstCoordinateIsPresent = false;
             } else {
                 setFirstCoordinate(row, column);
-                firstCoordinateIsPresent = true;
-                cutReady = false;
+                this.firstCoordinateIsPresent = true;
+                this.cutReady = false;
             }
         } else {
             super.hit(row, column);
@@ -80,11 +80,11 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
      */
     @Override
     public void cancelSelectMode() {
-        if (selectMode) {
+        if (this.selectMode) {
             this.applyChanges();
-            firstCoordinateIsPresent = false;
-            selectMode = false;
-            cutReady = false;
+            this.firstCoordinateIsPresent = false;
+            this.selectMode = false;
+            this.cutReady = false;
         }
     }
 
@@ -99,8 +99,8 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
     private void setFirstCoordinate(final int row, final int col) { // when click
         this.applyChanges();
         this.getGameGrid().displaySingleCell(row, col, Colors.selectMode(this.getCurrentStatus().get(row, col)));
-        lastCol = col;
-        lastRow = row;
+        this.lastCol = col;
+        this.lastRow = row;
     }
 
     private void showSelect(final int newRow, final int newCol, final int lastRow, final int lastCol) {
@@ -109,41 +109,41 @@ public class ExtendedGridEditorImpl extends GridEditorImpl implements ExtendedGr
             final int sizeCol = Math.abs(lastCol - newCol);
             final int sizeRow = Math.abs(lastRow - newRow);
             if (newRow < lastRow && newCol < lastCol) {
-                lowX = lastRow - sizeRow;
-                lowY = lastCol - sizeCol;
-                hightX = lastRow;
-                hightY = lastCol;
+                this.lowX = lastRow - sizeRow;
+                this.lowY = lastCol - sizeCol;
+                this.hightX = lastRow;
+                this.hightY = lastCol;
             } else if (newRow < lastRow && newCol > lastCol) {
-                lowY = lastCol;
-                lowX = lastRow - sizeRow;
-                hightY = lastCol + sizeCol;
-                hightX = lastRow;
+                this.lowY = lastCol;
+                this.lowX = lastRow - sizeRow;
+                this.hightY = lastCol + sizeCol;
+                this.hightX = lastRow;
             } else if (newRow > lastRow && newCol < lastCol) {
-                lowY = lastCol - sizeCol;
-                lowX = lastRow;
-                hightY = lastCol;
-                hightX = lastRow + sizeRow;
+                this.lowY = lastCol - sizeCol;
+                this.lowX = lastRow;
+                this.hightY = lastCol;
+                this.hightX = lastRow + sizeRow;
             } else {
-                lowY = lastCol;
-                lowX = lastRow;
-                hightY = lastCol + sizeCol;
-                hightX = lastRow + sizeRow;
+                this.lowY = lastCol;
+                this.lowX = lastRow;
+                this.hightY = lastCol + sizeCol;
+                this.hightX = lastRow + sizeRow;
             }
-            for (int x = lowY; x <= hightY; x++) {
-                this.getCurrentStatus().set(lowX, x, this.getCurrentStatus().get(lowX, x));
-                this.getGameGrid().displaySingleCell(lowX, x, Colors.selectMode(this.getCurrentStatus().get(lowX, x)));
-                this.getCurrentStatus().set(hightX, x, this.getCurrentStatus().get(hightX, x));
-                this.getGameGrid().displaySingleCell(hightX, x,
-                        Colors.selectMode(this.getCurrentStatus().get(hightX, x)));
+            for (int x = this.lowY; x <= this.hightY; x++) {
+                this.getCurrentStatus().set(this.lowX, x, this.getCurrentStatus().get(this.lowX, x));
+                this.getGameGrid().displaySingleCell(this.lowX, x, Colors.selectMode(this.getCurrentStatus().get(this.lowX, x)));
+                this.getCurrentStatus().set(this.hightX, x, this.getCurrentStatus().get(this.hightX, x));
+                this.getGameGrid().displaySingleCell(this.hightX, x,
+                        Colors.selectMode(this.getCurrentStatus().get(this.hightX, x)));
             }
-            for (int x = lowX; x <= hightX; x++) {
-                this.getCurrentStatus().set(x, lowY, this.getCurrentStatus().get(x, lowY));
-                this.getGameGrid().displaySingleCell(x, lowY, Colors.selectMode(this.getCurrentStatus().get(x, lowY)));
-                this.getCurrentStatus().set(x, hightY, this.getCurrentStatus().get(x, hightY));
-                this.getGameGrid().displaySingleCell(x, hightY,
-                        Colors.selectMode(this.getCurrentStatus().get(x, hightY)));
+            for (int x = this.lowX; x <= this.hightX; x++) {
+                this.getCurrentStatus().set(x, this.lowY, this.getCurrentStatus().get(x, this.lowY));
+                this.getGameGrid().displaySingleCell(x, this.lowY, Colors.selectMode(this.getCurrentStatus().get(x, this.lowY)));
+                this.getCurrentStatus().set(x, this.hightY, this.getCurrentStatus().get(x, this.hightY));
+                this.getGameGrid().displaySingleCell(x, this.hightY,
+                        Colors.selectMode(this.getCurrentStatus().get(x, this.hightY)));
             }
-            cutReady = sizeRow > 2 && sizeCol > 2;
+            this.cutReady = sizeRow > 2 && sizeCol > 2;
         }
     }
 }
