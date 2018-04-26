@@ -59,9 +59,19 @@
 100a$
 100a$
 100a$
-92a2b6a$
-92a1b1a1b5a$
-92a1b7a!
+100a$
+100a$
+100a$
+100a$
+100a$
+100a$
+100a$
+100a!
 
 a = dead
 b = alive
+
+Solution from row 61 with glider like
+92a2b6a$
+92a1b1a1b5a$
+92a1b7a$

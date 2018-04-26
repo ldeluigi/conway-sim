@@ -29,7 +29,7 @@ public interface Matrix<X> {
      *            the number of rotations
      */
     void rotateClockwise(int times);
-    
+
     /**
      * Reverts all rows.
      */
