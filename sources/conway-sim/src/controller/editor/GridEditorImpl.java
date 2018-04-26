@@ -15,7 +15,7 @@ import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.Colors;
-import view.swing.GridPanel;
+import view.GridPanel;
 
 /**
  * GridEditorImpl is the editor for the grid and the pattern manager; it allows

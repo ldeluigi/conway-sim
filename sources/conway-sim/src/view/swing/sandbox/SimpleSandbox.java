@@ -17,8 +17,8 @@ import controller.editor.ExtendedGridEditorImpl;
 import controller.editor.PatternEditor;
 import controller.io.RLEConvert;
 import controller.io.ResourceLoader;
+import view.GridPanel;
 import view.swing.DesktopGUI;
-import view.swing.GridPanel;
 import view.swing.book.BookFrame;
 import view.swing.menu.MenuSettings;
 

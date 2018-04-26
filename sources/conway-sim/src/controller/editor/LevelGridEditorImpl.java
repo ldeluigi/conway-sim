@@ -15,7 +15,7 @@ import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.Colors;
-import view.swing.GridPanel;
+import view.GridPanel;
 
 /**
  * Editor extended for level mode.
