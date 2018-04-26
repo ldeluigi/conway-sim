@@ -17,14 +17,6 @@ public interface Computing<X, Y extends Number> {
     void computeNext();
 
     /**
-     * Load an old element, removing all the newest element saved after oldNumber.
-     * 
-     * @param oldNumber
-     *            the Long number of the element to load
-     */
-    void loadElement(Y oldNumber);
-
-    /**
      * @return the current element X
      */
     X getCurrentElement();

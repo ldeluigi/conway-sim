@@ -1,11 +1,9 @@
 /**
  * 
  */
-package controller.generation;
+package core.model;
 
 import java.util.Map;
-
-import core.model.Generation;
 
 /**
  * Pattern memento. To store elements with key.
@@ -15,7 +13,7 @@ import core.model.Generation;
  * @param <X>
  *            the type of the elements to store.
  */
-interface Memento<Y extends Number, X> {
+public interface Memento<Y extends Number, X> {
 
     /**
      * 
@@ -73,7 +71,8 @@ interface Memento<Y extends Number, X> {
 
     /**
      * 
-     * @param numberOfElementsStored
+     * @param numberOfElementsToStored
+     *              the new number of elements that the memento should save
      */
     void setNumberOfElementsStored(int numberOfElementsToStored);
 }

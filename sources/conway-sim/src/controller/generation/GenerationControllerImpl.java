@@ -6,13 +6,15 @@ import java.util.stream.Collectors;
 
 import controller.io.ResourceLoader;
 import core.model.Generation;
+import core.model.GenerationHistory;
 import core.model.Generations;
+import core.model.Memento;
 import view.Sandbox;
 
 /**
- * Implementation of {@link GenerationController}.
+ * Implementation of {@link GenerationObserver}.
  */
-public class GenerationControllerImpl implements GenerationController {
+public class GenerationControllerImpl implements GenerationObserver {
     private static final int SAVE_GAP = ResourceLoader.loadConstantInt("generation.SAVE_GAP");
 
     private final Clock clock = new Clock(() -> this.computeNext());
@@ -87,7 +89,7 @@ public class GenerationControllerImpl implements GenerationController {
      * 
      */
     @Override
-    public void loadElement(final Long generationNumber) {
+    public void loadGeneration(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);

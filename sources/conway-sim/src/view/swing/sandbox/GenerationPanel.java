@@ -14,7 +14,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import controller.generation.GenerationController;
+import controller.generation.GenerationObserver;
 import controller.generation.GenerationControllerImpl;
 import controller.io.ResourceLoader;
 import core.campaign.GameWinningCell;
@@ -52,7 +52,7 @@ public class GenerationPanel extends JPanel {
 
     private final JPanel generationJumpPanel;
 
-    private final GenerationController generationController;
+    private final GenerationObserver generationController;
     private final AbstractSandbox view;
 
     private final int fontSize = MenuSettings.getFontSize();
@@ -282,7 +282,7 @@ public class GenerationPanel extends JPanel {
             //FutureTast return is ignored
             final FutureTask<Object> fTask = new FutureTask<>(() -> {
 
-                this.generationController.loadElement(value);
+                this.generationController.loadGeneration(value);
 
                     this.view.scheduleGUIUpdate(() -> {
                         this.progresBar.setVisible(false);

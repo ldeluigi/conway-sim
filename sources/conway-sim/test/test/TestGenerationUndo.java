@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.Test;
 
 import controller.editor.PatternEditor;
-import controller.generation.GenerationController;
+import controller.generation.GenerationObserver;
 import controller.generation.GenerationControllerImpl;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
@@ -29,7 +29,7 @@ public class TestGenerationUndo {
      */
     @Test
     public void testLoad() {
-        final GenerationController controller = new GenerationControllerImpl(newSandboxTest());
+        final GenerationObserver controller = new GenerationControllerImpl(newSandboxTest());
         final Generation firstGeneration = GenerationFactory.copyOf(controller.getCurrentElement());
         assertEquals(firstGeneration.toString(), controller.getCurrentElement().toString(),
                 "Error in the firse equals");
@@ -37,11 +37,11 @@ public class TestGenerationUndo {
         controller.computeNext();
         assertEquals(secondGeneration.toString(), controller.getCurrentElement().toString(),
                 "Error in computeNextGeneration");
-        controller.loadElement(LOAD_ELEMENT);
+        controller.loadGeneration(LOAD_ELEMENT);
         final Generation loadGeneration = Generations.compute((int) LOAD_ELEMENT, firstGeneration);
         assertEquals(loadGeneration.toString(), controller.getCurrentElement().toString(), "Error in load element");
         final Generation previousGeneration = Generations.compute(((int) LOAD_ELEMENT) - 1, firstGeneration);
-        controller.loadElement(LOAD_ELEMENT - 1L);
+        controller.loadGeneration(LOAD_ELEMENT - 1L);
         assertEquals(previousGeneration.toString(), controller.getCurrentElement().toString(),
                 "Error in load previous element");
     }
