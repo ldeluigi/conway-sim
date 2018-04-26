@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
-import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -15,12 +14,10 @@ import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
 import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import controller.io.ResourceLoader;
 import core.campaign.GameWinningCell;
-import core.model.Generation;
 import core.model.Status;
 import view.swing.menu.MenuSettings;
 
@@ -214,13 +211,6 @@ public class GenerationPanel extends JPanel {
     }
 
     /**
-     * Call the clean on the grid.
-     */
-    public void clear() {
-        this.view.getGridEditor().clean();
-    }
-
-    /**
      * 
      * @return the current speed value
      */
@@ -288,27 +278,19 @@ public class GenerationPanel extends JPanel {
             this.bPlay.setEnabled(false);
             this.bEnd.setEnabled(false);
             this.setTimeButtonEnable(false);
-
-            this.bGoTo.setVisible(false);
             this.progresBar.setVisible(true);
-
-            final FutureTask<Generation> fTask = new FutureTask<>(() -> {
+            //FutureTast return is ignored
+            final FutureTask<Object> fTask = new FutureTask<>(() -> {
 
                 this.generationController.loadElement(value);
 
-                try {
-                    SwingUtilities.invokeAndWait(() -> {
+                    this.view.scheduleGUIUpdate(() -> {
                         this.progresBar.setVisible(false);
-                        this.bGoTo.setVisible(true);
                         this.bPlay.setEnabled(true);
                         this.bEnd.setEnabled(true);
                         this.setTimeButtonEnable(true);
                         this.refreshView();
                     });
-                } catch (InvocationTargetException e) {
-                    throw new IllegalStateException();
-                } catch (InterruptedException e) {
-                }
             }, null);
             this.executor.execute(fTask);
         }

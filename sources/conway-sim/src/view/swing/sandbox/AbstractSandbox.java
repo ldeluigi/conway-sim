@@ -71,7 +71,7 @@ public abstract class AbstractSandbox extends JPanel implements Sandbox {
         final InputMap im = (InputMap) UIManager.get("Button.focusInputMap");
         im.put(KeyStroke.getKeyStroke("pressed SPACE"), "none");
         im.put(KeyStroke.getKeyStroke("released SPACE"), "none");
-        this.bClear.addActionListener(e -> this.generationPanel.clear());
+        this.bClear.addActionListener(e -> this.gridEditor.clean());
 
         // Button clear keylistener
         KeyListenerFactory.addKeyListener(this, "clear", KeyEvent.VK_D, KeyEvent.CTRL_DOWN_MASK,

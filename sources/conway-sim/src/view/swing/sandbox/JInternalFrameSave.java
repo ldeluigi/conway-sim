@@ -35,7 +35,6 @@ public class JInternalFrameSave extends JInternalFrame {
      */
     public JInternalFrameSave(final String stringRLEformat) {
         super(ResourceLoader.loadString("save.title"), true, false, true);
-        this.setDefaultCloseOperation(JInternalFrame.EXIT_ON_CLOSE);
         final JPanel general = new JPanel(new BorderLayout());
         final JPanel south = new JPanel(new FlowLayout());
         this.bSave = SandboxTools.newJButton(ResourceLoader.loadString("save.button.save"),

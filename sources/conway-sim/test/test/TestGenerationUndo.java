@@ -133,7 +133,6 @@ public class TestGenerationUndo {
 
                     @Override
                     public boolean isMouseBeingPressed() {
-                        // TODO Auto-generated method stub
                         return false;
                     }
 
