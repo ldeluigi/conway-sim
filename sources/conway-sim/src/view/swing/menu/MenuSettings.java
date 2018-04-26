@@ -30,7 +30,7 @@ import javax.swing.JSpinner.DefaultEditor;
 
 import controller.io.InformationManager;
 import controller.io.ResourceLoader;
-import view.swing.GUI;
+import view.swing.DesktopGUI;
 
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -64,7 +64,7 @@ public final class MenuSettings extends JPanel {
      * @param mainGUI
      *            the GUI to return
      */
-    public MenuSettings(final GUI mainGUI) {
+    public MenuSettings(final DesktopGUI mainGUI) {
         this.setLayout(new GridBagLayout());
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         centralButtons.setOpaque(false);
@@ -150,11 +150,23 @@ public final class MenuSettings extends JPanel {
             saveSettings();
             mainGUI.backToMainMenu();
         });
+        final JButton tutorial = new JButton(ResourceLoader.loadString("tutorial.button"));
+        tutorial.setBackground(Color.WHITE);
+        tutorial.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
+        tutorial.setFocusPainted(false);
+        tutorial.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        tutorial.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
+        tutorial.addActionListener(e -> {
+            mainGUI.popUpFrame(new TutorialBox(), false);
+        });
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = 7;
         c.gridwidth = GRIDBAG_WIDTH;
+        centralButtons.add(tutorial, c);
+        c.gridy = 8;
         centralButtons.add(ret, c);
         this.add(centralButtons);
         this.toResize.add(checkLFLabel);

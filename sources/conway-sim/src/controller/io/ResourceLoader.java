@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  * Resource loader for images or strings. Set the default {@link Locale} to use
@@ -30,7 +31,7 @@ public final class ResourceLoader {
     }
 
     /**
-     * Loader of images.
+     * Loader of images. It also has an internal buffer.
      * 
      * @param resource
      *            the resource tag to load
@@ -51,6 +52,18 @@ public final class ResourceLoader {
         } catch (IOException e) {
             throw new IllegalStateException("Resource " + resource + " not found (or not accessible) in " + path);
         }
+    }
+
+    /**
+     * Loader of {@link ImageIcon}. Not buffered.
+     * 
+     * @param resource
+     *            the resource tag to load
+     * @return loaded image if found, or else throws IllegalStateException
+     */
+    public static ImageIcon loadImageIcon(final String resource) {
+        final String path = getImagePath(resource);
+        return new ImageIcon(ResourceLoader.class.getResource(path));
     }
 
     /**
