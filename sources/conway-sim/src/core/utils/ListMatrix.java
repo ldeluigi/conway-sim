@@ -164,7 +164,8 @@ public final class ListMatrix<X> implements Matrix<X> {
         return this.matrix.stream().flatMap(l -> l.stream());
     }
 
-    private void reverseEachRow() {
+    @Override
+    public void reverseEachRow() {
         this.matrix.forEach(row -> {
             Collections.reverse(row);
         });

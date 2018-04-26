@@ -139,6 +139,11 @@ public final class Matrices {
             public Stream<X> stream() {
                 return matrix.stream().map(x -> (X) x);
             }
+
+            @Override
+            public void reverseEachRow() {
+                throw new UnsupportedOperationException("This matrix cannot be modified");
+            }
         };
     }
 
