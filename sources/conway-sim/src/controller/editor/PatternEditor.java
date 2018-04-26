@@ -79,4 +79,12 @@ public interface PatternEditor extends SimpleGridEditor {
      *            pressed
      */
     void setMouseBeingPressed(boolean pressed);
+
+    /**
+     * Reverts each row of the pattern.
+     * 
+     * @throws IllegalStateException
+     *             if there is no pattern that waits to be placed
+     */
+    void reversePatternRows();
 }

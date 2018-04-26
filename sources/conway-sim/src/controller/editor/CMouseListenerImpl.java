@@ -49,6 +49,9 @@ public class CMouseListenerImpl implements CMouseListener {
      * This Method is not supported.
      */
     public void mousePressedIsLeftWithControl() {
+        if (this.editor.isEnabled() && this.editor.isPlacingModeOn()) {
+            this.editor.reversePatternRows();
+        }
     }
 
     /**
