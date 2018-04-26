@@ -20,9 +20,9 @@ import javax.swing.UIManager;
 
 import controller.editor.PatternEditor;
 import controller.io.ResourceLoader;
+import view.GridPanel;
 import view.Sandbox;
 import view.swing.DesktopGUI;
-import view.swing.GridPanel;
 import view.swing.menu.LoadingScreen;
 import view.swing.menu.MenuSettings;
 

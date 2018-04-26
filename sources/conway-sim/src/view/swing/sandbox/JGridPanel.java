@@ -18,7 +18,7 @@ import controller.editor.CMouseListener;
 import core.utils.ListMatrix;
 import core.utils.Matrices;
 import core.utils.Matrix;
-import view.swing.GridPanel;
+import view.GridPanel;
 import view.swing.menu.MenuSettings;
 
 /**

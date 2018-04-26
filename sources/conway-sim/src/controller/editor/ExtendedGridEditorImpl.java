@@ -4,7 +4,7 @@ import core.model.Status;
 import core.utils.Matrices;
 import core.utils.Matrix;
 import view.Colors;
-import view.swing.GridPanel;
+import view.GridPanel;
 
 /**
  * This class extends {@link GridEditorImpl} to allow the selection and the cut
