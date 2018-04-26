@@ -206,42 +206,23 @@ public class GenerationPanel extends JPanel {
      * 
      * @return the panel with the generation jump control.
      */
-    public JPanel getGenerationJumpPanel() {
+    public JPanel getGenerationTimePanel() {
         return this.generationJumpPanel;
     }
 
     /**
-     * 
-     * @return the current speed value
-     */
-    public int getCurrentSpeed() {
-        return this.speedSlider.getValue();
-    }
-
-    /**
-     * Reset the current game to the original status.
-     */
-    public void resetGrid() {
-        this.generationController.pause();
-        this.end();
-        this.generationController.reset();
-    }
-
-    /**
      * Refresh the view of this panel and reload the constant.
+     * If lunched in level mode (with a runnable like second parameter of the constructor) check the victory 
      */
     public void refreshView() {
         if (!this.view.getGridEditor().isEnabled()) {
             this.view.getGridEditor().draw(this.generationController.getCurrentElement());
         }
-        int general = 0;
         // LEVEL OPTION
         if (this.isLevelMode) {
             final int gold = this.generationController.getCurrentElement().getCellMatrix().stream().parallel().mapToInt(
                     e -> e.getStatus().equals(Status.ALIVE) && e.code() == GameWinningCell.GAME_WINNING_CODE ? 1 : 0)
                     .sum();
-            general = this.generationController.getCurrentElement().getCellMatrix().stream().parallel()
-                    .mapToInt(e -> e.getStatus().equals(Status.ALIVE) ? 1 : 0).sum();
             this.counterLevel = gold == 0 ? this.counterLevel + 1 : 0;
             if (this.counterLevel >= REPETITION_FOR_WIN && !isWin) {
                 this.isWin = true;
@@ -251,49 +232,15 @@ public class GenerationPanel extends JPanel {
                 });
                 this.counterLevel = 0;
             }
-            // END LEVEL OPTION
-        } else {
-            this.isWin = false;
-            general = this.generationController.getCurrentElement().getCellMatrix().stream()
-                    .filter(cell -> cell.getStatus().equals(Status.ALIVE)).mapToInt(e -> 1).sum();
         }
-        final int generalF = general;
+        // END LEVEL OPTION
         this.view.scheduleGUIUpdate(() -> {
             SandboxTools.refreshStatistics(this.getCurrentSpeed(),
-                    this.generationController.getCurrentNumberElement().intValue(), generalF,
+                    this.generationController.getCurrentNumberElement().intValue(),
+                    this.generationController.getCurrentElement().getCellMatrix().stream().parallel()
+                            .mapToInt(e -> e.getStatus().equals(Status.ALIVE) ? 1 : 0).sum(),
                     new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize()));
         });
-    }
-
-    private void speedControl() {
-        this.generationController.setSpeed(this.speedSlider.getValue());
-    }
-
-    private void goTo(final Long value) {
-        if (value < 0) {
-            JOptionPane.showMessageDialog(this,
-                    ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
-                            this.generationController.getCurrentNumberElement().toString()));
-        } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
-            this.bPlay.setEnabled(false);
-            this.bEnd.setEnabled(false);
-            this.setTimeButtonEnable(false);
-            this.progresBar.setVisible(true);
-            //FutureTast return is ignored
-            final FutureTask<Object> fTask = new FutureTask<>(() -> {
-
-                this.generationController.loadGeneration(value);
-
-                    this.view.scheduleGUIUpdate(() -> {
-                        this.progresBar.setVisible(false);
-                        this.bPlay.setEnabled(true);
-                        this.bEnd.setEnabled(true);
-                        this.setTimeButtonEnable(true);
-                        this.refreshView();
-                    });
-            }, null);
-            this.executor.execute(fTask);
-        }
     }
 
     /**
@@ -336,6 +283,38 @@ public class GenerationPanel extends JPanel {
         this.view.setButtonClearEnabled(false);
     }
 
+    private void speedControl() {
+        this.generationController.setSpeed(this.speedSlider.getValue());
+    }
+
+    private void goTo(final Long value) {
+        if (value < 0) {
+            JOptionPane.showMessageDialog(this,
+                    ResourceLoader.loadString("generation.undo").replaceAll("end", value.toString()).replaceAll("start",
+                            this.generationController.getCurrentNumberElement().toString()));
+        } else if (!value.equals(this.generationController.getCurrentNumberElement())) {
+            this.bPlay.setEnabled(false);
+            this.bEnd.setEnabled(false);
+            this.setTimeButtonEnable(false);
+            this.progresBar.setVisible(true);
+            // FutureTast return is ignored
+            final FutureTask<Object> fTask = new FutureTask<>(() -> {
+
+                this.generationController.loadGeneration(value);
+
+                this.view.scheduleGUIUpdate(() -> {
+                    this.progresBar.setVisible(false);
+                    this.bPlay.setEnabled(true);
+                    this.bEnd.setEnabled(true);
+                    this.setTimeButtonEnable(true);
+                    this.refreshView();
+                });
+            }, null);
+            this.executor.execute(fTask);
+        }
+    }
+
+
     private void resume() {
         this.generationController.play();
         this.bPause.setEnabled(true);
@@ -356,5 +335,18 @@ public class GenerationPanel extends JPanel {
         this.bNext.setEnabled(flag);
         this.bPrev.setEnabled(flag);
         this.bGoTo.setEnabled(flag);
+    }
+
+    /**
+     * Reset the current game to the original status.
+     */
+    private void resetGrid() {
+        this.generationController.pause();
+        this.end();
+        this.generationController.reset();
+    }
+
+    private int getCurrentSpeed() {
+        return this.speedSlider.getValue();
     }
 }

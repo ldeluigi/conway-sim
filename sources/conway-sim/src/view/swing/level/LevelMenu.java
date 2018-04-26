@@ -108,7 +108,7 @@ public class LevelMenu extends JPanel {
         final GridBagConstraints c = new GridBagConstraints();
         final JPanel cpWrapper = new JPanel(new GridBagLayout());
         cpWrapper.setOpaque(false);
-        cpWrapper.add(cardPanel);
+        cpWrapper.add(this.cardPanel);
         c.ipady = this.mainGUI.getCurrentHeight() / 3;
         c.gridx = 0;
         c.gridy = 0;

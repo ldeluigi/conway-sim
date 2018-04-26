@@ -8,7 +8,7 @@ import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
 /**
- * Factory for KeyListeners.
+ * An utility class to create KeyListeners easily.
  */
 public final class KeyListenerFactory {
 
@@ -26,7 +26,7 @@ public final class KeyListenerFactory {
      * @param modifier
      *            a bitwise-ored combination of any modifiers
      * @param event
-     *            the event
+     *            the event to link with the keyCode
      */
     public static void addKeyListener(final JComponent component, final String name, final int keyCode,
             final int modifier, final Runnable event) {
@@ -56,7 +56,7 @@ public final class KeyListenerFactory {
      * @param keyCode
      *            the int (KeyEvent.VK_*) that start the event
      * @param event
-     *            the event
+     *            the event to link with the keyCode
      */
     public static void addKeyListener(final JComponent component, final String name, final int keyCode,
             final Runnable event) {

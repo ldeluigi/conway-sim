@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * The implementation of GenerationMemento. With this class you can save
+ * The implementation of GenerationMemento. With this class you can save a
+ * numberGeneration connect with a Generation
  */
 public final class GenerationHistory implements Memento<Long, Generation> {
 
