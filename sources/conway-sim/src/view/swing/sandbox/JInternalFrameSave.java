@@ -75,10 +75,10 @@ public class JInternalFrameSave extends JInternalFrame {
             try (BufferedWriter buffer = new BufferedWriter(
                     new FileWriter(new File("PatternBook" + "/" + this.textName.getText() + ".rle")));) {
                 buffer.write(stringFile);
-                buffer.close();
             } catch (IOException ioex) {
                 Logger.logThrowable(ioex);
             }
+            this.doDefaultCloseAction();
         });
         bExit.addActionListener(e -> {
             this.doDefaultCloseAction();

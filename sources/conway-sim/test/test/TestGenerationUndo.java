@@ -139,6 +139,10 @@ public class TestGenerationUndo {
                     @Override
                     public void setMouseBeingPressed(final boolean pressed) {
                     }
+
+                    @Override
+                    public void reversePatternRows() {
+                    }
                 };
             }
         };
