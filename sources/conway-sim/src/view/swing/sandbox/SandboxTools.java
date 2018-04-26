@@ -56,13 +56,13 @@ public final class SandboxTools {
         final JPanel statsPanel = new JPanel(new GridLayout(3, 1));
         statsPanel.setOpaque(false);
         // display for current speed
-        numSpeedLabel = new JLabel(ResourceLoader.loadString("sandbox.label.speed") + "1" + "|");
+        numSpeedLabel = new JLabel(ResourceLoader.loadString("sandbox.label.speed") + "1");
         numSpeedLabel.setFont(font);
         // display for current generation
-        numGenerationLabel = new JLabel(ResourceLoader.loadString("sandbox.label.generation") + "0" + "|");
+        numGenerationLabel = new JLabel(ResourceLoader.loadString("sandbox.label.generation") + "0");
         numGenerationLabel.setFont(font);
         // display the number of the alive cell
-        aliveCell = new JLabel(ResourceLoader.loadString("sandbox.label.alivecell") + "0" + "|");
+        aliveCell = new JLabel(ResourceLoader.loadString("sandbox.label.alivecell") + "0");
         aliveCell.setFont(font);
         statsPanel.add(numGenerationLabel);
         statsPanel.add(numSpeedLabel);
@@ -83,9 +83,9 @@ public final class SandboxTools {
     public static void refreshStatistics(final int speedSlider, final int genNumber, final int aliveCell,
             final Font font) {
         SandboxTools.numGenerationLabel
-                .setText(ResourceLoader.loadString("sandbox.label.generation") + genNumber + "|");
-        SandboxTools.numSpeedLabel.setText(ResourceLoader.loadString("sandbox.label.speed") + speedSlider + "|");
-        SandboxTools.aliveCell.setText(ResourceLoader.loadString("sandbox.label.alivecell") + aliveCell + "|");
+                .setText(ResourceLoader.loadString("sandbox.label.generation") + genNumber);
+        SandboxTools.numSpeedLabel.setText(ResourceLoader.loadString("sandbox.label.speed") + speedSlider);
+        SandboxTools.aliveCell.setText(ResourceLoader.loadString("sandbox.label.alivecell") + aliveCell);
         SandboxTools.numGenerationLabel.setFont(font);
         SandboxTools.numSpeedLabel.setFont(font);
         SandboxTools.aliveCell.setFont(font);
