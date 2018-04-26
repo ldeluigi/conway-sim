@@ -408,4 +408,13 @@ public class GridEditorImpl implements PatternEditor {
     private void removePatternWithoutRedraw() {
         this.pattern = Optional.empty();
     }
+
+    @Override
+    public void reversePatternRows() {
+        if (!this.isEnabled() || !this.patternIsPresent()) {
+            throw new IllegalStateException(GridEditorImpl.MESSAGE);
+        }
+        this.getPattern().reverseEachRow();
+        this.showPreview(this.lastPreviewRow, this.lastPreviewColumn);
+    }
 }
