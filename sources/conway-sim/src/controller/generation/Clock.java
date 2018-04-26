@@ -52,8 +52,7 @@ public class Clock {
     }
 
     /**
-     * Set the speed of this clock. wait ( 1000 / speed ) ms between every
-     * computation.
+     * Set the speed of this clock.
      * 
      * @param speed
      *            to set
@@ -70,7 +69,7 @@ public class Clock {
         }
     }
 
-    class AgentClock extends Thread {
+    private class AgentClock extends Thread {
 
         private static final long INIT_STEP = 1000L;
         private volatile Long step = INIT_STEP;
@@ -87,11 +86,11 @@ public class Clock {
             }
         }
 
-        public void setClock(final boolean flag) {
+        private void setClock(final boolean flag) {
             this.clock = flag;
         }
 
-        public synchronized void setStep(final Long step) {
+        private synchronized void setStep(final Long step) {
             this.step = step;
         }
 

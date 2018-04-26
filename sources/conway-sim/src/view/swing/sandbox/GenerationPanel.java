@@ -166,11 +166,11 @@ public class GenerationPanel extends JPanel {
         this.bNext.addActionListener(e -> this.goTo(this.generationController.getCurrentNumberElement() + 1L));
         KeyListenerFactory.addKeyListener(this.view, "space", KeyEvent.VK_SPACE, () -> {
             if (this.bStart.isEnabled()) {
-                this.bStart.doClick();
+                this.start();
             } else if (this.bPlay.isEnabled()) {
-                this.bPlay.doClick();
+                this.resume();
             } else if (this.bPause.isEnabled()) {
-                this.bPause.doClick();
+                this.pause();
             }
         });
 

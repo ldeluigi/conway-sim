@@ -1,7 +1,5 @@
 package view.swing.sandbox;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -24,7 +22,7 @@ public final class KeyListenerFactory {
      * @param name
      *            the unique name of this listener
      * @param keyCode
-     *            the int (KeyEvent.VK_*) that start the event
+     *            the int (KeyEvent.VK_*) that should start the event
      * @param modifier
      *            a bitwise-ored combination of any modifiers
      * @param event
@@ -32,20 +30,20 @@ public final class KeyListenerFactory {
      */
     public static void addKeyListener(final JComponent component, final String name, final int keyCode,
             final int modifier, final Runnable event) {
-        final List<InputMap> inputMap = new LinkedList<>();
-        inputMap.add(component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT));
+        final InputMap inputMap = component.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         final ActionMap actionMap = component.getActionMap();
-        inputMap.forEach(e -> {
-            e.put(KeyStroke.getKeyStroke(keyCode, modifier), name + e.toString());
-            actionMap.put(name + e.toString(), new AbstractAction() {
+        inputMap.put(KeyStroke.getKeyStroke(keyCode, modifier), name);
+        actionMap.remove(name);
+        actionMap.put(name, new AbstractAction() {
 
-                private static final long serialVersionUID = 1L;
+            private static final long serialVersionUID = 1L;
 
-                @Override
-                public void actionPerformed(final ActionEvent arg0) {
-                    event.run();
-                }
-            });
+            @Override
+            public void actionPerformed(final ActionEvent arg0) {
+                actionMap.remove(name);
+                event.run();
+                actionMap.put(name, this);
+            }
         });
     }
 
