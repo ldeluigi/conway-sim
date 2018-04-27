@@ -5,7 +5,7 @@ import core.model.Generation;
 /**
  * This interface is the controller of Generation computing.
  */
-public interface GenerationObserver extends Computing<Generation, Long> {
+public interface GenerationController extends Computing<Generation, Long> {
 
     /**
      * Create a new Game, ready to start.

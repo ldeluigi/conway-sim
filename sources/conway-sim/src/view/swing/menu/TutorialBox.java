@@ -23,7 +23,7 @@ public class TutorialBox extends JInternalFrame {
      * Main constructor.
      */
     public TutorialBox() {
-        super("Tutorial", true, true, false, true);
+        super("Tutorial", true, true, true, true);
         this.setLayout(new BorderLayout());
         final Icon image = ResourceLoader.loadImageIcon(TUTORIAL_RESOURCE + this.current);
         final JLabel jl = new JLabel(image);

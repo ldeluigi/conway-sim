@@ -12,9 +12,9 @@ import core.model.Memento;
 import view.Sandbox;
 
 /**
- * Implementation of {@link GenerationObserver}.
+ * Implementation of {@link GenerationController}.
  */
-public class GenerationControllerImpl implements GenerationObserver {
+public class GenerationControllerImpl implements GenerationController {
     private static final int SAVE_GAP = ResourceLoader.loadConstantInt("generation.SAVE_GAP");
 
     private final Clock clock = new Clock(() -> this.computeNext());

@@ -14,7 +14,7 @@ import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
-import controller.generation.GenerationObserver;
+import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import controller.io.ResourceLoader;
 import core.campaign.GameWinningCell;
@@ -52,7 +52,7 @@ public class GenerationPanel extends JPanel {
 
     private final JPanel generationJumpPanel;
 
-    private final GenerationObserver generationController;
+    private final GenerationController generationController;
     private final AbstractSandbox view;
 
     private final int fontSize = MenuSettings.getFontSize();

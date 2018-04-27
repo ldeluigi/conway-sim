@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.Test;
 
 import controller.editor.PatternEditor;
-import controller.generation.GenerationObserver;
+import controller.generation.GenerationController;
 import controller.generation.GenerationControllerImpl;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
@@ -29,7 +29,7 @@ public class TestGenerationUndo {
      */
     @Test
     public void testLoad() {
-        final GenerationObserver controller = new GenerationControllerImpl(newSandboxTest());
+        final GenerationController controller = new GenerationControllerImpl(newSandboxTest());
         final Generation firstGeneration = GenerationFactory.copyOf(controller.getCurrentElement());
         assertEquals(firstGeneration.toString(), controller.getCurrentElement().toString(),
                 "Error in the firse equals");
