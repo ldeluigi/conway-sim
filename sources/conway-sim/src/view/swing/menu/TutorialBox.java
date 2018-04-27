@@ -6,14 +6,18 @@ import javax.swing.JLabel;
 import controller.io.ResourceLoader;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
 import javax.swing.Icon;
 import javax.swing.JButton;
+
 /**
  * Tutorial JInternalFrame with gifs and a button next.
  */
 public class TutorialBox extends JInternalFrame {
 
+    private static final int MIN_WIDTH = 600;
+    private static final int MIN_HEIGHT = 400;
     private static final String TUTORIAL_RESOURCE = "tutorial.lvl";
     private static final long serialVersionUID = 1L;
     private static final int MAX = 3;
@@ -24,6 +28,7 @@ public class TutorialBox extends JInternalFrame {
      */
     public TutorialBox() {
         super("Tutorial", true, true, true, true);
+        this.setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
         this.setLayout(new BorderLayout());
         final Icon image = ResourceLoader.loadImageIcon(TUTORIAL_RESOURCE + this.current);
         final JLabel jl = new JLabel(image);
