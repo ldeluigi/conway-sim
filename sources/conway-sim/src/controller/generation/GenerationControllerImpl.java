@@ -45,7 +45,7 @@ public class GenerationControllerImpl implements GenerationController {
         this.setCurrentNumberGeneration(0);
         this.currentGeneration = this.view.getGridEditor().getGeneration();
         this.oldGeneration = new GenerationHistory(this.currentGeneration);
-        this.view.scheduleGUIUpdate(() -> this.view.refreshView()); // TODO
+        this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
     /**
