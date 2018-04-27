@@ -1,9 +1,11 @@
 /**
  * 
  */
-package core.model;
+package core.model.memento;
 
 import java.util.Map;
+
+import core.model.Generation;
 
 /**
  * Pattern memento. To store elements with key.

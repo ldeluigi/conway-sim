@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import controller.io.ResourceLoader;
 import core.model.Generation;
-import core.model.GenerationHistory;
 import core.model.Generations;
-import core.model.Memento;
+import core.model.memento.GenerationHistory;
+import core.model.memento.Memento;
 import view.Sandbox;
 
 /**
