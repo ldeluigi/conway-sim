@@ -25,7 +25,7 @@ import view.swing.menu.MainMenu;
 public final class MainGUI implements DesktopGUI {
 
     private static final int PIXELS_FROM_SCREEN_BORDERS = 50;
-    private static final float MINIMUM_FRAME_RATIO = 1.5f;
+    private static final float MINIMUM_FRAME_RATIO = 2f;
     private static final int INNER_FRAME_SCALE = 5;
     private static final float MINIMUM_INTERNAL_FRAME_RATIO = 2f;
 
