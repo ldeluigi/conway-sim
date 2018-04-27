@@ -41,6 +41,7 @@ import javax.swing.UIManager;
  */
 public final class MenuSettings extends JPanel {
 
+    private static final int SEVENTH_ROW = 7;
     private static final long serialVersionUID = 1L;
     private static final int BUTTON_RATIO_Y = 20;
     private static final int BUTTON_RATIO_X = 5;
@@ -163,9 +164,10 @@ public final class MenuSettings extends JPanel {
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 7;
+        c.gridy = SEVENTH_ROW;
         c.gridwidth = GRIDBAG_WIDTH;
         centralButtons.add(tutorial, c);
+        c.insets = new Insets(0, 0, 0, 0);
         c.gridy = 8;
         centralButtons.add(ret, c);
         this.add(centralButtons);

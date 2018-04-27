@@ -73,19 +73,19 @@ public class TestMatrix {
         final Matrix<Integer> m = MATRIX_MAKER_INT.apply(INTMATRIX);
         final Matrix<Integer> m2 = MATRIX_MAKER_INT.apply(INTMATRIX);
         m.rotateClockwise(4);
-        assertEquals(MATRIX_MAKER_INT.apply(INTMATRIX), m);
+        assertEquals(MATRIX_MAKER_INT.apply(INTMATRIX), m, "4 rotations should leave the matrix unchanged");
         m.rotateClockwise(1);
-        assertEquals(MATRIX_MAKER_INT.apply(ROTATEDMATRIX), m);
+        assertEquals(MATRIX_MAKER_INT.apply(ROTATEDMATRIX), m, "Matrix should rotate 90 degrees clockwise");
         m2.rotateClockwise(2);
         m.rotateClockwise(FIVE);
-        assertEquals(m2, m);
+        assertEquals(m2, m, "Matrix should be rotate 180 degrees");
         m.rotateClockwise(1);
         m2.rotateClockwise(NINE);
-        assertEquals(m2, m);
+        assertEquals(m2, m, "Another rotation of 90 degrees should be applied");
         final Matrix<Integer> m3 = MATRIX_MAKER_INT.apply(INTMATRIXRET);
         final Matrix<Integer> m4 = MATRIX_MAKER_INT.apply(ROTATEDMATRIXRET);
         m3.rotateClockwise(1);
-        assertEquals(m3, m4);
+        assertEquals(m3, m4, "Matrices should be equals");
     }
 
     /**
@@ -108,7 +108,7 @@ public class TestMatrix {
         }
         m.set(0, 0, CASUAL_NUMBER);
         m.set(m.getHeight() - 1, m.getWidth() - 1, CASUAL_NUMBER);
-        assertEquals(MATRIX_MAKER_INT.apply(MODIFIEDMATRIX), m, "message:");
+        assertEquals(MATRIX_MAKER_INT.apply(MODIFIEDMATRIX), m, "Setters didn't work");
     }
 
     /**
@@ -116,8 +116,8 @@ public class TestMatrix {
      */
     @Test
     public void testGetters() {
-        assertEquals(3, MATRIX_MAKER_INT.apply(INTMATRIX).getHeight());
-        assertEquals(4, MATRIX_MAKER_INT.apply(INTMATRIXRET).getWidth());
+        assertEquals(3, MATRIX_MAKER_INT.apply(INTMATRIX).getHeight(), "Wrong height");
+        assertEquals(4, MATRIX_MAKER_INT.apply(INTMATRIXRET).getWidth(), "Wrong width");
     }
 
     /**
@@ -128,7 +128,7 @@ public class TestMatrix {
         assertEquals(MATRIX_MAKER_STRING.apply(MAPPEDRETMATRIX), MATRIX_MAKER_INT.apply(INTMATRIXRET).map(x -> {
             x++;
             return x.toString();
-        }));
+        }), "Mapped returned unexpected result");
     }
 
     /**
@@ -148,7 +148,7 @@ public class TestMatrix {
      */
     @Test
     public void testEquals() {
-        assertEquals(filler(2, 2, () -> true), Matrices.unmodifiableMatrix(filler(2, 2, () -> true)));
+        assertEquals(filler(2, 2, () -> true), Matrices.unmodifiableMatrix(filler(2, 2, () -> true)), "Equals had a wrong implementation");
     }
 
     /**
@@ -161,7 +161,7 @@ public class TestMatrix {
             x.add(true);
             x.add(true);
         });
-        assertEquals(filler(10, 10, () -> new LinkedList<>(Arrays.asList(true, true))), m);
+        assertEquals(filler(10, 10, () -> new LinkedList<>(Arrays.asList(true, true))), m, "ForEach didn't work");
     }
 
     /**
@@ -169,6 +169,6 @@ public class TestMatrix {
      */
     @Test
     public void testCut() {
-        assertEquals(MATRIX_MAKER_INT.apply(CUTMATRIX), Matrices.cut(MATRIX_MAKER_INT.apply(INTMATRIX), 0, 1, 1, 2));
+        assertEquals(MATRIX_MAKER_INT.apply(CUTMATRIX), Matrices.cut(MATRIX_MAKER_INT.apply(INTMATRIX), 0, 1, 1, 2), "cut method returned unexpected result");
     }
 }
