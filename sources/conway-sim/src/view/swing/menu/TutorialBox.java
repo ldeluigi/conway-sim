@@ -33,10 +33,11 @@ public class TutorialBox extends JInternalFrame {
         final Icon image = ResourceLoader.loadImageIcon(TUTORIAL_RESOURCE + this.current);
         final JLabel jl = new JLabel(image);
         this.add(jl, BorderLayout.CENTER);
-        final JButton next = new JButton(ResourceLoader.loadString("tutorial.next"));
+        final JButton next = new JButton(ResourceLoader.loadString("tutorial.next") + " - " + (this.current + 1));
         next.addActionListener(e -> {
             this.current = (this.current + 1) % MAX;
             jl.setIcon(ResourceLoader.loadImageIcon(TUTORIAL_RESOURCE + this.current));
+            next.setText(ResourceLoader.loadString("tutorial.next") + " - " + (this.current + 1));
         });
         this.add(next, BorderLayout.SOUTH);
     }
