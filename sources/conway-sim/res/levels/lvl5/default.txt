@@ -1,3 +1,2 @@
 Glider.rle
 Lightweight_ship.rle
-Gosper_Glider_Gun.rle
