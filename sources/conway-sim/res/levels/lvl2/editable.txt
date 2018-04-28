@@ -1,0 +1,20 @@
+32b$
+32b$
+32b$
+32b$
+32b$
+32b$
+27b5a$
+27b5a$
+27b5a$
+27b5a$
+32b$
+32b$
+32b$
+32b$
+32b$
+32b!
+
+
+a = editable
+b = uneditable

@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import controller.io.ResourceLoader;
 import core.model.Generation;
 import core.model.Generations;
+import core.model.memento.GenerationHistory;
+import core.model.memento.Memento;
 import view.Sandbox;
 
 /**
@@ -36,7 +38,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * Load a new game, setting up the generation history.
+     * {@inheritDoc}
      */
     @Override
     public void newGame() {
@@ -47,7 +49,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * Stop the clock and refreshes view.
+     * {@inheritDoc}
      */
     @Override
     public void pause() {
@@ -56,7 +58,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * Start the clock.
+     * {@inheritDoc}
      */
     @Override
     public void play() {
@@ -64,7 +66,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * Reset the game.
+     * {@inheritDoc}
      */
     @Override
     public void reset() {
@@ -75,7 +77,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * Sets the speed of the clock and refreshes the view.
+     * {@inheritDoc}
      */
     @Override
     public void setSpeed(final int speed) {
@@ -84,10 +86,10 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * 
+     * {@inheritDoc}
      */
     @Override
-    public void loadOldElement(final Long generationNumber) {
+    public void loadGeneration(final Long generationNumber) {
         if (generationNumber.equals(0L)) {
             this.setCurrentGeneration(this.oldGeneration.getFirst());
             this.setCurrentNumberGeneration(0L);
@@ -95,16 +97,29 @@ public class GenerationControllerImpl implements GenerationController {
         } else if (generationNumber.longValue() < 0L) {
             throw new IllegalArgumentException();
         } else if (generationNumber > this.getCurrentNumberElement()) {
-            final Long difference = generationNumber - this.getCurrentNumberElement();
+            Long difference = generationNumber - this.getCurrentNumberElement();
+            Generation toBeComputed = this.getCurrentElement();
+            if (difference > 1000) {
+                final Long gap = difference / this.oldGeneration.getNumberOfElementsStored();
+                while (difference > gap) {
+                    if (this.savedState.size() >= this.oldGeneration.getNumberOfElementsStored()) {
+                        this.savedState.remove(0);
+                    }
+                    final int threadNumber = Runtime.getRuntime().availableProcessors();
+                    toBeComputed = Generations.compute(gap.intValue(), toBeComputed, threadNumber);
+                    this.setCurrentNumberGeneration(this.getCurrentNumberElement() + gap);
+                    this.savedState.add(this.getCurrentNumberElement());
+                    this.oldGeneration.addElem(this.getCurrentNumberElement(), toBeComputed);
+                    difference = difference - gap;
+                }
+            }
             final int threadNumber = Runtime.getRuntime().availableProcessors();
-            final Generation valueGeneration = Generations.compute(difference.intValue(),
-                    this.getCurrentElement(), threadNumber);
+            final Generation valueGeneration = Generations.compute(difference.intValue(), toBeComputed, threadNumber);
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
         } else {
-            final Long value = this.oldGeneration.getSavedState().keySet().stream()
-                    .filter(l -> l <= generationNumber).max((x, y) -> Long.compare(x, y))
-                    .orElse(-1L);
+            final Long value = this.oldGeneration.getSavedState().keySet().stream().filter(l -> l <= generationNumber)
+                    .max((x, y) -> Long.compare(x, y)).orElse(-1L);
             Generation valueGeneration;
             Long difference;
             if (value.equals(-1L)) {
@@ -115,21 +130,19 @@ public class GenerationControllerImpl implements GenerationController {
             difference = generationNumber - value;
             if (difference.longValue() != 0L) {
                 final int threadNumber = Runtime.getRuntime().availableProcessors();
-                valueGeneration = Generations.compute(difference.intValue(), valueGeneration,
-                        threadNumber);
+                valueGeneration = Generations.compute(difference.intValue(), valueGeneration, threadNumber);
             }
             this.setCurrentGeneration(valueGeneration);
             this.setCurrentNumberGeneration(generationNumber);
             this.oldGeneration.removeAllElemsAfter(this.getCurrentNumberElement());
         }
-        this.savedState.removeAll(
-                savedState.stream().filter(l -> l > 1 && l > this.getCurrentNumberElement())
-                        .collect(Collectors.toList()));
+        this.savedState.removeAll(savedState.stream().filter(l -> l > 1 && l > this.getCurrentNumberElement())
+                .collect(Collectors.toList()));
         this.view.scheduleGUIUpdate(() -> this.view.refreshView());
     }
 
     /**
-     * Returns current Generation.
+     * {@inheritDoc}
      */
     @Override
     public Generation getCurrentElement() {
@@ -141,7 +154,7 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * Returns current Generation index.
+     * {@inheritDoc}
      */
     @Override
     public synchronized Long getCurrentNumberElement() {
@@ -153,11 +166,13 @@ public class GenerationControllerImpl implements GenerationController {
     }
 
     /**
-     * Computes next generation and adds it to the history.
+     * {@inheritDoc}
      */
     @Override
     public synchronized void computeNext() {
+        this.getCurrentElement();
         this.setCurrentGeneration(Generations.compute(this.getCurrentElement()));
+        this.getCurrentElement();
         this.setCurrentNumberGeneration(this.getCurrentNumberElement() + 1L);
         this.saveGeneration(this.getCurrentElement(), getCurrentNumberElement());
         this.view.refreshView();

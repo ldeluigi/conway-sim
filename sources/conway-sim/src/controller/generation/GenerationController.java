@@ -27,14 +27,25 @@ public interface GenerationController extends Computing<Generation, Long> {
     void pause();
 
     /**
+     * Set the speed value, max and min value is define in
+     * ConstantBundle.properties.
+     * 
      * @param speed
-     *            set a speed value this value should be
+     *            set the speed value
      */
     void setSpeed(int speed);
 
     /**
-     * Totally reset the controller.
+     * Totally reset the controller, to the original state.
      */
     void reset();
+
+    /**
+     * Load an old element, removing all the newest element saved after oldNumber.
+     * 
+     * @param number
+     *            the Long number of the element to load
+     */
+    void loadGeneration(Long number);
 
 }

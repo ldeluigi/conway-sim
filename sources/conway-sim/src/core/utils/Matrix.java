@@ -31,6 +31,11 @@ public interface Matrix<X> {
     void rotateClockwise(int times);
 
     /**
+     * Reverts all rows.
+     */
+    void reverseEachRow();
+
+    /**
      * Sets the given value at the given position.
      * 
      * @param row

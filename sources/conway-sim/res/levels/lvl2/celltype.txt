@@ -1,0 +1,21 @@
+32c$
+32a$
+32a$
+32a$
+32a$
+32a$
+2a2b28a$
+2a2b28a$
+32a$
+32a$
+32a$
+32a$
+32a$
+32a$
+32a$
+32c!
+
+
+a = normal
+b = golden
+c= wall

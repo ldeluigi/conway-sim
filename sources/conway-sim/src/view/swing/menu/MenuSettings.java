@@ -12,6 +12,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -27,8 +28,9 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JSpinner.DefaultEditor;
 
+import controller.io.InformationManager;
 import controller.io.ResourceLoader;
-import view.GUI;
+import view.swing.DesktopGUI;
 
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
@@ -39,6 +41,7 @@ import javax.swing.UIManager;
  */
 public final class MenuSettings extends JPanel {
 
+    private static final int SEVENTH_ROW = 7;
     private static final long serialVersionUID = 1L;
     private static final int BUTTON_RATIO_Y = 20;
     private static final int BUTTON_RATIO_X = 5;
@@ -62,7 +65,7 @@ public final class MenuSettings extends JPanel {
      * @param mainGUI
      *            the GUI to return
      */
-    public MenuSettings(final GUI mainGUI) {
+    public MenuSettings(final DesktopGUI mainGUI) {
         this.setLayout(new GridBagLayout());
         final JPanel centralButtons = new JPanel(new GridBagLayout());
         centralButtons.setOpaque(false);
@@ -71,42 +74,27 @@ public final class MenuSettings extends JPanel {
         checkLookAndFeel.setOpaque(false);
         checkLookAndFeel.setSelected(isUsingSystemLF());
         checkLookAndFeel.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-                    setUsingSystemLF(true);
-                } catch (Exception e1) {
-                    final JLabel l = new JLabel(
-                            ResourceLoader.loadString("settings.error.SysLookAndFeelNotFound"));
-                    JOptionPane.showMessageDialog(this, l,
-                            ResourceLoader.loadString("error.unavailable"),
-                            JOptionPane.ERROR_MESSAGE);
-                }
-            } else if (e.getStateChange() == ItemEvent.DESELECTED) {
-                try {
-                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                    setUsingSystemLF(false);
-                } catch (Exception e1) {
-                    final JLabel l = new JLabel(
-                            ResourceLoader.loadString("settings.error.CrossLookAndFeelNotFound"));
-                    JOptionPane.showMessageDialog(this, l,
-                            ResourceLoader.loadString("settings.error.unavailable"),
-                            JOptionPane.ERROR_MESSAGE);
-                }
+            if (e.getStateChange() == ItemEvent.SELECTED && !setUsingSystemLF(true)) {
+                final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.SysLookAndFeelNotFound"));
+                JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("error.unavailable"),
+                        JOptionPane.ERROR_MESSAGE);
+            } else if (e.getStateChange() == ItemEvent.DESELECTED && !setUsingSystemLF(false)) {
+                final JLabel l = new JLabel(ResourceLoader.loadString("settings.error.CrossLookAndFeelNotFound"));
+                JOptionPane.showMessageDialog(this, l, ResourceLoader.loadString("settings.error.unavailable"),
+                        JOptionPane.ERROR_MESSAGE);
             }
             checkLookAndFeel.setSelected(isUsingSystemLF());
             this.repaint();
         });
         final JLabel checkLFLabel = new JLabel(ResourceLoader.loadString("settings.sysLF"));
         checkLFLabel.setFont(MenuSettings.generateFont());
-        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(
-                MenuSettings.getFontSize(), MIN_FONT_SIZE, MAX_FONT_SIZE, 1);
+        final SpinnerModel fontSizeSelectorModel = new SpinnerNumberModel(MenuSettings.getFontSize(), MIN_FONT_SIZE,
+                MAX_FONT_SIZE, 1);
         final JSpinner fontSizeSelector = new JSpinner(fontSizeSelectorModel);
         fontSizeSelector.setOpaque(false);
         fontSizeSelector.setFont(generateFont());
-        fontSizeSelector
-                .setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / MINI_BUTTON_RATIO_X,
-                        mainGUI.getCurrentHeight() / MINI_BUTTON_RATIO_Y));
+        fontSizeSelector.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / MINI_BUTTON_RATIO_X,
+                mainGUI.getCurrentHeight() / MINI_BUTTON_RATIO_Y));
         fontSizeSelectorModel.addChangeListener(e -> {
             setFontSize((int) fontSizeSelectorModel.getValue());
             resizeFonts();
@@ -124,11 +112,9 @@ public final class MenuSettings extends JPanel {
                 setInstantTransitions(false);
             }
         });
-        final JLabel checkInstantAnimationsLabel = new JLabel(
-                ResourceLoader.loadString("settings.instantTransitions"));
+        final JLabel checkInstantAnimationsLabel = new JLabel(ResourceLoader.loadString("settings.instantTransitions"));
         checkInstantAnimationsLabel.setFont(MenuSettings.generateFont());
-        final JLabel languageLabel = new JLabel(
-                ResourceLoader.loadString("settings.language.label"));
+        final JLabel languageLabel = new JLabel(ResourceLoader.loadString("settings.language.label"));
         languageLabel.setFont(MenuSettings.generateFont());
         final Locale[] listLocales = ResourceLoader.getLocales();
         final JComboBox<Locale> languageComboBox = new JComboBox<>(listLocales);
@@ -148,8 +134,7 @@ public final class MenuSettings extends JPanel {
         centralButtons.add(checkLFLabel, c);
         addToCenter(GridBagConstraints.WEST, 0, 0, 3, checkLFLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 0, 1, checkLookAndFeel, c, centralButtons);
-        addToCenter(GridBagConstraints.WEST, 0, 1, 3, checkInstantAnimationsLabel, c,
-                centralButtons);
+        addToCenter(GridBagConstraints.WEST, 0, 1, 3, checkInstantAnimationsLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 1, 1, checkInstantAnimations, c, centralButtons);
         addToCenter(GridBagConstraints.WEST, 0, 2, 3, fontLabel, c, centralButtons);
         addToCenter(GridBagConstraints.EAST, 4, 2, 1, fontSizeSelector, c, centralButtons);
@@ -159,18 +144,31 @@ public final class MenuSettings extends JPanel {
         ret.setBackground(Color.WHITE);
         ret.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
         ret.setFocusPainted(false);
-        ret.setPreferredSize(new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X,
-                mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
-        ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN,
-                MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
+        ret.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        ret.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
         ret.addActionListener(e -> {
+            saveSettings();
             mainGUI.backToMainMenu();
+        });
+        final JButton tutorial = new JButton(ResourceLoader.loadString("tutorial.button"));
+        tutorial.setBackground(Color.WHITE);
+        tutorial.setBorder(BorderFactory.createLineBorder(Color.BLACK, 3, false));
+        tutorial.setFocusPainted(false);
+        tutorial.setPreferredSize(
+                new Dimension(mainGUI.getCurrentWidth() / BUTTON_RATIO_X, mainGUI.getCurrentHeight() / BUTTON_RATIO_Y));
+        tutorial.setFont(new Font(Font.MONOSPACED, Font.PLAIN, MenuSettings.getFontSize() + BUTTON_FONT_PLUS));
+        tutorial.addActionListener(e -> {
+            mainGUI.popUpFrame(new TutorialBox(), false);
         });
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 8;
+        c.gridy = SEVENTH_ROW;
         c.gridwidth = GRIDBAG_WIDTH;
+        centralButtons.add(tutorial, c);
+        c.insets = new Insets(0, 0, 0, 0);
+        c.gridy = 8;
         centralButtons.add(ret, c);
         this.add(centralButtons);
         this.toResize.add(checkLFLabel);
@@ -180,6 +178,33 @@ public final class MenuSettings extends JPanel {
         this.toResize.add(languageLabel);
         this.toResize.add(languageComboBox);
         this.toResize.add(ret);
+    }
+
+    /**
+     * Tries to set and apply all the settings saved with {@link InformationManager}.
+     */
+    public static void tryLoadSettings() {
+        final List<Integer> settings = InformationManager.loadSettings();
+        setUsingSystemLF(!settings.isEmpty() ? settings.get(0).equals(1) : isUsingSystemLF());
+        setInstantTransitions(settings.size() >= 2 ? settings.get(1).equals(1) : areTransitionsInstant());
+        setFontSize(
+                settings.size() >= 3
+                        ? settings.get(2) < MIN_FONT_SIZE ? MIN_FONT_SIZE
+                                : settings.get(2) > MAX_FONT_SIZE ? MAX_FONT_SIZE : settings.get(2)
+                        : getFontSize());
+        Locale.setDefault(
+                settings.size() >= 4 && settings.get(3) >= 0 && settings.get(3) < ResourceLoader.getLocales().length
+                        ? ResourceLoader.getLocales()[settings.get(3)]
+                        : Locale.getDefault());
+    }
+
+    private void saveSettings() {
+        final List<Integer> settings = new LinkedList<>();
+        settings.add(0, isUsingSystemLF() ? 1 : 0);
+        settings.add(1, areTransitionsInstant() ? 1 : 0);
+        settings.add(2, getFontSize());
+        settings.add(3, Arrays.asList(ResourceLoader.getLocales()).indexOf(Locale.getDefault()));
+        InformationManager.saveSettings(settings);
     }
 
     /**
@@ -198,13 +223,11 @@ public final class MenuSettings extends JPanel {
 
     @Override
     public void paintComponent(final Graphics g) {
-        g.drawImage(ResourceLoader.loadImage("settings.background"), 0, 0, this.getWidth(),
-                this.getHeight(), this);
+        g.drawImage(ResourceLoader.loadImage("settings.background"), 0, 0, this.getWidth(), this.getHeight(), this);
     }
 
-    private void addToCenter(final int anchor, final int gridx, final int gridy,
-            final int gridwidth, final Component comp, final GridBagConstraints c,
-            final Container dest) {
+    private void addToCenter(final int anchor, final int gridx, final int gridy, final int gridwidth,
+            final Component comp, final GridBagConstraints c, final Container dest) {
         c.anchor = anchor;
         c.gridx = gridx;
         c.gridy = gridy;
@@ -212,11 +235,11 @@ public final class MenuSettings extends JPanel {
         dest.add(comp, c);
     }
 
-    private synchronized void setInstantTransitions(final boolean instantTransitions) {
+    private static synchronized void setInstantTransitions(final boolean instantTransitions) {
         MenuSettings.instantTransitions = instantTransitions;
     }
 
-    private synchronized void setFontSize(final int value) {
+    private static synchronized void setFontSize(final int value) {
         MenuSettings.fontSize = value;
     }
 
@@ -235,11 +258,25 @@ public final class MenuSettings extends JPanel {
                 MenuSettings.getFontSize() + (c instanceof JButton ? BUTTON_FONT_PLUS : 0));
     }
 
-    private boolean isUsingSystemLF() {
+    private static boolean isUsingSystemLF() {
         return MenuSettings.usingSystemLF;
     }
 
-    private void setUsingSystemLF(final boolean usingSystemLF) {
+    private static boolean setUsingSystemLF(final boolean usingSystemLF) {
+        if (usingSystemLF) {
+            try {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } catch (Exception e1) {
+                return false;
+            }
+        } else {
+            try {
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } catch (Exception e1) {
+                return false;
+            }
+        }
         MenuSettings.usingSystemLF = usingSystemLF;
+        return true;
     }
 }

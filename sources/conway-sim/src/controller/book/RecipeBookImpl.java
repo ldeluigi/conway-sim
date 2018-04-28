@@ -8,7 +8,7 @@ import java.util.List;
  * Implementation of {@link RecipeBook}.
  */
 public class RecipeBookImpl implements RecipeBook {
-    private List<Recipe> rb;
+    private List<Recipe> recipeList;
 
     /**
      * Constructor that initializes an empty list of recipes.
@@ -18,92 +18,74 @@ public class RecipeBookImpl implements RecipeBook {
     }
 
     /**
-     * @param pos
-     *            of the elem to extract
-     * @return recipe in given position
+     * {@inheritDoc}
      */
     @Override
     public Recipe getRecipeByPos(final int pos) {
-        return this.rb.get(pos);
+        return this.recipeList.get(pos);
     }
 
     /**
-     * @param name
-     *            of elem to get
-     * @return elem with given name
-     * @throws NullPointerException
-     *             if recipe not found
+     * {@inheritDoc}
      */
     @Override
     public Recipe getRecipeByName(final String name) throws NullPointerException {
-        for (final Recipe e : this.rb) {
+        for (final Recipe e : this.recipeList) {
             if ((e.getName()).equals(name)) {
                 return e;
             }
         }
-        return this.rb.get(0);
+        return this.recipeList.get(0);
 
     }
 
     /**
-     * Method for adding a new Recipe in the book given the content, the name of the recipe and the
-     * author.
-     * 
-     * @param content
-     *            of the Recipe.
-     * @param name
-     *            of the Recipe.
-     * @param author
-     *            of the Recipe.
+     * {@inheritDoc}
      */
     @Override
     public void addRecipe(final String content, final String name, final String author) {
-        this.rb.add(new RecipeImpl(content, name, author));
+        this.recipeList.add(new RecipeImpl(content, name, author));
     }
 
     /**
-     * Method for adding a new Recipe in the book given the content and the name of the recipe.
-     * 
-     * @param content
-     *            of the Recipe.
-     * @param name
-     *            of the Recipe.
+     * {@inheritDoc}
      */
     @Override
     public void addRecipe(final String content, final String name) {
-        this.rb.add(new RecipeImpl(content, name));
+        this.recipeList.add(new RecipeImpl(content, name));
     }
 
     /**
-     * Method for adding a new Recipe in the book given only the content of it.
-     * 
-     * @param content
-     *            of the Recipe
+     * {@inheritDoc}
      */
     @Override
     public void addRecipe(final String content) {
-        this.rb.add(new RecipeImpl(content));
+        this.recipeList.add(new RecipeImpl(content));
     }
 
     /**
-     * Method for getting the Book Size.
-     * 
-     * @return size of Book
+     * {@inheritDoc}
      */
     @Override
     public int getRecipeBookSize() {
-        return this.rb.size();
+        return this.recipeList.size();
     }
 
     /**
-     * Returns an unmodifiable list of {@link Recipe}.
+     * {@inheritDoc}
      */
     @Override
     public List<Recipe> getRecipeList() {
-        return Collections.unmodifiableList(rb);
+        return Collections.unmodifiableList(recipeList);
     }
 
+    /**
+     * Sets the given Recipe List.
+     * 
+     * @param rb
+     *            the Recipe List
+     */
     private void setRb(final List<Recipe> rb) {
-        this.rb = (ArrayList<Recipe>) rb;
+        this.recipeList = (ArrayList<Recipe>) rb;
     }
 }

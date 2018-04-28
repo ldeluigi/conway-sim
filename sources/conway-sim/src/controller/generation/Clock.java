@@ -5,14 +5,13 @@ import java.util.Optional;
 import controller.io.ResourceLoader;
 
 /**
- * This class uses a thread to implement a Clock that triggers events in form of Runnable.
+ * This class uses a thread to implement a Clock that triggers events in form of
+ * Runnable.
  */
 public class Clock {
 
-    private static final int MIN_CLOCK_TIME = ResourceLoader
-            .loadConstantInt("clock.MIN_CLOCK_TIME");
-    private static final int MAX_CLOCK_TIME = ResourceLoader
-            .loadConstantInt("clock.MAX_CLOCK_TIME");
+    private static final int MIN_CLOCK_TIME = ResourceLoader.loadConstantInt("clock.MIN_CLOCK_TIME");
+    private static final int MAX_CLOCK_TIME = ResourceLoader.loadConstantInt("clock.MAX_CLOCK_TIME");
     private static final int MIN_SPEED = ResourceLoader.loadConstantInt("generation.MIN_SPEED");
     private static final int MAX_SPEED = ResourceLoader.loadConstantInt("generation.MAX_SPEED");
     private int speed = MIN_SPEED;
@@ -53,7 +52,7 @@ public class Clock {
     }
 
     /**
-     * Set the speed of this clock. wait ( 1000 / speed ) ms between every computation.
+     * Set the speed of this clock.
      * 
      * @param speed
      *            to set
@@ -64,14 +63,13 @@ public class Clock {
         }
         this.speed = speed;
         if (this.clockAgent.isPresent()) {
-            final Long sleepTime = Long
-                    .valueOf(-(MAX_CLOCK_TIME - MIN_CLOCK_TIME) / (MAX_SPEED - MIN_SPEED) * speed
-                            + MAX_CLOCK_TIME + MIN_CLOCK_TIME);
+            final Long sleepTime = Long.valueOf(-(MAX_CLOCK_TIME - MIN_CLOCK_TIME) / (MAX_SPEED - MIN_SPEED) * speed
+                    + MAX_CLOCK_TIME + MIN_CLOCK_TIME);
             this.clockAgent.get().setStep(Long.valueOf(sleepTime));
         }
     }
 
-    class AgentClock extends Thread {
+    private class AgentClock extends Thread {
 
         private static final long INIT_STEP = 1000L;
         private volatile Long step = INIT_STEP;
@@ -88,11 +86,11 @@ public class Clock {
             }
         }
 
-        public void setClock(final boolean flag) {
+        private void setClock(final boolean flag) {
             this.clock = flag;
         }
 
-        public synchronized void setStep(final Long step) {
+        private synchronized void setStep(final Long step) {
             this.step = step;
         }
 

@@ -22,10 +22,7 @@ public class SimpleCell implements Cell {
     }
 
     /**
-     * setStatus is the method to invoke in order to change the current status of the cell.
-     * 
-     * @param nextstatus
-     *            is the new status to be assumed.
+     * {@inheritDoc}
      */
     @Override
     public void setStatus(final Status nextstatus) {
@@ -33,9 +30,7 @@ public class SimpleCell implements Cell {
     }
 
     /**
-     * getStatus is the method to get the current status of the cell.
-     * 
-     * @return the current status
+     * {@inheritDoc}
      */
     @Override
     public Status getStatus() {
@@ -55,7 +50,7 @@ public class SimpleCell implements Cell {
      */
     @Override
     public String toString() {
-        return current.toString();
+        return "SimpleCell: " + current.toString();
     }
 
     /**
@@ -67,7 +62,8 @@ public class SimpleCell implements Cell {
     }
 
     /**
-     * Equals checks if the two cells have the same {@link Status}.
+     * Equals checks if the two cells have the same {@link Status} and if they are
+     * both {@link SimpleCell}.
      */
     @Override
     public boolean equals(final Object obj) {
@@ -81,7 +77,7 @@ public class SimpleCell implements Cell {
             return false;
         }
         final SimpleCell other = (SimpleCell) obj;
-        return current.equals(other.current);
+        return this.getStatus().equals(other.getStatus());
     }
 
     /**

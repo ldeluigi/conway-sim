@@ -14,7 +14,7 @@ import core.utils.ListMatrix;
 import core.utils.Matrix;
 
 /**
- * 
+ * Converts a Standard RLE into a {@link Matrix}<{@link Status}>.
  * 
  */
 public class RLEConvert {
@@ -39,13 +39,9 @@ public class RLEConvert {
     // ALIVE CELL
     private static final String AC = "o";
 
-    // This will contain methods to convert a given matrix into a RLE Format
-    // http://www.conwaylife.com/w/index.php?title=Run_Length_Encoded
-    // NB: This will be used also as I/O method and SaveToFile
-
     /**
-     * This is the builder from file, it takes a fileName of File type and builds the buffer with
-     * the given text found.
+     * Constructor from file, it takes a fileName of {@link File} type and builds
+     * the buffer with the given text found.
      * 
      * @param fileName
      *            name of the file to be loaded
@@ -57,7 +53,7 @@ public class RLEConvert {
     }
 
     /**
-     * This is the builder from String, it takes a rle of String type and builds the buffer with the
+     * Constructor from String, it takes a rle of and builds the buffer with the
      * given text found in the String.
      * 
      * @param rle
@@ -68,7 +64,7 @@ public class RLEConvert {
     }
 
     /**
-     * This is a wrapper of the readLine() method of buffer.
+     * Wrapper of the readLine() method of buffer.
      * 
      * @return
      * @throws IOException
@@ -78,7 +74,7 @@ public class RLEConvert {
     }
 
     /**
-     * This is a wrapper of the close() method of buffer.
+     * Wrapper of the close() method of buffer.
      * 
      * @throws IOException
      */
@@ -87,7 +83,7 @@ public class RLEConvert {
     }
 
     /**
-     * This method finds and returns the header line of the RLE.
+     * Finds and returns the header line of the RLE.
      * 
      * @return the header line in String format
      * @throws IOException
@@ -101,16 +97,16 @@ public class RLEConvert {
             if (line != null && !line.startsWith(HASH)) {
                 return line;
             } else if (line == null) {
-                throw new IllegalArgumentException(
-                        "No usable (non-commented) strings found in stream.");
+                throw new IllegalArgumentException("No usable (non-commented) strings found in stream.");
             }
         }
 
     }
 
     /**
+     * Gets the Cell information String.
      * 
-     * @return
+     * @return the String with the Cell informations
      * @throws IOException
      * @throws IllegalArgumentException
      */
@@ -138,18 +134,18 @@ public class RLEConvert {
     }
 
     /**
-     * This method converts the Matrix from the format Boolean[][] into a Matrix<Status>.
+     * This method converts the Matrix from the format Boolean[][] into a
+     * {@link Matrix}<{@link Status}>.
      * 
      * @param grid
-     *            Grid of boolean to be converted.
+     *            Grid of boolean to be converted
      * @param row
-     *            Size of the row of the grid.
+     *            Size of the row of the grid
      * @param col
-     *            Size of the column of the grid.
-     * @return matrix The matrix converted in Matrix<Status> format.
+     *            Size of the column of the grid
+     * @return matrix The matrix converted in {@link Matrix}<{@link Status}> format
      */
-    public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row,
-            final int col) {
+    public final Matrix<Status> mBoolToStatus(final boolean[][] grid, final int row, final int col) {
         final Matrix<Status> matrix = new ListMatrix<>(row, col, () -> Status.DEAD);
 
         for (int i = 0; i < row; i++) {
@@ -163,17 +159,18 @@ public class RLEConvert {
     }
 
     /**
-     * This is the main method, it returns the matrix (Matrix<Status>) converted from the RLE
-     * format.
+     * This is the main method, it returns the matrix
+     * ({@link Matrix}<{@link Status}>) converted from the RLE format.
      * 
-     * @return The converted pattern in Matrix<Status> format.
+     * @return The converted pattern in {@link Matrix}<{@link Status}> format.
      */
     public Matrix<Status> convert() {
         try {
             final String header = getHeaderLine();
-            final Matcher headerMatcher = Pattern.compile(
-                    String.format("^%s, ?%s(, ?%s)?$", XCOORDPATTERN, YCOORDPATTERN, RULEPATTERN),
-                    Pattern.CASE_INSENSITIVE).matcher(header);
+            final Matcher headerMatcher = Pattern
+                    .compile(String.format("^%s, ?%s(, ?%s)?$", XCOORDPATTERN, YCOORDPATTERN, RULEPATTERN),
+                            Pattern.CASE_INSENSITIVE)
+                    .matcher(header);
             if (!headerMatcher.matches()) {
                 throw new IllegalArgumentException("Invalid header.");
             }
@@ -188,7 +185,7 @@ public class RLEConvert {
             // Create a new boolean matrix
             boolean[][] grid = new boolean[y][x];
 
-            // Split cellString by //$
+            // Split cellString by \\$
             final String[] cellStrings = getCellInfoStr().split(DCSLASH + DOLLAR);
             final Pattern p = Pattern.compile(CELLRUNPATTERN);
             Matcher cellRunMatcher;
@@ -201,7 +198,7 @@ public class RLEConvert {
 
                 String tag;
 
-                // RULE STILL NOT IMPLEMENTED
+                // RULE STILL UNUSED IN THIS PROJECT
                 @SuppressWarnings("unused")
                 String rule;
 
@@ -234,15 +231,85 @@ public class RLEConvert {
             }
             return mBoolToStatus(grid, grid.length, grid[0].length);
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.logThrowable(e);
         } finally {
             try {
                 close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Logger.logThrowable(e);
             }
         }
         return null;
+    }
+
+    /**
+     * Converts a {@link Matrix}<{@link Status}> into a Standard RLE String.
+     * 
+     * @param matrix
+     *            to be converted
+     * @return a string of the matrix that represents the RLE of the matrix
+     */
+    public static String convertMatrixStatusToString(final Matrix<Status> matrix) {
+        String header = "x = " + matrix.getHeight() + ", y = " + matrix.getWidth() + ", rule = B3/S23";
+        header = header.concat(System.lineSeparator());
+        int lines = 0;
+        for (int i = 0; i < matrix.getWidth(); i++) {
+            int buffer = 0;
+            int last = -1;
+            for (int j = 0; j < matrix.getHeight(); j++) {
+                // Read all the column i, from j = 0 to j = tab.getHeight()
+                if (matrix.get(j, i) == Status.ALIVE) {
+
+                    if (lines > 0) {
+                        if (lines > 1) {
+                            header = header.concat(Integer.toString(lines));
+                        }
+                        header = header.concat("$");
+                        lines = 0;
+                    }
+
+                    if (last == 0) {
+                        if (buffer > 1) {
+                            header = header.concat(Integer.toString(buffer));
+                        }
+                        header = header.concat("b");
+                        buffer = 0;
+                    }
+
+                    last = 1;
+                    buffer++;
+                } else {
+                    if (last == 1) {
+                        if (buffer > 1) {
+                            header = header.concat(Integer.toString(buffer));
+                        }
+                        header = header.concat("o");
+                        buffer = 0;
+                    }
+                    last = 0;
+                    buffer++;
+                }
+            }
+            if (last == 1) {
+                if (buffer > 1) {
+                    header = header.concat(Integer.toString(buffer));
+                }
+                header = header.concat("o");
+                buffer = 0;
+            }
+            lines++;
+        }
+
+        if (lines > 0) {
+            if (lines > 1) {
+                header = header.concat(Integer.toString(lines));
+            }
+            header = header.concat("$");
+            lines = 0;
+        }
+
+        header = header.concat("!");
+        return header;
     }
 
 }
