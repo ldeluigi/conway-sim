@@ -2,9 +2,7 @@ package core.model;
 
 /**
  * This is the main environment for the generation.
- * 
  */
-
 public interface Environment {
 
     /**

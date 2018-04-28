@@ -1,87 +1,112 @@
 package test;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.function.Function;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import core.model.CellEnvironment;
 import core.model.SimpleCell;
+import core.model.Status;
+import core.model.Cell;
 import core.model.Environment;
 import core.model.EnvironmentFactory;
 import core.model.Generation;
 import core.model.GenerationFactory;
 import core.model.Generations;
-import core.model.StandardCellEnvironments;
 import core.utils.ListMatrix;
 import core.utils.Matrix;
-import static core.model.Status.*;
+import static core.model.Status.ALIVE;
+import static core.model.Status.DEAD;
 
+/**
+ * Test class for {@link Generations} computation methods.
+ */
 public class TestGenerationComputation {
 
-    private static final Matrix<Boolean> BEFORE = new ListMatrix<>(
-            new Boolean[][] { { true, false, false, true }, { true, true, false, false },
-                    { false, false, true, false }, { true, true, true, false } });
+    private static final int SIX = 6;
+    private static final int FIVE = 5;
+    private static final int GENERATION_AFTER_SAME = 13;
+    private static final int GENERATIONS_AFTER = 20;
+    private static final Matrix<Boolean> BEFORE = new ListMatrix<>(new Boolean[][] { { true, false, false, true },
+            { true, true, false, false }, { false, false, true, false }, { true, true, true, false } });
     private static final Matrix<Boolean> AFTER_STANDARD = new ListMatrix<>(
-            new Boolean[][] { { true, true, false, false }, { true, true, true, false },
-                    { false, false, true, false }, { false, true, true, false } });
+            new Boolean[][] { { true, true, false, false }, { true, true, true, false }, { false, false, true, false },
+                    { false, true, true, false } });
 
     private static final Matrix<Boolean> AFTER_THREE_STANDARD = new ListMatrix<>(
-            new Boolean[][] { { false, false, false, false }, { true, false, true, true },
-                    { true, false, false, true }, { false, true, true, false } });
+            new Boolean[][] { { false, false, false, false }, { true, false, true, true }, { true, false, false, true },
+                    { false, true, true, false } });
+    private static final Function<Boolean, Status> BOOLEAN_TO_STATUS = b -> b ? ALIVE : DEAD;
 
+    /**
+     * Test for one single computation.
+     */
     @Test
-    void testOneComputation() {
-        Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)),
-                env);
-        assertEquals(AFTER_STANDARD, Generations.compute(start).getCellMatrix());
+    public void testOneComputation() {
+        final Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
+        final Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
+        assertEquals(AFTER_STANDARD.map(BOOLEAN_TO_STATUS), Generations.compute(start).getCellMatrix().map(Cell::getStatus),
+                "Computation produced unexpected cell matrix");
         System.out.println(
-                "First:\n" + start.getCellMatrix().map(b -> b.getStatus().equals(ALIVE) ? "■" : "□")
-                        + "\nSecond:\n" + Generations.compute(start).getCellMatrix()
-                                .map(b -> b.getStatus().equals(ALIVE) ? "■" : "□"));
+                "First:\n" + start.getCellMatrix().map(b -> b.getStatus().equals(ALIVE) ? "■" : "□") + "\nSecond:\n"
+                        + Generations.compute(start).getCellMatrix().map(b -> b.getStatus().equals(ALIVE) ? "■" : "□"));
     }
 
+    /**
+     * Test for several computations.
+     */
     @Test
-    void testSomeComputations() {
-        Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)),
-                env);
-        assertEquals(AFTER_THREE_STANDARD, Generations.compute(3, start).getCellMatrix());
-        assertEquals(Generations.compute(20, start).getCellMatrix(),
-                Generations.compute(13, start).getCellMatrix());
+    public void testSomeComputations() {
+        final Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
+        final Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
+        assertEquals(AFTER_THREE_STANDARD.map(BOOLEAN_TO_STATUS), Generations.compute(3, start).getCellMatrix().map(Cell::getStatus), "Wrong computation result");
+        assertEquals(Generations.compute(GENERATIONS_AFTER, start).getCellMatrix(),
+                Generations.compute(GENERATION_AFTER_SAME, start).getCellMatrix(), "Unexpected computation result");
     }
 
+    /**
+     * Test for multithreaded single computation.
+     */
     @Test
-    void testOneComputationMultithread() {
-        Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)),
-                env);
-        assertEquals(AFTER_STANDARD, Generations.compute(start, 4).getCellMatrix());
-        System.out.println(
-                "First:\n" + start.getCellMatrix().map(b -> b.getStatus().equals(ALIVE) ? "■" : "□")
-                        + "\nSecond:\n" + Generations.compute(start, 4).getCellMatrix()
-                                .map(b -> b.getStatus().equals(ALIVE) ? "■" : "□"));
+    public void testOneComputationMultithread() {
+        final Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
+        final Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
+        assertEquals(AFTER_STANDARD.map(BOOLEAN_TO_STATUS), Generations.compute(start, 4).getCellMatrix().map(Cell::getStatus), "Unexpected computation result");
+        System.out.println("First:\n" + start.getCellMatrix().map(b -> b.getStatus().equals(ALIVE) ? "■" : "□")
+                + "\nSecond:\n"
+                + Generations.compute(start, 4).getCellMatrix().map(b -> b.getStatus().equals(ALIVE) ? "■" : "□"));
     }
 
+    /**
+     * Test for multithreaded computations.
+     */
     @Test
-    void testSomeComputationsMultithread() {
-        Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)),
-                env);
-        assertEquals(AFTER_THREE_STANDARD, Generations.compute(3, start, 4).getCellMatrix());
-        assertEquals(Generations.compute(20, start, 4).getCellMatrix(),
-                Generations.compute(13, start, 4).getCellMatrix());
+    public void testSomeComputationsMultithread() {
+        final Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
+        final Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)), env);
+        assertEquals(AFTER_THREE_STANDARD.map(BOOLEAN_TO_STATUS), Generations.compute(3, start, 4).getCellMatrix().map(Cell::getStatus),
+                "Unexpected computation result");
+        assertEquals(Generations.compute(GENERATIONS_AFTER, start, 4).getCellMatrix(),
+                Generations.compute(GENERATION_AFTER_SAME, start, 4).getCellMatrix(), "Wrong computation result");
     }
 
+    /**
+     * OPTIONAL TEST. This test ensures that multithreading has better performances,
+     * but may not work for all systems.
+     */
+    @Disabled
     @Test
-    void testMultithreadPerformances() {
-        Environment env = EnvironmentFactory.standardRules(1000, 1000);
-        Generation start = GenerationFactory.from(new ListMatrix<>(1000, 1000,
-                () -> new SimpleCell(Math.random() > 0.5 ? ALIVE : DEAD)), env);
+    public void testMultithreadPerformances() {
+        final Environment env = EnvironmentFactory.standardRules(1000, 1000);
+        final Generation start = GenerationFactory
+                .from(new ListMatrix<>(1000, 1000, () -> new SimpleCell(Math.random() > 0.5 ? ALIVE : DEAD)), env);
         long startTime = System.currentTimeMillis();
         Generations.compute(100, start, 1);
-        long first = System.currentTimeMillis() - startTime;
+        final long first = System.currentTimeMillis() - startTime;
         System.out.println(first);
         startTime = System.currentTimeMillis();
         Generations.compute(100, start, 2);
@@ -92,23 +117,15 @@ public class TestGenerationComputation {
         second = System.currentTimeMillis() - startTime;
         System.out.println(second);
         startTime = System.currentTimeMillis();
-        Generations.compute(100, start, 5);
+        Generations.compute(100, start, FIVE);
         second = System.currentTimeMillis() - startTime;
         System.out.println(second);
         startTime = System.currentTimeMillis();
-        Generations.compute(100, start, 6);
+        Generations.compute(100, start, SIX);
         second = System.currentTimeMillis() - startTime;
         System.out.println(second);
         if (second > first) {
-            fail();
+            fail("Second computation (2 thread) took more time than the first (1 thread)");
         }
-    }
-
-    public static void main(String... args) {
-        Environment env = EnvironmentFactory.standardRules(BEFORE.getWidth(), BEFORE.getHeight());
-        Generation start = GenerationFactory.from(BEFORE.map(b -> new SimpleCell(b ? ALIVE : DEAD)),
-                env);
-        Generations.compute(3, start);
-        Generations.compute(Generations.compute(start));
     }
 }

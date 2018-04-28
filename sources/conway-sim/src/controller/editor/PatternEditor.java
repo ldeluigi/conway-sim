@@ -4,10 +4,10 @@ import core.model.Status;
 import core.utils.Matrix;
 
 /**
- * Represents a {@link GridEditor} able to place, show preview and rotate patterns of Conway's Game
- * of Life.
+ * Represents a {@link SimpleGridEditor} able to place, show preview and rotate
+ * patterns of Conway's Game of Life.
  */
-public interface PatternEditor extends GridEditor {
+public interface PatternEditor extends SimpleGridEditor {
 
     /**
      * Shows a preview of the current pattern in the given position.
@@ -62,4 +62,29 @@ public interface PatternEditor extends GridEditor {
      * Removes, if possible, the current pattern that is waiting to be placed.
      */
     void removePatternToPlace();
+
+    /**
+     * Is the method to get to know if a mouse button is being pressed.
+     * 
+     * @return the mouseBeingPressed
+     */
+    boolean isMouseBeingPressed();
+
+    /**
+     * Is the method to invoke to let the editor know if a mouse button is being
+     * pressed.
+     * 
+     * @param pressed
+     *            is the boolean describing if the user is keeping a mouse button
+     *            pressed
+     */
+    void setMouseBeingPressed(boolean pressed);
+
+    /**
+     * Reverts each row of the pattern.
+     * 
+     * @throws IllegalStateException
+     *             if there is no pattern that waits to be placed
+     */
+    void reversePatternRows();
 }

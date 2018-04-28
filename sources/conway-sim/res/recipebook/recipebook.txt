@@ -6,3 +6,5 @@ Gosper_Glider_Gun.rle
 Gray_Counter.rle
 Rabbits.rle
 Spacefiller.rle
+Lightweight_ship.rle
+Vacuum-cleaner.rle

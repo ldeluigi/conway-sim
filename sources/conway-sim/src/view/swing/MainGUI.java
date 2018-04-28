@@ -15,27 +15,30 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 
+import controller.io.Logger;
 import controller.io.ResourceLoader;
-import view.DesktopGUI;
 import view.swing.menu.MainMenu;
 
 /**
- * Implementation of a {@link DesktopGUI} with java.swing.
+ * Implementation of a {@link DesktopGUI} with swing.
  */
 public final class MainGUI implements DesktopGUI {
 
     private static final int PIXELS_FROM_SCREEN_BORDERS = 50;
-    private static final int MINIMUM_FRAME_RATIO = 2;
+    private static final float MINIMUM_FRAME_RATIO = 2f;
     private static final int INNER_FRAME_SCALE = 5;
+    private static final float MINIMUM_INTERNAL_FRAME_RATIO = 2f;
 
     private final JFrame frame;
     private final JDesktopPane desktop;
     private final JInternalFrame background;
 
     /**
-     * Starts the application.
+     * Starts the application, displaying the frame.
      */
     public MainGUI() {
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler());
+        System.setProperty("sun.awt.exception.handler", ExceptionHandler.class.getName());
         this.frame = new JFrame(ResourceLoader.loadString("frame.title"));
         this.frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.frame.addWindowListener(new WindowListener() {
@@ -63,8 +66,8 @@ public final class MainGUI implements DesktopGUI {
             }
         });
         final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        this.frame.setMinimumSize(new Dimension(screenSize.width / MINIMUM_FRAME_RATIO,
-                screenSize.height / MINIMUM_FRAME_RATIO));
+        this.frame.setMinimumSize(new Dimension(Math.round(screenSize.width / MINIMUM_FRAME_RATIO),
+                Math.round(screenSize.height / MINIMUM_FRAME_RATIO)));
         this.frame.setSize(screenSize.width - PIXELS_FROM_SCREEN_BORDERS * 2,
                 screenSize.height - PIXELS_FROM_SCREEN_BORDERS * 2);
         this.frame.setLocationRelativeTo(null);
@@ -80,8 +83,7 @@ public final class MainGUI implements DesktopGUI {
         }
         this.background.setLayer(JDesktopPane.DEFAULT_LAYER);
         this.background.setEnabled(false);
-        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background
-                .getUI());
+        final BasicInternalFrameUI basicInternalFrameUI = ((BasicInternalFrameUI) this.background.getUI());
         basicInternalFrameUI.setNorthPane(null);
         this.background.setBorder(null);
         this.background.setVisible(true);
@@ -90,13 +92,16 @@ public final class MainGUI implements DesktopGUI {
         setView(menuPanel);
         this.frame.setIconImage(ResourceLoader.loadImage("main.icon"));
         this.frame.setVisible(true);
+
+        Logger.logTime("Started application from " + this.getClass().getName());
     }
 
     /**
      * A method that changes the main view of the application (background).
      * 
      * @param viewPanel
-     *            the panel that will be shown as main screen on the application desktop.
+     *            the panel that will be shown as main screen on the application
+     *            desktop.
      */
     @Override
     public void setView(final JComponent viewPanel) {
@@ -108,6 +113,7 @@ public final class MainGUI implements DesktopGUI {
      */
     @Override
     public void close() {
+        Logger.logTime("Closed application");
         System.exit(0);
     }
 
@@ -118,20 +124,26 @@ public final class MainGUI implements DesktopGUI {
      *            the frame that pops up
      */
     @Override
-    public void popUpFrame(final JInternalFrame iFrame) {
+    public void popUpFrame(final JInternalFrame iFrame, final boolean maximum) {
         final Dimension minDim = new Dimension(
                 Math.max(iFrame.getMinimumSize().width,
-                        this.frame.getMinimumSize().width / MINIMUM_FRAME_RATIO),
+                        Math.round(this.frame.getMinimumSize().width / MINIMUM_INTERNAL_FRAME_RATIO)),
                 Math.max(iFrame.getMinimumSize().height,
-                        this.frame.getMinimumSize().height / MINIMUM_FRAME_RATIO));
+                        Math.round(this.frame.getMinimumSize().height / MINIMUM_INTERNAL_FRAME_RATIO)));
         iFrame.setMinimumSize(minDim);
-        iFrame.setSize(Math.max(minDim.width, iFrame.getWidth()),
-                Math.max(minDim.height, iFrame.getHeight()));
+        iFrame.setSize(Math.max(minDim.width, iFrame.getWidth()), Math.max(minDim.height, iFrame.getHeight()));
         iFrame.setLocation((this.getCurrentWidth() - iFrame.getWidth()) / 2,
                 this.desktop.getHeight() / INNER_FRAME_SCALE);
         iFrame.setVisible(true);
         this.desktop.add(iFrame);
         iFrame.setLayer(JDesktopPane.PALETTE_LAYER);
+        if (maximum) {
+            try {
+                iFrame.setMaximum(true);
+            } catch (PropertyVetoException e) {
+                System.err.println("Frame not maximizable.");
+            }
+        }
     }
 
     @Override

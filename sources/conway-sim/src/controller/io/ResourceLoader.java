@@ -9,40 +9,29 @@ import java.util.ResourceBundle;
 import java.util.ResourceBundle.Control;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
- * Resource loader. Set the default {@link Locale} to use it as default language of string
- * properties loading.
+ * Resource loader for images or strings. Set the default {@link Locale} to use
+ * it as default language of string properties loading.
  */
 public final class ResourceLoader {
 
     private static final String RES_DIR = "/";
     private static final String IMG_DIR = "img/";
-    private static final Map<String, String> RESOURCE_MAP = new HashMap<>();
     private static final Map<String, Image> IMG_BUFFER = new HashMap<>();
     private static final Locale[] LOCALE_LIST;
 
     static {
         Locale.setDefault(Locale.ENGLISH);
         LOCALE_LIST = new Locale[] { Locale.ITALIAN, Locale.ENGLISH };
-
-        RESOURCE_MAP.put("main.background", "bg_main.jpg");
-        RESOURCE_MAP.put("main.title", "logo_main.png");
-        RESOURCE_MAP.put("main.icon", "main_icon.png");
-        RESOURCE_MAP.put("settings.background", "bg_main_blurred.jpg");
-        RESOURCE_MAP.put("loading.background", "bg_main_blurred.jpg");
-        RESOURCE_MAP.put("sandbox.background1", "bg_blank_blurred.jpg");
-        RESOURCE_MAP.put("sandbox.background2", "corner.sandbox.jpg");
-        RESOURCE_MAP.put("sandbox.button.on", "buttonOn.jpg");
-        RESOURCE_MAP.put("sandbox.button.off", "buttonOff.jpg");
-        RESOURCE_MAP.put("sandbox.button.pressed", "buttonPressed.jpg");
     }
 
     private ResourceLoader() {
     }
 
     /**
-     * Loader of images.
+     * Loader of images. It also has an internal buffer.
      * 
      * @param resource
      *            the resource tag to load
@@ -61,25 +50,20 @@ public final class ResourceLoader {
             addBufferedImage(resource, result);
             return result;
         } catch (IOException e) {
-            throw new IllegalStateException(
-                    "Resource " + resource + " not found (or not accessible) in " + path);
+            throw new IllegalStateException("Resource " + resource + " not found (or not accessible) in " + path);
         }
     }
 
-    private static void addBufferedImage(final String resource, final Image result) {
-        IMG_BUFFER.put(resource, result);
-    }
-
-    private static Image getBufferedImage(final String resource) {
-        return IMG_BUFFER.get(resource);
-    }
-
-    private static boolean isBuffered(final String resource) {
-        return IMG_BUFFER.containsKey(resource);
-    }
-
-    private static String getImagePath(final String resource) {
-        return RES_DIR + IMG_DIR + RESOURCE_MAP.get(resource);
+    /**
+     * Loader of {@link ImageIcon}. Not buffered.
+     * 
+     * @param resource
+     *            the resource tag to load
+     * @return loaded image if found, or else throws IllegalStateException
+     */
+    public static ImageIcon loadImageIcon(final String resource) {
+        final String path = getImagePath(resource);
+        return new ImageIcon(ResourceLoader.class.getResource(path));
     }
 
     /**
@@ -89,7 +73,7 @@ public final class ResourceLoader {
      *            the resource tag to load
      * @param language
      *            a Locale representing the language of the required string
-     * @return the string loaded or null
+     * @return the string loaded
      */
     public static String loadString(final String resource, final Locale language) {
         final ResourceBundle labels = ResourceBundle.getBundle("LabelsBundle", language,
@@ -102,7 +86,7 @@ public final class ResourceLoader {
      * 
      * @param resource
      *            the resource tag to load
-     * @return the string loaded or null
+     * @return the string loaded
      */
     public static String loadString(final String resource) {
         return loadString(resource, Locale.getDefault());
@@ -122,9 +106,33 @@ public final class ResourceLoader {
     }
 
     /**
-     * @return an array of available {@link Locale}
+     * Returns an array of currently supported languages.
+     * 
+     * @return an array of {@link Locale}
      */
     public static Locale[] getLocales() {
         return ResourceLoader.LOCALE_LIST;
+    }
+
+    private static void addBufferedImage(final String resource, final Image result) {
+        IMG_BUFFER.put(resource, result);
+    }
+
+    private static Image getBufferedImage(final String resource) {
+        return IMG_BUFFER.get(resource);
+    }
+
+    private static boolean isBuffered(final String resource) {
+        return IMG_BUFFER.containsKey(resource);
+    }
+
+    private static String getImagePath(final String resource) {
+        return RES_DIR + IMG_DIR + getImageFileName(resource);
+    }
+
+    private static String getImageFileName(final String resource) {
+        final ResourceBundle images = ResourceBundle.getBundle("ImagesBundle", Locale.ROOT,
+                Control.getControl(Control.FORMAT_PROPERTIES));
+        return images.getString(resource);
     }
 }

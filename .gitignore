@@ -68,3 +68,7 @@ hs_err_pid*
 # Code Recommenders
 .recommenders/
 sources/conway-sim/src/test/saves/
+
+sources/conway-sim/log\.txt
+
+sources/conway-sim/\.conway

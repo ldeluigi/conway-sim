@@ -52,8 +52,7 @@ public final class ListMatrix<X> implements Matrix<X> {
     public ListMatrix(final List<List<X>> matrix) {
         Objects.requireNonNull(matrix);
         if (matrix.isEmpty() || matrix.get(0).isEmpty()) {
-            throw new IllegalArgumentException(
-                    "Input list was empty or had an empty list as first row.");
+            throw new IllegalArgumentException("Input list was empty or had an empty list as first row.");
         }
         if (!matrix.stream().allMatch(row -> row.size() == matrix.get(0).size())) {
             throw new IllegalArgumentException("Input list wasn't rectangular.");
@@ -65,7 +64,8 @@ public final class ListMatrix<X> implements Matrix<X> {
     }
 
     /**
-     * Constructor that takes the dimensions and fills the matrix with a {@link Supplier}.
+     * Constructor that takes the dimensions and fills the matrix with a
+     * {@link Supplier}.
      * 
      * @param width
      *            that is the number of columns
@@ -128,7 +128,7 @@ public final class ListMatrix<X> implements Matrix<X> {
         this.matrix.forEach(row -> {
             temp.add(row.stream().map(mapper).collect(Collectors.toList()));
         });
-        return new ListMatrix<>(temp);
+        return new ListMatrix<Y>(temp);
     }
 
     @Override
@@ -156,8 +156,7 @@ public final class ListMatrix<X> implements Matrix<X> {
 
     @Override
     public String toString() {
-        return this.matrix.stream().map(l -> l.toString())
-                .collect(Collectors.joining("\n", "[", "]"));
+        return this.matrix.stream().map(l -> l.toString()).collect(Collectors.joining("\n", "[", "]"));
     }
 
     @Override
@@ -165,7 +164,8 @@ public final class ListMatrix<X> implements Matrix<X> {
         return this.matrix.stream().flatMap(l -> l.stream());
     }
 
-    private void reverseEachRow() {
+    @Override
+    public void reverseEachRow() {
         this.matrix.forEach(row -> {
             Collections.reverse(row);
         });

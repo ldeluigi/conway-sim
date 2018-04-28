@@ -46,12 +46,13 @@ public final class Generations {
     }
 
     /**
-     * Computes a new {@link Generation} from the given one, with multithreading option.
+     * Computes a new {@link Generation} from the given one, with multithreading
+     * option.
      * 
      * @param start
      *            that is the previous {@link Generation}
      * @param threads
-     *            to use (the caller will wait for the others to end)
+     *            to use (the caller thread will wait for the others to end)
      * @return the new computed {@link Generation}
      */
     public static Generation compute(final Generation start, final int threads) {
@@ -66,13 +67,13 @@ public final class Generations {
      * @param start
      *            is the first {@link Generation}
      * @param threads
-     *            to use (the caller will wait for the others to end)
+     *            to use (the caller thread will wait for the others to end)
      * @return the result of the computations
      */
     public static Generation compute(final int number, final Generation start, final int threads) {
         Objects.requireNonNull(start);
-        if (number < 0) {
-            throw new IllegalArgumentException("Number must be non-negative.");
+        if (number <= 0) {
+            throw new IllegalArgumentException("Number of threads must be greater than zero.");
         }
         final int cells = start.getWidth() * start.getHeight();
         final int nThread = Math.min(cells, threads);
@@ -85,8 +86,8 @@ public final class Generations {
         return temp;
     }
 
-    private static Generation computeGeneration(final Generation start,
-            final ExecutorService executor, final int nThread) {
+    private static Generation computeGeneration(final Generation start, final ExecutorService executor,
+            final int nThread) {
         final Environment env = start.getEnviroment();
         final Matrix<Cell> previous = start.getCellMatrix();
         final Matrix<Cell> result = GenerationFactory.copyOf(start).getCellMatrix();
@@ -110,9 +111,9 @@ public final class Generations {
         return GenerationFactory.from(result, env);
     }
 
-    private static void computeSlice(final int fromCell, final int toCell,
-            final Matrix<Cell> previous, final Matrix<Cell> result, final Environment env) {
-        IntStream.range(fromCell, toCell).forEach(nCell -> {
+    private static void computeSlice(final int fromCell, final int toCell, final Matrix<Cell> previous,
+            final Matrix<Cell> result, final Environment env) {
+        for (int nCell = fromCell; nCell < toCell; nCell++) {
             // alive neighbors count
             final int row = nCell / previous.getWidth();
             final int column = nCell % previous.getWidth();
@@ -121,8 +122,7 @@ public final class Generations {
                 for (int w = -1; w <= 1; w++) {
                     if (row + h >= 0 && row + h < previous.getHeight() && column + w >= 0
                             && column + w < previous.getWidth() && !(h == 0 && w == 0)) {
-                        neighbors += previous.get(row + h, column + w).getStatus().equals(ALIVE) ? 1
-                                : 0;
+                        neighbors += previous.get(row + h, column + w).getStatus().equals(ALIVE) ? 1 : 0;
                     }
                 }
             }
@@ -134,6 +134,6 @@ public final class Generations {
                     && env.getCellEnvironment(row, column).checkCellBorn(neighbors)) {
                 result.get(row, column).setStatus(ALIVE);
             }
-        });
+        }
     }
 }
