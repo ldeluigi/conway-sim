@@ -12,8 +12,6 @@ More info about the story of this simulator can surely be found in the [Official
 
 ## This is OOP 17/18 Project ##
 
-/// TO BE WRITTEN ///
-
 ## How do I get set up? ##
 
 * Setting up
