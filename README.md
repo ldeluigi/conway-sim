@@ -19,7 +19,7 @@ More info about the story of this simulator can surely be found in the [Official
 
 ### Setting up
 - First, you need to download and install Java JRE, which can be found here: https://java.com/en/download/
-- Second, you need to download the project .jar file from this repository, also direct link can be found here: LINK_PLACEHOLDER
+- Second, you need to download the project .jar file from this repository, also direct link can be found here: https://github.com/ldeluigi/conway-sim/releases
 
 ### Configuration
 - Configuration is pretty straightforward, you just need to run:
@@ -34,7 +34,6 @@ We wanted our simulator to be run on as many platform as we could, so we tried t
 | Library | DOCS |
 | ------ | ------ |
 | Java SWING | [java-swing-doc] |
-| Placeholde | [placeholder-link] |
 
 ##  [LDLM Team]
 ### Team Members
