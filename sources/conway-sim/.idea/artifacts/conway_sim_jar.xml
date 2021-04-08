@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="conway-sim:jar">
+    <output-path>$PROJECT_DIR$/classes/artifacts/conway_sim_jar</output-path>
+    <root id="archive" name="conway-sim.jar">
+      <element id="module-output" name="conway-sim" />
+    </root>
+  </artifact>
+</component>
